@@ -1,5 +1,4 @@
-<script src="/javascripts/borrower_seeking.js" type="text/javascript"></script>
-
+<%= javascript_include_tag 'borrower_seeking.js' %>
 
 <%= form_for :borrowers, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
   <div class="top" >

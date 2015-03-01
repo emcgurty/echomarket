@@ -25,8 +25,10 @@ class Itemimages < ActiveRecord::Base
     if picture_field.blank?
       return
     end
-    directory = "public/images/item_images"
-    stored_file_name = get_primary_key_value + "_" + picture_field.original_filename
+  
+    
+    stored_file_name = get_primary_key_value + "_" + picture_field.original_filename  
+    directory = "#{Rails.root}/app/assets/images/item_images/" 
     path = File.join(directory, stored_file_name)
     delete_old_image_file(path)
     File.open(path, "wb") { |f| f.write(picture_field.read) }

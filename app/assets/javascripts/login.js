@@ -38,7 +38,7 @@ $(document).ready(function() {
 
 function submitPasswordReset() {
 
-	alert("EchoMarket testing, please disregard");
+	
 	var foundInvalid = true;
 
 	if ($("#users_password_confirmation").val() != $("#users_password").val()) {
@@ -55,8 +55,8 @@ function submitPasswordReset() {
 
 	if (foundInvalid) {
 
-		alert("EchoMarket testing, please disregard");
-		alert($("form.reset_password"));
+		
+		
 
 		$("form.reset_password").submit();
 

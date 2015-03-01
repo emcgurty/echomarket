@@ -1,5 +1,6 @@
-<script src="/javascripts/borrower_seeking.js" type="text/javascript"></script>
-<script src="/javascripts/bl_util.js" type="text/javascript"></script>
+<%= javascript_include_tag 'borrower_seeking.js' %>
+<%= javascript_include_tag 'bl_util.js' %>
+
 <%= render :partial => 'menus/borrowers_menu' %>
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_seeking"},
  :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
@@ -604,8 +605,8 @@
                   None provided.
                 <% end %></label>
               <label>Image of Item:</label>
-              <% file_path_str = "../images/item_images/" + @ig[0].image_file_name %>
-              <img  height="100" width="200" src="<%= file_path_str %>" alt="Uploaded image file" />
+              
+              <img  height="100" width="200" src="<%= get_image_path(@ig[0].image_file_name) %>" alt="Uploaded image file" />
               <span class="file_image_error">&nbsp;</span>
             </div>
 

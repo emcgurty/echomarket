@@ -220,7 +220,7 @@ class BorrowerController < ApplicationController
               :date_created => Time.now,
               :date_updated => Time.now,
               :is_active => 1]
-            @img.update_attributes(@myupdatehash[0])
+            @img.update_attributes(@myupdatehash)
             @img.save
           end
 

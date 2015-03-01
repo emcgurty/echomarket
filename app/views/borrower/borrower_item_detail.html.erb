@@ -21,7 +21,7 @@
 
 
 
-<script src="/javascripts/borrower_seeking.js" type="text/javascript"></script>
+<%= javascript_include_tag 'borrower_seeking.js' %>
 
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
   <% @ldr = @borrowers %>

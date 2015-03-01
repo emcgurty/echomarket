@@ -1,4 +1,4 @@
-<form class="items_listing",  id="lenders_item_form") >
+<form class="items_listing"  id="lenders_item_form" >
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
     <p>ITEMS LISTING</p>
@@ -40,7 +40,7 @@
         <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_item_id = ?', ldr.lender_item_id])  %>
         <% if @imgs %>
           <% @imgs.each do |oimg| %>
-            <% file_path_str = "../images/item_images/" + oimg.image_file_name %>
+            <% file_path_str = oimg.image_file_name %>
             <%  icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption)  %>
             <img src='<%= file_path_str.to_s %>' alt="<%= icaption  %>" style="margin:5px;"  height="50" width="50" />
             <% unless icaption.blank? %>
@@ -88,7 +88,7 @@
           <% @imgs.each do |oimg| %>
 
 
-            <% file_path_str = "../images/item_images/" + oimg.image_file_name %>
+            <% file_path_str = oimg.image_file_name %>
             <%  icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption) %>
             <img src='<%= file_path_str.to_s %>' alt="<%= icaption %>" style="margin:5px;" height="50" width="50" />
             <% unless icaption.blank? %>
@@ -131,4 +131,4 @@
   </div>
 
 
-</ form>
+</form>
