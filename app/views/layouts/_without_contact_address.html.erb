@@ -1,0 +1,7 @@
+<div class="<%= which_class %>">
+  <p>You have selected above to not display your contact address.</p>
+  <label for="displayAlternative" >Use an alternative address?:&nbsp;
+        <%= form.check_box(field, {:style=>"vertical-align: middle;width:15px;", :id =>"displayAlternative",:onchange=>onchange_call}) %>
+      </label>
+  </div>
+

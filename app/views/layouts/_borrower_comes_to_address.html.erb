@@ -1,0 +1,22 @@
+  <div class="<%= which_class %>">
+    <ul>
+      <li><label class="radio" for="borrowerComesToContactAddress" >Contact Address?:&nbsp;
+          <%= radio_button(:lenders,:b_comes_to_which_address, "3", {:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToContactAddress"}) %>
+        </label>
+      </li>
+      <li><label class="radio" for="borrowerComesToAlternativeAddress" >Alternative Address?:&nbsp;
+          <%= radio_button(:lenders,:b_comes_to_which_address, "2",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToAlternativeAddress"}) %>
+        </label>
+      </li>
+      <li>
+        <label class="radio" for="borrowerComesToEitherAddress" >Either address is fine.&nbsp;
+          <%= radio_button(:lenders,:b_comes_to_which_address, "1",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToEitherAddress"}) %>
+        </label>
+      </li>
+      <li>
+        <label class="radio" for="borrowerComesToNeitherAddress" >Neither? No pick up at any address.&nbsp;
+          <%= radio_button(:lenders,:b_comes_to_which_address, "0",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToNeitherAddress"}) %>
+        </label>
+      </li>
+    </ul>
+  </div>

@@ -1,0 +1,52 @@
+<script>
+  $(document).ready(function() {
+
+    $.fn.center = function () {
+
+        $(this).css( "width: " + $("form").width() + "15px","height: " + $("form").height() + "15px" )
+        var element = $(this);
+        var e_width = element.width();
+        var win_width = $(window).width();
+        var left_margin_calc =  (win_width - e_width) / 2;
+        element.css('margin-left', (left_margin_calc + "px"));
+
+
+    };
+
+    $.fn.center_form = function () {
+        var element = $(this);
+        var e_width = element.width();
+        var win_width = $("div.form_wrapper").width();
+        var left_margin_calc =  (win_width - e_width) / 2;
+        element.css('margin-left', (left_margin_calc + "px"));
+
+    };
+
+
+
+
+    $("form").center();
+
+
+  });
+
+
+
+
+
+</script>
+<div style="margin:5px;" >
+
+<div class="top">
+    <p><span class="logo" >The Echo Market</span></p>
+    <span class="logo_small" style="text-align:center;">Your goodwill resource for lending, borrowing and even trading or donating some of life's necessities.</span>
+    <p style="text-align:center;">Welcome to the Echo Market.  You have arrived at the Echo Market very early in its development.  It has not been thoroughly tested in all internet browsers with respective versions.
+      It is best viewed in Mozilla FireFox, Google Chrome looks good.  Firefox browser Reload will retain values, while Chrome browser Reload will clear values. You will experience some awkward or poor views in Internet Explorer version less than 9.</p>
+  </div>
+
+  <div class="bottom">
+    <%= submit_tag("Enter The Chamber!", :class=>"submit_buttons") %>
+  </div>
+
+</div>
+

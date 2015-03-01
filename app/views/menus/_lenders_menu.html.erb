@@ -1,0 +1,21 @@
+<%= stylesheet_link_tag 'menu_nav.css' %>
+<ul id="nav">
+  <li class="subs"><a href="#menu_item_1" onclick="showFormContact();">Contact Information</a></li>
+  <li class="subs"><a href="#menu_item_2" onclick="showBorrowersContactPreferences();">Borrowers Contact Preferences</a></li>
+  <li class="subs"><a href="#s2">Transfer</a>
+    <ul>
+      <li><a href="#menu_item_3" onclick="showLenderToBorrower();">Lender to Borrower</a></li>
+      <li><a href="#menu_item_4" onclick="showBorrowerToLender();">Borrower to Lender</a></li>
+    </ul>
+  </li>
+  <li class="subs"><a href="#menu_item_5" onclick="showItem();">Items(s) to Lend</a></li>
+
+  <li class="subs"><a href="#s2">Lending Terms</a>
+    <ul>
+       <li class="subs"><a href="#menu_item_6" onclick="showMonetary();">Monetary</a></li>
+       <li class="subs"><a href="#menu_item_7" onclick="showDuration();">Duration</a></li>
+      <li class="subs"><a href="#menu_item_8" onclick="showConditions();">Conditions</a></li>
+    </ul>
+  </li>
+  <li class="subs"><a href="#menu_item_9" onclick="showLegal();">Legal/Other</a></li>
+</ul>

@@ -1,0 +1,43 @@
+<style type="text/css">
+
+  p.about{
+
+    background-color: lightblue;   /* #444;  */
+    color:black;
+    font-size:16px;
+    font-weight:bold;
+    width:90%;
+    margin-left:15px;
+  }
+
+
+</style>
+
+<%= form_tag({:action=>"legal"}, {:class=>"legal"}) do  %>
+  <div class="top" >
+    <p><span class="logo_white" >The Echo Market</span></p>
+    <p>Nitty-gritty, but important legal matters.</p>
+  </div>
+
+  <div class="column">
+
+
+    <p class="about">Echo Market supports the exchange of items that enhance, advance  and
+      improve the lives of its participants.  Sometimes that notion is not very clear. </p>
+    <p class="about">All Echo Market items offered or sought will be approved with communication between either the lender or borrower and Echo Market.
+      Items that will be excluded: contraband, weapons, perishable, pharmaceutical, illegal/controlled, and broken items;
+      items offered or sought in malfescance; items that may raise sanitation risks; stolen items; items of human/sexual exploitative nature; items that foment crime
+      and/or hostility... </p>
+
+    <p class="about">The Echo Market is a non-profit, goodwill-based site.  Within the site, for the moment, no incentives are provided in offering goods, and no attention will be drawn
+      to those that borrow.  The general intent of the Echo Market is that it will foster goodwill within participating communities.</p>
+
+
+
+  </div>
+
+  <div class="bottom">
+    <%= link_to "Register", user_register_url %>
+  </div>
+<% end %>
+

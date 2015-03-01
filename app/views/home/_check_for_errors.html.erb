@@ -1,0 +1,25 @@
+<% if data_source %>
+  <% if data_source.errors.any?  %>
+
+    <div class="error_warning">
+      <p>
+        <% if data_source.errors.count == 1  %>
+          An error prohibited new data from being either saved or transmitted:
+        <% elsif data_source.errors.count > 1  %>
+          Errors prohibited new data from being either saved or transmitted:
+        <% end %>
+      </p>
+      <p>There were problems with the following fields: </p>
+      <ul>
+        <% data_source.errors.full_messages.each do |msg|  %>
+          <li style="margin-left:25px;font-weight:bold;">
+            <%= msg  %>
+
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <%  end  %>
+<% end %>
+
+

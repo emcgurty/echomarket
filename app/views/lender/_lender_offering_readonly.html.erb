@@ -1,0 +1,312 @@
+<style type="text/css">
+  span.readonly_span {
+    color:indigo;
+    font-size:14px;
+    width:auto;
+    display:inline;
+  }
+
+  label.readonly_label {
+    color:black;
+    font-size:14px;
+    width:100%;
+    display:inline;
+    float:left;
+    margin-left:25px;
+
+  }
+
+
+  div.item_section {
+    display:block;
+    float:left;
+    border-bottom:5px solid #ddd;
+    margin: 5px;
+    width:94%;
+
+  }
+
+  p.readonly_p {
+    color:purple;
+    display:inline;
+    float:left;
+    width:auto;
+
+  }
+
+  a.readonly_a {
+    color:#ff4500;
+    display:inline-table;
+    float:right;
+    width:auto;
+
+
+  }
+
+ 
+</style>
+
+
+<div class="top" >
+  <p>LENDER ITEM REGISRATION REVIEW</p>
+</div>
+<br />
+<p class="readonly_p" id="set_focus_on_review" style="width:100%;color:red;">In the following, 'Indifferent' means that you did not make a 'Yes/No' selection, which is okay...</p>
+<br />
+<div class="item_section" id="item_section1">
+  <p class="readonly_p">1. Contact Information</p>
+  <br />
+  <label class="readonly_label" >As a lender, how would you describe yourself?&nbsp;<span class="readonly_span" id="describe_yourself" >Required Description</span></label>
+
+  <br />
+  <label class="readonly_label">Organization Name:&nbsp;<span class="readonly_span" id="organization_name_selection">Organization Name Placeholder</span>&nbsp;&nbsp;
+    Display Organization Name:&nbsp;<span class="readonly_span" id="displayLenderOrganizationName_selection">Indifferent</span></label>
+
+  <br />
+  <label class="readonly_label">Your Name:&nbsp;
+    <span class="readonly_span" id="first_name_selection">Required First Name</span>&nbsp;&nbsp;
+    <span class="readonly_span" id="mi_selection">Middle Initial Placeholder</span>&nbsp;&nbsp;
+    <span class="readonly_span" id="last_name_selection" >Required Last Name</span>&nbsp;&nbsp;
+    Public Display Name?:&nbsp;<span class="readonly_span" id="display_name_selection">Indifferent</span></label>
+  <br />
+
+
+  <label class="readonly_label">Address Lines:&nbsp;
+    <span class="readonly_span" id="address_1_selection">Required Address Line 1</span>&nbsp;&nbsp;
+    <span class="readonly_span" id="address_2_selection">Address Line 2 Placeholder</span>&nbsp;&nbsp;</label>
+  <label class="readonly_label">City;County/Province;State:&nbsp;
+    <span class="readonly_span" id="city_selection">Required City; &nbsp;</span>
+    <span class="readonly_span" id="province_selection">County/Province Placeholder;&nbsp;</span>
+    <span class="readonly_span" id="state_selection">State Placeholder</span></label>
+  <br />
+
+  <label class="readonly_label">Country/Postal Code:&nbsp;
+    <span class="readonly_span" id="country_selection">Required Country;&nbsp;</span>
+    <span class="readonly_span" id="postal_code_selection">Required Postal Code</span>
+    Public Display Address?:&nbsp;<span class="readonly_span" id="display_address_selection">Indifferent</span></label>
+  <br />
+  <label class="readonly_label">Home Phone:&nbsp;<span class="readonly_span" id="home_phone_selection">Home Phone Placeholder</span>&nbsp;&nbsp;
+    Public display your home phone?&nbsp;<span class="readonly_span" id="display_home_phone_selection">&nbsp;No</span></label><br />
+  <label class="readonly_label">Cell Phone:&nbsp;<span class="readonly_span" id="cell_phone_selection">Cell Phone Placeholder</span>&nbsp;&nbsp;
+    Public display your cell phone?&nbsp;<span class="readonly_span" id="display_cell_phone_selection">&nbsp;No</span></label><br />
+  <label class="readonly_label">Alternative Phone:&nbsp;<span class="readonly_span" id="alternative_phone_selection">Alternative Phone Placeholder</span>&nbsp;&nbsp;
+    Public display your alternative phone?&nbsp;<span class="readonly_span" id="display_alternative_phone_selection">&nbsp;No</span></label>
+
+  <div   class="div_white" id="section1" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_1" onclick="showFormContact();">Edit '1. Contact Information'</a>
+
+</div>
+<div class="item_section" id="item_section2">
+
+  <p class="readonly_p">2. Your Borrowers Contact Preferences</p><br />
+  <label class="readonly_label">How would you like interested borrowers to make initial contact with you?</label><br />
+
+  <label class="readonly_label" style="text-decoration: underline;">By your Postal Address?</label>
+  <br />
+  <label class="readonly_label">Which Contact Address?:&nbsp;<span class="readonly_span" id="useWhichContactAddress_selection">Indifferent</span></label><br />
+
+  <div id="contactAddressWhich" style="display:none;">
+    <div id="contactAddressOnly" style="display:none;">
+      <label class="readonly_label" style="color:indigo;">  Your above Contact Address</label>
+    </div>
+    <div id="contactAddressWithAlternative" style="display:none;">
+      <label class="readonly_label">Address Line(s):&nbsp;
+        <span class="readonly_span" id="address_1_alternative_selection">Alt Address 1 Placeholder</span>&nbsp;&nbsp;
+        <span  class="readonly_span"  id="address_2_alternative_selection">Alt Address 2 Placeholder</span>&nbsp;&nbsp;</label>
+
+      <label class="readonly_label">City;County/Province;State:&nbsp;
+        <span class="readonly_span" id="city_alternative_selection">Alt City Placeholder</span>&nbsp;&nbsp;;
+        <span class="readonly_span" id="province_alternative_selection">Alt Province/County Placeholder</span>&nbsp;&nbsp;;
+        <span class="readonly_span" id="state_alternative_selection">Alt State Placeholder</span></label>
+      <br />
+      <label class="readonly_label">Country; Postal Code:&nbsp;
+        <span class="readonly_span" id="country_alternative_selection">Alt Country Placeholder;&nbsp;</span>
+        <span class="readonly_span" id="postal_code_alternative_selection">Alt Postal Code Placeholder</span></label>
+    </div>
+  </div>
+
+  <br />
+
+  <label class="readonly_label" style="text-decoration: underline;">By your Login E-Mail? Or, an Alternative E-Mail?</label><br />
+  <label class="readonly_label">Login E-Mail:&nbsp; <% @lender_email = Users.find(:first, :conditions => ["user_id = ?", session[:user_id]]) %>
+    <span class="readonly_span" style="font-size:14px;"><%= @lender_email.email %></span></label>
+  <br />
+
+
+  <label class="readonly_label">Alternative Email:&nbsp;<span class="readonly_span" id="email_alternative_selection">Alternative E-mail Placeholder</span></label><br />
+  <label class="readonly_label">Which E-Mail Address?:&nbsp;<span class="readonly_span" id="borrower_contact_by_email_selection">Indifferent</span></label><br />
+  <label class="readonly_label"  style="text-decoration: underline;;">By your Phone?</label><br />
+
+  <label class="readonly_label">Home Phone:&nbsp;<span class="readonly_span" id="home_phone_contact_selection">Home phone placeholder</span>
+    Can borrower call you at your home phone?<span class="readonly_span" id="home_phone_contact_permission_selection">No</span></label>
+  <label class="readonly_label">Cell Phone:&nbsp;<span class="readonly_span" id="cell_phone_contact_selection">Cell phone placeholder</span>
+    Can borrower call you at your cell phone?<span class="readonly_span" id="cell_phone_contact_permission_selection">No</span></label>
+  <label class="readonly_label">Alternative Phone:&nbsp;<span class="readonly_span" id="alternative_phone_contact_selection">Alternative phone placeholder</span>
+    Can borrower call you at your alternative phone?<span class="readonly_span" id="alternative_phone_contact_permission_selection">No</span></label>
+  <br />
+
+  <br />
+  <label class="readonly_label" style="text-decoration: underline;">By Internet Social Media?</label><br />
+  <table class="summary">
+    <tr>
+      <td>
+        <label class="readonly_label">Your Facebook Account:&nbsp;<span class="readonly_span" id="facebook_selection">Facebook...Placeholder</span></label>  </td>
+      <td>
+        <label class="readonly_label">Your LinkedIn Account:&nbsp;<span class="readonly_span" id="linkedin_selection">LinkedIn... Placeholder</span></label>  </td>
+    </tr>
+    <tr>
+      <td>
+        <label class="readonly_label">Your Twitter Account:&nbsp;<span class="readonly_span" id="twitter_selection">Twitter... Placeholder</span></label></td>
+
+      <td>
+        <label class="readonly_label">Your Instagram Account:&nbsp;<span class="readonly_span" id="instagram_selection">Instagram... Placeholder</span></label></td>
+    </tr>
+    <tr>
+      <td>
+        <label class="readonly_label">Other Social Media (OSM):&nbsp;<span class="readonly_span" id="other_media_selection">OSM... Placeholder</span></label></td>
+
+      <td>
+        <label class="readonly_label">Other Social Media Access:&nbsp;<span class="readonly_span" id="other_media_access_selection">OSM Access... Placeholder</span></label></td>
+    </tr>
+    <tr>
+      <td>
+        &nbsp;</td>
+
+      <td>
+        &nbsp;</td>
+
+    </tr>
+
+  </table>
+  <div   class="div_white" id="section2" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_2" onclick="showBorrowersContactPreferences();">Edit '2. Borrower Contact Preferences'</a><br />
+</div>
+<div class="item_section" id="item_section3">
+  <p class="readonly_p">3. Item Transfer: Lender to Borrower</p><br />
+
+  <label class="readonly_label" >How would like a borrower to receive your item?</label>
+  <br />
+  <label class="readonly_label" >Borrower comes to your...:&nbsp;<span class="readonly_span" id="borrower_comes_to_which_address_selection">Indifferent</span><br />
+    Meet with borrower at an agreed location?:<span class="readonly_span" id="l2b_agreed_selection">Indifferent</span>&nbsp;&nbsp;
+    Will deliver to borrower preferred location?:<span class="readonly_span" id="l2b_preferred_selection">Indifferent</span></label><br />
+
+  <div id="which_third_party">
+    <label class="readonly_label" >Would you like a third-party present during transfer to borrower?:&nbsp;
+      <span class="readonly_span" id="l2b_third_party_selection">Indifferent</span></label>
+    <label class="readonly_label" >Your choice?:&nbsp;<span class="readonly_span" id="l2b_your_choice_delivery_selection">Indifferent</span>&nbsp;
+      Mutually agreed?:&nbsp;<span class="readonly_span" id="l2b_agreed_delivery_selection">Indifferent</span></label>
+  </div>
+  <div   class="div_white" id="section3" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_3" onclick="showLenderToBorrower();">Edit '3. Item Transfer: Lender to Borrower'</a><br />
+</div>
+<div class="item_section" id="item_section4">
+  <p class="readonly_p">4. How would like a borrower to return your item?</p><br />
+
+  <label class="readonly_label" >Borrower returns to your...:&nbsp;<span class="readonly_span" id="borrower_returns_to_which_address_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >Will meet with borrower at an agreed alternative location?:&nbsp;<span class="readonly_span" id="b2lborrower_returns_to_agreed_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >Will pick up at borrower's location?:&nbsp;<span class="readonly_span" id="borrower_pick_up_selection">Indifferent</span></label>
+  <br />
+
+  <div id="which_third_party">
+    <label class="readonly_label" >Would you like a third-party present during transfer from borrower?:&nbsp;
+      <span class="readonly_span" id="b2l_third_party_present_selection">Indifferent</span></label>
+    <br />
+    <label class="readonly_label" >Your choice?:&nbsp;
+      <span class="readonly_span" id="b2l_third_your_choice_selection">Indifferent</span>&nbsp;
+      Mutually agreed?:&nbsp; <span class="readonly_span" id="b2l_third_mutual_selection">Indifferent</span>
+    </label><br />
+  </div>
+  <div   class="div_white" id="section4" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_4" onclick="showBorrowerToLender();">Edit '4. Item Transfer: Borrower to Lender'</a>  <br />
+</div>
+<div class="item_section" id="item_section5">
+
+  <p class="readonly_p">5. Item you would like to lend</p><br />
+
+  <label class="readonly_label">Category:&nbsp;<span class="readonly_span" id="category_selection">Required Category</span></label><br />
+  <label class="readonly_label">Add another category:&nbsp;<span class="readonly_span" id="other_item_category_selection">Another category</span></label><br />
+  <label class="readonly_label">Notify borrowers of Item in Category:&nbsp;<span class="readonly_span" id="category_notification_selection">Indifferent</span></label><br />
+  <label class="readonly_label">Description:&nbsp;<span class="readonly_span" id="item_description_selection">Required Item Description</span></label><br />
+  <label class="readonly_label">Condition:&nbsp;<span class="readonly_span" id="item_condition_selection">Item Condition</span></label><br />
+  <label class="readonly_label">Model:&nbsp;<span class="readonly_span" id="item_model_selection">Item Model</span></label><br />
+  <label class="readonly_label">Number of Items:&nbsp;<span class="readonly_span" id="item_count_selection">Number of Items</span></label><br />
+
+  <table class="summary">
+    <tr>
+      <td>
+        <label class="readonly_label">Provided image caption:&nbsp;
+          <span class="readonly_span" id="image_caption_selection">Caption Offered Placeholder</span>
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label class="readonly_label" style="float:left">Image of Item: &nbsp;&nbsp;<br />
+          <img id="imagePreview_selection" height="100" width="200" src="" alt="Uploaded image file" style="float:left" /></label>
+
+      </td>
+    </tr>
+  </table>
+
+
+
+  <div   class="div_white" id="section5" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_5" onclick="showItem();">Edit '5. Item to Lend'</a><br />
+</div>
+<div class="item_section" id="item_section6">
+  <p class="readonly_p">6. Terms of Lending: Monetary</p><br />
+
+  <label class="readonly_label">For free?:&nbsp;<span class="readonly_span" id="for_free_selection">Indifferent</span></label><br />
+  <label class="readonly_label">Small borrowing fee?:&nbsp;<span class="readonly_span" id="small_borrowing_fee_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >If yes, what fee amount?:&nbsp;<span class="readonly_span" id="small_fee_amount_selection">No amount indicated</span></label><br />
+  <label class="readonly_label" >Item may be available for small purchase amount?:&nbsp;<span class="readonly_span" id="purchase_selection">Indifferent</span></label><br />
+  <label class="readonly_label">If yes, what purchase amount?:&nbsp;<span class="readonly_span" id="purchase_amount_selection">No amount indicated</span></label><br />
+  <label class="readonly_label" >Item may be available for donation?:&nbsp;<span class="readonly_span" id="donation_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >If yes, would you like to anonymously donate?:&nbsp;<span class="readonly_span" id="anon_donations_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >Would you be interesting in trading?:&nbsp;<span class="readonly_span" id="trade_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >If yes, what would you like in exchange?:&nbsp;<span class="readonly_span" id="trade_item_selection">No item indicated</span></label><br />
+  <div   class="div_white" id="section6" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_6" onclick="showMonetary();">Edit '6. Terms of Lending: Monetary'</a><br />
+</div>
+<div class="item_section" id="item_section7">
+  <p class="readonly_p">7. Terms of Lending: Duration</p><br />
+
+  <label class="readonly_label" >Agreed number of days?:&nbsp;<span class="readonly_span" id="number_of_days_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >Agreed number of hours?:&nbsp;<span class="readonly_span" id="number_of_hours_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >Indefinite?&nbsp;<span class="readonly_span" id="indefinite_selection">Indifferent</span></label ><br />
+  <div   class="div_white" id="section7" >&nbsp;</div>
+
+  <a class="readonly_a"  href="#menu_item_7" onclick="showDuration();">Edit '7. Terms of Lending: Duration'</a><br />
+</div>
+<div class="item_section" id="item_section8">
+
+  <p class="readonly_p">8. Terms of Lending: Conditions</p><br />
+
+  <label class="readonly_label" >Would you like to be present during borrowing period?&nbsp;
+    <span class="readonly_span" id="present_during_borrowing_period_selection">Indifferent</span></label>
+  <br />
+  <div id="length_of_presence_selection">
+
+    <label class="readonly_label" >During the entire lending period?:&nbsp;<span class="readonly_span" id="entire_period_selection">Indifferent</span></label>
+    <br />
+    <label class="readonly_label" >During lending period partially?:&nbsp;<span class="readonly_span" id="partial_period_selection">Indifferent</span></label>
+    <br />
+  </div>
+
+  <label class="readonly_label" >Would you like to provide item proper-use training?&nbsp;<span class="readonly_span" id="proper_use_selection">Indifferent</span></label><br />
+  <label class="readonly_label" >I have specific conditions of lending:&nbsp;<span class="readonly_span" id="specific_conditions_selection">Borrowing Conditions Placeholder</span></label><br />
+  <div   class="div_white" id="section8" >&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_8" onclick="showConditions();">Edit '8. Terms of Lending: Conditions'</a><br />
+</div>
+
+<div class="item_section" id="item_section9">
+
+  <p class="readonly_p">9. Legal</p>
+  <div   class="div_white" >&nbsp;</div>
+  <label class="readonly_label">I am acting and participating in a spirit of goodwill:&nbsp;<span class="readonly_span" id="goodwill_selection">Required</span></label>
+  <label class="readonly_label">I have achieved the age of 18 years or more.&nbsp;<span class="readonly_span" id="18_selection">Required</span></label>
+
+  <div   class="div_white" id="section9">&nbsp;</div>
+  <a class="readonly_a"  href="#menu_item_9" onclick="showLegal();">Edit '9. Legal/Other'</a><br />
+  <br />
+</div>

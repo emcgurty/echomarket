@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+
+		<%= stylesheet_link_tag 'echo_market.css' %>
+
+		<!--
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-59882513-1', 'auto');
+		ga('send', 'pageview');
+
+		</script>-->
+
+		<% if session[:background] %>
+		<%= stylesheet_link_tag 'menu_nav.css' %>
+		<%= stylesheet_link_tag 'style_animated_echo_market.css' %>
+		<%= javascript_include_tag 'echo_market.js' %>
+		<%= javascript_include_tag 'background.js' %>
+		<%= javascript_include_tag  'http://code.jquery.com/jquery-1.10.1.min.js'  %>
+		<%= javascript_include_tag  'http://code.jquery.com/jquery.min.js'  %>
+		<%  end %>
+		<title>The Echo Market</title>
+
+	</head>
+
+	<body>
+
+		<% content_for :header do %>
+		<%= render :partial => 'menus/echomarket_menu_options' %>
+		<% end %>
+
+		<% content_for :footer do %>
+		<%= render :partial => 'menus/footer' %>
+		<% end %>
+
+		<% content_for :center do %>
+		<% if session[:background] %>
+		<div class="wrapper">
+			<div id="form_wrapper" class="form_wrapper">
+				<%= yield -%>
+			</div>
+
+		</div>
+		<% else %>
+		<%= yield -%>
+		<% end %>
+		<% end %>
+
+		<% if session[:background] %>
+		<div class="" >
+			<%= yield :header %>
+		</div>
+		<% end %>
+
+		<%= yield :center %>
+
+		<%# if session[:background] %>
+		<%#= yield :footer %>
+		<%#*</div>%>
+		<%# end %>
+	</body>
+</html>

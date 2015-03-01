@@ -1,0 +1,81 @@
+<script src="/javascripts/borrower_seeking.js" type="text/javascript"></script>
+<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_history"}, :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"} do |nf| %>
+
+
+  <div class="top" >
+    <p><span class="logo_white" >The Echo Market</span></p>
+    <p>Welcome Back Echo Market borrower!</p>
+
+  </div>
+
+  <% unless @borrowers.blank? %>
+
+    <div style="float:left;">
+      <table class="history" >
+        <tr >
+          <th>Category</th>
+          <th>Description</th>
+          <th>Model</th>
+          <th>Condition</th>
+          <th>Date Created/Updated</th>
+          <th>Status</th>
+          <th>Process</th>
+        </tr>
+        <%  rowCount = 1 %>
+
+        <% @borrowers.each do |isq| %>
+
+          <% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
+          <%  rowCount = rowCount + 1 %>
+          <tr class="<%= rowClass %>" >
+            <td>
+              <% @cats = Categories.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
+              <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
+            </td>
+            <td>
+              <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
+            <td>
+              <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
+            <td>
+              <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_conditions_id = ?", isq.item_condition_id]) %>
+              <%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
+            </td>
+            <td>
+              <%= (isq.date_created.blank? ? "NA": isq.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>
+              <%= (isq.date_updated.blank? ? "NA": isq.date_updated.strftime("%m/%d/%Y %I:%M%p")) %>
+            </td>
+            <td>
+              <%= (isq.is_saved == 0 ? "Not complete": "Complete") %><br style="margin:0;"/>
+              <%= (isq.approved == 0 ? "Not approved": "Approved") %>
+            </td>
+            <td >
+
+              <%= link_to "Edit", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>isq.borrower_item_id  %><br style="margin:0;"/>
+              <%= link_to "Reuse", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> isq.borrower_item_id %><br style="margin:0;"/>
+              <%= link_to ("Delete", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>isq.borrower_item_id} ,
+                
+                 {:confirm => "Are you sure you wish to delete this record?"})  %>
+
+
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+
+  <% else %>
+    <p>Echo Market could not find your borrower history, prehaps it has items not yet approved.</p>
+  <% end %>
+  <div class="div_white" ></div>
+  <div class="bottom" style="text-align:center">
+    <% unless @borrowers.blank? %>
+
+      <%= link_to "I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "borrower", :action => "borrower_seeking", :id=>"" %>
+    <% else %>
+
+      <%= link_to "I'd like to offer a new item for borrowing.", :controller => "borrower", :action => "borrower_seeking", :id=>"" %>
+
+    <% end %>
+
+  </div>
+<% end %>

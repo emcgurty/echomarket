@@ -1,0 +1,48 @@
+<%= javascript_include_tag 'login.js' %>
+<% if session[:register_type].blank? || session[:register_type]== 'all' %>
+<% @lender_type_string == "" %>
+<% elsif session[:register_type] == "both" %>
+<% @lender_type_string == "LENDER/BORROWER" %>
+<% else %>
+<% @lender_type_string = session[:register_type].upcase + " " %>
+<% end %>
+<%= form_for @users, :url=> {:controller=>"user", :action => "login", :commit=>"login"}, :html=> {:class=>"login",  :id=>"user_login_form"} do |nf| %>
+
+<div class="top" >
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+	<p>
+		<%= @lender_type_string %>LOGIN
+	</p>
+</div>
+
+<% if session[:login_notice] %>
+<div class="top_notice" style="margin-top:5px;margin-left:5px;padding:5px;">
+	<p>
+		<%= session[:login_notice] %>
+	</p>
+</div>
+<% end %>
+
+<div class="column">
+	<label>Username: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your username?</span></a> </label>
+	<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
+	&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
+</div>
+
+<div class="column">
+	<label>Password: <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your password?</span></a> </label>
+	<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
+	&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
+</div>
+
+<div class="bottom">
+	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
+	<a href="#" onclick="submitLogin();">=> Submit Login</a>
+	<% end %>
+	<a href="#" onclick="showRegistration();">=> Don't have an account yet? Register here.</a>
+	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see that is being offered to borrow or lend.</a>
+</div>
+<% end %>
+

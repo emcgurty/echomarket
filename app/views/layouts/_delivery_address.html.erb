@@ -1,0 +1,17 @@
+<div class="<%= which_class %>">
+  <ul>
+    <li><label class="radio" for="borrowerReturnContact" >Contact Address?:&nbsp;
+        <%= form.check_box_tag(field, "2", {:style=>"vertical-align: middle;width:15px;", :id =>"borrowerReturnContact"}) %>
+      </label>
+    </li>
+    <li><label class="radio" for="borrowerReturnAlternative" >Alternative Address?:&nbsp;
+        <%= form.check_box_tag(field, "1",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerReturnAlternative"}) %>
+      </label>
+    </li>
+    <li>
+      <label class="radio" for="neitherBorrowerAddress" >Neither?&nbsp;
+        <%= form.check_box_tag(field, "0",{:style=>"vertical-align: middle;width:15px;", :id =>"neitherBorrowerAddress"}) %>
+      </label>
+    </li>
+  </ul>
+</div>

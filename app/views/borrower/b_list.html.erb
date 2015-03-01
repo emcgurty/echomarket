@@ -1,0 +1,66 @@
+<script src="/javascripts/borrower_seeking.js" type="text/javascript"></script>
+
+
+<%= form_for :borrowers, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
+  <div class="top" >
+    <p><span class="logo_white" >The Echo Market</span></p>
+    <p>Borrower Items</p>
+  </div>
+
+  <div class="column">
+    <h2 id="h2_listing" >What is sought to borrow...</h2>
+
+    <% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1"])  %>
+    <% if @borrower.blank? %>
+      <p>Seems that no one is seeking to borrow anything...</p>
+      <% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>
+        <%= link_to "Would you like to seek something to borrow?", borrower_seeking_url(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+      <% else %>
+        <%= link_to "Please login or register as a 'borrower' to seek an item.", user_login_path(:id => '', :type => 'borrower'), {:class=> "search1"}   %>
+      <% end %>
+    <% else %>
+      <% hold_cat  = "" %>
+
+      <% @borrower.each do |ldr| %>
+        <% @cats = Categories.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
+        <% if @cats %>
+          <% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
+            <label><%= @cats.category_type %></label><br />
+            <% hold_cat  = @cats.category_id %>
+          <% end %>
+        <% end %>
+        <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_item_id = ?', ldr.borrower_item_id])  %>
+        <% if @imgs %>
+          <% @imgs.each do |oimg| %>
+            <%  icaption = (oimg.item_image_caption.blank? ? 'None provided' : oimg.item_image_caption)  %>
+            <img src='<%= get_image_path(oimg.image_file_name) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
+            <% unless icaption.blank? %>
+              <label id="item_listing"><%= icaption %></label>
+            <% end %>
+          <% end %>
+        <% end %>
+        <label id="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
+        <label id="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
+        <% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
+        <label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
+
+        <%= link_to "Details..." , borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>
+
+        <hr style="color:indigo;" />
+
+      <% end %>
+
+    <% end %>
+  </div>
+
+  <div class="bottom">
+    <% if session[:user_id] %>
+      <a href="/lender/lender_offering" >Offer an Item to Lend</a>
+      <a href="/borrower/borrower_seeking" >Seek an Item to Borrow</a>
+    <% end %>
+    <a href="/user/register" >Become a Echo Market Lender or Borrower Member</a>
+  </div>
+
+
+
+<% end %>

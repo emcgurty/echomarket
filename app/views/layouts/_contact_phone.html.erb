@@ -1,0 +1,20 @@
+<div class="<%= which_class %>">
+  <ul>
+    <li>
+      <label class="radio" for="displayHomePhone" >Home?:&nbsp;
+        <%#*object, method, tag_value,%>
+        <%= form.check_box_tag(field,"2" ,{:style=>"vertical-align: middle;width:15px;", :id =>"displayHomePhone"}) %>
+
+      </label>
+    </li>
+    <li><label class="radio" for="displayCellPhone" >Cell?:&nbsp
+      
+      </label>
+    </li>
+    <li><label class="radio" for="displayAlternativePhone" >Alternative?:&nbsp
+        <%= form.check_box_tag(field, "0", {:style=>"vertical-align: middle;width:15px;", :id =>"displayAlternativePhone"}) %>
+      </label>
+    </li>
+    
+  </ul>
+</div>

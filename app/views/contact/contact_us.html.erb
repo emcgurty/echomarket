@@ -1,0 +1,65 @@
+<%= javascript_include_tag 'login.js' %>
+<script>
+	function submitContactUs() {
+		if (($("#contacts_subject").val() == "") || ($("#contacts_email").val() == "") || ($("#contacts_comments").val() == "")) {
+			$("span#contact_us_error").text("Subject, email and comments fields are all required.");
+			$("span#contact_us_error").css("visibility", "visible");
+
+		} else {
+
+			$('form.contact_us').submit();
+
+		}
+	}
+
+</script>
+
+<%= form_for @contact, :url=> {:controller=> "contact", :action => "contact_us"}, :html=> {:class=>"contact_us"} do |form|%>
+
+<div class="top" >
+
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+	<p>
+		Echo Market Contact
+	</p>
+</div>
+
+<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @contact}  %>
+
+<div class="column">
+
+	<label>Subject:</label>
+	<%= form.text_field(:subject) %>
+	<span class="error" id="contact_us_email_error">No text yet</span>
+
+</div>
+
+<div class="column" >
+	<label>Your email address: </label>
+	<%= form.email_field(:email) %>
+	<span class="error" id="contact_us_email_error">No text yet</span>
+</div>
+
+<div class="column">
+	<label>Comments: </label>
+	<%= form.text_area(:comments, {:rows=> '10', :cols=> '45', :maxlength=>255}) %>
+	<span class="error" id="contact_us_error">No text yet</span>
+
+</div>
+
+<div class="bottom">
+	<a href="#" onclick="submitContactUs();" >=> Submit my comments</a>
+	<%= link_to "=> I'll offer comments later", home_items_listing_url %>
+	<%= form.hidden_field :remote_ip,{ :value => request.remote_ip} %>
+	<% if session[:user_id] %>
+	<%= form.hidden_field :user_id,{ :value => session[:user_id]} %>
+	<% else %>
+	<%= form.hidden_field :user_id,{ :value => 'NA'} %>
+
+	<% end %>
+	<%= form.hidden_field :date_created,{ :value => Time.now} %>
+</div>
+
+<% end %>

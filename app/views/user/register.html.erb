@@ -1,0 +1,120 @@
+<%= javascript_include_tag 'login.js' %>
+<% if session[:register_type].blank? || session[:register_type]== 'all' %>
+<% @lender_type_string == "" %>
+<% elsif session[:register_type] == "both" %>
+<% @lender_type_string == "LENDER/BORROWER" %>
+<% else %>
+<% @lender_type_string = session[:register_type].upcase + " " %>
+
+<% end %>
+
+<%= form_for @users,  :url=>  {:controller=>"user", :action => "create", :commit=>"register"}, :html=> {:class=>"register", :id=>"user_login_form"} do |nf| %>
+
+<div class="top" >
+
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+
+	<p >
+		<%= @lender_type_string %> REGISTRATION
+	</p>
+</div>
+
+<% if @users.errors.any? %>
+<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @users}  %>
+<% end %>
+
+<% if session[:register_type].blank? || session[:register_type] == 'all'%>
+<div style="float:left;width:100%;margin-top:15px;" >
+	<label class="radio_login" >How would you like to Register?:</label>
+	<div class="radio" style="width:375px;">
+		<div style="float:left;" >
+			<label class="radio_login"  >As a Guest:
+				<%= nf.radio_button(:user_type, "guest", {:checked => true}) %> </label>
+		</div>
+		<div style="float:left;" >
+			<label class="radio_login"  >&nbsp;&nbsp;As a Lender:
+				<%= nf.radio_button(:user_type, "lender") %> </label>
+		</div>
+		<div style="float:left;" >
+			<label class="radio_login"  >&nbsp;&nbsp;As a Borrower:
+				<%= nf.radio_button(:user_type, "borrower") %> </label>
+		</div>
+		<div style="float:left;" >
+			<label class="radio_login"  >As a Lender and a Borrower:
+				<%= nf.radio_button(:user_type, "both") %> </label>
+		</div>
+	</div>
+	<span class="error" id="no_type_choice_error">This is an error</span>
+</div>
+<% else %>
+<%= nf.hidden_field :user_type, :value=> session[:register_type] %>
+<% end %>
+
+<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
+	<label>User Alias:&nbsp; </label>
+	<%= nf.text_field(:user_alias, {:maxlength=>24,:tabindex=>"1",:value=>"" }) %>
+	<span style="color:indigo;font-size:12px;">Your required publicly displayed User Alias.</span>
+	<span class="error" id="registration_alias_error">This is an error</span>
+
+</div>
+<div class="column50">
+	<div >
+		<label>Username:&nbsp;
+			<br />
+			<%= nf.text_field(:username, {:maxlength=>16,:tabindex=>"2",:value=>""})  %></label>
+		<span style="color:indigo;font-size:12px;">Strictly for login.  Will never be publicly displayed.</span>
+		<span class="error" id="registration_username_error">This is an error</span>
+	</div>
+	<div  >
+		<label>Password:&nbsp;
+			<br />
+			<%= nf.password_field(:password, {:maxlength=>16,:tabindex=>"4",:value=>""})  %></label>
+		<span style="color:indigo;font-size:12px;">Between 8 - 16 alpha-numeric characters.</span>
+		<span class="error" id="registration_password_error">This is an error</span>
+	</div>
+
+</div>
+
+<div class="column50">
+	<div >
+		<label>Email:&nbsp;
+			<br />
+			<%= nf.email_field(:email, {:maxlength=>100, :size=>24,:tabindex=>"3",:value=>""}) %></label>
+		<span style="color:indigo;font-size:12px;">Required.  Will not be publicly displayed unless you later permit it.</span>
+		<span class="error" id="registration_email_error">This is an error</span>
+	</div>
+	<div  >
+		<label>Re-enter Password: &nbsp;
+			<br />
+			<%= nf.password_field(:password_confirmation, {:maxlength=>16,:tabindex=>"5",:value=>""})  %></label>
+		<span style="color:indigo;font-size:12px;">Password and re-entered password must match.</span>
+		<span class="error" id="registration_password_confirmation_error">This is an error</span>
+	</div>
+
+</div>
+
+<% if session[:edit_user] %>
+<div class="bottom" >
+	<a href="#" onclick="submitRegistration();">=> Okay... Please update my Registration.</a>
+	<a href="#" onclick="window.location.replace('/home/items_listing');">=> No, I'll update later. Let's see what is being offered to borrow or lend.</a>
+</div>
+<% else %>
+<div class="bottom" >
+	<a href="#" onclick="submitRegistration();">>>Submit Registration.</a>
+	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
+	<a href="#" onclick="showLogin();">=> Remembered that I already registered.</a>
+	<% end %>
+	<a href="#" onclick="window.location.replace('/home/items_listing');">=> I'll register later. Let's see what is being offered to borrow or lend.</a>
+</div>
+<% end %>
+
+<%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
+<%= nf.hidden_field :approved, :value => 0 %>
+<% begin %>
+<%= nf.hidden_field :user_id %>
+<% rescue %>
+<% end %>
+
+<% end %>

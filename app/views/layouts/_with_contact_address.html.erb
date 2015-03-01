@@ -1,0 +1,22 @@
+<div class="<%= which_class %>">
+  <ul  >
+    <li><label class="radio" for="displayContact" >Use your above Contact address?:&nbsp;
+        <%= radio_button(object,field, "3", {:style=>"vertical-align: middle;width:15px;", :id =>"displayContact", :onchange=>onchange_call}) %>
+      </label>
+    </li>
+    <li><label class="radio" for="displayAlternative" >Use an alternative address?:&nbsp;
+        <%= radio_button(object,field, "2", {:style=>"vertical-align: middle;width:15px;", :id =>"displayAlternative",:onchange=>onchange_call}) %>
+      </label>
+    </li>
+    <li>
+      <label class="radio" for="displayEither" >Either address is fine.:&nbsp;
+        <%= radio_button(object,field, "1", {:style=>"vertical-align: middle;width:15px;", :id =>"displayEither", :onchange=>onchange_call}) %>
+      </label>
+    </li>
+        <li>
+      <label class="radio" for="displayNeither" >Neither, no address contact please.:&nbsp;
+        <%= radio_button(object,field, "0", {:style=>"vertical-align: middle;width:15px;", :id =>"displayNeither",  :onchange=>onchange_call}) %>
+      </label>
+    </li>
+  </ul>
+</div>

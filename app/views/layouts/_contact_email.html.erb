@@ -1,0 +1,23 @@
+<div class="<%= which_class %>">
+  <ul>
+    <li><label class="radio" for="displayLoginEmail" >Your Login E-Mail?:&nbsp;
+        <%= radio_button(object,field, "3", {:style=>"vertical-align: middle;width:15px;", :id =>"displayLoginEmail"}) %>
+      </label>
+    </li>
+    <li>
+      <label class="radio" for="displayAlternativeEmail" >Your Alternative Email?:&nbsp
+        <%= radio_button(object,field, "2",  {:style=>"vertical-align: middle;width:15px;", :id =>"displayAlternativeEmail"}) %>
+      </label>
+    </li>
+       <li>
+      <label class="radio" for="displayEitherEmail" >Either Email?:&nbsp
+        <%= radio_button(object,field, "1",  {:style=>"vertical-align: middle;width:15px;", :id =>"displayEitherEmail"}) %>
+      </label>
+    </li>
+       <li>
+      <label class="radio" for="displayNeitherEmail" >Neither Email?:&nbsp
+        <%= radio_button(object,field, "0",  {:style=>"vertical-align: middle;width:15px;", :id =>"displayNeitherEmail"}) %>
+      </label>
+    </li>
+  </ul>
+</div>
