@@ -15,7 +15,7 @@ I built this web-site in my spare-time.  I know that it is not perfect.... Large
 
 4.)  I know that I need to resize for different screen sizes. I generally understand the process, but uncertain as to DOM object requirement in each screen.
 
-5.)  I realize that the site is not complete with regard to error management, asset config, and and general config settings.
+5.)  I realize that the site is not complete with regard to error management, asset config, and general config settings.
 
 6.)  Then there are the more sophisticated matters of need for threading...
 
