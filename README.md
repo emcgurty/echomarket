@@ -17,7 +17,7 @@ I built this web-site in my spare-time.  I know that it is not perfect.... Large
 
 5.)  I realize that the site is not complete with regard to error management, asset config, and general config settings.
 
-6.)  Then there are the more sophisticated matters of need for threading...
+6.)  Then there are the more sophisticated matters of need for threading, caching, haven't figured out sprokets yet, and generally explore gems that may be best for the site, ...
 
 Sincerely,
 
