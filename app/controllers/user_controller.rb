@@ -1,13 +1,15 @@
 class UserController < ApplicationController
-
   def edit
-    if request.put?  && params[:commit] == "Save My Changes"
+    unless params[:users].blank?
       begin
-        @user = Users.find(:first, :conditions => ["user_id = ?", session[:user_id]])
-        @user.user_type = params[:users][:user_type].to_s
-        @user.user_alias = params[:users][:user_alias].to_s
-        @save_result = @user.save(:validate=> false)
-        @current_user = @user
+        @users = Users.find(:first,  :conditions => ["user_id = ?", session[:user_id]])
+        @myupdatehash = Hash.new
+        @myupdatehash = [:user_type => params[:users][:user_type].to_s,
+        :user_alias => params[:users][:user_alias].to_s,
+        :email => params[:users][:email].to_s]
+        @save_result = @users.update_attributes(@myupdatehash[0])
+        @users.save(:validate => false)
+        @current_user = @users
       rescue ActiveRecord::ActiveRecordError => msg
         session[:notice] = "Error in updating your user record with system generated message: " + msg
         redirect_to home_items_listing_url
@@ -17,11 +19,9 @@ class UserController < ApplicationController
         session[:notice]  = "Your changes have been successful, " + params[:users][:user_alias].to_s
         redirect_to home_items_listing_url
       end
-
-
-
     else
-      @user = Users.find(:first, :conditions => ["user_id = ?", session[:user_id]])
+
+      @users = Users.find(:first, :conditions => ["user_id = ?", session[:user_id]])
     end
   end
 
@@ -33,7 +33,6 @@ class UserController < ApplicationController
       @bdelete = Borrowers.find(:all, :conditions => ["user_id = ?", session[:user_id]])
       @udelete = Users.delete(session[:user_id])
 
-
       @ldelete.each do |val|
         Lenders.delete(val.lender_item_id)
 
@@ -43,8 +42,6 @@ class UserController < ApplicationController
         Borrowers.delete(val.borrower_item_id)
 
       end
-
-
 
     rescue ActiveRecord::ActiveRecordError => msg
       reset_session
@@ -68,7 +65,7 @@ class UserController < ApplicationController
 
   end
 
-
+ 
 
   def register
 
@@ -79,19 +76,13 @@ class UserController < ApplicationController
 
     @users = Users.new
 
-
   end
-
-
-
-
 
   def login
     reset_session
     session[:edit_user] = false
     session[:background] = true
     session[:register_type] = (params[:type].blank? ? 'all': params[:type])
-
 
     ### Create, update or validate login in
     if request.post?
@@ -100,7 +91,7 @@ class UserController < ApplicationController
       else
         show
       end
-      ### else were are about to edit user
+    ### else were are about to edit user
     else
       unless params[:id].blank?
         session[:edit_user] = true
@@ -117,7 +108,6 @@ class UserController < ApplicationController
     end
 
   end
-
 
   def show
     session[:login_notice] = ''
@@ -149,7 +139,6 @@ Please try again. "
       @user = Users.new
     end
   end
-
 
   def user_record
     session[:notice] = ''
@@ -203,9 +192,8 @@ Please try again. "
       render :action => 'register'
     end
 
-
   end
-
+ 
 
   def update
     session[:notice] = ''
@@ -228,14 +216,12 @@ Please try again. "
         session[:user_id] = @current_user.user_id
         session[:user_type] = @current_user.user_type
         session[:user_alias] = @current_user.user_alias
-        return true
+      return true
       else
-        return false
+      return false
       end
     end
   end
-
-
 
   def activate
     session[:notice] = ''
@@ -265,8 +251,6 @@ Please try again. "
 
     redirect_to :controller=> "home", :action=>"items_listing"
   end
-
-
 
   def forgot_username
     session[:background] = true
@@ -298,7 +282,7 @@ Please try again. "
           Notifier.get_username_notification(@user).deliver if @user.recently_reset? && @user.recently_username_get?
           #format.html
           session[:notice] = "Path to retrieve username sent to #{@user.email}"
-          #end
+        #end
         else
           Notifier.reset_password_notification(@user).deliver if @user.recently_reset? && @user.recently_password_reset?
           session[:notice] = "Path to reset password code sent to #{@user.email}"
@@ -312,37 +296,34 @@ Please try again. "
       end
 
     end
-    # respond_to do |format|
-    # format.html
-    #end
+  # respond_to do |format|
+  # format.html
+  #end
   end
 
+  def get_reset_password
+    reset_session
+    session[:background] = true
+    session[:notice] = ''
+    @users = Users.find(:first, :conditions => ["reset_code =?", params[:id]])
+  end
 
-def get_reset_password
-	reset_session
-	session[:background] = true
-	session[:notice] = ''
-     @users = Users.find(:first, :conditions => ["reset_code =?", params[:id]])
-end
+  def reset_password
 
-
- def reset_password
-
-      @users = Users.find(:first, :conditions => ["reset_code =?", params[:users][:reset_code]])
-      if @users 
-        @myupdatehash = Hash.new
-     	   @myupdatehash = [:password => params[:users][:password], :password_confirmation => params[:users][:password_confirmation]]
-        @users.update_attributes(@myupdatehash)
-        @users.delete_reset_code
-	   session[:notice] = "Password reset successfully for #{@users.email}. Please login"
-        redirect_to home_items_listing_url
-	else
-       session[:notice] = "There was an error in updating your password, please contact the Echo Market. Perhaps you are trying to update your password from an old email notification."
-       redirect_to home_items_listing_url
+    @users = Users.find(:first, :conditions => ["reset_code =?", params[:users][:reset_code]])
+    if @users
+      @myupdatehash = Hash.new
+      @myupdatehash = [:password => params[:users][:password], :password_confirmation => params[:users][:password_confirmation]]
+      @users.update_attributes(@myupdatehash)
+      @users.delete_reset_code
+      session[:notice] = "Password reset successfully for #{@users.email}. Please login"
+      redirect_to home_items_listing_url
+    else
+      session[:notice] = "There was an error in updating your password, please contact the Echo Market. Perhaps you are trying to update your password from an old email notification."
+      redirect_to home_items_listing_url
     end
-	 
-  end
 
+  end
 
   def get_username
     session[:notice] = ''

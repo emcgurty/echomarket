@@ -132,12 +132,12 @@ function submitLogin() {
 }
 
 function submitRegistration() {
-	foundInvalid = false;
+	var foundInvalid = false;
 
 	if ($("input[name='users[user_type]']:checked").val() == '') {
 		$("#no_type_choice_error").text("Please choose a User Type.");
 		$("#no_type_choice_error").css("visibility", "visible");
-		foundInvalid = true
+		foundInvalid = true;
 	} else {
 		$("#no_type_choice_error").text("");
 		$("#no_type_choice_error").css("visibility", "hidden");
@@ -203,4 +203,7 @@ function submitRegistration() {
 
 	}
 }
+
+
+
 

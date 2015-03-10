@@ -1,0 +1,130 @@
+<%= javascript_include_tag 'login.js' %>
+<style>
+	input#form_submit1 {
+		background-color: indigo;
+		color: white;
+		font-size: 12px;
+		width: auto;
+		height: auto;
+		border: none;
+		margin-left: 15px;
+		padding: 0;
+		float: left;
+	}
+	th {
+		width: auto;
+		text-align: left;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	p {
+		padding: 5x;
+		margin-left: 5px;
+		color: black;
+		font-size: 14px;
+		/*    border-bottom:1px solid #ddd;*/
+		font-weight: bold;
+		width: 94%;
+	}
+
+</style>
+
+<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+
+<div class="top" >
+
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+
+	<p >
+		COMMUNITY REGISTRATION, continued...
+	</p>
+
+	<% if session[:notice] %>
+	<p>
+		<%= session[:notice] %>
+	</p>
+	<% end %>
+
+</div>
+<div class="top" id="commmunity_info">
+	<a id="top">Collapse</a>
+	<p>
+		Would you like to add members to your Community?
+	</p>
+	<p>
+		Adding members is optional, but recommended as it adds a layer of security to your Community. You may choose later to add members, and of course update or delete members.
+	</p>
+	<p>
+		Frankly, adding members seems to be a great opportunity to <span style="font-size:16px;color:indigo;">Throw A Echo Market Commmunity Member Party</span>!
+	</p>
+</div>
+
+<div id="community_members_build" style="display:block;float:left;width:96%;">
+	<p>
+		For each member, you need to provide either a member's full name or alias.  Either way, for each member that name or alias must be unique.  On login to the Echo Market, the member will need to provide the Community name, Community password and then provided either fullname or alias.
+	</p>
+
+	<div id="add_community_members" style="display:block;float:left;width:96%;height:auto;margin:5px;">
+		
+		<% @cm = CommunityMembers.find(:all, :readonly) %>
+		<table class="history_members" style="margin-left:25px;">
+
+			<tr >
+				<th >First Name</th>
+				<th >MI</th>
+				<th>Last Name</th>
+				<th>OR</th>
+				<th>Alias</th>
+				<th>Function</th>
+			</tr>
+			<% unless @cm.blank? %>
+			<%= nf.hidden_field :community_id, {:value=> @cm.community_id} %>
+			<% rowCount = 1 %>
+			<% @cm.each do |lf|%>
+			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
+			<% my_row_string =  @cm.community_id + "," + lf.community_member_id.to_s + "," + lf.first_name.to_s + "," + lf.last_name.to_s + "," + lf.mi + "," + lf.alias %>
+			<tr class="<%= rowClass %>" >
+
+				<td width= "20%"> <%= nf.text_field :first_name, {:value=> lf.first_name, :size=>24}  %></td>
+				<td width='5%'><%= nf.text_field :mi,  {:value=> lf.mi, :size=>2} %></td>
+				<td width='20%'><%= nf.text_field (:last_name), {:value=> lf.last_name,:size=>24} %></td>
+				<td width="5%">OR</td>
+				<td width='20%'><%= nf.text_field :alias, {:value=> lf.alias, :size=>24} %></td>
+				<td width='20%'>&nbsp;&nbsp;<%= link_to "Remove Member", :controller=> "community_member", :action=> "remove", :id=>lf.community_member_id %>
+				<br />
+				<%= link_to "Update Member", :controller=> "community_member", :action=> "update_row", :id=> my_row_string %> </td>
+			</tr>
+			<% rowCount = rowCount + 1 %>
+			<% end%>
+
+			<tr>
+				<td width= '20%'> <%= nf.text_field :first_name, {:value=> '', :size=>24} %></td>
+				<td width='5%'><%= nf.text_field :mi, {:value=> '', :size=>1} %></td>
+				<td width= '20%'><%= nf.text_field :last_name, {:value=> '', :size=>24} %></td>
+				<td width='5%'>OR</td>
+				<td width='20%'><%= nf.text_field :alias, {:value=> '',:size=>24} %></td>
+				<td width='20%'>&nbsp;&nbsp;<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
+			</tr>
+			<% else %>
+			<%= nf.hidden_field :community_id, {:value=>session[:community_id]} %>
+			<tr>
+				<td width= '20%'><%= nf.text_field :first_name, {:size=>24} %></td>
+				<td width='5%'><%= nf.text_field :mi , {:size=>1} %></td>
+				<td width= '20%'><%= nf.text_field :last_name, {:size=>24} %></td>
+				<td width= '5%'>OR</td>
+				<td width= '20%'><%= nf.text_field :alias,  {:size=>24} %></td>
+				<td width= '20%'>&nbsp;&nbsp;<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
+			</tr>
+			<% end %>
+		</table>
+	</div>
+
+</div>
+
+<% end%>
+

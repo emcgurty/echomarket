@@ -142,6 +142,23 @@ p.application_footer {
 
 }
 
+.form_wrapper .bottom_flash{
+    background-color:#666699;
+    border-top:1px solid #ddd;
+    border-bottom:5px solid #ddd;
+    margin-left:15px;
+    clear:both;
+    float:left;
+    color:white;
+    text-shadow:1px 1px 1px #000;
+    width:96%;
+    position:relative;
+    text-align:center;
+
+}
+
+
+
 div.application_bottom {
     background-color:#6fa9a9;
     border-top:1px solid #ddd;
@@ -320,6 +337,8 @@ h2 span{
     color:#ff4500;
     font-size:14px;
 }
+
+
 
 .form_wrapper a.search:hover{
     text-decoration:none;
@@ -587,6 +606,67 @@ input#lenders_other_describe_yourself.hidden_input {
 
 
 }
+
+
+
+.form_wrapper table.history_members {
+    width:860px;
+    border:#6fa9a9;
+    padding:1px;
+    border-spacing:1px;
+    margin-left:15px;
+  
+    empty-cells: show;
+    text-align:left;
+    font-size:12px;
+    font-weight:normal;
+    /*     table-layout: fixed;*/
+
+
+}
+
+.form_wrapper table.history_members tr {
+    text-align:left;
+    font-size:12px;
+    font-weight:normal;
+    border-bottom: 1px solid #6fa9a9;
+  
+
+}
+
+.form_wrapper table.history_members a {
+    text-align:left;
+    font-size:12px;
+    font-weight:normal;
+    color:indigo;
+
+
+}
+
+.form_wrapper table.history_members td th {
+
+    border-bottom: 1px solid #6fa9a9;
+    border-right: 1px solid #6fa9a9;
+    padding:0px;
+    margin:1px;
+    text-align:left;
+    vertical-align: middle;
+    empty-cells: show;
+    /*    word-wrap:break-word;*/
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 .form_wrapper table.alternative_address_table {
 
     border:none;

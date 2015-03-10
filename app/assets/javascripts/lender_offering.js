@@ -592,6 +592,21 @@ $("input[name='lenders[useWhichContactAddressAlternative]']").bind('change', fun
 
 
 
+  $("#lenders_security_deposit_amount").bind('change', function() {
+        $("span#security_deposit_amount_selection").html($(this).val());
+    });
+    $("#lenders_security_deposit_amount").trigger('change');
+
+  $("input[name='lenders[security_deposit]']").bind('change', function() {
+        var y_n = $("input[name='lenders[security_deposit]']:checked").val();
+        if (y_n == 1) {
+            $("span#security_deposit_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#security_deposit_selection").html("No");
+        }
+  });
+
+
 
     $("input[name='lenders[small_fee]']").bind('change', function() {
         var y_n = $("input[name='lenders[small_fee]']:checked").val();

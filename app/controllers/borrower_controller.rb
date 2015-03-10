@@ -2,7 +2,7 @@ class BorrowerController < ApplicationController
 
  def b_list
    
-  end
+end
 
   def borrower_item_detail
     @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ? and is_active = 1", params[:id]])

@@ -15,7 +15,15 @@ class Notifier < ActionMailer::Base
     @created_at =   sent_at
   end
 
+ def signup_notification_community(communities)
+    puts "inside signup_notification"   
+    setup_email_community(communities)
+    @subject    += ' Please activate your new account'
+    @url  = "http://"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/communities/activate/#{communities.activation_code}/#{communities.user_id}"
 
+  end
+  
   def signup_notification(users)
 
 
@@ -48,14 +56,28 @@ class Notifier < ActionMailer::Base
     @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_username/#{users.reset_code}"
   end
 
+def get_community_notification(communities)
+    setup_email_community(communities)
+    @subject    += ' Follow this link to learn your username'
+    @url  = "http://"
+    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/communities/get_username/#{users.reset_code}"
+  end
   private
   def setup_email(users)
     @recipients  = "#{users.email}"
     @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @subject     = "Message From www.echomarket.org. "
     @sent_on     = Time.now
-    @body[:user] = users
+    
 
+  end
+  def setup_email_community(communities)
+    puts "inside setup_email"
+    @recipients  = communities.email + ","  + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    @subject     = "Message From www.echomarket.org. "
+    @sent_on     = Time.now
+    
   end
   
 

@@ -3,18 +3,7 @@
 	<head>
 
 		<%= stylesheet_link_tag 'echo_market.css' %>
-
-		<!--
-		<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		ga('create', 'UA-59882513-1', 'auto');
-		ga('send', 'pageview');
-
-		</script>-->
+		<!-- <%= javascript_include_tag 'google_analytics.js' %> -->
 
 		<% if session[:background] %>
 		<%= stylesheet_link_tag 'menu_nav.css' %>
@@ -23,14 +12,16 @@
 		<%= javascript_include_tag 'background.js' %>
 		<%= javascript_include_tag  'http://code.jquery.com/jquery-1.10.1.min.js'  %>
 		<%= javascript_include_tag  'http://code.jquery.com/jquery.min.js'  %>
+
 		<%  end %>
-		<title>The Echo Market</title>
+		<title>The Echo Market  -- Lending and Borrowing</title>
 
 	</head>
 
 	<body>
 
 		<% content_for :header do %>
+		
 		<%= render :partial => 'menus/echomarket_menu_options' %>
 		<% end %>
 
@@ -40,15 +31,15 @@
 
 		<% content_for :center do %>
 		<% if session[:background] %>
-		<div class="wrapper">
-			<div id="form_wrapper" class="form_wrapper">
-				<%= yield -%>
+			<div class="wrapper">
+				<div id="form_wrapper" class="form_wrapper">
+					<%= yield -%>
+				</div>
+	
 			</div>
-
-		</div>
-		<% else %>
-		<%= yield -%>
-		<% end %>
+			<% else %>
+			<%= yield -%>
+			<% end %>
 		<% end %>
 
 		<% if session[:background] %>
@@ -59,9 +50,5 @@
 
 		<%= yield :center %>
 
-		<%# if session[:background] %>
-		<%#= yield :footer %>
-		<%#*</div>%>
-		<%# end %>
 	</body>
 </html>

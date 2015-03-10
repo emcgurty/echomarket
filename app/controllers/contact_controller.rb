@@ -4,7 +4,7 @@ class ContactController < ApplicationController
     session[:notice] = ""
     if (request.post?)
       @contact = Contacts.new(params[:contacts])
-      if @contact.save&& @contact.errors.empty?
+      if @contact.save && @contact.errors.empty?
         message = @contact.comments
         recipient = params[:contacts][:email]
         if Notifier.comments_received(recipient, message).deliver

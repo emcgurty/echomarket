@@ -1,8 +1,9 @@
 <form class="items_listing"  id="lenders_item_form" >
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
+    <p> Your goodwill resource for lending, borrowing, and even donating and trading items as an individual, organization or Community.</p>
     <p>ITEMS LISTING</p>
- <%= link_to 'Learn More About The Echo Market', {:controller => "home", :action=> "about"}, {:class=> "search" , :style=> "margin-left:25px;"}   %>
+ <%= link_to 'Learn More About The Echo Market', {:controller => "home", :action=> "about"}, {:class=> "search" , :style=> "margin-left:20px;"}   %>
   </div>
 
   <% if session[:notice] %>
@@ -126,8 +127,14 @@
     <% else %>
       <%= link_to '=> Become a registered Echo Market Lender, Borrower or Guest', user_register_url(:type=>'all', :id=>''), {:class=> "search"}   %>
     <% end %>
+  </div>
+  
+   <div class="bottom_flash">
+      <p><span class="logo_white" >Create Your Own Echo Market Community</span></p>
+      <p>Register your Community name, list members by name or alias if you choose so, and then community members login into your Echo Market Community.</p>
 
-
+      <%= link_to 'Just what I was hoping for... I want to create my Echo Market Community now', community_new_url( :id=>'', :type=>'all'), :class=> "search"   %>
+      
   </div>
 
 

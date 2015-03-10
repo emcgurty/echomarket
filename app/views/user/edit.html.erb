@@ -16,9 +16,10 @@
 <div class="column" >
 	<label for="alias">Current Alias: &nbsp;
 		<%= f.text_field(:user_alias, :maxlength =>16) %></label>
+		&nbsp;&nbsp;<span class="error" id="user_alias_error">This is an error</span>
 </div>
 
-<div class="column" style="margin-bottom:20px;">
+<div class="column" >
 
 	<% @userTypeArray = Array.new %>
 	<% @userTypeArray << ["guest","Guest"] %>
@@ -28,8 +29,16 @@
 
 	<label for="user_type">Current User Type:&nbsp;
 		<%= f.select(:user_type, @userTypeArray.collect {|p| [ p[1], p[0]]}) %> </label>
+		&nbsp;&nbsp;<span class="error" id="user_user_type">This is an error</span>
 </div>
+<div class="column"  >
 
+	<label for="email">Current User Email:&nbsp;
+		<%= f.text_field :email %> </label>
+		&nbsp;&nbsp;<span class="error" id="user_email_error">This is an error</span>
+		<br />
+
+</div>
 <div class="bottom" >
 	<%= f.submit 'Save My Changes' %>
 	<%= link_to "Delete My Account" , controller => "user", :action => "delete_user_account" %>
