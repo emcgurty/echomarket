@@ -68,6 +68,9 @@
 	<% @getUserType = (session[:user_type] == 'both' ? "Lender/Borrower": session[:user_type]).upcase %>
 	<li class="subs">
 		<a href="#s3"><%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
+		
+		<% if session[:community_id].blank? %>
+		
 		<ul>
 			<li>
 				<%= link_to 'Logout', :controller => 'user', :action => 'logout'  %>
@@ -76,7 +79,56 @@
 				<%= link_to "User Account", user_edit_path  %>
 			</li>
 		</ul>
+		<% else %>
+		
+				<ul>
+			<li>
+				<%= link_to 'Logout', :controller => 'community', :action => 'logout'  %>
+			</li>
+			<li>
+				<%= link_to "Community Account", community_edit_path  %>
+			</li>
+			
+					<li>
+				<%= link_to "Community Members", community_member_edit_path  %>
+			</li>
+		</ul>
+		<% end%>
+		
 	</li>
 	<% end %>
 </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -13,7 +13,7 @@
 		<span class="logo_white" >The Echo Market</span>
 	</p>
 	<p>
-		<%= @lender_type_string %>LOGIN: As either an established Community, or as a Lender, Borrower or Guest...
+		<%= @lender_type_string %> LOGIN: As either an established Community, or as a Lender, Borrower or Guest...
 	</p>
 </div>
 
@@ -25,51 +25,84 @@
 </div>
 <% end %>
 
-<div class='column50_withborderl' >
-	<p>Echo Market Community Login</p>
-<div style="margin-left:25px;">
-	<label>Community Name: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community Name?</span></a> </label>
-	<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
-	&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
+<div class='column50_withborder' >
+	<p>	Echo Market Community Login
+	</p>
+	<div style="margin-left:25px;">
+		<label>Community Name: <a href="#" onclick="showForgotCommunityName();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community Name?</span></a> </label>
+		<%= nf.text_field(:community_name, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
+		&nbsp;&nbsp; <span class="error" id="login_community_username_error">This is an error</span>
+	
+	
+		<label>Community Password: <a href="#" onclick="showForgotCommunityPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
+		<%= nf.password_field(:community_password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
+		&nbsp;&nbsp;<span class="error" id="login_community_password_error">This is an error</span>
+	
+
+	
+		<p class="offering">
+			Optional, you may login in under your Community provided Member full name or alias. Otherwise you can continue to borrow or lend under your Community identity.
+		</p>
+		<table style="margin-left:5px;">
+
+				<tr >
+					<th >First Name</th>
+					<th >MI</th>
+					<th>Last Name</th>
+					<th>&nbsp;</th>
+					<th>Alias</th>
+
+				</tr>
+				<tr>
+					<td style="background-color: ivory;"><%= nf.text_field(:community_first_name, {:maxlength=>16,  :tabindex=>"3", :value=>""}) %></td>
+					<td style="background-color: ivory;"><%= nf.text_field(:community_mi, {:maxlength=>1,  :tabindex=>"4", :value=>""}) %></td>
+					<td style="background-color: ivory;"><%= nf.text_field(:community_last_name, {:maxlength=>16,  :tabindex=>"5", :value=>""}) %></td>
+					<td>OR</td>
+					<td style="background-color: light green;"><%= nf.text_field(:community_alias, {:maxlength=>16,  :tabindex=>"6", :value=>""}) %></td>
+				</tr>
+			</table>
+</div>
+	
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div class="bottom_login">
+		<a style="color:white;" href="#" onclick="submitCommunityLogin();">Submit Community Login</a>
+	</div>
+
+	<div   class="div_white" >
+		&nbsp;
+	</div>
 </div>
 
-<div style="margin-left:25px;">
-	<label>Community Password: <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
-	<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
-	&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
+<div class='column50_withborder' >
+	<p>
+		Echo Market Lender, Borrower, and Guest Login
+	</p>
+	<div style="margin-left:25px;">
+		<label>Username: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your username?</span></a> </label>
+		<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"7",:value=>"" })  %>
+
+		&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
+	</div>
+
+	<div style="margin-left:25px;">
+		<label>Password: <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your password?</span></a> </label>
+		<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"8", :value=>""}) %>
+		&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
+	</div>
+
+	<div class="bottom_login">
+		<a style="color:white" onclick="submitLogin();">Submit Lender, Borrower or Guest Login</a>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
 </div>
 
-<div class="bottom">
-	<a href="#" onclick="submitLogin();">Submit Community Login</a>
+<div   class="div_white" >
+	&nbsp;
 </div>
-
-<div   class="div_white" >&nbsp;</div>
-</div>
-
-
-
-
-<div class='column50_withborderr' >
-	<p>Echo Market Lender, Borrower, and Guest Login</p>
-<div style="margin-left:25px;">
-	<label>Username: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your username?</span></a> </label>
-	<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
-	&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
-</div>
-
-<div style="margin-left:25px;">
-	<label>Password: <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your password?</span></a> </label>
-	<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
-	&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
-</div>
-
-<div class="bottom">
-	<a href="#" onclick="submitLogin();">Submit Lender, Borrower or Guest Login</a>
-</div>
-<div   class="div_white" >&nbsp;</div>
-</div>
-
- <div   class="div_white" >&nbsp;</div>
 
 <div class="bottom">
 	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>

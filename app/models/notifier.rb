@@ -4,11 +4,13 @@ class Notifier < ActionMailer::Base
 
   include LookupValues
   LookupMethods.load_values
-
+  layout 'notifier'
 
   def comments_received(recipient, message, sent_at = Time.now)
     @subject = "The Echo Market Contact..."
     @recipients = recipient + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    puts "lookup"
+    puts LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @sent_on = sent_at
     @comments = message
@@ -20,7 +22,7 @@ class Notifier < ActionMailer::Base
     setup_email_community(communities)
     @subject    += ' Please activate your new account'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/communities/activate/#{communities.activation_code}/#{communities.user_id}"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{communities.user_id}"
 
   end
   

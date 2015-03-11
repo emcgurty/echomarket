@@ -131,6 +131,31 @@ function submitLogin() {
 	}
 }
 
+function submitCommunityLogin() {
+	foundInvalid = true;
+	if ($("#users_community_name").val() == "") {
+		$("#login_community_name_error").text("Community name is required.");
+		$("#login_community_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#login_community_name_error").text("");
+		$("#login_community_name_error").css("visibility", "hidden");
+	}
+
+	if ($("#users_community_password").val() == "") {
+		$("#login_community_password_error").text("Password is required.");
+		$("#login_community_password_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#login_community_password_error").text("");
+		$("#login_community_password_error").css("visibility", "hidden");
+	}
+	if (foundInvalid) {
+
+		$("form.login").submit();
+	}
+}
+
 function submitRegistration() {
 	var foundInvalid = false;
 

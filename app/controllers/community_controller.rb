@@ -12,7 +12,7 @@ class CommunityController < ApplicationController
 
   # GET /communities/1/edit
   def edit
-    @communities = Communities.find(params[:id])
+    @communities = Communities.find(session[:community_id])
   end
 
   # POST /communities
@@ -35,11 +35,12 @@ class CommunityController < ApplicationController
   # PUT /communities/1
   # PUT /communities/1.json
   def update
-    @communities = Communities.find(params[:id])
+    @communities = Communities.find(params[:commuity_id])
 
     respond_to do |format|
       if @communities.update_attributes(params[:Communities])
-        format.html { redirect_to @communities, notice: 'Communities was successfully updated.' }
+        session[:notice] = "Your updates have completed successfully."
+        format.html { redirect_to :controller=> "home", :action => "items_listing"}
 
       else
         format.html { render action: "edit" }
@@ -59,32 +60,48 @@ class CommunityController < ApplicationController
 
     end
   end
+  
+    def logout
+
+    @current_user = nil
+    reset_session
+    session[:notice] = "Thank you for exploring www.echomarket.org.  Please return soon."
+    redirect_to home_items_listing_path
+
+  end
+  
+  
    def activate
     session[:notice] = ''
-    @user = params[:activation_code].blank? ? false : Communities.find_by_activation_code(params[:activation_code])
-    unless @user.blank?
-      unless @user.activation_code.blank?
-        if @user.activate
-          @current_user = @user
+    @cm = params[:activation_code].blank? ? false : Communities.find_by_activation_code(params[:activation_code])
+    unless @cm.blank?
+      unless @cm.activation_code.blank?
+        if @cm.activate
+          @current_user = @cm
           session[:user_id] = @current_user.user_id
+          session[:community_id] = @current_user.community_id
           session[:user_type] = @current_user.user_type
           session[:community_name] = @current_user.community_name
+          session[:user_alias] = @current_user.community_name
           session[:notice] = @current_user.community_name + ", your registration activation is complete, and you are now logged in."
         else
           session[:notice] = "Failure in saving record."
         end
       else
-        @current_user = @user
+        @current_user = @cm
         session[:user_id] = @current_user.user_id
+        session[:community_id] = @current_user.community_id
         session[:user_type] = @current_user.user_type
         session[:community_name] = @current_user.community_name
-        session[:notice] = @current_user.community + ", you have already activated your registration, and you are now logged in."
+        session[:user_alias] = @current_user.community_name
+        session[:notice] = @current_user.community_name + ", you have already activated your registration, and you are now logged in."
       end
-
+      redirect_to :controller=> "community_member", :action=>"advise"
     else
       session[:notice] = "Seems that you may have not properly copied the Activation url provided in your email.  Please try again."
+      redirect_to :controller=> "home", :action=>"items_listing"
     end
 
-    redirect_to :controller=> "home", :action=>"items_listing"
+    
   end
 end

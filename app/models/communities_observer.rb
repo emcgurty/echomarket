@@ -9,16 +9,28 @@ class CommunitiesObserver < ActiveRecord::Observer
   end
 
   def after_create(communities)
-    Notifier.signup_notification_community(communities).deliver
+    begin
+      Notifier.signup_notification_community(communities).deliver
+     rescue  Exception => e
+    puts e.message
+    puts "sihnup"        
+      
+    end  
   end
 
   def after_save(communities)
 
-    Notifier.activation(communities).deliver if communities.recently_activated?
+   begin
+      Notifier.activation(communities).deliver if communities.recently_activated?
     Notifier.deliver_reset_password_notification(communities) if communities.recently_reset? && communities.recently_password_reset?
     Notifier.deliver_get_community_notification(communities) if communities.recently_reset? && communities.recently_community_name_get?
+   
+         rescue  Exception => e
+    puts e.message
+    puts "after_save"   
+    
   end
-
+end
 
   def get_random
     length = 36

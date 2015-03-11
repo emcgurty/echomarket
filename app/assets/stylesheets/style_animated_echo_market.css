@@ -86,7 +86,7 @@ form.reset, form.contact_us, form.forgot_password, form.forgot_username, form.ed
 
 
 form.login{
-    width:940px;
+    width:840px;
 }
 
 
@@ -141,6 +141,22 @@ p.application_footer {
     color:white;
     text-shadow:1px 1px 1px #000;
     width:96%;
+    position:relative;
+    text-align:right;
+
+}
+
+.form_wrapper .bottom_login{
+    background-color:indigo;
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    margin-left:15px;
+     padding:5px;
+    clear:both;
+    float:right;
+    color:white;
+    text-shadow:1px 1px 1px #000;
+    width:76%;
     position:relative;
     text-align:right;
 
@@ -399,18 +415,14 @@ h2 span{
     float:left;
 }
 
-.form_wrapper .column50_withborderl{
-    float:left;
-    border:1px solid;
-    border-color: indigo;
-    padding-right:25px;
-}
-.form_wrapper .column50_withborderr{
+
+.form_wrapper .column50_withborder{
     float:left;
     border:1px solid;
     border-color: indigo;
     padding-left:15px;
     padding-right:5px;
+    width:76%;
 }
 
 .form_wrapper .column40 {
