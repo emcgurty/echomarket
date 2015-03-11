@@ -13,7 +13,7 @@
 		<span class="logo_white" >The Echo Market</span>
 	</p>
 	<p>
-		<%= @lender_type_string %>LOGIN
+		<%= @lender_type_string %>LOGIN: As either an established Community, or as a Lender, Borrower or Guest...
 	</p>
 </div>
 
@@ -25,17 +25,51 @@
 </div>
 <% end %>
 
-<div class="column">
+<div class='column50_withborderl' >
+	<p>Echo Market Community Login</p>
+<div style="margin-left:25px;">
+	<label>Community Name: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community Name?</span></a> </label>
+	<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
+	&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
+</div>
+
+<div style="margin-left:25px;">
+	<label>Community Password: <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
+	<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
+	&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
+</div>
+
+<div class="bottom">
+	<a href="#" onclick="submitLogin();">Submit Community Login</a>
+</div>
+
+<div   class="div_white" >&nbsp;</div>
+</div>
+
+
+
+
+<div class='column50_withborderr' >
+	<p>Echo Market Lender, Borrower, and Guest Login</p>
+<div style="margin-left:25px;">
 	<label>Username: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your username?</span></a> </label>
 	<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
 	&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
 </div>
 
-<div class="column">
+<div style="margin-left:25px;">
 	<label>Password: <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your password?</span></a> </label>
 	<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
 	&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
 </div>
+
+<div class="bottom">
+	<a href="#" onclick="submitLogin();">Submit Lender, Borrower or Guest Login</a>
+</div>
+<div   class="div_white" >&nbsp;</div>
+</div>
+
+ <div   class="div_white" >&nbsp;</div>
 
 <div class="bottom">
 	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
@@ -44,5 +78,6 @@
 	<a href="#" onclick="showRegistration();">=> Don't have an account yet? Register here.</a>
 	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see that is being offered to borrow or lend.</a>
 </div>
+
 <% end %>
 
