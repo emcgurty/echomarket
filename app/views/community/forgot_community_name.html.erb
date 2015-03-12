@@ -1,0 +1,29 @@
+<%= javascript_include_tag 'login.js' %>
+ <% if session[:register_type].blank? || session[:register_type]== 'all' %>
+  <% @lender_type_string == "" %>
+<% elsif session[:register_type] == "both" %>
+  <% @lender_type_string == "LENDER/BORROWER" %>
+<% else %>
+  <% @lender_type_string = session[:register_type].upcase + " " %>
+<% end %>
+
+    <%= form_for @communities, :url=> {:controller=>"community", :action => "forgot_community_name"}, :html=> {:class=>"forgot_username", :id=>"user_login_form"} do |nf| %>
+      <div class="top" >
+        <p><span class="logo_white" >The Echo Market</span></p>
+        <p><%= @lender_type_string %> FORGOT USER NAME</p>
+      </div>
+      <div class="column" >
+        <label>Email:</label>
+        <%= nf.email_field(:email, {:tabindex=>"1",:value=>"" }) %>
+        <span class="error" id="forgot_community_email_error">This is an error</span>
+      </div>
+      <div class="bottom">
+
+        <a href="#" onclick="submitForgotCommunityName();">=> Please retrieve my Community Name</a>
+        <a href="#" onclick="showLogin();">=> Now I remember my Community Name.</a>
+
+      </div>
+
+    <% end %>
+
+

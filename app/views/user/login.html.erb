@@ -24,14 +24,16 @@
 	</p>
 </div>
 <% end %>
-
+	<div   class="div_white" >
+		&nbsp;
+	</div>
 <div class='column50_withborder' >
 	<p>	Echo Market Community Login
 	</p>
 	<div style="margin-left:25px;">
 		<label>Community Name: <a href="#" onclick="showForgotCommunityName();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community Name?</span></a> </label>
 		<%= nf.text_field(:community_name, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
-		&nbsp;&nbsp; <span class="error" id="login_community_username_error">This is an error</span>
+		&nbsp;&nbsp; <span class="error" id="login_community_name_error">This is an error</span>
 	
 	
 		<label>Community Password: <a href="#" onclick="showForgotCommunityPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
@@ -41,24 +43,53 @@
 
 	
 		<p class="offering">
-			Optional, you may login in under your Community provided Member full name or alias. Otherwise you can continue to borrow or lend under your Community identity.
+			Optional, you may login under your Community provided Member full name or alias. Otherwise you can borrow or lend under your Community identity.
 		</p>
-		<table style="margin-left:5px;">
+		<table style="margin-left:0px;widht:100%;">
 
 				<tr >
-					<th >First Name</th>
-					<th >MI</th>
-					<th>Last Name</th>
+					<th style="background-color: #FFFFCC;text-align:left;">First Name</th>
+					<th style="background-color: #FFFFCC;text-align:left;">MI</th>
+					<th style="background-color: #FFFFCC;text-align:left;">Last Name</th>
 					<th>&nbsp;</th>
-					<th>Alias</th>
+					<th style="background-color: #CCFFCC;text-align:left;">Alias</th>
 
 				</tr>
 				<tr>
-					<td style="background-color: ivory;"><%= nf.text_field(:community_first_name, {:maxlength=>16,  :tabindex=>"3", :value=>""}) %></td>
-					<td style="background-color: ivory;"><%= nf.text_field(:community_mi, {:maxlength=>1,  :tabindex=>"4", :value=>""}) %></td>
-					<td style="background-color: ivory;"><%= nf.text_field(:community_last_name, {:maxlength=>16,  :tabindex=>"5", :value=>""}) %></td>
+					<td ><%= nf.text_field(:community_first_name, {:maxlength=>16,  :tabindex=>"3", :value=>""}) %>
+					
+						
+					</td>
+					<td ><%= nf.text_field(:community_mi, {:maxlength=>1,  :tabindex=>"4", :value=>""}) %>
+					
+					</td>
+					<td ><%= nf.text_field(:community_last_name, {:maxlength=>16,  :tabindex=>"5", :value=>""}) %>
+					
+					</td>
 					<td>OR</td>
-					<td style="background-color: light green;"><%= nf.text_field(:community_alias, {:maxlength=>16,  :tabindex=>"6", :value=>""}) %></td>
+					<td ><%= nf.text_field(:community_alias, {:maxlength=>16,  :tabindex=>"6", :value=>""}) %>
+					
+					</td>
+				</tr>
+					<tr>
+					<td >
+						
+						<span class="error" id="login_community_first_name_error">This is an error</span>
+						
+					</td>
+					<td >
+						
+						<span >&nbsp;</span>
+					</td>
+					<td >
+						
+						<span class="error" id="login_community_last_name_error">This is an error</span>
+					</td>
+					<td>&nbsp;</td>
+					<td >
+						
+						<span class="error" id="login_community_alias_error">This is an error</span>
+					</td>
 				</tr>
 			</table>
 </div>
@@ -82,8 +113,7 @@
 	<div style="margin-left:25px;">
 		<label>Username: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your username?</span></a> </label>
 		<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"7",:value=>"" })  %>
-
-		&nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
+		 &nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
 	</div>
 
 	<div style="margin-left:25px;">
@@ -111,6 +141,8 @@
 	<a href="#" onclick="showRegistration();">=> Don't have an account yet? Register here.</a>
 	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see that is being offered to borrow or lend.</a>
 </div>
-
+<div   class="div_white" >
+		&nbsp;
+	</div>
 <% end %>
 

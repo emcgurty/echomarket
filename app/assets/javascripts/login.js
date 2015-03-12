@@ -75,6 +75,14 @@ function showForgotUsername() {
 	window.location.replace("/user/forgot_username");
 }
 
+function showForgotCommunityPassword() {
+	window.location.replace("/community/forgot_community_password");
+}
+
+function showForgotCommunityName() {
+	window.location.replace("/community/forgot_community_name");
+}
+
 function showRegistration() {
 	window.location.replace("/user/register");
 }
@@ -93,6 +101,20 @@ function submitForgotUsername() {
 
 }
 
+function submitForgotCommunityName() {
+
+	if ($("#communities_email").val() == "") {
+		$("#forgot_community_email_error").text("Email is required.");
+		$("#forgot_community_email_error").css("visibility", "visible");
+
+	} else {
+		$("#forgot_community_email_error").text("");
+		$("#forgot_community_email_error").css("visibility", "hidden");
+		$("form.forgot_community_name").submit();
+	}
+
+}
+
 function submitForgotPassword() {
 
 	if ($("#users_email").val() == "") {
@@ -105,6 +127,19 @@ function submitForgotPassword() {
 		$("form.forgot_password").submit();
 	}
 }
+function submitForgotCommunityPassword() {
+
+	if ($("#communities_email").val() == "") {
+		$("#forgot_community_password_email_error").text("Email is required.");
+		$("#forgot_community_password_email_error").css("visibility", "visible");
+
+	} else {
+		$("#forgot_community_password_email_error").text("");
+		$("#forgot_community_password_email_error").css("visibility", "hidden");
+		$("form.forgot_community_password").submit();
+	}
+}
+
 
 function submitLogin() {
 	foundInvalid = true;
@@ -150,6 +185,28 @@ function submitCommunityLogin() {
 		$("#login_community_password_error").text("");
 		$("#login_community_password_error").css("visibility", "hidden");
 	}
+	alert($("#users_community_alias").val());
+	alert(($("#users_community_alias").val() != "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ));
+	if ($("#users_community_alias").val() != "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ) {
+		$("#login_community_alias_error").text("Provide only a fullname or alias.");
+		$("#login_community_alias_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#login_community_alias_error").text("");
+		$("#login_community_alias_error").css("visibility", "hidden");
+	}
+	
+	if ($("#users_community_alias").val() == "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ) {
+		$("#login_community_first_name_error").text("Provide a fullname.");
+		$("#login_community_first_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#login_community_first_name_error").text("");
+		$("#login_community_first_name_error").css("visibility", "hidden");
+	}
+	
+	
+	
 	if (foundInvalid) {
 
 		$("form.login").submit();

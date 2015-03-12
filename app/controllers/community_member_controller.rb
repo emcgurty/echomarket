@@ -39,7 +39,11 @@ class CommunityMemberController < ApplicationController
 
   # GET /community_members/1/edit
   def edit
-    @community_member = CommunityMembers.find(params[:id])
+    
+    @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+    if @community_members.blank?
+      @community_members = CommunityMembers.new
+    end
   end
 
   # POST /community_members

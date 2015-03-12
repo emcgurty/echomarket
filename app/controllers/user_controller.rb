@@ -120,6 +120,7 @@ class UserController < ApplicationController
           session[:user_id] = @current_user.user_id
           session[:user_type] = @current_user.user_type
           session[:user_alias] = @current_user.user_alias
+          session[:email] = @current_user.email 
           @getUserType = (@current_user.user_type == 'both' ? "Lender/Borrower": @current_user.user_type ).upcase
           session[:notice] = "Welcome, #{@current_user.user_alias}, you are registered as a #{@getUserType}."
           redirect_to home_items_listing_url
@@ -166,24 +167,36 @@ Please try again. "
           end
 
           unless @cm_nom.blank? && @cm_m.blank? && @cm_a.blank?
-            unless @cm.blank?
+            unless @cm_nom.blank?
               session[:user_id] = @cm.community_member_id
+              session[:user_alias] = params[:users][:community_first_name] + " " + params[:users][:community_last_name]
+            
+             
             end
             unless @cm_m.blank?
               session[:user_id] = @cm_m.community_member_id
+              session[:user_alias] = params[:users][:community_first_name] + " " + params[:users][:community_last_name] + " " + params[:users][:community_last_name]
+            
+             
             end
             unless @cm_a.blank?
               session[:user_id] = @cm_a.community_member_id
+              session[:user_alias] = params[:users][:community_alias]
+              
+              
             end
           else
             session[:user_id] = @current_user.user_id
+            session[:user_alias] = @current_user.community_name
+            session[:community_name] = @current_user.community_name
+        
+            
           end
-          session[:user_type] = @current_user.user_type
-          session[:user_alias] = @current_user.community_name
-          session[:community_name] = @current_user.community_name
-          session[:community_id] = @current_user.community_id
+            session[:user_type] = session[:register_type] = @current_user.user_type
+            session[:email] = @current_user.email  
+            session[:community_id] = @current_user.community_id
           @getUserType = (@current_user.user_type == 'both' ? "Lender/Borrower": @current_user.user_type ).upcase
-          session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All features of borrowing and lending will pertain only to your community."
+          session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
           redirect_to home_items_listing_url
         else
           unless @current_user.activation_code.blank?
@@ -195,7 +208,7 @@ Please try again. "
           end
         end
       else
-        session[:login_notice] = "Sorry about this , but your username and/or password were not recognized by www.echomarket.org. Please try again. "
+        session[:login_notice] = "Sorry about this , but your Community name  and/or password were not recognized by www.echomarket.org. Please try again. "
         @users = Users.new
       end
     else
