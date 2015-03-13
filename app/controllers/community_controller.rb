@@ -19,26 +19,32 @@ class CommunityController < ApplicationController
   # POST /communities.json
   def create
     @communities = Communities.new(params[:communities])
-
     respond_to do |format|
       if @communities.save(:validate => true) && @communities.errors.empty?
-        session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
-        format.html { redirect_to :controller => "home", :action => "items_listing" }
-
+        @cm = Community_Members.new(:community_id => @communities.community_id, :first_name => @communities.first_name, :mi => @communities.mi,:last_name => @communities.last_name)
+        if @cm.save(:validate => true) && @cm.errors.empty?
+          session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
+          format.html { redirect_to :controller => "home", :action => "items_listing" }
+        else
+          session[:notice]= "Error in creating Community Member record"
+          format.html { render action: "new" }
+          
+        end
       else
         format.html { render action: "new" }
-
-      end
-    end
-  end
-
+      end  #ends if saved
+    end # ends do
+  end  # ends def
+ 
+ 
+ 
   # PUT /communities/1
   # PUT /communities/1.json
   def update
     @communities = Communities.find(params[:commuity_id])
 
     respond_to do |format|
-      if @communities.update_attributes(params[:Communities])
+      if @communities.update_attributes(params[:communities])
         session[:notice] = "Your updates have completed successfully."
         format.html { redirect_to :controller=> "home", :action => "items_listing"}
 
@@ -54,10 +60,15 @@ class CommunityController < ApplicationController
   def destroy
     @communities = Communities.find(params[:id])
     @communities.destroy
-
+    @cm = Community_Members.find(:all, :conditions => ["community_id = ?", params[:id]])
+    @cm.destroy
     respond_to do |format|
-      format.html { redirect_to communities_url }
-
+      if @communities.save && cm.save
+        format.html { redirect_to communities_edit_url }
+      else
+        session[:notice] = "Failure in deleting"
+        format.html { redirect_to communities_edit_url }  
+      end
     end
   end
   
@@ -78,7 +89,8 @@ class CommunityController < ApplicationController
       unless @cm.activation_code.blank?
         if @cm.activate
           @current_user = @cm
-          session[:user_id] = @current_user.user_id
+          @cm_l = Community_Members.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
+          session[:user_id] = @cm_l.user_id 
           session[:community_id] = @current_user.community_id
           session[:user_type] = session[:register_type] = @current_user.user_type
           session[:community_name] = @current_user.community_name
@@ -89,7 +101,8 @@ class CommunityController < ApplicationController
         end
       else
         @current_user = @cm
-        session[:user_id] = @current_user.user_id
+         @cm_l = Community_Members.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
+         session[:user_id] = @cm_l.user_id
         session[:community_id] = @current_user.community_id
         session[:user_type] = session[:register_type] = @current_user.user_type
         session[:community_name] = @current_user.community_name

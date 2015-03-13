@@ -22,24 +22,22 @@
 
 <% @st = UsStates.find(:all, :order => "state_name") %>
 <% @ct = Countries.find(:all, :order => "country_name") %>
-
+<% @community_name  = (session[:community_name].blank? ? false : true) %>
+<% if @community_name  %>
+<% @cdetails = Community_Members.find(:first, :readonly, :conditions => ["user_id = ?", session[:user_id]])  %>
+<% @caddress = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id])  %>
+<% end  %>
 <div class="top" >
 
-	<p>
-		<span class="logo_white" >The Echo Market</span>
-	</p>
-	<p>
-		<%= session[:commmunity_name].upcase unless session[:community_name].blanks?  %> LENDER ITEM REGISTRATION
-		
-	</p>
+	<p><span class="logo_white" >The Echo Market</span></p>
+	<p><%= session[:commmunity_name].upcase if @community_name %> LENDER ITEM REGISTRATION</p>
 	<% unless session[:notice].blank? %>
-	<p>
-		<%= session[:notice] %>
-	</p>
+	<p><%= session[:notice] %></p>
 	<% end  %>
 </div>
 <div>
-	<span class="registration_header" style="display:none;color:red;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;"> In the following, a black '*' indicates a required field; '(nn)' indicates the maximum number of characters allowed for entry; and, not choosing either 'Yes' or 'No' will be interpreted as 'Indifferent'...</span>
+	<span class="registration_header" style="display:none;color:red;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;">
+		 In the following, a black '*' indicates a required field; '(nn)' indicates the maximum number of characters allowed for entry; and, not choosing either 'Yes' or 'No' will be interpreted as 'Indifferent'...</span>
 </div>
 <div   class="div_p" id="menu_item_1" >
 	1. Contact Information
@@ -64,8 +62,6 @@
 		<% unless @lenders.describe_yourself.blank? %>
 		<% if @lenders.describe_yourself == 100 %>
 		<% display_div =  'inline'%>
-		<% else %>
-		<% display_div =  'none'%>
 		<% end %>
 		<% end %>
 		<div id="other_describe_yourself" style="float:left;width:48%;margin-left:15px;display:<%= display_div %>;">
@@ -101,6 +97,60 @@
 
 			</tr>
 
+			<% if @community_name && !@cdetails.first_name.blank? %>
+			<tr class="even">
+				<td style="width:25%;">
+				<div>
+					<% @first_name = (@cdetails.first_name.blank? ? "" : @cdetails.first_name ) %>
+					<label><%= @first_name %></label>
+				</div></td>
+
+				<td style="width:25%;">
+				<div>
+					<% @mi = (@cdetails.mi.blank? ? "" : @cdetails.mi ) %>
+					<label><%= @mi %></label>
+
+				</div></td>
+
+				<td style="width:25%;">
+				<div>
+					<% @last_name = (@cdetails.last_name.blank? ? "" : @cdetails.last_name ) %>
+					<label><%= @last_name %></label>
+				</div></td>
+
+				<td style="width:25%;">	<div>&nbsp;</div></td>
+
+			</tr>
+
+			<% elsif @community_name && @cdetails.first_name.blank? %>  ## then alias
+
+			<tr class="even">
+				<td style="width:25%;">
+				<div>
+					<% @alias = (@cdetails.alias.blank? ? "" : @cdetails.alias ) %>
+					<label><%= @alias %></label>
+				</div></td>
+
+				<td style="width:25%;">
+				<div>
+					&nbsp;
+				</div></td>
+
+				<td style="width:25%;">
+				<div>
+					&nbsp;
+
+				</div></td>
+
+				<td style="width:25%;">	<div>
+					&nbsp;
+
+				</div></td>
+
+			</tr>
+
+			<% else %>
+
 			<tr class="even">
 				<td style="width:25%;">
 				<div>
@@ -132,37 +182,77 @@
 
 			</tr>
 
+			<% end %>
+
 			<tr class="odd">
 				<td style="width:25%;">
 				<div>
+					<% @ad1 = true %>
+					<% @ad1 = (@caddress ? (@caddress.address_line_1.blank? ? "" : @caddress.address_line_1) : false ) %>
 					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
-					<span class="error" id="address_line_1_error">&nbsp;</span>
+					<% unless @ad1 %>
+						<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
+						<span class="error" id="address_line_1_error">&nbsp;</span>
+					<% else %>  
+						<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24, :value => @ad1) %>
+						<span class="error" id="address_line_1_error">&nbsp;</span>
+					 <% end%>
 				</div></td>
 				<td style="width:25%;">
 				<div>
-					<label>Address Line 2:</label>
-					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
-					<span class="error">&nbsp;</span>
+					<% @ad2 = true %>
+					<% @ad2 = (@caddress ? (@caddress.address_line_2.blank? ? "" : @caddress.address_line_2) : false ) %>
+					<label>Address Line 2:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<% unless @ad2 %>
+						<%= nf.text_field( :address_line_2, :maxlength=>24, :size=>24) %>
+						<span class="error" id="address_line_2_error">&nbsp;</span>
+					<% else %>  
+						<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24, :value => @ad2) %>
+						<span class="error" id="address_line_2_error">&nbsp;</span>
+					 <% end%>
+				
+				
 				</div></td>
 				<td style="width:25%;">
+			<td style="width:25%;">
 				<div>
+					<% @postal = true %>
+					<% @postal = (@caddress ? (@caddress.postal_code.blank? ? "" : @caddress.postal_code) : false ) %>
 					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
-					<span class="error" id="postal_code_error">&nbsp;</span>
+					<% unless @postal %>
+						<%= nf.text_field( :postal_code :maxlength=>15, :size=>15) %>
+						<span class="error" id="postal_code_error">&nbsp;</span>
+					<% else %>  
+						<%= nf.text_field( :postal_code, :maxlength=>15, :size=>24, :value => @postal) %>
+						<span class="error" id="postal_code_error">&nbsp;</span>
+					 <% end %>
+				
+				
 				</div></td>
 				<td style="width:25%;">
 				<div>
-					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
-					<span class="error" id="city_error">&nbsp;</span>
-				</div></td>
+					<% @city = true %>
+					<% @city = (@caddress ? (@caddress.city.blank? ? "" : @caddress.city) : false ) %>
+					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<% unless @city %>
+						<%= nf.text_field( :postal_code :maxlength=>15, :size=>15) %>
+						<span class="error" id="postal_code_error">&nbsp;</span>
+					<% else %>  
+						<%= nf.text_field( :postal_code, :maxlength=>15, :size=>24, :value => @postal) %>
+						<span class="error" id="postal_code_error">&nbsp;</span>
+					 <% end %>
+				</div>
+				
+				</td>
 
 			</tr>
 			<tr class="even">
-				<td style="width:25%;"><label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
+				<td style="width:25%;">
+					<label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
+				
+				
 				<td style="width:25%;"><label>State:</label> <% unless @lenders.state_id.blank? %>
-				<% current_selected = @lenders.state_id %>
+				<% current_selected = (@community_name ? (@caddress.state_id? ? @caddress.state_id : "99" ): @lenders.state_id) %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -170,7 +260,7 @@
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
 				<%= nf.select(:state_id, @states) %> <span class="error" id="state_error">&nbsp;</span></td>
 				<td style="width:25%;"><label>Country:</label> <% unless @lenders.country_id.blank? %>
-				<% current_selected = @lenders.country_id %>
+				<% current_selected = (@community_name ? (@caddress.country_id? ? @caddress.country_id  : "99"): (@lenders.state_id) %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -296,7 +386,7 @@
 				<td >
 				<div>
 					<label>Login E-Mail:</label>
-					
+
 					<label style="font-size:14px;"><%= session[:email] %></label>
 					<span class="error" id="email1_contact_error">&nbsp;</span>
 				</div></td>

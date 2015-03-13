@@ -4,8 +4,6 @@ class CommunitiesObserver < ActiveRecord::Observer
 
   def before_create(communities)
     communities.community_id = get_random
-    communities.user_id = get_random
-    
   end
 
   def after_create(communities)
