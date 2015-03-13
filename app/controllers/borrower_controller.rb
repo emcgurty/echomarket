@@ -5,8 +5,8 @@ class BorrowerController < ApplicationController
 end
 
   def borrower_item_detail
-    @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ? and is_active = 1", params[:id]])
-  end
+    @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
+ end
 
   def borrower_history
 
@@ -116,6 +116,7 @@ end
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
           :is_saved => @req[:is_saved].to_i,
+          :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_created => Time.now,
           :approved => 0)
         @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
@@ -202,6 +203,7 @@ end
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
           :is_saved => @req[:is_saved].to_i,
+          :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_updated => Time.now,
           :approved => 0]
 

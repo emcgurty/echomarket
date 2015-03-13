@@ -28,6 +28,12 @@
 
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @contact}  %>
 
+<div class="column" >
+	<label>Your email address: </label>
+	<%= form.email_field(:email) %>
+	<span class="error" id="contact_us_email_error">No text yet</span>
+</div>
+
 <div class="column">
 
 	<label>Subject:</label>
@@ -36,11 +42,6 @@
 
 </div>
 
-<div class="column" >
-	<label>Your email address: </label>
-	<%= form.email_field(:email) %>
-	<span class="error" id="contact_us_email_error">No text yet</span>
-</div>
 
 <div class="column">
 	<label>Comments: (255 characters permitted) </label>

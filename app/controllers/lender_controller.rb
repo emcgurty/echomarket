@@ -5,7 +5,7 @@ class LenderController < ApplicationController
   end
 
   def lender_item_detail
-    @lenders = Lenders.find(:first, :readonly => true, :conditions => ["lender_item_id = ? and is_active = 1", params[:id]])
+    @lenders = Lenders.find(:first, :readonly => true, :conditions => ["lender_item_id = ?", params[:id]])
   end
 
   def lender_history
@@ -20,14 +20,15 @@ class LenderController < ApplicationController
 
         redirect_to :action => "lender_offering", :commit => "reuse", :id => params[:id]
       else
-
-        @lenders  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
+         @lenders  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
+        
+        
+        
       end
     else
-
-      @lenders  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
-      session[:notice]  = "Echo Market could not find your lender history, prehaps it has items not yet approved. Here you may offer a new item to lend."
-      redirect_to  :controller => "lender", :action => "lender_offering", :id=>session[:user_id]  if @lenders.blank?
+       @lenders  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
+       session[:notice]  = "Echo Market could not find your lender history, prehaps it has items not yet approved. Here you may offer a new item to lend."
+       redirect_to  :controller => "lender", :action => "lender_offering", :id=>session[:user_id]  if @lenders.blank?
     end
   
   end
@@ -37,6 +38,7 @@ class LenderController < ApplicationController
       @l = Lenders.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
       @l.save
       @ld  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
+          
       unless  @ld.blank?
         redirect_to :action => "lender_history", :commit => ""
       else
@@ -147,6 +149,7 @@ class LenderController < ApplicationController
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
           :is_saved => @req[:is_saved].to_i,
+          :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_created => Time.now,
           :approved => 0)
         @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
@@ -264,6 +267,7 @@ class LenderController < ApplicationController
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
           :is_saved => @req[:is_saved].to_i,
+          :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_updated => Time.now,
           :approved => 0]
 
@@ -295,6 +299,7 @@ class LenderController < ApplicationController
     else
       unless params[:id].blank?
         session[:reuse] = (params[:commit] == 'reuse' ? true : false)
+        
         @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
         @lenders = Lenders.new if @lenders.blank?
       else

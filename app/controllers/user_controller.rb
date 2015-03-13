@@ -145,6 +145,7 @@ Please try again. "
 
   def show_community
     session[:login_notice] = ''
+    
     if request.post?
       @current_user = Communities.find(:first, :readonly => true, :conditions=>['community_name = ?', params[:users][:community_name]])
       unless @current_user.blank?

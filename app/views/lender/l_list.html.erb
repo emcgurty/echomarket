@@ -4,15 +4,19 @@
 	<p>
 		<span class="logo_white" >The Echo Market</span>
 	</p>
-	<p>
-		Lender Items
+	<p><%= session[:community_name].upcase unless session[:community_name].blank? %>Lender Items
 	</p>
 </div>
 
 <div class="column">
 	<h2 id="h2_listing" >What is offered to lend...</h2>
 
-	<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1"])  %>
+	<% if session[:community_name].blank? %>
+	<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and is_community = 0"])  %>
+	<% else %>
+	<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => 
+	           ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
+	<% end %>
 	<% if @lender.blank? %>
 	<p>
 		Seems that no one has offered to lend anything...

@@ -3,13 +3,17 @@
 <%= form_for :borrowers, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
-    <p>Borrower Items</p>
+    <p><%= session[:community_name].upcase unless session[:community_name].blank? %> Borrower Items</p>
   </div>
 
   <div class="column">
     <h2 id="h2_listing" >What is sought to borrow...</h2>
-
-    <% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1"])  %>
+    <% if session[:community_name].blank? %>
+       <% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and is_community = 0"])  %>
+    <% else  %>   
+      <% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions =>
+               ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
+    <%end %>
     <% if @borrower.blank? %>
       <p>Seems that no one is seeking to borrow anything...</p>
       <% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>

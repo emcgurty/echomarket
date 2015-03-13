@@ -13,7 +13,7 @@ class CommunitiesObserver < ActiveRecord::Observer
       Notifier.signup_notification_community(communities).deliver
      rescue  Exception => e
     puts e.message
-    puts "sihnup"        
+    puts "signup_notification_community"        
       
     end  
   end
@@ -21,14 +21,12 @@ class CommunitiesObserver < ActiveRecord::Observer
   def after_save(communities)
 
    begin
-      Notifier.activation(communities).deliver if communities.recently_activated?
+    Notifier.community_activation(communities).deliver if communities.recently_activated?
     Notifier.deliver_reset_password_notification(communities) if communities.recently_reset? && communities.recently_password_reset?
     Notifier.deliver_get_community_notification(communities) if communities.recently_reset? && communities.recently_community_name_get?
-   
-         rescue  Exception => e
+   rescue  Exception => e
     puts e.message
     puts "after_save"   
-    
   end
 end
 

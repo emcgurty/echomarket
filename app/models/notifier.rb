@@ -43,6 +43,14 @@ class Notifier < ActionMailer::Base
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}"
 
   end
+  
+    def community_activation(communities)
+    setup_email_community(communities)
+    @subject    += ' Your account has been activated!'
+    @url  = "http://"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}"
+
+  end
 
   def reset_password_notification(users)
     setup_email(users)

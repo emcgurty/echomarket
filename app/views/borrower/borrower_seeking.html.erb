@@ -24,8 +24,8 @@
   <div class="top" >
 
     <p><span class="logo_white" >The Echo Market</span></p>
-    <p>BORROWER ITEM REGISTRATION
-  <%#*<a href="#" class="registration_header" style="display:none;" onclick="saveAndFinishLater();" >Save and Finish Later</a>%>
+    <p><%= session[:community_name].upcase unless session[:community_name].blank? %> BORROWER ITEM REGISTRATION
+  
       <a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a></p>
     <% unless session[:notice].blank? %>
       <p><%= session[:notice] %></p>
@@ -368,8 +368,8 @@
           <td >
             <div>
               <label>Login E-Mail:</label>
-              <% @borrower_email = Users.find(:first) %>
-              <label style="font-size:14px;"><%= @borrower_email.email %></label>
+              
+              <label style="font-size:14px;"><%= session[:email] %></label>
               <span class="error" id="email1_contact_error">&nbsp;</span>
             </div>
           </td>

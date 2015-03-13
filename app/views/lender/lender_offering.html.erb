@@ -29,8 +29,8 @@
 		<span class="logo_white" >The Echo Market</span>
 	</p>
 	<p>
-		LENDER ITEM REGISTRATION
-		<%#*<a href="#" class="registration_header" style="display:none;" onclick="saveAndFinishLater();" >Save and Finish Later</a>%> <a href="#" class="registration_header" style="display:none;" onclick="saveAll();">Save Lender Item Registration</a>
+		<%= session[:commmunity_name].upcase unless session[:community_name].blanks?  %> LENDER ITEM REGISTRATION
+		
 	</p>
 	<% unless session[:notice].blank? %>
 	<p>
@@ -296,8 +296,8 @@
 				<td >
 				<div>
 					<label>Login E-Mail:</label>
-					<% @lender_email = Users.find(:first) %>
-					<label style="font-size:14px;"><%= @lender_email.email %></label>
+					
+					<label style="font-size:14px;"><%= session[:email] %></label>
 					<span class="error" id="email1_contact_error">&nbsp;</span>
 				</div></td>
 				<td >
