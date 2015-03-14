@@ -27,6 +27,7 @@
 <%= nf.hidden_field :approved, :value => 0 %>
 <%= nf.hidden_field :is_active, :value => 1 %>
 <%= nf.hidden_field :is_saved, :value => 1 %>
+<%= nf.hidden_field :is_creator, :value => 1 %>
 <% @st = UsStates.find(:all, :order => "state_name") %>
 <% @ct = Countries.find(:all, :order => "country_name") %>
 
@@ -75,21 +76,21 @@
 				<td style="width:25%;">
 				<div>
 					<label>First Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24, :tabindex=>"5") %>
 					<span class="error" id="first_name_error">&nbsp;</span>
 				</div></td>
 
 				<td style="width:25%;">
 				<div>
 					<label>Middle Initial:</label>
-					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
+					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1", :tabindex=>"6") %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 
 				<td style="width:25%;">
 				<div>
 					<label>Last Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24, :tabindex=>"7") %>
 					<span class="error" id="last_name_error">&nbsp;</span>
 				</div></td>
 
@@ -101,31 +102,31 @@
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24, :tabindex=>"8") %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 2:</label>
-					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24, :tabindex=>"9") %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
+					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15, :tabindex=>"10") %>
 					<span class="error" id="postal_code_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
+					<%= nf.text_field( :city, :maxlength=>20, :size=>20, :tabindex=>"11") %>
 					<span class="error" id="city_error">&nbsp;</span>
 				</div></td>
 
 			</tr>
 			<tr class="even">
-				<td style="width:25%;"><label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
+				<td style="width:25%;"><label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20, :tabindex=>"12") %> <span class="error">&nbsp;</span></td>
 				<td style="width:25%;"><label>State:</label> <% unless @communities.state_id.blank? %>
 				<% current_selected = @communities.state_id %>
 				<% else %>
@@ -133,7 +134,7 @@
 				<% end  %>
 
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> <span class="error" id="state_error">&nbsp;</span></td>
+				<%= nf.select(:state_id, @states, {:tabindex=>13}) %> <span class="error" id="state_error">&nbsp;</span></td>
 
 				<td style="width:25%;"><label>Country:</label> <% unless @communities.country_id.blank? %>
 				<% current_selected = @communities.country_id %>
@@ -141,12 +142,12 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries, {:onchange=>""}) %> <span class="error" id="country_error">&nbsp;</span></td>
+				<%= nf.select(:country_id, @countries, {:tabindex=>14}) %> <span class="error" id="country_error">&nbsp;</span></td>
 
 			</tr>
 			<tr class="odd">
-				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
-				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
+				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15, :tabindex=>"15") %> </td>
+				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15, :tabindex=>"16") %> </td>
 				<td colspan="2"> &nbsp;</td>
 
 			</tr>
@@ -161,12 +162,12 @@
 		<ul >
 			<li style="margin:2px;">
 				<label for="communities_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
-					<%= nf.check_box( :goodwill) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
+					<%= nf.check_box( :goodwill, {:tabindex=>17}) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
 				<span class="error" id="goodwill_error"  >&nbsp;</span>
 			</li>
 			<li style="margin:2px;">
 				<label for="communities_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
-					<%= nf.check_box( :age_18_or_more) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
+					<%= nf.check_box( :age_18_or_more, {:tabindex=>18}) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
 				<span class="error" id="18_or_more_error">&nbsp;</span>
 			</li>
 		</ul>

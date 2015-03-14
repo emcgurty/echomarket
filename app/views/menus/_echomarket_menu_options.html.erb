@@ -63,6 +63,18 @@
 	<% if session[:user_id].blank? %>
 	<li>
 		<%= link_to 'Register/Login', user_login_path(type: 'all', id: '')   %>
+		
+			<ul>
+			<li>
+				<%= link_to 'Community registration'  %>
+			</li>
+			<li>
+				<%= link_to "Lender, Bowwower or Guest"  %>
+			</li>
+		</ul>
+		
+		
+		
 	</li>
 	<% else %>
 	<% @getUserType = (session[:user_type] == 'both' ? "Lender/Borrower": session[:user_type]).upcase %>

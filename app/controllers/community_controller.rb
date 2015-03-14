@@ -18,10 +18,14 @@ class CommunityController < ApplicationController
   # POST /communities
   # POST /communities.json
   def create
+    
     @communities = Communities.new(params[:communities])
     respond_to do |format|
       if @communities.save(:validate => true) && @communities.errors.empty?
-        @cm = Community_Members.new(:community_id => @communities.community_id, :first_name => @communities.first_name, :mi => @communities.mi,:last_name => @communities.last_name)
+        @cm = CommunityMembers.new(
+        :community_id => @communities.community_id, 
+        :first_name => @communities.first_name, 
+        :mi => @communities.mi,:last_name => @communities.last_name, :remote_ip => @communities.remote_ip, :date_created => Time.now, :is_active => 1)
         if @cm.save(:validate => true) && @cm.errors.empty?
           session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
           format.html { redirect_to :controller => "home", :action => "items_listing" }
@@ -60,7 +64,7 @@ class CommunityController < ApplicationController
   def destroy
     @communities = Communities.find(params[:id])
     @communities.destroy
-    @cm = Community_Members.find(:all, :conditions => ["community_id = ?", params[:id]])
+    @cm = CommunityMembers.find(:all, :conditions => ["community_id = ?", params[:id]])
     @cm.destroy
     respond_to do |format|
       if @communities.save && cm.save
@@ -89,27 +93,27 @@ class CommunityController < ApplicationController
       unless @cm.activation_code.blank?
         if @cm.activate
           @current_user = @cm
-          @cm_l = Community_Members.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
+          @cm_l = CommunityMembers.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
           session[:user_id] = @cm_l.user_id 
           session[:community_id] = @current_user.community_id
           session[:user_type] = session[:register_type] = @current_user.user_type
           session[:community_name] = @current_user.community_name
-          session[:user_alias] = @current_user.community_name
+          session[:user_alias] = (@cm_l.first_name.blank? ? @cm_l.alias : @cm_l.first_name + " " + (@cm_l.mi.blank? ? "": @cm_l.mi) + " " + @cm_l.last_name) 
           session[:notice] = @current_user.community_name + ", your registration activation is complete, and you are now logged in."
         else
           session[:notice] = "Failure in saving record."
         end
       else
         @current_user = @cm
-         @cm_l = Community_Members.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
+         @cm_l = CommunityMembers.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
          session[:user_id] = @cm_l.user_id
         session[:community_id] = @current_user.community_id
         session[:user_type] = session[:register_type] = @current_user.user_type
         session[:community_name] = @current_user.community_name
-        session[:user_alias] = @current_user.community_name
+        session[:user_alias] = (@cm_l.first_name.blank? ? @cm_l.alias : @cm_l.first_name + " " + (@cm_l.mi.blank? ? "": @cm_l.mi) + " " + @cm_l.last_name)
         session[:notice] = @current_user.community_name + ", you have already activated your registration, and you are now logged in."
       end
-      redirect_to :controller=> "community_member", :action=>"advise"
+      redirect_to :controller=> "community_member", :action=>"advise", :id => @cm.community_id
     else
       session[:notice] = "Seems that you may have not properly copied the Activation url provided in your email.  Please try again."
       redirect_to :controller=> "home", :action=>"items_listing"
