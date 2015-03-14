@@ -21,22 +21,17 @@
 	<body>
 
 		<% content_for :header do %>
+			<%= render :partial => 'menus/echomarket_menu_options' %>
+		<% end %>
+
 		
-		<%= render :partial => 'menus/echomarket_menu_options' %>
-		<% end %>
-
-		<% content_for :footer do %>
-		<%= render :partial => 'menus/footer' %>
-		<% end %>
-
 		<% content_for :center do %>
 		<% if session[:background] %>
 			<div class="wrapper">
 				<div id="form_wrapper" class="form_wrapper">
 					<%= yield -%>
 				</div>
-	
-			</div>
+				</div>
 			<% else %>
 			<%= yield -%>
 			<% end %>

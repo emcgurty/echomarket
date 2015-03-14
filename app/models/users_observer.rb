@@ -14,8 +14,8 @@ class UsersObserver < ActiveRecord::Observer
   def after_save(users)
 
     Notifier.activation(users).deliver if users.recently_activated?
-    Notifier.deliver_reset_password_notification(users) if users.recently_reset? && users.recently_password_reset?
-    Notifier.deliver_get_username_notification(users) if users.recently_reset? && users.recently_username_get?
+    Notifier.reset_password_notification(users).deliver if users.recently_reset? && users.recently_password_reset?
+    Notifier.get_username_notification(users).deliver if users.recently_reset? && users.recently_username_get?
   end
 
 

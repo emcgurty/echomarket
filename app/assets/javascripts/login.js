@@ -87,6 +87,10 @@ function showRegistration() {
 	window.location.replace("/user/register");
 }
 
+function showCommunityRegistration() {
+	window.location.replace("/community/new");
+}
+
 function submitForgotUsername() {
 
 	if ($("#users_email").val() == "") {
@@ -99,6 +103,13 @@ function submitForgotUsername() {
 		$("form.forgot_username").submit();
 	}
 
+}
+
+function submitCommunityRegistration(){
+	
+	
+	
+	
 }
 
 function submitForgotCommunityName() {
@@ -128,12 +139,14 @@ function submitForgotPassword() {
 	}
 }
 function submitForgotCommunityPassword() {
+	
 
 	if ($("#communities_email").val() == "") {
 		$("#forgot_community_password_email_error").text("Email is required.");
 		$("#forgot_community_password_email_error").css("visibility", "visible");
 
 	} else {
+	
 		$("#forgot_community_password_email_error").text("");
 		$("#forgot_community_password_email_error").css("visibility", "hidden");
 		$("form.forgot_community_password").submit();
@@ -185,8 +198,8 @@ function submitCommunityLogin() {
 		$("#login_community_password_error").text("");
 		$("#login_community_password_error").css("visibility", "hidden");
 	}
-	alert($("#users_community_alias").val());
-	alert(($("#users_community_alias").val() != "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ));
+	
+	
 	if ($("#users_community_alias").val() != "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ) {
 		$("#login_community_alias_error").text("Provide only a fullname or alias.");
 		$("#login_community_alias_error").css("visibility", "visible");

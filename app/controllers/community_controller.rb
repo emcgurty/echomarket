@@ -25,7 +25,7 @@ class CommunityController < ApplicationController
         @cm = CommunityMembers.new(
         :community_id => @communities.community_id, 
         :first_name => @communities.first_name, 
-        :mi => @communities.mi,:last_name => @communities.last_name, :remote_ip => @communities.remote_ip, :date_created => Time.now, :is_active => 1)
+        :mi => @communities.mi,:last_name => @communities.last_name, :remote_ip => @communities.remote_ip, :date_created => Time.now, :is_active => 1, :is_creator => 1)
         if @cm.save(:validate => true) && @cm.errors.empty?
           session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
           format.html { redirect_to :controller => "home", :action => "items_listing" }
@@ -120,17 +120,22 @@ class CommunityController < ApplicationController
     end
   end
   
-   def forgot_community_name
+  # POST /communities
+  # POST /communities.json
+  def forgot_community_name
     session[:background] = true
     if request.post?
-      forgot('username')
+      forgot('community_name')
     else
       @communities = Communities.new
     end
   end
 
   def forgot_community_password
+    puts "forgot_community_password"
     session[:background] = true
+    puts request.post?
+    puts request.put?
     if request.post?
       forgot('password')
     else
@@ -139,15 +144,16 @@ class CommunityController < ApplicationController
   end
 
   def forgot(which)
+    puts "In forgot"
     session[:notice] = ''
     if request.post?
-      @communities = Communities.find(:first, :conditions => ['email = ?', params[:users][:email]])
+      @communities = Communities.find(:first, :conditions => ['email = ?', params[:communities][:email]])
 
       unless @communities.blank?
         @communities.create_reset_code(which)
-        if which == 'username'
+        if which == 'community_name'
           # respond_to do |format|
-          Notifier.get_username_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_username_get?
+          Notifier.get_username_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_community_name_get?
           #format.html
           session[:notice] = "Path to retrieve Community name sent to #{@communities.email}"
         #end
@@ -163,7 +169,8 @@ class CommunityController < ApplicationController
 
       end
 
-    end
+    end  #end def
+    
   # respond_to do |format|
   # format.html
   #end

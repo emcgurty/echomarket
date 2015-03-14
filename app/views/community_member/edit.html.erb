@@ -32,7 +32,7 @@
 
 </style>
 
-<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+
 
 <div class="top" >
 
@@ -59,7 +59,7 @@
 		Either way, for each member that name or alias must be unique.  On login to the Echo Market, the member will need to provide the Community name, Community password and then provide either his/her fullname or alias.
 	</p>
 
-	<div id="add_community_members" style="display:block;float:left;width:96%;height:auto;margin:5px;">
+		<div id="add_community_members" style="display:block;float:left;width:96%;height:auto;margin:5px;">
 		
 		
 		<table style="margin-left:25px;">
@@ -73,7 +73,8 @@
 				<th>Function</th>
 			</tr>
 		
-			<%= nf.hidden_field :community_id, {:value=> session[:community_id]} %>
+			<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+            <%= nf.hidden_field :community_id, {:value=> session[:community_id]} %>
 			<% rowCount = 1 %>
 			<% numRows = @community_members.count %>
 			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
@@ -86,7 +87,7 @@
 				<td width="5%">OR</td>
 				<td width='20%'><%= nf.text_field :alias, {:size=>24} %></td>
 				
-				<td width='20%'>&nbsp;&nbsp;
+				<td width='20%'>
 					<% if  @community_members[rowCount][:is_creator] == 1 %>
 					<%= link_to "Update Member", community_member_update_row_url(@community_members[rowCount][:community_member_id]) %>
 				    <%= nf.hidden_field :is_creator, :value => 1 %>
@@ -112,11 +113,11 @@
 					<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
 			</tr>
 			<% end %>
-			
+			<% end%>
 		</table>
 	</div>
 
 </div>
 
-<% end%>
+
 

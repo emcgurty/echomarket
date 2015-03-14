@@ -61,21 +61,21 @@
 	</li>
 
 	<% if session[:user_id].blank? %>
-	<li>
-		<%= link_to 'Register/Login', user_login_path(type: 'all', id: '')   %>
-		
-			<ul>
-			<li>
-				<%= link_to 'Community registration'  %>
-			</li>
-			<li>
-				<%= link_to "Lender, Bowwower or Guest"  %>
-			</li>
-		</ul>
-		
-		
-		
-	</li>
+		<li>
+			<a href="#s1">Login/Registration</a>
+				<ul>
+				<li>
+					<%= link_to 'Login', user_login_path(type: 'all', id: '')   %>
+					
+				</li>	
+				<li>
+					<%= link_to 'Community Registration',  community_new_url %>
+				</li>
+				<li>
+					<%= link_to "Lender, Borrower or Guest Registration" , user_register_url  %>
+				</li>
+			</ul>
+		</li>
 	<% else %>
 	<% @getUserType = (session[:user_type] == 'both' ? "Lender/Borrower": session[:user_type]).upcase %>
 	<li class="subs">
@@ -98,11 +98,11 @@
 				<%= link_to 'Logout', :controller => 'community', :action => 'logout'  %>
 			</li>
 			<li>
-				<%= link_to "Community Account", community_edit_path  %>
+				<%= link_to "Community Account", community_edit_url(session[:community_id])  %>
 			</li>
 			
-					<li>
-				<%= link_to "Community Members", community_member_edit_path  %>
+			<li>
+				<%= link_to "Community Members", community_member_edit_url(session[:community_id])  %>
 			</li>
 		</ul>
 		<% end%>

@@ -138,7 +138,8 @@
 	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
 	<a href="#" onclick="submitLogin();">=> Submit Login</a>
 	<% end %>
-	<a href="#" onclick="showRegistration();">=> Don't have an account yet? Register here.</a>
+	<a href="#" onclick="showCommunityRegistration();">=> Register here as a Community.</a>
+	<a href="#" onclick="showRegistration();">=> Register here as a lender, borrower or guest.</a>
 	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see that is being offered to borrow or lend.</a>
 </div>
 <div   class="div_white" >

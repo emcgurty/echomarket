@@ -32,14 +32,17 @@
 <% @ct = Countries.find(:all, :order => "country_name") %>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
-	<label>Echo Market Community Name:&nbsp; </label>
+	<label>Echo Market Community Name:&nbsp; 
+		<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(50)</span>
+		
+	</label>
 	<%= nf.text_field(:community_name, {:maxlength=>50,:tabindex=>"1",:value=>"" }) %>
 	<span style="color:indigo;font-size:12px;">Required Community name, displayed only to members.</span>
 	<span class="error" id="registration_community_name_error">This is an error</span>
 </div>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
-	<label>Echo Market Community E-Mail:&nbsp; </label>
+	<label>Echo Market Community E-Mail:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span> </label>
 	<%= nf.text_field(:email, {:maxlength=>50,:tabindex=>"2",:value=>"" }) %>
 	<span style="color:indigo;font-size:12px;">Required Community email, displayed only to members.</span>
 	<span class="error" id="registration_community_email_error">This is an error</span>
@@ -47,7 +50,7 @@
 
 <div class="column50">
 	<div  >
-		<label>Community Password:&nbsp;
+		<label>Community Password:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span>
 			<br />
 			<%= nf.password_field(:password, {:maxlength=>16,:tabindex=>"3",:value=>""})  %></label>
 		<span style="color:indigo;font-size:12px;">Between 8 - 16 alpha-numeric characters.</span>
@@ -59,7 +62,7 @@
 <div class="column50">
 
 	<div  >
-		<label>Re-enter Community Password: &nbsp;
+		<label>Re-enter Community Password: &nbsp;<span class="required_fields">&nbsp;&nbsp;*</span>
 			<br />
 			<%= nf.password_field(:password_confirmation, {:maxlength=>16,:tabindex=>"4",:value=>""})  %></label>
 		<span style="color:indigo;font-size:12px;">Password and re-entered password must match.</span>
@@ -75,7 +78,8 @@
 			<tr class="even">
 				<td style="width:25%;">
 				<div>
-					<label>First Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<label>First Name:
+						<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24, :tabindex=>"5") %>
 					<span class="error" id="first_name_error">&nbsp;</span>
 				</div></td>
@@ -89,7 +93,8 @@
 
 				<td style="width:25%;">
 				<div>
-					<label>Last Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<label>Last Name:
+						<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24, :tabindex=>"7") %>
 					<span class="error" id="last_name_error">&nbsp;</span>
 				</div></td>
@@ -101,7 +106,8 @@
 			<tr class="odd">
 				<td style="width:25%;">
 				<div>
-					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<label>Address Line 1:
+						<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24, :tabindex=>"8") %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
@@ -113,7 +119,8 @@
 				</div></td>
 				<td style="width:25%;">
 				<div>
-					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
+					<label>Postal Code:
+						<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
 					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15, :tabindex=>"10") %>
 					<span class="error" id="postal_code_error">&nbsp;</span>
 				</div></td>
@@ -126,8 +133,10 @@
 
 			</tr>
 			<tr class="even">
-				<td style="width:25%;"><label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20, :tabindex=>"12") %> <span class="error">&nbsp;</span></td>
-				<td style="width:25%;"><label>State:</label> <% unless @communities.state_id.blank? %>
+				<td style="width:25%;"><label>County/Province:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20, :tabindex=>"12") %> <span class="error">&nbsp;</span></td>
+				<td style="width:25%;"><label>State:
+					<span class="required_fields">&nbsp;&nbsp;*</span>
+					</label> <% unless @communities.state_id.blank? %>
 				<% current_selected = @communities.state_id %>
 				<% else %>
 				<% current_selected = '99' %>
@@ -136,7 +145,8 @@
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
 				<%= nf.select(:state_id, @states, {:tabindex=>13}) %> <span class="error" id="state_error">&nbsp;</span></td>
 
-				<td style="width:25%;"><label>Country:</label> <% unless @communities.country_id.blank? %>
+				<td style="width:25%;"><label>Country:
+										<span class="required_fields">&nbsp;&nbsp;*</span></label> <% unless @communities.country_id.blank? %>
 				<% current_selected = @communities.country_id %>
 				<% else %>
 				<% current_selected = '99' %>
@@ -161,12 +171,16 @@
 		<div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
 		<ul >
 			<li style="margin:2px;">
-				<label for="communities_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
+				<label for="communities_goodwill" style="color:#0B0B3B">
+										<span class="required_fields">&nbsp;&nbsp;*</span>
+					&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
 					<%= nf.check_box( :goodwill, {:tabindex=>17}) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
 				<span class="error" id="goodwill_error"  >&nbsp;</span>
 			</li>
 			<li style="margin:2px;">
-				<label for="communities_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
+				<label for="communities_age_18_or_more" style="color:#0B0B3B">
+										<span class="required_fields">&nbsp;&nbsp;*</span>
+										&nbsp;I have achieved the age of 18 years or more.&nbsp;
 					<%= nf.check_box( :age_18_or_more, {:tabindex=>18}) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
 				<span class="error" id="18_or_more_error">&nbsp;</span>
 			</li>
@@ -178,10 +192,10 @@
 </div >
 
 <div class="bottom" >
-	<%= nf.submit "Register" %>
-	<!-- <a href="#" onclick="submitCommunityRegistration();">>>Submit Community Registration.</a> -->
+	
+	<a href="#" onclick="submitCommunityRegistration();">>>Submit Community Registration</a>
 	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
-	<a href="#" onclick="showCommunityLogin();">=> Remembered that I already registered my Community.</a>
+	<a href="#" onclick="showCommunityLogin();">=> Remembered that I already registered my Community</a>
 	<% end %>
 	<a href="#" onclick="window.location.replace('/home/items_listing');">=> I'll register later. Let's see what is being offered to borrow or lend.</a>
 </div>

@@ -7,11 +7,14 @@
   <% @lender_type_string = session[:register_type].upcase + " " %>
 <% end %>
 
-    <%= form_for @communities, :url=> {:controller=>"community", :action => "forgot_community_name"}, :html=> {:class=>"forgot_username", :id=>"user_login_form"} do |nf| %>
+    <%= form_for @communities, :url=> {:controller=>"community", :action => "forgot_community_name"}, :html=> {:class=>"forgot_community_name", :id=>"user_login_form"} do |nf| %>
       <div class="top" >
         <p><span class="logo_white" >The Echo Market</span></p>
-        <p><%= @lender_type_string %> FORGOT USER NAME</p>
+        <p><%= @lender_type_string %> FORGOT COMMUNITY NAME</p>
       </div>
+      
+        <div   class="div_white" >&nbsp;</div>
+      
       <div class="column" >
         <label>Email:</label>
         <%= nf.email_field(:email, {:tabindex=>"1",:value=>"" }) %>
@@ -20,7 +23,7 @@
       <div class="bottom">
 
         <a href="#" onclick="submitForgotCommunityName();">=> Please retrieve my Community Name</a>
-        <a href="#" onclick="showLogin();">=> Now I remember my Community Name.</a>
+        <a href="#" onclick="showLogin();">=> Now I remember my Community Name</a>
 
       </div>
 

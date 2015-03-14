@@ -40,7 +40,9 @@
 
     <div class="bottom">
       <% unless session[:user_id].blank? %>
-      <%= link_to "Sounds interesting. I'd like to Register", user_register_url(:id=>'', :type=>'all') %>
+      <%= link_to "I'd like to Register as a Community", community_new_url %>
+      <br />
+       <%= link_to "I'd like to Register as a Lender, Borrower or Guest", user_register_url(:id=>'', :type=>'all') %>
       <% else%>
       <%= link_to "Let's see what is available for lending or borrowing", home_items_listing_url %>
       <% end %>

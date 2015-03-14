@@ -63,9 +63,13 @@
   </div>
 
 
-
-  <% lc = Lenders.count(:conditions => ["is_active = 1 && is_saved = 1"]) %>
-  <% bc = Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1"]) %>
+  <% if session[:community_id] %>
+  	<% lc = Lenders.count(:conditions => ["is_active = 1 && is_saved = 1 and community_id = ?" session[:community_id] ]) %>
+  	<% bc = Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1 and community_id = ?" session[:community_id] ]) %>
+  <% else %>
+ 	 <% lc = Lenders.count(:conditions => ["is_active = 1 && is_saved = 1"]) %>
+  	<% bc = Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1"]) %>  
+  <% end %>
   <% if @item_search_query.blank? %>
 
     <% unless session[:on_search_open] %>

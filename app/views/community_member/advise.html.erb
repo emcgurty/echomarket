@@ -32,7 +32,7 @@
 
 </style>
 
-<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+
 
 <div class="top" >
 
@@ -69,6 +69,7 @@
 		For each member, you need to provide either a member's full name or alias.  Either way, for each member that name or alias must be unique.  On login to the Echo Market, the member will need to provide the Community name, Community password and then provided either his/her fullname or alias.
 	</p>
 
+<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 	<div id="add_community_members" style="display:block;float:left;width:96%;height:auto;margin:5px;">
 		
 		
@@ -98,7 +99,7 @@
 				<td width='20%'><%= nf.text_field :alias, {:size=>24} %></td>
 				<td width='20%'>
 			    <%= nf.hidden_field :community_id %>
-				&nbsp;&nbsp;
+				
 				<% if  @community_members[rowCount][:is_creator] == 1 %>
 					<%= link_to "Update Member", community_member_update_row_url(@community_members[rowCount][:community_member_id]) %>
 				    <%= nf.hidden_field :is_creator, :value => 1 %>
@@ -135,8 +136,9 @@
 				<td width= '20%'><%= nf.text_field :alias,  {:size=>24} %></td>
 				<td width= '20%'>&nbsp;&nbsp;<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
 			</tr>
-			<% end %>
+			
 		</table>
+		<% end %>
 	</div>
 
 </div>

@@ -80,7 +80,7 @@ form {
 }
 
 
-form.reset, form.contact_us, form.forgot_password, form.forgot_username, form.edit_users, form.reset_password {
+form.reset, form.contact_us, form.edit_users, form.reset_password {
     width:460px;
 }
 
@@ -187,7 +187,7 @@ div.application_bottom {
     bottom:0;
     height:auto;
     width:50%;
-    margin-left:25%;
+    margin-left:25px;
 
 }
 tr.even {
@@ -457,21 +457,22 @@ form.search{
 
 
 form.register{
-    width:480px;
+    width:580px;
     height:auto;
     display:block;
 }
 
 
-form.forgot_password{
-    width:260px;
+form.forgot_password, form.forgot_community_password {
+    width:420px;
+    height:auto;
+    display:block ;
+}
+
+form.forgot_username,  form.forgot_community_name{
+    width:420px;
     height:auto;
     display:block;
-}
-form.forgot_username{
-    width:260px;
-    height:auto;
-    display:inline;
 }
 .form_wrapper textarea  {
     border: solid 1px #E5E5E5;

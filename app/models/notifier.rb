@@ -59,6 +59,13 @@ class Notifier < ActionMailer::Base
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_reset_password/#{users.reset_code}"
   end
 
+  def reset_community_password_notification(communities)
+    setup_email_community(communities)
+    @subject    += ' Follow this link to reset your password'
+    @url  = "http://"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/comunity/forgot_community_password/#{communities.reset_code}"
+  end
+
   def get_username_notification(users)
     setup_email(users)
     @subject    += ' Follow this link to learn your username'
@@ -68,9 +75,9 @@ class Notifier < ActionMailer::Base
 
 def get_community_notification(communities)
     setup_email_community(communities)
-    @subject    += ' Follow this link to learn your username'
+    @subject    += ' Follow this link to learn your Community Name'
     @url  = "http://"
-    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/communities/get_username/#{users.reset_code}"
+    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/forgot_community_name/#{users.reset_code}"
   end
   private
   def setup_email(users)

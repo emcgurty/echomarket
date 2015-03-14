@@ -20,8 +20,8 @@ class CommunitiesObserver < ActiveRecord::Observer
 
    begin
     Notifier.community_activation(communities).deliver if communities.recently_activated?
-    Notifier.deliver_reset_password_notification(communities) if communities.recently_reset? && communities.recently_password_reset?
-    Notifier.deliver_get_community_notification(communities) if communities.recently_reset? && communities.recently_community_name_get?
+    Notifier.reset_community_password_notification(communities).deliver if communities.recently_reset? && communities.recently_password_reset?
+    Notifier.get_community_notification(communities).deliver if communities.recently_reset? && communities.recently_community_name_get?
    rescue  Exception => e
     puts e.message
     puts "after_save"   
