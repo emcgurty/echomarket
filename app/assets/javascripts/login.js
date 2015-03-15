@@ -22,7 +22,9 @@ $(document).ready(function() {
 
 	$("div.form_wrapper").center();
 	$("form").center_form();
-
+        $("div#provide_country_state").css("display", "none");
+		$("div#choose_us_state").css("display", "inline");
+			
 	$("#users_password_confirmation").change(function() {
 
 		if ($("#users_password_confirmation").val() != $("#users_password").val()) {
@@ -33,7 +35,43 @@ $(document).ready(function() {
 			$("#registration_password_confirmation_error").css("visibility", "hidden");
 		}
 	});
+	
+	$("#communities_password_confirmation").bind('change', function() {
 
+		if ($("#communities_password_confirmation").val() != $("#communities_password").val()) {
+			$("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
+			$("#registration_password_confirmation_error").css("visibility", "visible");
+		} else {
+			$("#registration_password_confirmation_error").text("");
+			$("#registration_password_confirmation_error").css("visibility", "hidden");
+		}
+	});
+	$("#communities_password_confirmation").trigger('change');
+	
+	$("select#communities_country_id").bind('change', function() {
+
+		var country_text    = $( "select#communities_country_id option:selected" ).text();
+        if ((country_text != 'United States') || (country_text == 'Please select')) {
+               	
+			$("div#choose_us_state").css("display", "none");
+			$("div#provide_country_state").css("display", "inline");
+			$("input#communities_state_id_string").val("");
+			
+		} 
+		else {
+			
+			$("div#provide_country_state").css("display", "none");
+			$("div#choose_us_state").css("display", "inline");
+		}
+        	
+        
+	});
+	$("select#communities_country_id").trigger('change');
+	
+	
+	
+	
+	
 });
 
 function submitPasswordReset() {
@@ -106,8 +144,120 @@ function submitForgotUsername() {
 }
 
 function submitCommunityRegistration(){
+	var foundInvalid = true;
+	if ($("#communities_community_name").val() == "") {
+		$("#registration_community_name_error").text("Community Name is required.");
+		$("#registration_community_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#registration_community_name_error").text("");
+		$("#registration_community_name_error").css("visibility", "hidden");
+	}
+	
+	if ($("#communities_email").val() == "") {
+		$("#registration_community_email_error").text("Community email is required.");
+		$("#registration_community_email_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#registration_community_email_error").text("");
+		$("#registration_community_email_error").css("visibility", "hidden");
+	}
+	
+	if ($("#communities_password_confirmation").val() == "") {
+		$("#registration_password_confirmation_error").text("Community password re-entry is required.");
+		$("#registration_password_confirmation_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#registration_password_confirmation_error").text("");
+		$("#registration_password_confirmation_error").css("visibility", "hidden");
+	}
+	if ($("#communities_password").val() == "") {
+		$("#registration_password_error").text("Community password is required.");
+		$("#registration_password_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#registration_password_error").text("");
+		$("#registration_password_error").css("visibility", "hidden");
+	}
+	
+	if ($("#communities_password_confirmation").val() != $("#communities_password").val()) {
+		
+		$("#registration_password_confirmation_error").text("Community password and password re-entry must match.");
+		$("#registration_password_confirmation_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#registration_password_confirmation_error").text("");
+		$("#registration_password_confirmation_error").css("visibility", "hidden");
+	}
 	
 	
+	if ($("#communities_first_name").val() == "") {
+		
+		$("#first_name_error").text("First name is required.");
+		$("#first_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#first_name_error").text("");
+		$("#first_name_error").css("visibility", "hidden");
+	}
+	if ($("#communities_last_name").val() == "") {
+		$("#last_name_error").text("Last name is required.");
+		$("#last_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#last_name_error").text("");
+		$("#last_name_error").css("visibility", "hidden");
+	}
+	if ($("#communities_address_line_1").val() == "") {
+		$("#address_line_1_error").text("First address line is required.");
+		$("#address_line_1_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#address_line_1_error").text("");
+		$("#address_line_1_error").css("visibility", "hidden");
+	}
+	if ($("#communities_city").val() == "") {
+		$("#city_error").text("City is required.");
+		$("#city_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#city_error").text("");
+		$("#city_error").css("visibility", "hidden");
+	}
+	if ($("#communities_postal_code").val() == "") {
+		$("#postal_code_error").text("Postal Code is required.");
+		$("#postal_code_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("#postal_code_error").text("");
+		$("#postal_code_error").css("visibility", "hidden");
+	}
+	
+
+    var legal_18 = $("#communities_age_18_or_more");
+    var legal_goodwill = $("#communities_goodwill");
+
+    if (!(legal_18.is (':checked'))) {
+        foundInvalid = false;
+        $("span#18_or_more_error").text("You must be 18 years of age.");
+        $("span#18_or_more_error").css("visibility", "visible");
+    } else {
+        $("span#18_or_more_error").text("");
+        $("span#18_or_more_error").css("visibility", "hidden");
+    }
+    if (!(legal_goodwill.is (':checked'))) {
+        foundInvalid = false;
+        $("span#goodwill_error").text("You must be acting in goodwill.");
+        $("span#goodwill_error").css("visibility", "visible");
+    } else {
+        $("span#goodwill_error").text("");
+        $("span#goodwill_error").css("visibility", "hidden");
+    }
+
+    if (foundInvalid) {
+
+		$("form").submit();
+	}
 	
 	
 }
@@ -155,7 +305,7 @@ function submitForgotCommunityPassword() {
 
 
 function submitLogin() {
-	foundInvalid = true;
+	var foundInvalid = true;
 	if ($("#users_username").val() == "") {
 		$("#login_username_error").text("Username is required.");
 		$("#login_username_error").css("visibility", "visible");
@@ -180,7 +330,7 @@ function submitLogin() {
 }
 
 function submitCommunityLogin() {
-	foundInvalid = true;
+	var foundInvalid = true;
 	if ($("#users_community_name").val() == "") {
 		$("#login_community_name_error").text("Community name is required.");
 		$("#login_community_name_error").css("visibility", "visible");

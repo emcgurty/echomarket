@@ -174,19 +174,7 @@
             <span class="error">&nbsp;</span>
 
           </td>
-          <td style="width:25%;">
-            <label>State:</label>
-            <% unless @borrowers.state_id.blank? %>
-              <% @current_selected = @borrowers.state_id %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-
-            <% @states = options_from_collection_for_select(@st, :state_id, :state_name, @current_selected) %>
-            <%= nf.select(:state_id, @states) %>
-            <span class="error" id="state_error">&nbsp;</span>
-          </td>
-          <td style="width:25%;">
+             <td style="width:25%;">
             <label>Country:</label>
             <% unless @borrowers.country_id.blank? %>
               <% @current_selected = @borrowers.country_id %>
@@ -197,6 +185,30 @@
             <%= nf.select(:country_id, @countries, {:onchange=>"select#borrowers_country_id();"}) %>
             <span class="error" id="country_error">&nbsp;</span>
           </td>
+          
+           <td style="width:25%;">
+            
+           
+            <div id="choose_us_state"  style="display:inline;" >
+				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<% unless @borrowers.state_id.blank? %>
+				<% current_selected = @borrowers.state_id %>
+				<% else %>
+				<% current_selected = '99' %>
+				<% end  %>
+				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
+				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				</div>
+
+				<div id="provide_country_state" style="display:none;">
+					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
+					
+				</div>
+				<span class="error" id="state_error">&nbsp;</span>
+             
+          </td>
+    
 
           <td style="width:25%;">
             <div style="display:inline-block;vertical-align:top;">

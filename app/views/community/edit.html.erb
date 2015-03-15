@@ -127,25 +127,53 @@
 
 			</tr>
 			<tr class="even">
-				<td style="width:25%;"><label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
-				<td style="width:25%;"><label>State:</label> <% unless @communities.state_id.blank? %>
-				<% current_selected = @communities.state_id %>
-				<% else %>
-				<% current_selected = '99' %>
-				<% end  %>
-
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> <span class="error" id="state_error">&nbsp;</span></td>
-
-				<td style="width:25%;"><label>Country:</label> <% unless @communities.country_id.blank? %>
+			<td style="width:25%;"><label>County:<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20, :tabindex=>"12") %> <span class="error">&nbsp;</span>
+					</td>
+				
+				<td style="width:25%;">
+				<label>Country: <span class="required_fields">&nbsp;&nbsp;*</span></label> 
+				<% unless @communities.country_id.blank? %>
 				<% current_selected = @communities.country_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries, {:onchange=>""}) %> <span class="error" id="country_error">&nbsp;</span></td>
+				<%= nf.select(:country_id, @countries, {:tabindex=>13}) %> 
+				<span class="error" id="country_error">&nbsp;</span>
+				</td>
+				
+				<td style="width:25%;">
+				
+				<div id="choose_us_state"  style="display:inline;" >
+				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<% unless @communities.state_id.blank? %>
+				<% current_selected = @communities.state_id %>
+				<% else %>
+				<% current_selected = '99' %>
+				<% end  %>
+				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
+				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				</div>
 
+				<div id="provide_country_state" style="display:none;">
+					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
+					
+				</div>
+				<span class="error" id="state_error">&nbsp;</span>
+				</td>
 			</tr>
+			
+			
+			
+
+			
+			
+			
+			
+			
+			
+			
 			<tr class="odd">
 				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
 				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
