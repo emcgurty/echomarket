@@ -14,6 +14,7 @@ class HomeController < ApplicationController
       session[:search_params]= search_product_string + search_postal_code_string
       build_conditions_string = ""
       @item_search_query = ""
+     
       if params[:itemsearch] == '1'
 
         unless params[:search_product].blank?
@@ -127,7 +128,7 @@ class HomeController < ApplicationController
         end
 
           
-      else (params[:itemsearch] == '2')
+      elsif params[:itemsearch] == '2'
 
         unless params[:search_product].blank?
           split_query_string = params[:search_product].split(" ").map!(&:strip)    ## /\s/

@@ -188,8 +188,13 @@
           
            <td style="width:25%;">
             
-           
-            <div id="choose_us_state"  style="display:inline;" >
+           <% if @borrowers.state_id_string.blank? %>
+           <% display_state_id = 'inline' %>
+           <% else %>
+           <% display_state_id = 'none' %>
+           <% end %>
+             
+            <div id="choose_us_state"  style="display:#{display_state_id};" >
 				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
 				<% unless @borrowers.state_id.blank? %>
 				<% current_selected = @borrowers.state_id %>
@@ -200,7 +205,12 @@
 				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
 				</div>
 
-				<div id="provide_country_state" style="display:none;">
+			<% unless @borrowers.state_id_string.blank? %>
+           <% display_state_id_string = 'inline' %>
+           <% else %>
+           <% display_state_id_string = 'none' %>
+           <% end %>
+           	<div id="provide_country_state" style="display:#{display_state_id_string};" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
 					

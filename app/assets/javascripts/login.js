@@ -359,7 +359,7 @@ function submitCommunityLogin() {
 		$("#login_community_alias_error").css("visibility", "hidden");
 	}
 	
-	if ($("#users_community_alias").val() == "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ) {
+	if (($("#users_community_alias").val() == "") && ($("#users_community_first_name").val() == ""  || $("#users_community_last_name").val() == "")   ) {
 		$("#login_community_first_name_error").text("Provide a fullname.");
 		$("#login_community_first_name_error").css("visibility", "visible");
 		foundInvalid = false;

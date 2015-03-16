@@ -3,11 +3,11 @@ class CommunityMemberController < ApplicationController
      
     if params[:id].blank?
       @community_members = CommunityMembers.new()
-      puts "NEW"
+
     else
       session[:community_id] = params[:id]
       @community_members = CommunityMembers.find(:all)
-      puts "Find All"
+
     end
 
     respond_to do |format|
@@ -37,13 +37,11 @@ class CommunityMemberController < ApplicationController
     end
   end
 
-  # GET /community_members/1/edit
-  def edit
-    
+
+  def m_list
     @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
-    if @community_members.blank?
-      @community_members = CommunityMembers.new
-    end
+    # puts @community_members[0].to_yaml
+    @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
 
   # POST /community_members
@@ -54,8 +52,12 @@ class CommunityMemberController < ApplicationController
 
     respond_to do |format|
       if @community_members.save
-        format.html { redirect_to :action=>'advise' , :id => @community_members.community_id}
-
+        if params[:commit] == 'Add'
+          format.html { redirect_to :action=>'m_list' }
+        else
+         format.html { redirect_to :action=>'advise' , :id => @community_members.community_id}
+        end
+      
       else
         format.html { render action: "new" }
 
@@ -63,6 +65,23 @@ class CommunityMemberController < ApplicationController
     end
   end
 
+ # POST /community_members
+  # POST /community_members.json
+  def add
+
+    @community_members = CommunityMembers.new(params[:community_members])
+
+    respond_to do |format|
+      if @community_members.save
+        format.html { redirect_to :action=>'edit'}
+
+      else
+        format.html { render action: "new" }
+
+      end
+    end
+  end
+  
   # POST /community_members
   # POST /community_members.json
   def remove
@@ -87,7 +106,11 @@ class CommunityMemberController < ApplicationController
     @saved_cm = @cm.update_attributes(params[:community_members])
     respond_to do |format|
       if @saved_cm
-        format.html { redirect_to :action=>'advise' , :id => session[:community_id]}
+        if params[:view] == 'm_list'
+          format.html { redirect_to :action=>'m_list'}
+        else
+          format.html { redirect_to :action=>'advise' , :id => session[:community_id]}
+        end    
       else
         format.html { render action: "new" }
 

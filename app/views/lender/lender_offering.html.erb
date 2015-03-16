@@ -251,7 +251,8 @@
 					<label>County/Province:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
 				
 				
-				<td style="width:25%;"><label>State:</label> <% unless @lenders.state_id.blank? %>
+				<td style="width:25%;"><label>State:</label> 
+				<% unless @lenders.state_id.blank? %>
 				<% current_selected = (@community_name ? (@caddress.state_id? ? @caddress.state_id : "99" ): @lenders.state_id) %>
 				<% else %>
 				<% current_selected = '99' %>
