@@ -17,10 +17,14 @@
 	</p>
 </div>
 
-<% if session[:login_notice] %>
+<% if session[:login_notice]  || session[:notice] %>
 <div class="top_notice" style="margin-top:5px;margin-left:5px;padding:5px;">
 	<p>
-		<%= session[:login_notice] %>
+		<%= session[:login_notice] unless session[:login_notice].blank? %>
+	</p>
+	
+	<p>
+		<%= session[:notice] unless session[:notice].blank? %>
 	</p>
 </div>
 <% end %>
