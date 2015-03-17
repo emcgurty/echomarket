@@ -21,15 +21,10 @@
 
   <% @st = UsStates.find(:all, :order => "state_name") %>
   <% @ct = Countries.find(:all, :order => "country_name") %>
-  <% @community_name  = (session[:community_name].blank? ? false : true) %>
-	<% if @community_name  %>
-		<% @cdetails = CommunityMembers.find(:first, :readonly, :conditions => ["user_id = ?", session[:user_id]])  %>
-		<% @caddress = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
-	<% end  %>
   <div class="top" >
 
     <p><span class="logo_white" >The Echo Market</span></p>
-    <p><%= session[:community_name].upcase unless session[:community_name].blank? %> BORROWER ITEM REGISTRATION
+    <p><%= session[:user_alias].upcase unless session[:user_alias].blank? %> BORROWER ITEM REGISTRATION
   
       <a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a></p>
     <% unless session[:notice].blank? %>
@@ -181,6 +176,9 @@
             <% else %>
               <% @current_selected = '99' %>
             <% end  %>
+           
+                      
+           
             <% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
             <%= nf.select(:country_id, @countries, {:onchange=>"select#borrowers_country_id();"}) %>
             <span class="error" id="country_error">&nbsp;</span>
@@ -345,15 +343,38 @@
         </tr>
         <tr>
           <td>
-            <label>State:&nbsp;&nbsp;</label>
-            <% unless @borrowers.state_id_alternative.blank? %>
-              <% @current_selected = @borrowers.state_id_alternative %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-            <% @states = options_from_collection_for_select(@st, :state_id, :state_name, @current_selected) %>
-            <%= nf.select(:state_id_alternative, @states) %>
-            <span class="error" id="state_alternative_error">&nbsp;</span>
+         
+         
+        <% if @borrowers.state_id_string_alternative.blank? %>
+           <% display_state_id = 'inline' %>
+           <% else %>
+           <% display_state_id = 'none' %>
+           <% end %>
+             
+            <div id="choose_us_state"  style="display:#{display_state_id};" >
+				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<% unless @borrowers.state_id_alternative.blank? %>
+				<% current_selected = @borrowers.state_id_alternative %>
+				<% else %>
+				<% current_selected = '99' %>
+				<% end  %>
+				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
+				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				</div>
+
+			<% unless @borrowers.state_id_string_alternative.blank? %>
+           <% display_state_id_string = 'inline' %>
+           <% else %>
+           <% display_state_id_string = 'none' %>
+           <% end %>
+           	<div id="provide_country_state" style="display:#{display_state_id_string};" >
+					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<%= nf.text_field(:state_id_string_alternative, {:tabindex=>14}) %>
+					
+				</div>
+				<span class="error" id="state_alternative_error">&nbsp;</span>
+         
+         
           </td>
           <td>
             <label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label>

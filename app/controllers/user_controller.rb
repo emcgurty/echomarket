@@ -142,61 +142,65 @@ class UserController < ApplicationController
   end
 
   def show_community
+          reset_session
           session[:login_notice] = ''
           @does_member_exist = true
           if request.post?
                     @current_user = Communities.find(:first, :readonly => true, :conditions=>['community_name = ?', params[:users][:community_name]])
-                    unless @current_user.blank? 
-                    # return true if all are blank
-                    @member_provided_info = params[:users][:community_first_name].blank? && params[:users][:community_mi].blank? && params[:users][:community_last_name].blank? && params[:users][:community_alias].blank?
-                                                                                         # correct login this will be false           
-                    @does_member_exist = get_member_login_info(@current_user, params[:users]) unless  @member_provided_info
-                    
-                   if (@does_member_exist)
-
-                     if @current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:community_password]) 
-
-                         @cm_creator = CommunityMembers.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
-                         #  This is already defined in find_member_name or findsession[:user_id] = @cm_creator.community_memeber_id
-                         session[:user_alias] = @current_user.community_name if session[:user_alias].blank? 
-                         session[:community_name] = @current_user.community_name
-                         session[:user_type] = session[:register_type] = @current_user.user_type
-                         session[:email] = @current_user.email  
-                         session[:community_id] = @current_user.community_id    
-                         @getUserType = (@current_user.user_type == 'both' ? "Lender/Borrower": @current_user.user_type ).upcase
-                         session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
-                         redirect_to home_items_listing_url
-                      else  # not activated and member info not found
-                          unless @does_member_exist
-
-                            unless @current_user.activation_code.blank? 
+                    if @current_user.blank?
+                       session[:notice] = "Sorry about this, but your Community name  and/or password were not recognized by www.echomarket.org. Please try again. "
+                         @users = Users.new
+                         return @users
+                    elsif !(@current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:community_password]))
+                           unless @current_user.activation_code.blank? 
                               session[:notice] = session[:notice] + "#{@current_user.community_name}, please check your email to activate your login."
-                              redirect_to home_items_listing_url
-                            else @current_user.authenticated?(params[:users][:community_password].blank?)
-                              session[:login_notice] = "We have entered an incorrect password."
-                              @users = Users.new
-                            end   
-                                                       
-                          else
-                            
+                               @users = Users.new
+                              return @users
+                           else !(@current_user.authenticated?(params[:users][:community_password].blank?))
+                              session[:notice] = "We have entered an incorrect password."
+                               @users = Users.new
+                              return @users
+                           end  
+                          
+                   else
+                     @member_provided_info = params[:users][:community_first_name].blank? && params[:users][:community_mi].blank? && params[:users][:community_last_name].blank? && params[:users][:community_alias].blank?
+                     @does_member_exist = get_member_login_info(@current_user, params[:users]) unless  @member_provided_info
+                      puts "begin puts from member exits"
+                      puts @does_member_exist
+                      puts                 session[:user_id]
+                      puts                 session[:user_alias] 
+                      puts "end puts from member exits"
+                     
+                     @cm_creator = CommunityMembers.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
+                        puts "Run creator" 
+                            session[:user_id] = @cm_creator.user_id if session[:user_id].blank?
+                            if session[:user_alias].blank?
+                              unless @cm_creator.alias.blank?
+                                session[:user_alias] = @cm_creator.alias
+                              else
+                                session[:user_alias] = @cm_creator.first_name + (@cm_creator.mi.blank? ? "" : " " + @cm_creator.mi) + " " + @cm_creator.last_name       
+                              end
+                            end
+                           
+                            session[:community_name] = @current_user.community_name
+                            session[:user_type] = session[:register_type] = @current_user.user_type
+                            session[:email] = @current_user.email  
+                            session[:community_id] = @cm_creator.community_id    
+                            @getUserType = (@current_user.user_type == 'both' ? "Lender/Borrower": @current_user.user_type ).upcase
                             session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
-                           redirect_to home_items_listing_url
-                          end
-                        end       
-                    else  
-                        @users = Users.new
-                                 
+                            redirect_to home_items_listing_url
                     end  # unless current_user?
-          else
-             session[:notice] = "Sorry about this, but your Community name  and/or password were not recognized by www.echomarket.org. Please try again. "
-             @users = Users.new
-          end #request post  
-         
-         else
-            @users = Users.new
-         end
-              
-          
+           end  # request.post?
+           puts "begin puts"
+           puts                 session[:user_id]
+           puts                 session[:user_alias] 
+           puts                 session[:community_name] 
+           puts                 session[:user_type] 
+           puts                 session[:email]   
+           puts                 session[:community_id]
+           puts "end puts"     
+           
+           
   end  #def
 
 

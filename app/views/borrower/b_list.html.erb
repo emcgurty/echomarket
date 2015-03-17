@@ -46,7 +46,7 @@
         <label id="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
         <% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
         <label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
-		<% unless session[:community_id].blank? >
+		<% unless session[:community_id].blank? %>
         <%= link_to "Details..." , borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>
 <% else %>
  <%= link_to "Details..." , community_borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>

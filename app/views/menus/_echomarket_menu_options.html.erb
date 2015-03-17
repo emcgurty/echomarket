@@ -61,8 +61,7 @@
 	</li>
 
 	<% if session[:user_id].blank? %>
-		<li>
-			<a href="#s1">Login/Registration</a>
+		<li><a href="#s1">Login/Registration</a>
 				<ul>
 				<li>
 					<%= link_to 'Login', user_login_path(type: 'all', id: '')   %>
@@ -78,8 +77,7 @@
 		</li>
 	<% else %>
 	<% @getUserType = (session[:user_type] == 'both' ? "Lender/Borrower": session[:user_type]).upcase %>
-	<li class="subs">
-		<a href="#s3"><%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
+	<li class="subs"><a href="#s3"><%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
 		
 		<% if session[:community_id].blank? %>
 		
@@ -91,9 +89,10 @@
 				<%= link_to "User Account", user_edit_path  %>
 			</li>
 		</ul>
+		
 		<% else %>
 		
-				<ul>
+		<ul>
 			<li>
 				<%= link_to 'Logout', :controller => 'community', :action => 'logout'  %>
 			</li>

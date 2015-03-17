@@ -22,6 +22,11 @@
 
 <% @st = UsStates.find(:all, :order => "state_name") %>
 <% @ct = Countries.find(:all, :order => "country_name") %>
+<% @community_name  = (session[:community_name].blank? ? false : true) %>
+<% if @community_name  %>
+<% @cdetails = Community_Members.find(:first, :readonly, :conditions => ["user_id = ?", session[:user_id]])  %>
+<% @caddress = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id])  %>
+<% end  %>
 
 <div class="top" >
 
