@@ -108,7 +108,6 @@ class UserController < ApplicationController
         end
       end
     end
-
   end
 
   def show
@@ -134,8 +133,7 @@ class UserController < ApplicationController
           end
         end
       else
-        session[:login_notice] = "Sorry about this , but your username and/or password were not recognized by www.echomarket.org.
-Please try again. "
+        session[:login_notice] = "Sorry about this but your username and/or password were not recognized by www.echomarket.org. Please try again. "
         @users = Users.new
       end
     else
@@ -148,24 +146,19 @@ Please try again. "
           @does_member_exist = true
           if request.post?
                     @current_user = Communities.find(:first, :readonly => true, :conditions=>['community_name = ?', params[:users][:community_name]])
+                    unless @current_user.blank? 
+                    # return true if all are blank
                     @member_provided_info = params[:users][:community_first_name].blank? && params[:users][:community_mi].blank? && params[:users][:community_last_name].blank? && params[:users][:community_alias].blank?
-                    puts "memeber provid"
-                    puts @member_provided_info
-                    @does_member_exist = get_member_login_info(@current_user, params[:users]) unless @current_user.blank? ||  @member_provided_info
-                    puts @does_member_exist
-                    puts "add"
-                    puts @current_user.to_yaml
-                    puts @current_user.blank?  && @does_member_exist
-                    puts "or"
-                    puts @current_user.blank?  || @does_member_exist
-                    puts "aut and code"
-                    puts @current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:community_password]) 
+                                                                                         # correct login this will be false           
+                    @does_member_exist = get_member_login_info(@current_user, params[:users]) unless  @member_provided_info
                     
-                   if ((@current_user.blank?)  || (@does_member_exist))
-                      if @current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:community_password]) && @does_memeber_exist
+                   if (@does_member_exist)
+
+                     if @current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:community_password]) 
+
                          @cm_creator = CommunityMembers.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
-                         session[:user_id] = @cm_creator.community_memeber_id
-                         session[:user_alias] = @current_user.community_name
+                         #  This is already defined in find_member_name or findsession[:user_id] = @cm_creator.community_memeber_id
+                         session[:user_alias] = @current_user.community_name if session[:user_alias].blank? 
                          session[:community_name] = @current_user.community_name
                          session[:user_type] = session[:register_type] = @current_user.user_type
                          session[:email] = @current_user.email  
@@ -174,11 +167,8 @@ Please try again. "
                          session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
                          redirect_to home_items_listing_url
                       else  # not activated and member info not found
-                        puts "else"
-                        puts @current_user.activation_code.blank? 
-                         puts @does_member_exist
                           unless @does_member_exist
-                            puts "does member"
+
                             unless @current_user.activation_code.blank? 
                               session[:notice] = session[:notice] + "#{@current_user.community_name}, please check your email to activate your login."
                               redirect_to home_items_listing_url
@@ -188,24 +178,25 @@ Please try again. "
                             end   
                                                        
                           else
-                              puts "pppppppppppp"
-                              session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
-                         redirect_to home_items_listing_url
+                            
+                            session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
+                           redirect_to home_items_listing_url
                           end
                         end       
-                    else  # else current user
-                      puts "ljkjlkj"
-                      if current_user.blank? && (@does_member_exist)
-                              session[:login_notice] = "Sorry about this , but your Community name  and/or password were not recognized by www.echomarket.org. Please try again. "
-                              
-                              @users = Users.new
-                      else
-                             @users = Users.new
-                      end          
+                    else  
+                        @users = Users.new
+                                 
                     end  # unless current_user?
           else
+             session[:notice] = "Sorry about this, but your Community name  and/or password were not recognized by www.echomarket.org. Please try again. "
+             @users = Users.new
+          end #request post  
+         
+         else
             @users = Users.new
-          end #request post
+         end
+              
+          
   end  #def
 
 
@@ -416,17 +407,21 @@ Please try again. "
    return_result = true
    @fn = ""
    @b_find_member_name = find_member_name(c, pm) unless pm[:community_first_name].blank? && pm[:community_mi].blank? && pm[:community_first_name].blank?
+      
    unless  @b_find_member_name
-       @b_find_member_alias = find_member_alias(c, pm) unless pm[:alias].blank? 
+       
+       @b_find_member_alias = find_member_alias(c, pm) unless pm[:community_alias].blank?
+       
+        
    end
-   puts @b_find_member_name
+   
    unless (@b_find_member_name || @b_find_member_alias)
-      @fn = "Fullname: "
+      @fn = ""
       @fn =  @fn + (pm[:community_first_name].blank?  ? "" : pm[:community_first_name] + " ")  
       @fn =  @fn + (pm[:community_mi].blank?  ? "" : pm[:community_mi] + " ")
       @fn =  @fn +  (pm[:community_last_name].blank?  ? "" : pm[:community_last_name])
-      @an =  "Alias: " +  (pm[:community_alias].blank?  ? "" : pm[:community_alias]) 
-      session[:notice] = "Member provided information could not be found" + @fn + " " + @an
+      @an =  (pm[:community_alias].blank?  ? "" : pm[:community_alias]) 
+      session[:notice] = "Member provided information could not be found: " + (@fn.blank? ? "" : "Fullname: #{@fn}" ) + " " +  (@an.blank? ? "" : " Alias: #{@an}" )
       return_result = false
    end
                      
@@ -439,19 +434,19 @@ end
        if pm[:community_mi].blank?
               @cm_nom = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and first_name = ? and last_name = ?",
                 c.community_id, pm[:community_first_name], pm[:community_last_name]])
-            else
+       else
               @cm_m = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and first_name = ? and last_name = ? and mi = ?",
                 c.community_id, pm[:community_first_name], pm[:community_last_name], pm[:community_mi]])
-            end
-        unless @cm_nom.blank? || @cm_m.blank?
+        end
+        unless @cm_nom.blank? && @cm_m.blank?
             unless @cm_nom.blank?
-              session[:user_id] = @cm.community_member_id
-              session[:user_alias] = params[:users][:community_first_name] + " " + params[:users][:community_last_name]
+              session[:user_id] = @cm_nom.community_member_id
+              session[:user_alias] = pm[:community_first_name] + " " + pm[:community_last_name]
               @r_success = true
             end
             unless @cm_m.blank?
               session[:user_id] = @cm_m.community_member_id
-              session[:user_alias] = params[:users][:community_first_name] + " " + params[:users][:community_last_name] + " " + params[:users][:community_last_name]
+              session[:user_alias] = pm[:community_first_name] + " " + pm[:community_mi] + " " + pm[:community_last_name]
              @r_success = true
        end
        end
@@ -460,6 +455,7 @@ end
     
       def find_member_alias(c, pm)
             @r_success = false
+           
            unless pm[:community_alias].blank?
               @cm_a = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and alias = ?",
                 c.community_id, pm[:community_alias]])
@@ -467,9 +463,14 @@ end
 
             unless @cm_a.blank?
               session[:user_id] = @cm_a.community_member_id
-              session[:user_alias] = params[:users][:community_alias]
+              session[:user_alias] = pm[:community_alias]
               @r_success = true   
             end
+            puts "id and aliad"
+              puts session[:user_id].to_s
+              puts session[:user_alias].to_s
+            
+            
             return @r_success
        end
 
