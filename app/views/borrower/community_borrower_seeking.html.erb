@@ -2,7 +2,7 @@
 <%= javascript_include_tag 'bl_util.js' %>
 
 <%= render :partial => 'menus/borrowers_menu' %>
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "update_borrower_seeking"},
+<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_seeking"},
  :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
 

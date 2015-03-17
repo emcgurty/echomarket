@@ -7,6 +7,10 @@ end
   def borrower_item_detail
     @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
  end
+ 
+   def community_borrower_item_detail
+    @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
+ end
 
   def borrower_history
 
@@ -47,6 +51,15 @@ end
   end
 
   def borrower_seeking
+    @borrowers = Borrowers.new
+  end
+  
+  def community_borrower_seeking
+    @borrowers = Borrowers.new
+  end
+   
+  
+  def update_borrower_seeking
 
     session[:background] = true
     unless params[:borrowers].blank?

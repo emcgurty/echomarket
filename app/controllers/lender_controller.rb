@@ -48,7 +48,18 @@ class LenderController < ApplicationController
     end
   end
 
-  def lender_offering
+    def lender_offering
+     @lenders = Lenders.new
+    
+  end
+  
+  def community_lender_offering
+    
+    @lenders = Lenders.new
+  end
+  
+  
+  def update_lender_offering
     
     session[:background] = true
     unless params[:lenders].blank?

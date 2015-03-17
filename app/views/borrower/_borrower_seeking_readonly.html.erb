@@ -73,9 +73,10 @@
   <label class="readonly_label">Address Lines:&nbsp;
     <span class="readonly_span" id="address_1_selection">Required Address Line 1</span>&nbsp;&nbsp;
     <span class="readonly_span" id="address_2_selection">Address Line 2 Placeholder</span>&nbsp;&nbsp;</label>
-  <label class="readonly_label">City;County/Province;State:&nbsp;
+  	<label class="readonly_label">City;County;Region;State:&nbsp;
     <span class="readonly_span" id="city_selection">Required City; &nbsp;</span>
-    <span class="readonly_span" id="province_selection">County/Province Placeholder;&nbsp;</span>
+    <span class="readonly_span" id="province_selection">County Placeholder;&nbsp;</span>
+    <span class="readonly_span" id="state_id_string_selection">Province/Region Placeholder;&nbsp;</span>
     <span class="readonly_span" id="state_selection">State Placeholder</span></label>
   <br />
 
@@ -113,9 +114,10 @@
     <span class="readonly_span" id="address_1_alternative_selection">Alt Address 1 Placeholder</span>&nbsp;&nbsp;
     <span  class="readonly_span"  id="address_2_alternative_selection">Alt Address 2 Placeholder</span>&nbsp;&nbsp;</label>
 
-  <label class="readonly_label">City;County/Province;State:&nbsp;
-    <span class="readonly_span" id="city_alternative_selection">Alt City Placeholder</span>&nbsp;&nbsp;;
-    <span class="readonly_span" id="province_alternative_selection">Alt Province/County Placeholder</span>&nbsp;&nbsp;;
+  <label class="readonly_label">City;County;Region;State:&nbsp;
+    <span class="readonly_span" id="city_alternative_selection">Alt City Placeholder</span>;&nbsp;&nbsp;
+    <span class="readonly_span" id="province_alternative_selection">Alt County Placeholder</span>;&nbsp;&nbsp;
+    <span class="readonly_span" id="state_id_string_alternative_selection">Alt Region Placeholder</span>;&nbsp;&nbsp;
     <span class="readonly_span" id="state_alternative_selection">Alt State Placeholder</span></label>
   <br />
   <label class="readonly_label">Country; Postal Code:&nbsp;
@@ -127,8 +129,8 @@
   <br />
 
   <label class="readonly_label" style="text-decoration: underline;">By your Login E-Mail? Or, an Alternative E-Mail?</label><br />
-  <label class="readonly_label">Login E-Mail:&nbsp; <% @b_email = Users.find(:first, :conditions => ["user_id = ?", session[:user_id]]) %>
-    <span class="readonly_span" style="font-size:14px;"><%= @b_email.email %></span></label>
+  <label class="readonly_label">Login E-Mail:&nbsp; 
+    <span class="readonly_span" style="font-size:14px;"><%= session[:email] %></span></label>
   <br />
 
   <label class="readonly_label">Alternative Email:&nbsp;<span class="readonly_span" id="email_alternative_selection">Alternative E-mail Placeholder</span></label><br />

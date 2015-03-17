@@ -1012,7 +1012,7 @@ function saveAll() {
         
         $("#lenders_is_active").val('1');
         $("#lenders_is_saved").val('1');
-        $("form.lender_offering").submit();
+        $("form.update_lender_offering").submit();
     }
     return;
 }

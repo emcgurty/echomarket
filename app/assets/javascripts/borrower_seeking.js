@@ -723,7 +723,7 @@ function saveBAll() {
 
 		$("#borrowers_is_active").val('1');
 		$("#borrowers_is_saved").val('1');
-		$("form.borrower_seeking").submit();
+		$("form.update_borrower_seeking").submit();
 	}
 	return;
 }
