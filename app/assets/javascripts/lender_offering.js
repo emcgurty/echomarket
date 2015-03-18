@@ -48,7 +48,13 @@ $(document).ready(function() {
     });
     $("input[name='lenders[displayLenderOrganizationName]']").trigger('change');
 
-    
+    	
+	$("input#lenders_state_id_string").bind('change', function() {
+		$("span#state_id_string_selection").html($(this).val());
+	});
+	$("input#lenders_state_id_string").trigger('change');
+	
+	
     $("#lenders_age_18_or_more").bind('change', function() {
         if ($("#lenders_age_18_or_more").is (':checked')) {
             $("span#18_selection").html("Yes");

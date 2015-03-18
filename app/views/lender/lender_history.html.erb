@@ -72,11 +72,25 @@
   <div class="div_white" ></div>
   <div class="bottom" style="text-align:center">
     <% unless @lenders.blank? %>
+ 		<% unless session[:community_id].blank? %>
+	      <%= link_to "=> I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "lender", :action => "community_lender_offering", :id=>"" %>
+       <% else %>
+         <%= link_to "=> I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "lender", :action => "lender_offering", :id=>"" %>
+ 		<% end %>
 
-      <%= link_to "=> I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "lender", :action => "lender_offering", :id=>"" %>
+
     <% else %>
 
-      <%= link_to "=> I'd like to offer a new item for lending.", :controller => "lender", :action => "lender_offering", :id=>"" %>
+      <% unless session[:community_id].blank? %>
+	       <%= link_to "=> I'd like to offer a new item for lending.", :controller => "lender", :action => "community_lender_offering", :id=>"" %>
+       <% else %>
+ 			<%= link_to "=> I'd like to offer a new item for lending.", :controller => "lender", :action => "lender_offering", :id=>"" %>
+ 		<% end %>
+      
+      
+      
+      
+     
 
     <% end %>
 

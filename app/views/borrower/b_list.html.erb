@@ -17,7 +17,16 @@
     <% if @borrower.blank? %>
       <p>Seems that no one is seeking to borrow anything...</p>
       <% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>
-        <%= link_to "Would you like to seek something to borrow?", borrower_seeking_url(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+       
+       <% unless session[:community_id].blank? %>
+       		<%= link_to "Would you like to seek something to borrow?", community_borrower_seeking_url(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+	   <% else %>
+			<%= link_to "Would you like to seek something to borrow?", borrower_seeking_url(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+		<% end %>
+        
+     
+     
+     
       <% else %>
         <%= link_to "Please login or register as a 'borrower' to seek an item.", user_login_path(:id => '', :type => 'borrower'), {:class=> "search1"}   %>
       <% end %>
@@ -59,10 +68,20 @@
   </div>
 
   <div class="bottom">
+    
+    
     <% if session[:user_id] %>
-      <a href="/lender/lender_offering" >Offer an Item to Lend</a>
-      <a href="/borrower/borrower_seeking" >Seek an Item to Borrow</a>
+        <% unless session[:community_id].blank? %>
+      		<a href="/lender/community_lender_offering" >Offer an Item to Lend</a>
+      		<a href="/borrower/community_borrower_seeking" >Seek an Item to Borrow</a>
+      	<% else %>
+      		<a href="/lender/lender_offering" >Offer an Item to Lend</a>
+      		<a href="/borrower/borrower_seeking" >Seek an Item to Borrow</a>
+      	<% end %>
     <% end %>
+    
+    
+    
     <a href="/user/register" >Become a Echo Market Lender or Borrower Member</a>
   </div>
 

@@ -17,7 +17,7 @@
 	</p>
 </div>
 
-<% if session[:login_notice]  || session[:notice] %>
+<% unless session[:login_notice].blank? && session[:notice].blank? %>
 <div class="top_notice" style="margin-top:5px;margin-left:5px;padding:5px;">
 	<p>
 		<%= session[:login_notice] unless session[:login_notice].blank? %>

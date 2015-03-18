@@ -346,6 +346,19 @@ $(document).ready(function() {
 	});
 	$("#l2bimage").trigger('change');
 
+	
+	$("input#borrowers_state_id_string").bind('change', function() {
+		$("span#state_id_string_selection").html($(this).val());
+	});
+	$("input#borrowers_state_id_string").trigger('change');
+	
+	
+	
+	
+	
+	
+	
+	
 	$("#borrowers_other_describe_yourself").bind('change', function() {
 		$("span#describe_yourself").html($(this).val());
 	});

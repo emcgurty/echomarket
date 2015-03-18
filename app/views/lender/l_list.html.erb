@@ -66,9 +66,23 @@
 
 <div class="bottom">
 	<% if session[:user_id] %>
-	<a href="/lender/lender_offering" >=> Offer an Item to Lend</a>
-	<a href="/borrower/borrower_seeking" >=> Seek an Item to Borrow</a>
+	
+	<% unless session[:community_id].blank? %>
+		<a href="/lender/community_lender_offering" >=> Offer an Item to Lend</a>
+		<a href="/borrower/community_borrower_seeking" >=> Seek an Item to Borrow</a>
+	<% else %>
+		<a href="/lender/lender_offering" >=> Offer an Item to Lend</a>
+		<a href="/borrower/borrower_seeking" >=> Seek an Item to Borrow</a>
 	<% end %>
+	
+	
+
+	
+	
+	<% end %>
+	
+	
+	
 	<a href="/user/register" >=> Become a Echo Market Lender or Borrower Member</a>
 </div>
 

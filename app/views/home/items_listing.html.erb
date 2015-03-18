@@ -35,7 +35,12 @@
 		</p>
 
 		<% if session[:user_type] == 'lender' || session[:user_type] == 'both' %>
-		<%= link_to "Would you like to offer something to lend?", lender_offering_path(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+			<% unless session[:community_id].blank? %>
+				<%= link_to "Would you like to offer something to lend?", lender_offering_path(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+			<% else %>
+				<%= link_to "Would you like to offer something to lend?", community_lender_offering_path(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+			<% end %>
+		
 		<% else %>
 		<%= link_to "Please login or register as a 'lender' to offer an item.", user_login_path(:id => '', :type => 'lender'), {:class=> "search1"}   %>
 		<% end %>
@@ -145,10 +150,28 @@
 	<div class="bottom">
 		<% unless session[:user_type].blank? %>
 		<% if session[:user_type] == 'lender' || session[:user_type] == 'both' %>
-		<a href="/lender/lender_offering" >=> Offer an Item to Lend</a>
+		
+		<% unless session[:community_id].blank? %>
+			<a href="/lender/community_lender_offering" >=> Offer an Item to Lend</a>
+		<% else %>
+			<a href="/lender/lender_offering" >=> Offer an Item to Lend</a>
+		<% end %>
+		
+		
+		
 		<% end %>
 		<% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>
-		<a href="/borrower/borrower_seeking" >=> Seek an Item to Borrow</a>
+		
+		<% unless session[:community_id].blank? %>
+			<a href="/borrower/community_borrower_seeking" >=> Seek an Item to Borrow</a>
+		<% else %>
+			<a href="/borrower/borrower_seeking" >=> Seek an Item to Borrow</a>
+		<% end %>
+		
+		
+		
+		
+		
 		<% end %>
 		<% if session[:user_type] == 'guest'  %>
 		<%= link_to "=> You are registered as a 'Guest', please change that status to offer or seek items.", user_edit_url, {:class=> "search"}   %>
