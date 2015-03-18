@@ -9,8 +9,6 @@ class Notifier < ActionMailer::Base
   def comments_received(recipient, message, sent_at = Time.now)
     @subject = "The Echo Market Contact..."
     @recipients = recipient + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
-    puts "lookup"
-    puts LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @sent_on = sent_at
     @comments = message
@@ -18,7 +16,6 @@ class Notifier < ActionMailer::Base
   end
 
  def signup_notification_community(communities)
-    puts "inside signup_notification"   
     setup_email_community(communities)
     @subject    += ' Please activate your new account'
     @url  = "http://"
@@ -79,9 +76,11 @@ def get_community_notification(communities)
     @url  = "http://"
     @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/forgot_community_name/#{users.reset_code}"
   end
+  
   private
+  
   def setup_email(users)
-    @recipients  = "#{users.email}"
+    @recipients  = "#{users.email}" + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @subject     = "Message From www.echomarket.org. "
     @sent_on     = Time.now
@@ -89,7 +88,6 @@ def get_community_notification(communities)
 
   end
   def setup_email_community(communities)
-    puts "inside setup_email"
     @recipients  = communities.email + ","  + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @subject     = "Message From www.echomarket.org. "
@@ -101,7 +99,7 @@ def get_community_notification(communities)
   def do_contact(params, sent_at = Time.now)
 
     @subject = "Echo Market Contact... "
-    @recipients = params[:email]
+    @recipients = params[:email].to_s + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @message = message
     @sent_on = sent_at

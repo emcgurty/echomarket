@@ -12,7 +12,7 @@ class CommunitiesObserver < ActiveRecord::Observer
      rescue  Exception => e
     puts e.message
     puts "signup_notification_community"        
-      
+     
     end  
   end
 

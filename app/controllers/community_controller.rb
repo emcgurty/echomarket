@@ -132,10 +132,7 @@ class CommunityController < ApplicationController
   end
 
   def forgot_community_password
-    puts "forgot_community_password"
     session[:background] = true
-    puts request.post?
-    puts request.put?
     if request.post?
       forgot('password')
     else
@@ -144,7 +141,7 @@ class CommunityController < ApplicationController
   end
 
   def forgot(which)
-    puts "In forgot"
+   
     session[:notice] = ''
     if request.post?
       @communities = Communities.find(:first, :conditions => ['email = ?', params[:communities][:email]])

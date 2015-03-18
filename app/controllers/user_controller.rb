@@ -78,6 +78,7 @@ class UserController < ApplicationController
 
   def login
     
+    reset_session
     session[:edit_user] = false
     session[:background] = true
     session[:register_type] = (params[:type].blank? ? 'all': params[:type])
@@ -479,11 +480,7 @@ end
               session[:user_alias] = pm[:community_alias]
               @r_success = true   
             end
-            puts "id and aliad"
-              puts session[:user_id].to_s
-              puts session[:user_alias].to_s
-            
-            
+                       
             return @r_success
        end
 

@@ -39,8 +39,7 @@ class CommunityMemberController < ApplicationController
 
 
   def m_list
-    @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
-    # puts @community_members[0].to_yaml
+    
     @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
 
