@@ -27,7 +27,7 @@ $(document).ready(function() {
 
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
-			$("input#borrowers_state_id_string").val("");
+
 
 		} else {
 
@@ -38,6 +38,7 @@ $(document).ready(function() {
 	});
 	$("select#borrowers_country_id").trigger('change');
 
+		
 	$("input#borrowers_organization_name").bind('change', function() {
 		$("span#organization_name_selection").html($(this).val());
 	});
@@ -977,14 +978,7 @@ function validateContactPreferences() {
 		foundInvalid = false;
 	}
 
-	if ((($("#borrowers_state_id option:selected").text() == "Please select") || ($("#borrowers_state_id option:selected").val() == null)) && ($("#borrowers_country_id option:selected").val() != "US")) {
-		$("#state_error").text("Your Country selection is incorrect.");
-		$("#state_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
 
-	return foundInvalid;
-}
 
 function showReview() {
 

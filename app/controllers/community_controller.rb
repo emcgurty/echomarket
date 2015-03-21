@@ -21,6 +21,7 @@ class CommunityController < ApplicationController
     
     @communities = Communities.new(params[:communities])
     respond_to do |format|
+      
       if @communities.save(:validate => true) && @communities.errors.empty?
         @cm = CommunityMembers.new(
         :community_id => @communities.community_id, 
@@ -30,7 +31,7 @@ class CommunityController < ApplicationController
           session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
           format.html { redirect_to :controller => "home", :action => "items_listing" }
         else
-          session[:notice]= "Error in creating Community Member record"
+          session[:notice]= "Error in creating Community record"
           format.html { render action: "new" }  
           
         end
@@ -87,6 +88,7 @@ class CommunityController < ApplicationController
   
   
    def activate
+    reset_session
     session[:notice] = ''
     @cm = params[:activation_code].blank? ? false : Communities.find_by_activation_code(params[:activation_code])
     unless @cm.blank?

@@ -26,15 +26,26 @@
 	</p>
 </div>
 
-<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @contact}  %>
+	<% if  @contact.errors.any? %>
+		<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @contact}  %>
+	<% end %>
+	<%= form.hidden_field :remote_ip,{ :value => request.remote_ip} %>
+		<% if session[:user_id] %>
+			<%= form.hidden_field :user_id,{ :value => session[:user_id]} %>
+		<% else %>
+			<%= form.hidden_field :user_id,{ :value => 'NA'} %>
+		<% end %>
+	<%= form.hidden_field :date_created,{ :value => Time.now} %>
+	
+<div   class="div_white" >&nbsp;</div>	
 
-<div class="column" >
+<div class="column100" >
 	<label>Your email address: </label>
 	<%= form.email_field(:email) %>
 	<span class="error" id="contact_us_email_error">No text yet</span>
 </div>
 
-<div class="column">
+<div class="column100">
 
 	<label>Subject:</label>
 	<%= form.text_field(:subject) %>
@@ -43,24 +54,16 @@
 </div>
 
 
-<div class="column">
+<div class="column100">
 	<label>Comments: (255 characters permitted) </label>
 	<%= form.text_area(:comments, {:rows=> '10', :cols=> '60', :maxlength=>255}) %>
 	<span class="error" id="contact_us_error">No text yet</span>
 
 </div>
-
-<div class="bottom">
+  <div   class="div_white" >&nbsp;</div>
+<div class="bottom" >
 	<a href="#" onclick="submitContactUs();" >=> Submit my comments</a>
 	<%= link_to "=> I'll offer comments later", home_items_listing_url %>
-	<%= form.hidden_field :remote_ip,{ :value => request.remote_ip} %>
-	<% if session[:user_id] %>
-	<%= form.hidden_field :user_id,{ :value => session[:user_id]} %>
-	<% else %>
-	<%= form.hidden_field :user_id,{ :value => 'NA'} %>
-
-	<% end %>
-	<%= form.hidden_field :date_created,{ :value => Time.now} %>
 </div>
 
 <% end %>

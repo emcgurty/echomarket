@@ -22,8 +22,7 @@ $(document).ready(function() {
 
 	$("div.form_wrapper").center();
 	$("form").center_form();
-        $("div#provide_country_state").css("display", "none");
-		$("div#choose_us_state").css("display", "inline");
+     
 			
 	$("#users_password_confirmation").change(function() {
 
@@ -55,7 +54,7 @@ $(document).ready(function() {
                	
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
-			$("input#communities_state_id_string").val("");
+			
 			
 		} 
 		else {
@@ -67,10 +66,6 @@ $(document).ready(function() {
         
 	});
 	$("select#communities_country_id").trigger('change');
-	
-	
-	
-	
 	
 });
 
@@ -145,6 +140,45 @@ function submitForgotUsername() {
 
 function submitCommunityRegistration(){
 	var foundInvalid = true;
+	
+	 
+	 if (($("select#communities_country_id option:selected").text() == 'United States') && ($("select#communities_state_id option:selected").text() == 'Please select')) {
+		$("span#state_error").text("A State selection is required.");
+		$("span#state_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("span#state_error").text("");
+		$("span#state_error").css("visibility", "hidden");
+	}
+	
+	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() == '')) {
+		$("span#country_error").text("A Country with Region information is required.");
+		$("span#country_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("span#country_error").text("");
+		$("span#country_error").css("visibility", "hidden");
+	}
+	
+	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() != '')) {
+		$("span#country_error").text("Please select a Country.");
+		$("span#country_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("span#country_error").text("");
+		$("span#country_error").css("visibility", "hidden");
+	}
+	
+	if (($("select#communities_country_id option:selected").text() != 'Please select') && ($("select#communities_country_id option:selected").text() != 'United States') && ($("input#communities_state_id_string").val() == '')) {
+		$("span#country_error").text("Please provide the required Region.");
+		$("span#country_error").css("visibility", "visible");
+		foundInvalid = false;
+	} else {
+		$("span#country_error").text("");
+		$("span#country_error").css("visibility", "hidden");
+	}
+	
+	
 	if ($("#communities_community_name").val() == "") {
 		$("#registration_community_name_error").text("Community Name is required.");
 		$("#registration_community_name_error").css("visibility", "visible");
@@ -233,27 +267,6 @@ function submitCommunityRegistration(){
 		$("#postal_code_error").css("visibility", "hidden");
 	}
 	
-
-    var legal_18 = $("#communities_age_18_or_more");
-    var legal_goodwill = $("#communities_goodwill");
-
-    if (!(legal_18.is (':checked'))) {
-        foundInvalid = false;
-        $("span#18_or_more_error").text("You must be 18 years of age.");
-        $("span#18_or_more_error").css("visibility", "visible");
-    } else {
-        $("span#18_or_more_error").text("");
-        $("span#18_or_more_error").css("visibility", "hidden");
-    }
-    if (!(legal_goodwill.is (':checked'))) {
-        foundInvalid = false;
-        $("span#goodwill_error").text("You must be acting in goodwill.");
-        $("span#goodwill_error").css("visibility", "visible");
-    } else {
-        $("span#goodwill_error").text("");
-        $("span#goodwill_error").css("visibility", "hidden");
-    }
-
     if (foundInvalid) {
 
 		$("form").submit();

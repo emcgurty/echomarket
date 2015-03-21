@@ -29,7 +29,7 @@
   <div class="top" >
 
     <p><span class="logo_white" >The Echo Market</span></p>
-    <p><%= session[:user_alias].upcase + " of " session[:community_name].upcase unless session[:community_id].blank? %> BORROWER ITEM REGISTRATION
+    <p><%= session[:user_alias] + " of " + session[:community_name] unless session[:community_id].blank? %> BORROWER ITEM REGISTRATION
   
       <a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a></p>
     <% unless session[:notice].blank? %>
@@ -111,7 +111,7 @@
           <td style="width:25%;">
             <div>
               <label>Middle Initial:</label>
-              <%= nf.text_field( :mi, :size=>"1", :maxlength=>"1", , :value=> @cdetails.mi) %>
+              <%= nf.text_field( :mi, :size=>"1", :maxlength=>"1", :value=> @cdetails.mi) %>
               <span class="error">&nbsp;</span>
             </div>
           </td>
@@ -374,7 +374,7 @@
 				</div>
 				
 				
-           <% if @borrowers.state_id_alternative_string.blank?  %>
+           <% if @borrowers.state_id_string_alternative.blank?  %>
            <% display_state_id_string = 'none' %>
            <% else %>
            <% display_state_id_string = 'inline' %>
@@ -382,7 +382,7 @@
 
 
            	<div id="provide_country_state" style="display:#{display_state_id_string};" >
-					<label>Provide Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string_alternative, {:tabindex=>14}) %>
 		   </div>
 			<span class="error" id="state_id_alternative_error">&nbsp;</span>

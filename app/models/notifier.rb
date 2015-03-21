@@ -19,7 +19,7 @@ class Notifier < ActionMailer::Base
     setup_email_community(communities)
     @subject    += ' Please activate your new account'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{communities.user_id}"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{communities.community_id}"
 
   end
   

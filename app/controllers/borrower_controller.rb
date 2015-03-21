@@ -16,22 +16,20 @@ end
 
     session[:background] = true
     session[:notice] = ""
-    unless (params[:commit].blank?)
+    @which_view = (session[:community_id].blank? ? "borrower_seeking" : "community_borrower_seeking" )
+     unless (params[:commit].blank?)
       if params[:commit] == "edit"
-
-        redirect_to :action => "borrower_seeking", :commit => "edit", :id => params[:id]
+        redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
       elsif params[:commit] == "reuse"
-
-        redirect_to :action => "borrower_seeking", :commit => "reuse", :id => params[:id]
+        redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
       else
-
         @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       end
     else
 
       @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       session[:notice]  = "Echo Market could not find your borrower history, prehaps it has items not yet approved. Here you may seek a new item to borrow."
-      redirect_to  :controller => "borrower", :action => "borrower_seeking", :id=>session[:user_id]  if @borrowers.blank?
+      redirect_to  :controller => "borrower", :action => @which_view, :id=>session[:user_id]  if @borrowers.blank?
     end
 
   end
@@ -90,6 +88,7 @@ end
           :city=> @req[:city],
           :province=> @req[:province],
           :state_id=> @req[:state_id].to_s,
+          :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id].to_s,
           :useWhichContactAddressAlternative => @req[:useWhichContactAddressAlternative],
           :useWhichContactAddress => @useWhichContactAddress,
@@ -99,6 +98,7 @@ end
           :city_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:city_alternative]: ''),
           :province_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:province_alternative]: ''),
           :state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:state_id_alternative]: '99'),
+          :state_id_string_aternative=> @req[:state_id_string_alternative],
           :country_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:country_id_alternative]:'99'),
           :home_phone => @req[:home_phone],
           :public_display_home_phone=> (@req[:public_display_home_phone].blank? ? -1:@req[:public_display_home_phone].to_i) ,

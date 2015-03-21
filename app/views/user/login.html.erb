@@ -36,12 +36,12 @@
 	</p>
 	<div style="margin-left:25px;">
 		<label>Community Name: <a href="#" onclick="showForgotCommunityName();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community Name?</span></a> </label>
-		<%= nf.text_field(:community_name, {:maxlength=>16, :tabindex=>"1",:value=>"" })  %>
+		<%= nf.text_field(:community_name, {:maxlength=>16, :value=>"" })  %>
 		&nbsp;&nbsp; <span class="error" id="login_community_name_error">This is an error</span>
 	
 	
 		<label>Community Password (case sensitive): <a href="#" onclick="showForgotCommunityPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
-		<%= nf.password_field(:community_password, {:maxlength=>16,  :tabindex=>"2", :value=>""}) %>
+		<%= nf.password_field(:community_password, {:maxlength=>16,  :value=>""}) %>
 		&nbsp;&nbsp;<span class="error" id="login_community_password_error">This is an error</span>
 	
 
@@ -60,18 +60,18 @@
 
 				</tr>
 				<tr>
-					<td ><%= nf.text_field(:community_first_name, {:maxlength=>16,  :tabindex=>"3", :value=>""}) %>
+					<td ><%= nf.text_field(:community_first_name, {:maxlength=>16,  :value=>""}) %>
 					
 						
 					</td>
-					<td ><%= nf.text_field(:community_mi, {:maxlength=>1,  :tabindex=>"4", :value=>""}) %>
+					<td ><%= nf.text_field(:community_mi, {:maxlength=>1, :value=>""}) %>
 					
 					</td>
-					<td ><%= nf.text_field(:community_last_name, {:maxlength=>16,  :tabindex=>"5", :value=>""}) %>
+					<td ><%= nf.text_field(:community_last_name, {:maxlength=>16,  :value=>""}) %>
 					
 					</td>
 					<td>OR</td>
-					<td ><%= nf.text_field(:community_alias, {:maxlength=>16,  :tabindex=>"6", :value=>""}) %>
+					<td ><%= nf.text_field(:community_alias, {:maxlength=>16,  :value=>""}) %>
 					
 					</td>
 				</tr>
@@ -105,9 +105,7 @@
 		<a style="color:white;" href="#" onclick="submitCommunityLogin();">Submit Community Login</a>
 	</div>
 
-	<div   class="div_white" >
-		&nbsp;
-	</div>
+	<div   class="div_white" >&nbsp;</div>
 </div>
 
 <div class='column50_withborder' >
@@ -116,38 +114,30 @@
 	</p>
 	<div style="margin-left:25px;">
 		<label>Username: <a href="#" onclick="showForgotUsername();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your username?</span></a> </label>
-		<%= nf.text_field(:username, {:maxlength=>16, :tabindex=>"7",:value=>"" })  %>
+		<%= nf.text_field(:username, {:maxlength=>16, :value=>"" })  %>
 		 &nbsp;&nbsp; <span class="error" id="login_username_error">This is an error</span>
 	</div>
 
 	<div style="margin-left:25px;">
 		<label>Password (case sensitive): <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your password?</span></a> </label>
-		<%= nf.password_field(:password, {:maxlength=>16,  :tabindex=>"8", :value=>""}) %>
+		<%= nf.password_field(:password, {:maxlength=>16, :value=>""}) %>
 		&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
 	</div>
 
 	<div class="bottom_login">
-		<a style="color:white" onclick="submitLogin();">Submit Lender, Borrower or Guest Login</a>
+		<a style="color:white" href="#" onclick="submitLogin();">Submit Lender, Borrower or Guest Login</a>
 	</div>
-	<div   class="div_white" >
-		&nbsp;
-	</div>
+	<div   class="div_white" >&nbsp;</div>
 </div>
 
-<div   class="div_white" >
-	&nbsp;
-</div>
+<div   class="div_white" >&nbsp;</div>
 
 <div class="bottom">
-	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
-	<a href="#" onclick="submitLogin();">=> Submit Login</a>
-	<% end %>
-	<a href="#" onclick="showCommunityRegistration();">=> Register here as a Community.</a>
-	<a href="#" onclick="showRegistration();">=> Register here as a lender, borrower or guest.</a>
+
+	<a href="#" onclick="showCommunityRegistration();">=> I don't have a login...Register here as a Community.</a>
+	<a href="#" onclick="showRegistration();">=> I don't have a login...Register here as a lender, borrower or guest.</a>
 	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see that is being offered to borrow or lend.</a>
 </div>
-<div   class="div_white" >
-		&nbsp;
-	</div>
+<div   class="div_white" >&nbsp;</div>
 <% end %>
 

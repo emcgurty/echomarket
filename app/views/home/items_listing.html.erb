@@ -181,6 +181,9 @@
 		<% end %>
 	</div>
 
+	
+	<% if session[:community_id].blank? %>
+	
 	<div class="bottom_flash">
 		<p class="offering">
 		<span class="logo_white" >Create Your Own Echo Market Community</span> </p>
@@ -188,7 +191,11 @@
 		</p>
 
 		<%= link_to 'Just what I was hoping for... I want to create my Echo Market Community now', community_new_url( :id=>'', :type=>'all'), :class=> "search"   %>
-
+		<div   class="div_white" >&nbsp;</div>
 	</div>
-
+	
+	<% end %>
+	
+	
+	<div   class="div_white" >&nbsp;</div>
 </form>

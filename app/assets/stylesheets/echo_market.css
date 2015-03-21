@@ -71,6 +71,13 @@ div.center_content  {
     color:indigo;
     text-shadow: 1px 1px slategray;
 }
+
+.logo_smaller  {
+    font-weight:bold;
+    font-size:16px;
+    color:indigo;
+    text-shadow: 1px 1px slategray;
+}
 .logo_white  {
     font-weight:bold;
     font-size:24px;

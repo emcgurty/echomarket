@@ -25,6 +25,8 @@ class UserController < ApplicationController
     end
   end
 
+ 
+ 
   def delete_user_account
     @hold_alias = session[:user_alias]
     begin
@@ -43,13 +45,13 @@ class UserController < ApplicationController
 
       end
 
-    rescue ActiveRecord::ActiveRecordError => msg
+    rescue Exception => msg
       reset_session
       session[:notice] = "Error in deleting your user record with system generated messages"
 
     else
       reset_session
-      session[:notice]  = "Your account has been deleted and all record associated with your Login have been deleted, " + @hold_alias
+      session[:notice]  = "#{@hold_alias}, your account has been deleted and all record associated with your Login have been deleted." 
 
     end
     redirect_to home_items_listing_path
@@ -78,13 +80,14 @@ class UserController < ApplicationController
 
   def login
     
-    reset_session
+    
     session[:edit_user] = false
     session[:background] = true
     session[:register_type] = (params[:type].blank? ? 'all': params[:type])
 
     ### Create, update or validate login in
     if request.post?
+     
       unless session[:user_id].blank?
         user_record
       else
@@ -113,6 +116,7 @@ class UserController < ApplicationController
 
   def show
     session[:login_notice] = ''
+    
     if request.post?
       @current_user = Users.find(:first, :readonly => true, :conditions=>['username = ?', params[:users][:username]])
       unless @current_user.blank?
@@ -150,66 +154,65 @@ class UserController < ApplicationController
           @mn = ""
           @ln = ""
           @does_member_exist = true
-          @member_provided_info = false
-          if request.post?
+         
+         
                     @current_user = Communities.find(:first, :readonly => true, :conditions=>['community_name = ?', params[:users][:community_name]])
+                     
                     if @current_user.blank?
                        session[:notice] = "Sorry about this, but your Community name and/or password were not recognized by www.echomarket.org. Please try again. "
                        redirect_to :action => "login"
-                    elsif !(@current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:community_password]))
-                           unless @current_user.activation_code.blank? 
-                              session[:notice] = session[:notice] + "#{@current_user.community_name}, please check your email to activate your login."
-                              redirect_to :action => "login"
-                           else !(@current_user.authenticated?(params[:users][:community_password].blank?))
+                    elsif !@current_user.activation_code.blank? 
+                       session[:notice] = session[:notice] + "#{@current_user.community_name}, please check your email to activate your login."
+                       redirect_to :action => "login"
+                    elsif !(@current_user.authenticated?(params[:users][:community_password]))
                               session[:notice] = "We have entered an incorrect password."
                               redirect_to :action => "login"
-                           end  
+                    else  
                           
-                   else
-                     
-                     @member_provided_info = params[:users][:community_first_name].blank? && params[:users][:community_mi].blank? && params[:users][:community_last_name].blank? && params[:users][:community_alias].blank?
-               
-                     if !(@member_provided_info)
-                       @member_parse = (params[:users][:community_alias].blank? ? "" : params[:users][:community_alias].to_s)
-                       if @member_parse.blank?
-                         @fin = (params[:users][:community_first_name].blank? ? "" : params[:users][:community_first_name].to_s) 
-                         @mn = (params[:users][:community_mi].blank? ? "" : params[:users][:community_mi].to_s)
-                         @ln = (params[:users][:community_last_name].blank? ? "" : params[:users][:community_last_name].to_s)
-                         @member_parse = @fin + " " + (@mn.blank? ? "" : @mn + " ") + @ln
-                
-                       end
-                     end
-                     
-                     @does_member_exist = get_member_login_info(@current_user, params[:users]) unless  @member_provided_info
-                      
-                     if (@does_member_exist) 
-                     @cm_creator = CommunityMembers.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
-                       
-                            session[:user_id] = @cm_creator.user_id if session[:user_id].blank?
-                            if session[:user_alias].blank?
-                              unless @cm_creator.alias.blank?
-                                session[:user_alias] = @cm_creator.alias
-                              else
-                                session[:user_alias] = @cm_creator.first_name + (@cm_creator.mi.blank? ? "" : " " + @cm_creator.mi) + " " + @cm_creator.last_name       
-                              end
-                            end
+                             @member_parse = params[:users][:community_alias] unless params[:users][:community_alias].blank?
+                             if @member_parse.blank?
+                               @fin = (params[:users][:community_first_name].blank? ? "" : params[:users][:community_first_name].to_s) 
+                               @mn = (params[:users][:community_mi].blank? ? "" : params[:users][:community_mi].to_s)
+                               @ln = (params[:users][:community_last_name].blank? ? "" : params[:users][:community_last_name].to_s)
+                               @member_parse = @fin + @mn + @ln
+                             end
+                                             
+                         @does_member_exist = get_member_login_info(@current_user, params[:users]) unless @member_parse.blank?
+                         puts "ember parse"
+                         puts @memeber_parse
+                         
+                         
+                         puts "does memeber ist"
+                         puts @does_member_exist
+                         if @does_member_exist == true 
+                         @cm_creator = CommunityMembers.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
                            
-                            session[:community_name] = @current_user.community_name
-                            session[:user_type] = session[:register_type] = @current_user.user_type
-                            session[:email] = @current_user.email  
-                            session[:community_id] = @cm_creator.community_id    
-                            @getUserType = (@current_user.user_type == 'both' ? "Lender/Borrower": @current_user.user_type ).upcase
-                            session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
-                            redirect_to home_items_listing_url
-                     else
-                       session[:notice] = "Echo Market was not able to find the member fullname or alias that you entered: #{@member_parse}.  Please either try again, or just login under your Community name and password."
-                       redirect_to :action => "login"
-                     end         
-                            
-                    end  # unless current_user?
-           end  # request.post?
-             
-           
+                                session[:user_id] = @cm_creator.user_id if session[:user_id].blank?
+                                if session[:user_alias].blank?
+                                  unless @cm_creator.alias.blank?
+                                    session[:user_alias] = @cm_creator.alias
+                                  else
+                                    session[:user_alias] = @cm_creator.first_name + (@cm_creator.mi.blank? ? "" : " " + @cm_creator.mi) + " " + @cm_creator.last_name       
+                                  end
+                                end
+                               
+                                session[:community_name] = @current_user.community_name
+                                session[:user_type] = session[:register_type] = @current_user.user_type
+                                session[:email] = @current_user.email  
+                                session[:community_id] = @cm_creator.community_id    
+                                @getUserType = (@current_user.user_type == 'both' ? "Lender/Borrower": @current_user.user_type ).upcase
+                                session[:notice] = "Welcome, #{@current_user.community_name}, you are registered as a Echo Market Community #{@getUserType}.  All Echo Market features of borrowing and lending will pertain only to your community."
+                                redirect_to home_items_listing_url
+                         elsif @does_member_exist == true
+                            unless params[:users][:community_alias].blank?
+                              session[:notice] = "Echo Market was not able to find the member fullname or alias that you entered: #{params[:users][:community_alias]}.  Please either try again, or just login under your Community name and password."
+                            else
+                              @member_parse = @fin + " " + (@mn.blank? ? "" : @mn + " ") + @ln
+                              session[:notice] = "Echo Market was not able to find the member fullname or alias that you entered: #{params[:users][:community_alias]}.  Please either try again, or just login under your Community name and password."                         
+                           end
+                        
+                        
+                     end      
            
   end  #def
 
@@ -261,8 +264,9 @@ class UserController < ApplicationController
       :user_type => user_type_,
       :user_alias => user_alias_)
     if @users.save(:validate => true) && @users.errors.empty?
-      session[:notice] = "Thanks for signing up! Please check your email to activate your account."
-
+      reset_session
+      session[:reset] = true
+      session[:notice] = "Thanks for signing up! Please check your email, #{params[:users][:email]}, to activate your account."
       redirect_to home_items_listing_url
     else
       render :action => 'register'
@@ -299,6 +303,7 @@ class UserController < ApplicationController
   end
 
   def activate
+    reset_session
     session[:notice] = ''
     @user = params[:activation_code].blank? ? false : Users.find_by_activation_code(params[:activation_code])
     unless @user.blank?
@@ -309,6 +314,7 @@ class UserController < ApplicationController
           session[:user_type] = @current_user.user_type
           session[:user_alias] = @current_user.user_alias
           session[:notice] = @current_user.user_alias + ", your registration activation is complete, and you are now logged in."
+          
         else
           session[:notice] = "Failure in saving record."
         end

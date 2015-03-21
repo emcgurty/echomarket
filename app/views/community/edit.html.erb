@@ -18,9 +18,9 @@
 		In the following, a black '*' indicates a required field; '(nn)' indicates the maximum number of characters allowed for entry...</span>
 </div>
 
-<% if @communities.errors.any? %>
-<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @communities}  %>
-<% end %>
+	<% if @communities.errors.any? %>
+		<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @communities}  %>
+	<% end %>
 
 <%= nf.hidden_field :user_type, :value=> 'both' %>
 <%= nf.hidden_field :remote_ip, :value => request.remote_ip %>

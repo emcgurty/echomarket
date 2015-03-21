@@ -80,13 +80,13 @@ form {
 }
 
 
-form.reset, form.contact_us, form.edit_users, form.reset_password {
+form.reset,   form.reset_password {
     width:460px;
 }
 
 
 form.login{
-    width:820px;
+    width:696px;     /*  7.25 inches */
 }
 
 
@@ -95,6 +95,14 @@ form.item_search {
 
 }
 
+form.edit_users, form.contact_us{
+    width:580px;
+
+}
+form.register_community{
+    width:840px;
+
+}
 
 form.reset {
     width:460px;
@@ -284,6 +292,18 @@ h2 span{
     text-shadow:1px 1px 1px #000;
     width:96%;
 }
+
+.form_wrapper .top_notice_5{
+    background-color:sandybrown;
+    border-top:5px solid #ddd;
+    margin-left:0px;
+    clear:both;
+    float:left;
+    color:black;
+    text-shadow:1px 1px 1px #000;
+    width:96%;
+}
+
 .form_wrapper .top{
     background-color:indigo;
     border-top:5px solid #ddd;
@@ -396,6 +416,7 @@ h2 span{
     margin:0;
     
 }
+
 .form_wrapper div.error_warning{
     width:92%;
     float:left;

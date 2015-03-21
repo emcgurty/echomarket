@@ -50,12 +50,24 @@
 		</ul>
 	</li>
 
-	<% unless Lenders.count(:conditions => ["is_active = 1 && is_saved = 1"]) == 0 && Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1"]) == 0%>
-	<li>
-		<%= link_to "Search", home_item_search_url %>
-	</li>
+	
+	<% if session[:community_id].blank? %>
+		<% unless Lenders.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 0"]) == 0 && Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 0"]) == 0 %>
+			<li>
+				<%= link_to "Search", home_item_search_url %>
+			</li>
+		<% end %>
+	<% else %>
+		<% unless Lenders.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 1"]) == 0 && Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 1"]) == 0 %>
+		
+		<li>
+				<%= link_to "Search", home_item_search_url %>
+		</li>
+		<% end %>
 	<% end %>
-
+	
+		
+	
 	<li>
 		<%= link_to "Contact Echo Market", contact_us_url  %>
 	</li>
@@ -77,7 +89,8 @@
 		</li>
 	<% else %>
 	<% @getUserType = (session[:user_type] == 'both' ? "Lender/Borrower": session[:user_type]).upcase %>
-	<li class="subs"><a href="#s3"><%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
+	<li class="subs"><a href="#s3">
+		<%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
 		
 		<% if session[:community_id].blank? %>
 		
@@ -99,6 +112,7 @@
 			<li>
 				<%= link_to "Community Account", community_edit_url(session[:community_id])  %>
 			</li>
+		
 			
 			<li>
 				<%= link_to "Community Members", community_member_m_list_url  %>

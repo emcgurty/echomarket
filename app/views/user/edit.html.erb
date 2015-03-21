@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'login.js' %>
 
-<%= form_for @user, :url=> {:controller=>"user", :action => "edit"} do |f| %>
+<%= form_for @users, :url=> {:controller=>"user", :action => "edit"}, :html=> {:class=>"edit_users"} do |f| %>
 
 <div class="top" >
 	<p>
@@ -10,35 +10,37 @@
 		USER ACCOUNT
 	</p>
 </div>
-<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @user}  %>
-<%= f.hidden_field(:user_id)   %>
-
-<div class="column" >
-	<label for="alias">Current Alias: &nbsp;
-		<%= f.text_field(:user_alias, :maxlength =>16) %></label>
-		&nbsp;&nbsp;<span class="error" id="user_alias_error">This is an error</span>
-</div>
-
-<div class="column" >
-
+	
 	<% @userTypeArray = Array.new %>
 	<% @userTypeArray << ["guest","Guest"] %>
 	<% @userTypeArray << ["borrower","Borrower"] %>
 	<% @userTypeArray << ["lender","Lender"] %>
 	<% @userTypeArray << ["both","Lender/Borrower"] %>
+	
+	<%= f.hidden_field(:user_id)   %>
+<div   class="div_white" >&nbsp;</div>
+<table class="personal" style="width:76%">
+<tr>	
+	<td><label for="alias">Current Alias:</td>
+	<td><%= f.text_field(:user_alias, :maxlength =>16) %></label>
+		<br /><span class="error" id="user_alias_error">This is an error</span></td>
+</tr>
 
-	<label for="user_type">Current User Type:&nbsp;
-		<%= f.select(:user_type, @userTypeArray.collect {|p| [ p[1], p[0]]}) %> </label>
-		&nbsp;&nbsp;<span class="error" id="user_user_type">This is an error</span>
-</div>
-<div class="column"  >
+<tr>
+<td><label for="user_type">Current User Type:</label></td>
 
-	<label for="email">Current User Email:&nbsp;
-		<%= f.text_field :email %> </label>
-		&nbsp;&nbsp;<span class="error" id="user_email_error">This is an error</span>
-		<br />
+<td><%= f.select(:user_type, @userTypeArray.collect {|p| [ p[1], p[0]]}) %>
+	 <br /><span class="error" id="user_user_type">This is an error</span></td>
+</tr>
 
-</div>
+<tr>
+	<td><label for="email">Current User Email:</label></td>
+	<td><%= f.text_field :email %> 
+		<br /><span class="error" id="user_email_error">This is an error</span></td>
+</tr>
+
+</table>
+<div   class="div_white" >&nbsp;</div>
 <div class="bottom" >
 	<%= f.submit 'Save My Changes' %>
 	<%= link_to "Delete My Account" , controller => "user", :action => "delete_user_account" %>

@@ -1,6 +1,6 @@
 class CommunityMemberController < ApplicationController
   def advise
-     
+        session[:background] = true
     if params[:id].blank?
       @community_members = CommunityMembers.new()
 
@@ -15,29 +15,6 @@ class CommunityMemberController < ApplicationController
     end
   end
 
-  # GET /community_members/1
-  # GET /community_members/1.json
-  def show
-    @community_member = CommunityMembers.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-
-    end
-  end
-
-  # GET /community_members/new
-  # GET /community_members/new.json
-  def new
-    @community_member = CommunityMembers.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-
-    end
-  end
-
-
   def m_list
     
     @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
@@ -48,9 +25,10 @@ class CommunityMemberController < ApplicationController
   def create
 
     @community_members = CommunityMembers.new(params[:community_members])
-
+    
     respond_to do |format|
-      if @community_members.save
+      puts @community_memebers.errors
+      if @community_members.save && @community_members.errors.empty? 
         if params[:commit] == 'Add'
           format.html { redirect_to :action=>'m_list' }
         else
