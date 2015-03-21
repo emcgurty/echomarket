@@ -28,7 +28,7 @@
 <% if session[:register_type].blank? || session[:register_type] == 'all'%>
 <div style="float:left;width:100%;margin-top:15px;" >
 	<label class="radio_login" >How would you like to Register?:</label>
-	<div class="radio" style="width:375px;">
+	<div class="radio" style="width:475px;">
 		<div style="float:left;" >
 			<label class="radio_login"  >As a Guest:
 				<%= nf.radio_button(:user_type, "guest", {:checked => true}) %> </label>
@@ -52,48 +52,42 @@
 <%= nf.hidden_field :user_type, :value=> session[:register_type] %>
 <% end %>
 
-<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
+	<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>User Alias:&nbsp; </label>
-	<%= nf.text_field(:user_alias, {:maxlength=>24,:tabindex=>"1",:value=>"" }) %>
-	<span style="color:indigo;font-size:12px;">Your required publicly displayed User Alias.</span>
+	<%= nf.text_field(:user_alias, {:maxlength=>40,:tabindex=>"1",:value=>"" }) %>
+	<span style="color:indigo;font-size:12px;">Your required publicly displayed User Alias, must have between 8 and 40 alpha-numeric characters.</span>
 	<span class="error" id="registration_alias_error">This is an error</span>
+	</div>
 
-</div>
-<div class="column50">
-	<div >
-		<label>Username:&nbsp;
-			<br />
-			<%= nf.text_field(:username, {:maxlength=>16,:tabindex=>"2",:value=>""})  %></label>
-		<span style="color:indigo;font-size:12px;">Strictly for login.  Will never be publicly displayed.</span>
+	<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
+		<label>Username:&nbsp;</label>
+		<%= nf.text_field(:username, {:maxlength=>40,:tabindex=>"2",:value=>""})  %>
+		<span style="color:indigo;font-size:12px;">Strictly for login, will not be publicly displayed, and must have between 8 and 40 characters.</span>
 		<span class="error" id="registration_username_error">This is an error</span>
 	</div>
-	<div  >
-		<label>Password:&nbsp;
-			<br />
-			<%= nf.password_field(:password, {:maxlength=>16,:tabindex=>"4",:value=>""})  %></label>
+	
+	<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
+		<label>Password:&nbsp;</label>
+		<%= nf.password_field(:password, {:maxlength=>16,:tabindex=>"3",:value=>""})  %>
 		<span style="color:indigo;font-size:12px;">Between 8 - 16 alpha-numeric characters.</span>
 		<span class="error" id="registration_password_error">This is an error</span>
 	</div>
-
-</div>
-
-<div class="column50">
-	<div >
-		<label>Email:&nbsp;
-			<br />
-			<%= nf.email_field(:email, {:maxlength=>100, :size=>24,:tabindex=>"3",:value=>""}) %></label>
-		<span style="color:indigo;font-size:12px;">Required.  Will not be publicly displayed unless you later permit it.</span>
-		<span class="error" id="registration_email_error">This is an error</span>
-	</div>
-	<div  >
-		<label>Re-enter Password: &nbsp;
-			<br />
-			<%= nf.password_field(:password_confirmation, {:maxlength=>16,:tabindex=>"5",:value=>""})  %></label>
+	
+	<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
+		<label>Re-enter Password: &nbsp;</label>
+		<%= nf.password_field(:password_confirmation, {:maxlength=>16,:tabindex=>"4",:value=>""})  %>
 		<span style="color:indigo;font-size:12px;">Password and re-entered password must match.</span>
 		<span class="error" id="registration_password_confirmation_error">This is an error</span>
 	</div>
 
-</div>
+
+	<div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
+		<label>Email:&nbsp;</label>
+		<%= nf.email_field(:email, {:maxlength=>100, :size=>24,:tabindex=>"5",:value=>""}) %>
+		<span style="color:indigo;font-size:12px;">Required, will not be publicly displayed unless you later permit it and must be formatted properly.</span>
+		<span class="error" id="registration_email_error">This is an error</span>
+	</div>
+
 
 <% if session[:edit_user] %>
 <div class="bottom" >

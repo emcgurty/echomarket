@@ -471,12 +471,21 @@ function submitRegistration() {
 	}
 
 	if (($("#users_username").val()).length < 8) {
-		$("#registration_username_error").text("Username is too short, 8 - 16 characters required.");
+		$("#registration_username_error").text("Username is too short, 8 - 40 characters required.");
 		$("#registration_username_error").css("visibility", "visible");
 		foundInvalid = true;
 	} else {
 		$("#registration_username_error").text("");
 		$("#registration_username_error").css("visibility", "hidden");
+	}
+	
+		if (($("#users_user_alias").val()).length < 8) {
+		$("#registration_alias_error").text("User alias is too short, 8 - 40 characters required.");
+		$("#registration_alias_error").css("visibility", "visible");
+		foundInvalid = true;
+	} else {
+		$("#registration_alias_error").text("");
+		$("#registration_alias_error").css("visibility", "hidden");
 	}
 
 	if ($("#users_password").val() == "") {

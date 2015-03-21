@@ -21,7 +21,8 @@ class Users < ActiveRecord::Base
   validates_uniqueness_of :user_alias,:if => :user_alias, :case_sensitive => false, :message => " already exists"
   validates_uniqueness_of :email,:if => :email, :case_sensitive => false, :message =>  " already exists"
   validates_length_of :password, :if => :password, :in => 8..16, :message => "must be between 8 and 16 characters"
-  validates_length_of :username, :if => :username, :in => 8..16, :message => "must be between 8 and 16 characters"
+  validates_length_of :username, :if => :username, :in => 8..40, :message => "must be between 8 and 40 characters"
+  validates_length_of :user_alias, :if => :user_alias, :in => 8..40, :message => "must be between 8 and 40 characters"
   validates_confirmation_of :password ,:if => :password, :message => "and re-entered password must match."
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
   #  validates_format_of :username, :with => alpha_numeric_regex_username, :message => "must contain only alpha-numeric characters with either a dash or an underscore"
