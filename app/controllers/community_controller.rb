@@ -3,6 +3,8 @@ class CommunityController < ApplicationController
     
   def new
     @communities = Communities.new
+    puts "new Communities"
+    puts @communities.to_yaml
 
     respond_to do |format|
       format.html # new.html.erb

@@ -1,6 +1,8 @@
 require 'digest/sha1'
 
 class Communities < ActiveRecord::Base
+  
+  has_many :community_members
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   name_alpha_regex = /\A[ a-zA-Z'-]+\z/

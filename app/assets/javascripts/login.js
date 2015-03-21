@@ -234,6 +234,7 @@ function submitCommunityRegistration(){
 		$("#first_name_error").text("");
 		$("#first_name_error").css("visibility", "hidden");
 	}
+	
 	if ($("#communities_last_name").val() == "") {
 		$("#last_name_error").text("Last name is required.");
 		$("#last_name_error").css("visibility", "visible");
@@ -242,6 +243,8 @@ function submitCommunityRegistration(){
 		$("#last_name_error").text("");
 		$("#last_name_error").css("visibility", "hidden");
 	}
+	
+	
 	if ($("#communities_address_line_1").val() == "") {
 		$("#address_line_1_error").text("First address line is required.");
 		$("#address_line_1_error").css("visibility", "visible");
@@ -344,6 +347,7 @@ function submitLogin() {
 
 function submitCommunityLogin() {
 	var foundInvalid = true;
+	var foundInvalidNameAlias = true;
 	if ($("#users_community_name").val() == "") {
 		$("#login_community_name_error").text("Community name is required.");
 		$("#login_community_name_error").css("visibility", "visible");
@@ -366,14 +370,70 @@ function submitCommunityLogin() {
 	if ($("#users_community_alias").val() != "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ) {
 		$("#login_community_alias_error").text("Provide only a fullname or alias.");
 		$("#login_community_alias_error").css("visibility", "visible");
+		$("#login_community_first_name_error").text("");
+		$("#login_community_first_name_error").css("visibility", "hidden");
 		foundInvalid = false;
+		foundInvalidNameAlias = false;
 	} else {
 		$("#login_community_alias_error").text("");
 		$("#login_community_alias_error").css("visibility", "hidden");
 	}
 	
-
+	if (foundInvalidNameAlias) {	
+	if (($("#users_community_first_name").val() != "") &&  ($("#users_community_last_name").val() == "")   ) {
+		$("#login_community_first_name_error").text("Provide a last name");
+		$("#login_community_first_name_error").css("visibility", "visible");
+		$("#login_community_alias_error").text("");
+		$("#login_community_alias_error").css("visibility", "hidden");
+		foundInvalid = false;
+		foundInvalidNameAlias = false;
+	} else {
+		$("#login_community_first_name_error").text("");
+		$("#login_community_first_name_error").css("visibility", "hidden");
+	}
+	}	
 	
+	if (foundInvalidNameAlias) {	
+	if (($("#users_community_first_name").val() == "") &&  ($("#users_community_last_name").val() != "")   ) {
+		$("#login_community_first_name_error").text("Provide a first name");
+		$("#login_community_first_name_error").css("visibility", "visible");
+		$("#login_community_alias_error").text("");
+		$("#login_community_alias_error").css("visibility", "hidden");
+		foundInvalid = false;
+		foundInvalidNameAlias = false;
+	} else {
+		$("#login_community_first_name_error").text("");
+		$("#login_community_first_name_error").css("visibility", "hidden");
+	}
+	}
+	
+	
+	if (foundInvalidNameAlias) {	
+	if (($("#users_community_first_name").val() == "") &&  ($("#users_community_mi").val() != "") && ($("#users_community_last_name").val() != "")   ) {
+		$("#login_community_first_name_error").text("Provide a first name");
+		$("#login_community_first_name_error").css("visibility", "visible");
+		$("#login_community_alias_error").text("");
+		$("#login_community_alias_error").css("visibility", "hidden");
+		foundInvalid = false;
+		foundInvalidNameAlias = false;
+	} else {
+		$("#login_community_first_name_error").text("");
+		$("#login_community_first_name_error").css("visibility", "hidden");
+	}
+	}
+	
+	if (foundInvalidNameAlias) {	
+		if (($("#users_community_first_name").val() != "") &&  ($("#users_community_mi").val() != "") && ($("#users_community_last_name").val() == "")   ) {
+		$("#login_community_first_name_error").text("Provide a last name");
+		$("#login_community_first_name_error").css("visibility", "visible");
+		$("#login_community_alias_error").text("");
+		$("#login_community_alias_error").css("visibility", "hidden");
+		foundInvalid = false;
+	} else {
+		$("#login_community_first_name_error").text("");
+		$("#login_community_first_name_error").css("visibility", "hidden");
+	}
+	}
 	if (foundInvalid) {
 
 		$("form.login").submit();
