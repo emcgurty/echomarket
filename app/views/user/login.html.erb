@@ -1,4 +1,5 @@
 <%= javascript_include_tag 'login.js' %>
+
 <% if session[:register_type].blank? || session[:register_type]== 'all' %>
 <% @lender_type_string == "" %>
 <% elsif session[:register_type] == "both" %>
@@ -43,10 +44,8 @@
 		<label>Community Password (case sensitive): <a href="#" onclick="showForgotCommunityPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
 		<%= nf.password_field(:community_password, {:maxlength=>16,  :value=>""}) %>
 		&nbsp;&nbsp;<span class="error" id="login_community_password_error">This is an error</span>
-	
 
-	
-		<p class="offering">
+		<p class="offering0">
 			Optional, you may login under your Community provided Member full name or alias. Otherwise you can borrow or lend under your Community identity.
 		</p>
 		<table style="margin-left:0px;widht:100%;">
@@ -98,9 +97,7 @@
 			</table>
 </div>
 	
-	<div   class="div_white" >
-		&nbsp;
-	</div>
+
 	<div class="bottom_login">
 		<a style="color:white;" href="#" onclick="submitCommunityLogin();">Submit Community Login</a>
 	</div>

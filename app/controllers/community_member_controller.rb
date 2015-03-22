@@ -1,6 +1,7 @@
 class CommunityMemberController < ApplicationController
   def advise
-        session[:background] = true
+    session[:notice] = ''
+    session[:background] = true
     if params[:id].blank?
       @community_members = CommunityMembers.new()
 
@@ -16,7 +17,7 @@ class CommunityMemberController < ApplicationController
   end
 
   def m_list
-    
+    session[:notice] = ''
     @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
 

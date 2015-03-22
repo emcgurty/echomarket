@@ -3,6 +3,7 @@ class HomeController < ApplicationController
 
  
   def item_search
+    session[:notice] = ''
     session[:background] = true
     session[:item_search_query]  =''
     if request.post?
@@ -263,8 +264,8 @@ class HomeController < ApplicationController
   end  ## end def
 
   def items_listing
+   
     session[:background] = true
-
     respond_to do |format|
       format.html
     end
@@ -276,6 +277,7 @@ class HomeController < ApplicationController
   end
 
   def about
+    session[:notice] = ''
     session[:background] = true
   end
   

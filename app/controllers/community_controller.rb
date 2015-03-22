@@ -3,10 +3,7 @@ class CommunityController < ApplicationController
     
   def new
     @communities = Communities.new
-    puts "new Communities"
-    puts @communities.to_yaml
-
-    respond_to do |format|
+     respond_to do |format|
       format.html # new.html.erb
 
     end
@@ -20,7 +17,7 @@ class CommunityController < ApplicationController
   # POST /communities
   # POST /communities.json
   def create
-    
+    session[:notice] = ''
     @communities = Communities.new(params[:communities])
     respond_to do |format|
       
@@ -48,6 +45,7 @@ class CommunityController < ApplicationController
   # PUT /communities/1
   # PUT /communities/1.json
   def update
+    session[:notice] = ''
     @communities = Communities.find(params[:commuity_id])
 
     respond_to do |format|
@@ -65,6 +63,7 @@ class CommunityController < ApplicationController
   # DELETE /communities/1
   # DELETE /communities/1.json
   def destroy
+    session[:notice] = ''
     @communities = Communities.find(params[:id])
     @communities.destroy
     @cm = CommunityMembers.find(:all, :conditions => ["community_id = ?", params[:id]])
@@ -91,7 +90,7 @@ class CommunityController < ApplicationController
   
    def activate
     reset_session
-    session[:notice] = ''
+    
     @cm = params[:activation_code].blank? ? false : Communities.find_by_activation_code(params[:activation_code])
     unless @cm.blank?
       unless @cm.activation_code.blank?
@@ -180,7 +179,7 @@ class CommunityController < ApplicationController
   def get_reset_community_password
     reset_session
     session[:background] = true
-    session[:notice] = ''
+    
     @communities = Communities.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
 

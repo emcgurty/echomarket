@@ -1,14 +1,16 @@
 class BorrowerController < ApplicationController
 
  def b_list
-   
+     session[:background] = true
 end
 
   def borrower_item_detail
+      session[:background] = true
     @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
  end
  
    def community_borrower_item_detail
+       session[:background] = true
     @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
  end
 
@@ -35,6 +37,7 @@ end
   end
 
   def delete_borrower_record
+    session[:background] = true
     if params[:commit] == "delete"
       @l = Borrowers.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
       @l.save
@@ -49,17 +52,19 @@ end
   end
 
   def borrower_seeking
+    session[:notice] = ''
     @borrowers = Borrowers.new
   end
   
   def community_borrower_seeking
+    session[:notice] = ''
     @borrowers = Borrowers.new
   end
    
   
   def update_borrower_seeking
 
-    session[:background] = true
+    session[:notice] = ''
     unless params[:borrowers].blank?
       if (params[:borrowers][:borrower_item_id].blank?)  ## then it is a new record
 

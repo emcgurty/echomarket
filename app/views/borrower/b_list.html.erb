@@ -1,9 +1,9 @@
-<%= javascript_include_tag 'borrower_seeking.js' %>
+<%= javascript_include_tag 'echo_market.js' %>
 
 <%= form_for :borrowers, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
-    <p><%= session[:community_name].upcase unless session[:community_name].blank? %> Borrower Items</p>
+    <p><%= session[:community_name].to_s unless session[:community_name].blank? %> Borrower Items</p>
   </div>
 
   <div class="column">

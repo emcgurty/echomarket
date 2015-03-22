@@ -1,10 +1,13 @@
 class LenderController < ApplicationController
 
   def l_list
-   
+    session[:notice] = ''
+     session[:background] = true
   end
 
   def lender_item_detail
+    session[:notice] = ''
+      session[:background] = true
     @lenders = Lenders.find(:first, :readonly => true, :conditions => ["lender_item_id = ?", params[:id]])
   end
 
@@ -50,12 +53,15 @@ class LenderController < ApplicationController
   end
 
     def lender_offering
+      session[:notice] = ''
+        session[:background] = true
      @lenders = Lenders.new
     
   end
   
   def community_lender_offering
-    
+    session[:notice] = ''
+      session[:background] = true
     @lenders = Lenders.new
   end
   

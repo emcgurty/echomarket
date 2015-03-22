@@ -22,7 +22,7 @@ $(document).ready(function() {
 
 	$("div.form_wrapper").center();
 	$("form").center_form();
-     
+    $("span.error").css("visibility", "hidden");
 			
 	$("#users_password_confirmation").change(function() {
 
@@ -30,7 +30,7 @@ $(document).ready(function() {
 			$("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
 			$("#registration_password_confirmation_error").css("visibility", "visible");
 		} else {
-			$("#registration_password_confirmation_error").text("");
+			
 			$("#registration_password_confirmation_error").css("visibility", "hidden");
 		}
 	});
@@ -41,7 +41,7 @@ $(document).ready(function() {
 			$("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
 			$("#registration_password_confirmation_error").css("visibility", "visible");
 		} else {
-			$("#registration_password_confirmation_error").text("");
+			
 			$("#registration_password_confirmation_error").css("visibility", "hidden");
 		}
 	});
@@ -140,35 +140,44 @@ function submitForgotUsername() {
 
 function submitCommunityRegistration(){
 	var foundInvalid = true;
-	
+	var foundInvalidNameCI = true;
 	 
 	 if (($("select#communities_country_id option:selected").text() == 'United States') && ($("select#communities_state_id option:selected").text() == 'Please select')) {
 		$("span#state_error").text("A State selection is required.");
 		$("span#state_error").css("visibility", "visible");
+		$("span#country_error").text("");
+		$("span#country_error").css("visibility", "hidden");
 		foundInvalid = false;
+		foundInvalidNameCI = false;
 	} else {
 		$("span#state_error").text("");
 		$("span#state_error").css("visibility", "hidden");
 	}
 	
+	if (foundInvalidNameCI) {
 	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() == '')) {
 		$("span#country_error").text("A Country with Region information is required.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
+		foundInvalidNameCI = false;
 	} else {
 		$("span#country_error").text("");
 		$("span#country_error").css("visibility", "hidden");
 	}
+	}
 	
-	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() != '')) {
+	if (foundInvalidNameCI) {
+		if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() != '')) {
 		$("span#country_error").text("Please select a Country.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
+		foundInvalidNameCI = false;
 	} else {
 		$("span#country_error").text("");
 		$("span#country_error").css("visibility", "hidden");
 	}
-	
+	}
+	if (foundInvalidNameCI) {
 	if (($("select#communities_country_id option:selected").text() != 'Please select') && ($("select#communities_country_id option:selected").text() != 'United States') && ($("input#communities_state_id_string").val() == '')) {
 		$("span#country_error").text("Please provide the required Region.");
 		$("span#country_error").css("visibility", "visible");
@@ -177,7 +186,7 @@ function submitCommunityRegistration(){
 		$("span#country_error").text("");
 		$("span#country_error").css("visibility", "hidden");
 	}
-	
+	}
 	
 	if ($("#communities_community_name").val() == "") {
 		$("#registration_community_name_error").text("Community Name is required.");
@@ -269,6 +278,19 @@ function submitCommunityRegistration(){
 		$("#postal_code_error").text("");
 		$("#postal_code_error").css("visibility", "hidden");
 	}
+	
+	if ($("#communities_postal_code").val() != "") {
+		var re = /^[A-Za-z]+$/;
+		if (re.test(document.getElementById("communities_postal_code").value)) {
+			$("#postal_code_error").text("Please verify your postal code, it should contain at least one number.");
+			$("#postal_code_error").css("visibility", "visible");
+			foundInvalid = false;
+		} else {
+		$("#postal_code_error").text("");
+		$("#postal_code_error").css("visibility", "hidden");
+	}
+	}
+	
 	
     if (foundInvalid) {
 

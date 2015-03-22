@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
 	$.fn.center = function() {
+
+		$(this).css("width: " + $("form").width() + "15px", "height: " + $("form").height() + "15px");
 		var element = $(this);
 		var e_width = element.width();
 		var win_width = $(window).width();
@@ -9,15 +11,19 @@ $(document).ready(function() {
 
 	};
 
-	$.fn.get_form_border_line = function() {
+	$.fn.center_form = function() {
 		var element = $(this);
-		var win_height = $("div.form_wrapper").height();
-
-		element.css('height', (win_height + "px"));
+		var e_width = element.width();
+		var win_width = $("div.form_wrapper").width();
+		var left_margin_calc = (win_width - e_width) / 2;
+		element.css('margin-left', (left_margin_calc + "px"));
 
 	};
 
+
+
 	$("div.form_wrapper").center();
+	$("form").center_form();
 	showFormContact();
 
 	$("select#borrowers_country_id").bind('change', function() {
@@ -353,12 +359,7 @@ $(document).ready(function() {
 	});
 	$("input#borrowers_state_id_string").trigger('change');
 	
-	
-	
-	
-	
-	
-	
+		
 	
 	$("#borrowers_other_describe_yourself").bind('change', function() {
 		$("span#describe_yourself").html($(this).val());
@@ -542,19 +543,7 @@ $(document).ready(function() {
 	$("select#borrowers_state_id").bind('change', function() {
 
 		state_cmb = $("select#borrowers_state_id option:selected").text();
-		var tmpID = $("select#borrowers_state_id option:selected").val();
-
-		if ((tmpID == '0') || (tmpID == '99')) {
-
-			$("select#borrowers_country_id").removeAttr('selected');
-			$("select#borrowers_country_id").prop('selected', '99');
-			$("span#state_selection").html("Not applicable");
-
-		} else {
-
-			$("span#state_selection").html(state_cmb);
-
-		}
+		$("span#state_selection").html(state_cmb);
 
 	});
 	$("select#borrowers_state_id").trigger('change');
@@ -563,15 +552,7 @@ $(document).ready(function() {
 
 		country_cmb = $("select#borrowers_country_id option:selected").text();
 		$("span#country_selection").html(country_cmb);
-		var tmpID = $("select#borrowers_country_id option:selected").val();
-
-		if (tmpID != 'US') {
-
-			$("select#borrowers_state_id").removeAttr('selected');
-			$("select#borrowers_state_id").prop('selected', 'selected');
-			$("select#borrowers_state_id option[value='0']").attr('selected', 'selected');
-
-		}
+		
 	});
 	$("select#borrowers_country_id").trigger('change');
 
@@ -612,15 +593,7 @@ $(document).ready(function() {
 
 		var tmpID = $("select#borrowers_state_id_alternative option:selected").val();
 		$("span#state_alternative_selection").html($("select#borrowers_state_id_alternative option:selected").text());
-
-		if (tmpID == '99') {
-
-			$("select#borrowers_country_id_alternative").removeAttr('selected');
-			$("select#borrowers_country_id_alternative").prop('selected', null);
-
-			$("select#borrowers_country_id_alternative option[value='99']").attr('selected', 'selected');
-			$("span#country_alternative_selection").html("Not applicable");
-		}
+	
 
 	});
 	$("select#borrowers_state_id_alternative").trigger('change');
@@ -630,13 +603,7 @@ $(document).ready(function() {
 		var tmpID = $("select#borrowers_country_id_alternative option:selected").val();
 		$("span#country_alternative_selection").html($("select#borrowers_country_id_alternative option:selected").text());
 
-		if (tmpID != 'US') {
 
-			$("select#borrowers_state_id_alternative").removeAttr('selected');
-			$("select#borrowers_state_id_alternative").prop('selected', null);
-			$("select#borrowers_state_id_alternative option[value='0']").attr('selected', 'selected');
-
-		}
 	});
 	$("select#borrowers_country_id_alternative").trigger('change');
 
@@ -977,6 +944,10 @@ function validateContactPreferences() {
 
 		foundInvalid = false;
 	}
+	
+	return foundInvalid;
+	
+	}
 
 
 
@@ -989,4 +960,3 @@ function showReview() {
 	return false;
 
 }
-

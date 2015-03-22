@@ -32,6 +32,16 @@ p.offering{
     width:94%;
 }
 
+
+p.offering0{
+    padding:0px;
+    margin-left:5px;
+    color:black;
+    font-size:12px;
+    /*    border-bottom:1px solid #ddd;*/
+    font-weight:normal;
+    width:94%;
+}
 span.offering{
     color:black;
     font-size:12px;
@@ -90,7 +100,7 @@ form.login{
 }
 
 
-form.item_search {
+form.item_search , form.l_list, form.b_list{
     width:540px;
 
 }

@@ -24,7 +24,7 @@
   <div class="top" >
 
     <p><span class="logo_white" >The Echo Market</span></p>
-    <p><%= session[:user_alias].upcase unless session[:user_alias].blank? %> BORROWER ITEM REGISTRATION
+    <p><%= session[:user_alias].to_s unless session[:user_alias].blank? %> BORROWER ITEM REGISTRATION
   
       <a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a></p>
     <% unless session[:notice].blank? %>

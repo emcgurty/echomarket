@@ -32,14 +32,14 @@
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(50)</span></label>
-	<%= nf.text_field(:community_name, {:maxlength=>50, :tabindex=>"1",:value=>"" }) %>
+	<%= nf.text_field(:community_name, {:maxlength=>50, :value=>"" }) %>
 	<span style="color:indigo;font-size:12px;">Required Community name, displayed only to members.</span>
 	<span class="error" id="registration_community_name_error">This is an error</span>
 </div>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community E-Mail:<span class="required_fields">&nbsp;&nbsp;*</span> </label>
-	<%= nf.text_field(:email, {:maxlength=>50, :tabindex=>"2",:value=>"" }) %>
+	<%= nf.text_field(:email, {:maxlength=>50,:value=>"" }) %>
 	<span style="color:indigo;font-size:12px;">Required Community email, displayed only to members.</span>
 	<span class="error" id="registration_community_email_error">This is an error</span>
 </div>
@@ -48,7 +48,7 @@
 	<div  >
 		<label>Community Password:<span class="required_fields">&nbsp;&nbsp;*</span>
 			<br />
-			<%= nf.password_field(:password, {:maxlength=>16,:tabindex=>"3",:value=>""})  %></label>
+			<%= nf.password_field(:password, {:maxlength=>16,:value=>""})  %></label>
 		<span style="color:indigo;font-size:12px;">Between 8 - 16 alpha-numeric characters.</span>
 		<span class="error" id="registration_password_error">This is an error</span>
 	</div>
@@ -60,7 +60,7 @@
 	<div  >
 		<label>Re-enter Community Password: <span class="required_fields">&nbsp;&nbsp;*</span>
 			<br />
-			<%= nf.password_field(:password_confirmation, {:maxlength=>16,:tabindex=>"4",:value=>""})  %></label>
+			<%= nf.password_field(:password_confirmation, {:maxlength=>16,:value=>""})  %></label>
 		<span style="color:indigo;font-size:12px;">Password and re-entered password must match.</span>
 		<span class="error" id="registration_password_confirmation_error">This is an error</span>
 	</div>
@@ -68,28 +68,28 @@
 </div>
 <div id="form_contact_information" class="contact_information" style="display:block;">
 
-	<div style="display:block;float:left;width:86%;height:auto;margin:5px;">
+	<div style="display:block;float:left;width:86%;height:auto;margin-left:5px;">
 		<table class="personal">
 
 			<tr class="even">
 				<td style="width:25%;">
 				<div>
 					<label>First Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24, :tabindex=>"5") %>
+					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24) %>
 					<span class="error" id="first_name_error">&nbsp;</span>
 				</div></td>
 
 				<td style="width:25%;">
 				<div>
 					<label>Middle Initial:</label>
-					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1", :tabindex=>"6") %>
+					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 
 				<td style="width:25%;">
 				<div>
 					<label>Last Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24, :tabindex=>"7") %>
+					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
 					<span class="error" id="last_name_error">&nbsp;</span>
 				</div></td>
 
@@ -101,27 +101,27 @@
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 1: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24, :tabindex=>"8") %>
+					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 2:</label>
-					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24, :tabindex=>"9") %>
+					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 				
 				<td style="width:25%;">
 				<div>
 					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-					<%= nf.text_field( :city, :maxlength=>20, :size=>20, :tabindex=>"10") %>
+					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
 					<span class="error" id="city_error">&nbsp;</span>
 				</div>
 		     	</td>
 				
 				<td style="width:25%;">
 				<div>
-				<label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20, :tabindex=>"11") %> <span class="error">&nbsp;</span>
+				<label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
 				</div>
 		     	</td>
 				
@@ -136,7 +136,7 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries, {:tabindex=>12}) %> 
+				<%= nf.select(:country_id, @countries) %> 
 				<span class="error" id="country_error">&nbsp;</span>
 				</td>
 				
@@ -150,12 +150,12 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states, {:tabindex=>12}) %> 
+				<%= nf.select(:state_id, @states) %> 
 				</div>
 
 				<div id="provide_country_state" style="display:none;">
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string, {:tabindex=>13}) %>
+					<%= nf.text_field(:state_id_string) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>
@@ -163,7 +163,7 @@
 					<td style="width:25%;">
 					<div>
 					<label>Postal Code: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>14, :tabindex=>"14") %>
+					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>14) %>
 					<span class="error" id="postal_code_error">&nbsp;</span>
 				</div>
 				</td>
@@ -172,8 +172,8 @@
 
 			</tr>
 			<tr class="odd">
-				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15, :tabindex=>"15") %> </td>
-				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15, :tabindex=>"16") %> </td>
+				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
+				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
 				<td colspan="2"> &nbsp;</td>
 
 			</tr>

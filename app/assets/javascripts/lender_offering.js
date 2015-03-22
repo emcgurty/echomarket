@@ -1,25 +1,27 @@
 $(document).ready(function() {
     
-    $.fn.center = function () {
-        var element = $(this);
-        var e_width = element.width();
-        var win_width = $(window).width();
-        var left_margin_calc =  (win_width - e_width) / 2;
-        element.css('margin-left', (left_margin_calc + "px"));
-    
-    };
+ 	$.fn.center = function() {
 
-    $.fn.get_form_border_line = function () {
-        var element = $(this);
-        var win_height = $("div.form_wrapper").height();
-    
-        element.css('height', (win_height + "px"));
+		$(this).css("width: " + $("form").width() + "15px", "height: " + $("form").height() + "15px");
+		var element = $(this);
+		var e_width = element.width();
+		var win_width = $(window).width();
+		var left_margin_calc = (win_width - e_width) / 2;
+		element.css('margin-left', (left_margin_calc + "px"));
 
+	};
 
-    };
+	$.fn.center_form = function() {
+		var element = $(this);
+		var e_width = element.width();
+		var win_width = $("div.form_wrapper").width();
+		var left_margin_calc = (win_width - e_width) / 2;
+		element.css('margin-left', (left_margin_calc + "px"));
 
+	};
  
     $("div.form_wrapper").center();
+   	$("form").center_form();
     showFormContact();
     
 
@@ -905,7 +907,7 @@ function validateUseWhichLenderContactAddress() {
     var return_value = true;
     var whichType = 'lenders';
     var use_which_ca = $("input[name='lenders[useWhichContactAddress]']:checked").val();
-    var useAddressAlternative = $('input#lenders_useWhichContactAddressAlternative').is(':checked')
+    var useAddressAlternative = $('input#lenders_useWhichContactAddressAlternative').is(':checked');
     if ((use_which_ca == 1) || (use_which_ca == 2  || useAddressAlternative )) {
 
         if (($("#" + whichType + "_address_line_1_alternative").val() == '')  ||
@@ -962,10 +964,10 @@ function validateLItem() {
 
     if (bad_count){
         $("span#item_count_error").css("visibility", "visible");
-        return_value = false
+        return_value = false;
     } else if ((parseInt(item_count_value) < 1) || (parseInt(item_count_value) > 100)){
         $("span#item_count_error").css("visibility", "visible");
-        return_value = false
+        return_value = false;
     }
 
     if ($("#" + whichType + "_item_description").val() == '') {
@@ -1118,9 +1120,7 @@ function showBorrowersContactPreferences() {
     return foundInvalid;
 }
 
-function validateContactPreferences()
-
-{
+function validateContactPreferences() {
     var foundInvalid = true;
 
     $("span.error").css("visibility", "hidden");
@@ -1139,8 +1139,6 @@ function validateContactPreferences()
         $("#describe_yourself_combo_error").css("visibility", "visible");
         foundInvalid = false;
     }
-
-
 
     if (($( "#lenders_describe_yourself option:selected" ).text() == "Other") && ($("#lenders_other_describe_yourself").val() == "")){
 
@@ -1200,13 +1198,13 @@ function validateContactPreferences()
         foundInvalid = false;
     }
 
-    if  ((($("#lenders_state_id option:selected").text() == "Please select") ||
-        ($("#lenders_state_id option:selected").val() == '')) && ($("#lenders_country_id option:selected").text() == "United States")){
-
+    if  (($("#lenders_state_id option:selected").text() == "Please select") && ($("#lenders_country_id option:selected").text() == "United States")) {
         $("#state_error").text("Please select a State.");
         $("#state_error").css("visibility", "visible");
-
         foundInvalid = false;
+    }
+    
+    return foundInvaid;
     }
 
 

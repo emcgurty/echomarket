@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     $.fn.center = function () {
     
-       $(this).css( "width: " + $("form").width() + "15px","height: " + $("form").height() + "15px" )
+       $(this).css( "width: " + $("form").width() + "15px","height: " + $("form").height() + "15px" );
        var element = $(this);
         var e_width = element.width();
         var win_width = $(window).width();
@@ -24,9 +24,10 @@ $(document).ready(function() {
 
 
     $("div.form_wrapper").center();
-
+$("form").center_form();
        
 });
+
 
  
 
