@@ -89,7 +89,10 @@ $(document).ready(function() {
 		$("span#public_display_name_error").text("");
 		$("span#public_display_name_error").css("visibility", "hidden");
 	}
-	}
+	}  
+	
+	
+	
 	});
 $("input[name='borrowers[displayBorrowerName]']").trigger('change');
 
@@ -996,7 +999,7 @@ function validateContactPreferences() {
 	if ($("#borrowers_postal_code").val() != "") {
 		var re = /^[A-Za-z]+$/;
 		if (re.test(document.getElementById("borrowers_postal_code").value)) {
-			$("#postal_code_error").text("Please verify your postal code.");
+			$("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
 			$("#postal_code_error").css("visibility", "visible");
 			foundInvalid = false;
 		}

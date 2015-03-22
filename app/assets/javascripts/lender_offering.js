@@ -1273,7 +1273,7 @@ function validateContactPreferences() {
     if ($("#lenders_postal_code").val() != "") {
         var re = /^[A-Za-z]+$/;
         if(re.test(document.getElementById("lenders_postal_code").value)) {
-            $("#postal_code_error").text("Please verify your postal code.");
+            $("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
             $("#postal_code_error").css("visibility", "visible");
             foundInvalid = false;
         }

@@ -129,7 +129,7 @@
               <label>Public Display Name?:</label>
               <%= render :partial => 'layouts/yes_no', :locals =>
                 {:object=> "borrowers",:edit => true, :field=> "displayBorrowerName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="public_display_name_error">&nbsp;</span>
+              <span class="error" id="public_display_name_error">&nbsp;</span>
             </div>
           </td>
 
@@ -210,7 +210,7 @@
 				<% end  %>
 				
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				<%= nf.select(:state_id, @states) %> 
 				</div>
            <% if @borrowers.state_id_string.blank? && @cdetails.state_id_string.blank? %>
            <% display_state_id_string = 'inline' %>
@@ -221,7 +221,7 @@
 
            	<div id="provide_country_state" style="display:#{display_state_id_string};" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string, {:tabindex=>14, :value => @cdetails.state_id_string}) %>
+					<%= nf.text_field(:state_id_string, {:value => @cdetails.state_id_string}) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>
@@ -233,7 +233,7 @@
             <div style="display:inline-block;vertical-align:top;">
               <label >Public Display Address?:</label>
               <%= render :partial => 'layouts/yes_no', :locals => {:object=> "borrowers",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="error">&nbsp;</span>
+              <span class="error" id="public_display_address">&nbsp;</span>
             </div>
           </td>
         </tr>
@@ -370,7 +370,7 @@
 				<% end  %>
 								
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id_alternative, @states, {:tabindex=>14}) %> 
+				<%= nf.select(:state_id_alternative, @states) %> 
 				</div>
 				
 				
@@ -383,7 +383,7 @@
 
            	<div id="provide_country_state" style="display:#{display_state_id_string};" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string_alternative, {:tabindex=>14}) %>
+					<%= nf.text_field(:state_id_string_alternative) %>
 		   </div>
 			<span class="error" id="state_id_alternative_error">&nbsp;</span>
           
@@ -500,33 +500,33 @@
       <div class="column50">
         <div>
           <label>Your Facebook Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Facebook, {:tabindex=>"1"}) %>
+          <%= nf.text_field( :borrower_contact_by_Facebook) %>
           <span class="error">&nbsp;</span>
         </div>
         <div>
           <label>Your LinkedIn Account:</label>
-          <%= nf.text_field( :borrower_contact_by_LinkedIn,{:tabindex=>"3"}) %>
+          <%= nf.text_field( :borrower_contact_by_LinkedIn) %>
           <span class="error">&nbsp;</span>
         </div>
         <div>
           <label>Other Social Media:</label>
-          <%= nf.text_field( :borrower_contact_by_Other_Social_Media,{:tabindex=>"5"}) %>
+          <%= nf.text_field( :borrower_contact_by_Other_Social_Media) %>
           <span class="error">&nbsp;</span>
         </div>
       </div>
       <div class="column50">
         <div>
           <label>Your Twitter Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Twitter,{:tabindex=>"2"}) %>
+          <%= nf.text_field( :borrower_contact_by_Twitter) %>
 
           <span class="error">&nbsp;</span>  </div>
         <div>
           <label>Your Instagram Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Instagram,{:tabindex=>"4"}) %>
+          <%= nf.text_field( :borrower_contact_by_Instagram) %>
           <span class="error">&nbsp;</span>  </div>
         <div>
           <label>Other Social Media Access:</label>
-          <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access, {:tabindex=>"6"}) %>
+          <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access) %>
           <span class="error">&nbsp;</span>
         </div>
       </div>
