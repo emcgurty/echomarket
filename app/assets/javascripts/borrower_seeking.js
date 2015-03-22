@@ -25,25 +25,6 @@ $(document).ready(function() {
 	$("div.form_wrapper").center();
 	$("form").center_form();
 	showFormContact();
-
-	$("select#borrowers_country_id").bind('change', function() {
-
-		var country_text = $("select#borrowers_country_id option:selected").text();
-		if ((country_text != 'United States') || (country_text == 'Please select')) {
-
-			$("div#choose_us_state").css("display", "none");
-			$("div#provide_country_state").css("display", "inline");
-
-
-		} else {
-
-			$("div#provide_country_state").css("display", "none");
-			$("div#choose_us_state").css("display", "inline");
-		}
-
-	});
-	$("select#borrowers_country_id").trigger('change');
-
 		
 	$("input#borrowers_organization_name").bind('change', function() {
 		$("span#organization_name_selection").html($(this).val());
@@ -68,6 +49,50 @@ $(document).ready(function() {
 
 	});
 	$("input[name='borrowers[displayBorrowerOrganizationName]']").trigger('change');
+	
+	
+	$("input[name='borrowers[displayBorrowerAddress]']").bind('change', function() {
+	var	y_n = $("input[name='borrowers[displayBorrowerAddress]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("#borrowers_address_line_1").val() == "") || 
+		($("#borrowers_postal_code").val() == "") || 
+		($("#borrowers_city").val() == "") || 
+		($("#borrowers_country_id option:selected").text() == "Please select")
+	) {
+		
+		$("span#display_address_error").text("Please provide a complete address.");
+		$("span#display_address_error").css("visibility", "visible");
+		
+	} else {
+		$("span#display_address_error").text("");
+		$("span#display_address_error").css("visibility", "hidden");
+	}
+	}
+	});
+	$("input[name='borrowers[displayBorrowerAddress]']").trigger('change');
+	
+
+
+	$("input[name='borrowers[displayBorrowerName]']").bind('change', function() {
+    	var y_n = $("input[name='borrowers[displayBorrowerName]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("#borrowers_first_name").val() == "") || 
+		($("#borrowers_last_name").val() == "") 
+	) {
+		
+		$("span#public_display_name_error").text("Please provide a complete name.");
+		$("span#public_display_name_error").css("visibility", "visible");
+	
+	} else {
+		$("span#public_display_name_error").text("");
+		$("span#public_display_name_error").css("visibility", "hidden");
+	}
+	}
+	});
+$("input[name='borrowers[displayBorrowerName]']").trigger('change');
+
 
 	$("#borrowers_age_18_or_more").bind('change', function() {
 		if ($("#borrowers_age_18_or_more").is(':checked')) {
@@ -353,12 +378,6 @@ $(document).ready(function() {
 	});
 	$("#l2bimage").trigger('change');
 
-	
-	$("input#borrowers_state_id_string").bind('change', function() {
-		$("span#state_id_string_selection").html($(this).val());
-	});
-	$("input#borrowers_state_id_string").trigger('change');
-	
 		
 	
 	$("#borrowers_other_describe_yourself").bind('change', function() {
@@ -540,21 +559,7 @@ $(document).ready(function() {
 	});
 	$("#borrowers_item_count").trigger('change');
 
-	$("select#borrowers_state_id").bind('change', function() {
 
-		state_cmb = $("select#borrowers_state_id option:selected").text();
-		$("span#state_selection").html(state_cmb);
-
-	});
-	$("select#borrowers_state_id").trigger('change');
-
-	$("select#borrowers_country_id").bind('change', function() {
-
-		country_cmb = $("select#borrowers_country_id option:selected").text();
-		$("span#country_selection").html(country_cmb);
-		
-	});
-	$("select#borrowers_country_id").trigger('change');
 
 	$("input#borrowers_address_line_1").bind('change', function() {
 		address1 = $(this).val();
@@ -589,13 +594,62 @@ $(document).ready(function() {
 	});
 	$("#borrowers_postal_code").trigger('change');
 
+	$("#borrowers_postal_code_alternative").bind('change', function() {
+
+		$("span#postal_code_alternative_selection").html($(this).val());
+
+	});
+	$("#borrowers_postal_code_alternative").trigger('change');
+
+
+
+	$("select#borrowers_state_id").bind('change', function() {
+
+		state_cmb = $("select#borrowers_state_id option:selected").text();
+		$("span#state_selection").html(state_cmb);
+
+	});
+	$("select#borrowers_state_id").trigger('change');
+
+
+	$("select#borrowers_state_id").bind('change', function() {
+
+		state_cmb = $("select#borrowers_state_id option:selected").text();
+		$("span#state_selection").html(state_cmb);
+
+	});
+	$("select#borrowers_state_id").trigger('change');
+
+	$("select#borrowers_country_id").bind('change', function() {
+
+		var country_text = $("select#borrowers_country_id option:selected").text();
+		$("span#country_selection").html(country_text);
+		if ((country_text != 'United States') || (country_text == 'Please select')) {
+
+			$("div#choose_us_state").css("display", "none");
+			$("div#provide_country_state").css("display", "inline");
+
+
+		} else {
+
+			$("div#provide_country_state").css("display", "none");
+			$("div#choose_us_state").css("display", "inline");
+		}
+
+	});
+	$("select#borrowers_country_id").trigger('change');
+
+	$("input#borrowers_state_id_string").bind('change', function() {
+		$("span#state_id_string_selection").html($(this).val());
+	});
+	$("input#borrowers_state_id_string").trigger('change');
+	
+	
 	$("select#borrowers_state_id_alternative").bind('change', function() {
 
 		var tmpID = $("select#borrowers_state_id_alternative option:selected").val();
 		$("span#state_alternative_selection").html($("select#borrowers_state_id_alternative option:selected").text());
-	
-
-	});
+		});
 	$("select#borrowers_state_id_alternative").trigger('change');
 
 	$("select#borrowers_country_id_alternative").bind('change', function() {
@@ -631,12 +685,6 @@ $(document).ready(function() {
 	});
 	$("#borrowers_city_alternative").trigger('change');
 
-	$("#borrowers_postal_code_alternative").bind('change', function() {
-
-		$("span#postal_code_alternative_selection").html($(this).val());
-
-	});
-	$("#borrowers_postal_code_alternative").trigger('change');
 
 });
 
@@ -864,18 +912,47 @@ function showBorrowersContactPreferences() {
 
 function validateContactPreferences() {
 	var foundInvalid = true;
-
+    var y_n = "";
 	$("span.error").css("visibility", "hidden");
-	var y_n = $("input[name='borrowers[displayBorrowerOrganizationName]']:checked").val();
+	
+	y_n = $("input[name='borrowers[displayBorrowerOrganizationName]']:checked").val();
 	if ((y_n == 1) && ($("#borrowers_organization_name").val() == "")) {
 		$("span#organization_name_error").text("Please provide an organization name.");
 		$("span#organization_name_error").css("visibility", "visible");
 		foundInvalid = false;
-	} else {
-		$("span#organization_name_error").text("");
-		$("span#organization_name_error").css("visibility", "hidden");
-	}
+	} 
 
+	y_n = $("input[name='borrowers[displayBorrowerAddress]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("#borrowers_address_line_1").val() == "") || 
+		($("#borrowers_postal_code").val() == "") || 
+		($("#borrowers_city").val() == "") || 
+		($("#borrowers_country_id option:selected").text() == "Please select")
+	) {
+		
+		$("span#display_address_error").text("Please provide a complete address.");
+		$("span#display_address_error").css("visibility", "visible");
+		foundInvalid = false;
+	} 
+	}
+	
+	
+	y_n = $("input[name='borrowers[displayBorrowerName]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("#borrowers_first_name").val() == "") || 
+		($("#borrowers_last_name").val() == "") 
+	) {
+		
+		$("span#public_display_name_error").text("Please provide a complete name.");
+		$("span#public_display_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} 
+	}
+		
+	
+	
 	if ($("#borrowers_describe_yourself option:selected").text() == "Please select") {
 		$("#describe_yourself_combo_error").text("Please chooose an option to describe yourself.");
 		$("#describe_yourself_combo_error").css("visibility", "visible");
@@ -937,6 +1014,14 @@ function validateContactPreferences() {
 		foundInvalid = false;
 	}
 
+
+alert(( ($("#borrowers_country_id option:selected").text() == "Please select")   &&  ($("input#borrowers_state_id_string").val() == "")));
+	if ( ($("#borrowers_country_id option:selected").text() == "Please select")   &&  ($("input#borrowers_state_id_string").val() == "")) {
+		$("#state_error").text("Please provide a Region.");
+		$("#state_error").css("visibility", "visible");
+		foundInvalid = false;
+	}
+	
 	if ((($("#borrowers_state_id option:selected").text() == "Please select") || ($("#borrowers_state_id option:selected").val() == '')) && ($("#borrowers_country_id option:selected").text() == "United States")) {
 
 		$("#state_error").text("Please select a State.");

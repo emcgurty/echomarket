@@ -124,7 +124,7 @@
               <label>Public Display Name?:</label>
               <%= render :partial => 'layouts/yes_no', :locals =>
                 {:object=> "borrowers",:edit => true, :field=> "displayBorrowerName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="public_display_name_error">&nbsp;</span>
+              <span class="error" id="public_display_name_error">&nbsp;</span>
             </div>
           </td>
 
@@ -164,13 +164,13 @@
         <tr class="even">
           <td style="width:25%;">
 
-            <label>County/Province:&nbsp;<span class="max_length">(20)</span></label>
+            <label>County:&nbsp;<span class="max_length">(20)</span></label>
             <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %>
             <span class="error">&nbsp;</span>
 
           </td>
              <td style="width:25%;">
-            <label>Country:</label>
+            <label>Country:<span class="required_fields">&nbsp;&nbsp;*</span></label>
             <% unless @borrowers.country_id.blank? %>
               <% @current_selected = @borrowers.country_id %>
             <% else %>
@@ -193,7 +193,7 @@
            <% end %>
              
             <div id="choose_us_state"  style="display:#{display_state_id};" >
-				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
 				<% unless @borrowers.state_id.blank? %>
 				<% current_selected = @borrowers.state_id %>
 				<% else %>
@@ -209,7 +209,7 @@
            <% display_state_id_string = 'none' %>
            <% end %>
            	<div id="provide_country_state" style="display:#{display_state_id_string};" >
-					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
 					
 				</div>
@@ -222,7 +222,7 @@
             <div style="display:inline-block;vertical-align:top;">
               <label >Public Display Address?:</label>
               <%= render :partial => 'layouts/yes_no', :locals => {:object=> "borrowers",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="error">&nbsp;</span>
+              <span class="error" id="display_address_error">&nbsp;</span>
             </div>
           </td>
         </tr>
