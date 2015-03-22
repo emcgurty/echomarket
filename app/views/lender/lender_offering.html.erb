@@ -128,7 +128,7 @@
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Name?:</label>
 					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
-					<span class="public_display_name_error">&nbsp;</span>
+					<span class="error" id="public_display_name_error">&nbsp;</span>
 				</div></td>
 
 			</tr>
@@ -220,7 +220,7 @@
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Address?:</label>
 					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
-					<span class="error">&nbsp;</span>
+					<span class="error" id="display_address_error">&nbsp;</span>
 				</div></td>
 			</tr>
 		</table>

@@ -116,6 +116,69 @@ $(document).ready(function() {
     });
     $("input[name='lenders[displayLenderOrganizationName]']").trigger('change');
 
+   	$("input[name='lenders[displayLenderAddress]']").bind('change', function() {
+	var	y_n = $("input[name='lenders[displayLenderAddress]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("#lenders_address_line_1").val() == "") || 
+		($("#lenders_postal_code").val() == "") || 
+		($("#lenders_city").val() == "") || 
+		($("#lenders_country_id option:selected").text() == "Please select")
+	) {
+		
+		$("span#display_address_error").text("Please provide a complete address.");
+		$("span#display_address_error").css("visibility", "visible");
+		
+	} else {
+		$("span#display_address_error").text("");
+		$("span#display_address_error").css("visibility", "hidden");
+	}
+	}
+	});
+	$("input[name='lenders[displayLenderAddress]']").trigger('change');
+	
+
+
+	$("input[name='lenders[displayLenderName]']").bind('change', function() {
+    	var y_n = $("input[name='lenders[displayLenderName]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("input#lenders_first_name").val() == "") || 
+		($("input#lender_last_name").val() == "") 
+	) {
+		
+		$("span#public_display_name_error").text("Please provide a complete name.");
+		$("span#public_display_name_error").css("visibility", "visible");
+	
+	} else {
+		$("span#public_display_name_error").text("");
+		$("span#public_display_name_error").css("visibility", "hidden");
+	}
+	}
+	});
+$("input[name='lenders[displayLenderName]']").trigger('change');
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	///
+    	
+    	
     	
 	$("input#lenders_state_id_string").bind('change', function() {
 		$("span#state_id_string_selection").html($(this).val());
@@ -1122,9 +1185,9 @@ function showBorrowersContactPreferences() {
 
 function validateContactPreferences() {
     var foundInvalid = true;
-
+    var y_n = "";
     $("span.error").css("visibility", "hidden");
-    var y_n = $("input[name='lenders[displayLenderOrganizationName]']:checked").val();
+    y_n = $("input[name='lenders[displayLenderOrganizationName]']:checked").val();
     if ((y_n == 1) && ($("#lenders_organization_name").val() == "")) {
         $("span#organization_name_error").text("Please provide an organization name.");
         $("span#organization_name_error").css("visibility", "visible");
@@ -1133,6 +1196,37 @@ function validateContactPreferences() {
         $("span#organization_name_error").text("");
         $("span#organization_name_error").css("visibility", "hidden");
     }
+    
+    
+  	y_n = $("input[name='lenders[displayLenderAddress]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("input#lenders_address_line_1").val() == "") || 
+		($("input#lenders_postal_code").val() == "") || 
+		($("input#lenders_city").val() == "") || 
+		($("select#lenders_country_id option:selected").text() == "Please select")
+	) {
+		
+		$("span#display_address_error").text("Please provide a complete address.");
+		$("span#display_address_error").css("visibility", "visible");
+		foundInvalid = false;
+	} 
+	}
+	
+	
+	y_n = $("input[name='lenders[displayLenderName]']:checked").val();
+	if (y_n == 1) {
+	if (
+		($("input#lenders_first_name").val() == "") || 
+		($("input#lenders_last_name").val() == "") 
+	) {
+		
+		$("span#public_display_name_error").text("Please provide a complete name.");
+		$("span#public_display_name_error").css("visibility", "visible");
+		foundInvalid = false;
+	} 
+	}  
+    
 
     if  ($("#lenders_describe_yourself option:selected").text() == "Please select") {
         $("#describe_yourself_combo_error").text("Please chooose an option to describe yourself.");
