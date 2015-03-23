@@ -11,7 +11,9 @@
     <% @borrowers = @borrowers[0] %>
   <% end  %>
   <% if not @borrowers.blank?  %>
-    <% unless session[:reuse] %>
+    <% if session[:reuse] %>
+      <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
+    <% else %>
       <%= nf.hidden_field( :borrower_item_id) %>
     <% end %>
     <%= nf.hidden_field( :is_active) %>
@@ -295,7 +297,7 @@
       <% unless @borrowers.useWhichContactAddress.blank? %> <% if @borrowers.useWhichContactAddress != -1 %>
           <% display_div =  'block'%> <% end %>
       <% end %>
-      <div id="postalWithContactAddress" style="display: <%= display_div %>;">
+      <div id="postalWithContactAddress" style="display: block;">
         <%= render :partial => 'layouts/with_contact_address', :locals =>
           {:object => "borrowers", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'borrowers');"} %>
       </div>
@@ -315,13 +317,7 @@
       </div>
     </div>
 
-    <% display_div = 'none' %>
-    <% unless @borrowers.useWhichContactAddress.blank? %>
-      <% if @borrowers.useWhichContactAddress == 1 || @borrowers.useWhichContactAddress == 2 %>
-        <% display_div =  'inline'%>
-      <% end %>
-    <% end %>
-    <div id="table_alternative_address_input" style="float:left;display:<%= display_div %>;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
+    <div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
       <label id="personal" >Provide your alternative contact address here:</label>
       <br />
       <table class="alternative_address_table" id="table_address_input" >
@@ -353,6 +349,18 @@
           </td>
         </tr>
         <tr>
+              <td>
+            <label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label>
+            <% unless @borrowers.country_id_alternative.blank? %>
+              <% @current_selected = @borrowers.country_id_alternative %>
+            <% else %>
+              <% @current_selected = '99' %>
+            <% end  %>
+            <% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
+            <%= nf.select(:country_id_alternative, @countries) %>
+            <span class="error" id="country_alternative_error">&nbsp;</span>
+          </td>
+         
           <td>
           
      	   <% if @borrowers.state_id_string_alternative.blank?  %>
@@ -390,25 +398,13 @@
           
           
           </td>
-          <td>
-            <label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label>
-            <% unless @borrowers.country_id_alternative.blank? %>
-              <% @current_selected = @borrowers.country_id_alternative %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-            <% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
-            <%= nf.select(:country_id_alternative, @countries) %>
-            <span class="error" id="country_alternative_error">&nbsp;</span>
-          </td>
+     
           <td>
             <label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
             <%= nf.text_field( :postal_code_alternative,  :maxlength=>15, :size=>15) %>
             <span class="error" id="postal_code_alternative_error">&nbsp;</span>
           </td>
-          <td>
-            &nbsp;
-          </td>
+          <td>            &nbsp;          </td>
 
         </tr>
 

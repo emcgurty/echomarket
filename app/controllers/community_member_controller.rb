@@ -28,7 +28,7 @@ class CommunityMemberController < ApplicationController
     @community_members = CommunityMembers.new(params[:community_members])
     
     respond_to do |format|
-      puts @community_memebers.errors
+      
       if @community_members.save && @community_members.errors.empty? 
         if params[:commit] == 'Add'
           format.html { redirect_to :action=>'m_list' }
