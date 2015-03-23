@@ -4,6 +4,7 @@
     font-size:14px;
     width:auto;
     display:inline;
+    border-bottom:#4C4C4C dashed 1px;
   }
 
   label.readonly_label {
@@ -58,8 +59,11 @@
   <label class="readonly_label" >As a borrower, how would you describe yourself?&nbsp;<span class="readonly_span" id="describe_yourself" >Required Description</span></label>
 
   <br />
-  <label class="readonly_label">Organization Name:&nbsp;<span class="readonly_span" id="organization_name_selection">Organization Name Placeholder</span>&nbsp;&nbsp;
-    Display Organization Name:&nbsp;<span class="readonly_span" id="displayBorrowerOrganizationName_selection">Indifferent</span></label>
+  <label class="readonly_label">Organization Name:&nbsp;
+  <span class="readonly_span" id="organization_name_selection">Organization Name Placeholder</span>&nbsp;&nbsp;</label>
+  <label class="readonly_label">Display Organization Name:&nbsp;
+  <span class="readonly_span" id="displayBorrowerOrganizationName_selection">Indifferent</span></label>
+  
 
   <br />
   <label class="readonly_label">Your Name:&nbsp;
@@ -70,20 +74,33 @@
   <br />
 
 
-  <label class="readonly_label">Address Lines:&nbsp;
+    <label class="readonly_label">Address Lines:&nbsp;
     <span class="readonly_span" id="address_1_selection">Required Address Line 1</span>&nbsp;&nbsp;
     <span class="readonly_span" id="address_2_selection">Address Line 2 Placeholder</span>&nbsp;&nbsp;</label>
-  	<label class="readonly_label">City;County;Region;State:&nbsp;
-    <span class="readonly_span" id="city_selection">Required City; &nbsp;</span>
-    <span class="readonly_span" id="province_selection">County Placeholder;&nbsp;</span>
-    <span class="readonly_span" id="state_id_string_selection">Region Placeholder;&nbsp;</span>
-    <span class="readonly_span" id="state_selection">State Placeholder</span></label>
-  <br />
-
-  <label class="readonly_label">Country/Postal Code:&nbsp;
-    <span class="readonly_span" id="country_selection">Required Country;&nbsp;</span>
-    <span class="readonly_span" id="postal_code_selection">Required Postal Code</span>
-    Public Display Address?:&nbsp;<span class="readonly_span" id="display_address_selection">Indifferent</span></label>
+  	
+  	<label class="readonly_label">City:&nbsp;
+    <span class="readonly_span" id="city_selection">Required City; &nbsp;</span></label>
+    
+   	<label class="readonly_label">County:&nbsp;
+    <span class="readonly_span" id="province_selection">County Placeholder;&nbsp;</span></label>
+     
+     <label class="readonly_label">US State:&nbsp; 
+   	<span class="readonly_span" id="us_state_selection">&nbsp;</span></label>
+   
+   
+   
+    <label class="readonly_label">Region:&nbsp; 
+   	<span class="readonly_span" id="state_id_string_selection">Region Placeholder;&nbsp;</span></label>
+    
+    <label class="readonly_label">Country:&nbsp; 
+    <span class="readonly_span" id="country_selection">Required Country;&nbsp;</span></label>
+    
+    <label class="readonly_label">Postal Code:&nbsp; 
+    <span class="readonly_span" id="postal_code_selection">Required Postal Code</span></label>
+    
+     <label class="readonly_label">Public Display Address?:&nbsp;
+     <span class="readonly_span" id="display_address_selection">Indifferent</span></label>
+     
   <br />
   <label class="readonly_label">Home Phone:&nbsp;<span class="readonly_span" id="home_phone_selection">Home Phone Placeholder</span>&nbsp;&nbsp;
     Public display your home phone?&nbsp;<span class="readonly_span" id="display_home_phone_selection">&nbsp;No</span></label><br />
@@ -107,22 +124,33 @@
 
   <div id="contactAddressWhich" style="display:none;">
     <div id="contactAddressOnly" style="display:none;">
-      <label class="readonly_label" style="color:indigo;">  Your above Contact Address</label>
+      <label class="readonly_label" style="color:indigo;">Your above Contact Address</label>
     </div>
     <div id="contactAddressWithAlternative" style="display:none;">
-  <label class="readonly_label">Address Line(s):&nbsp;
-    <span class="readonly_span" id="address_1_alternative_selection">Alt Address 1 Placeholder</span>&nbsp;&nbsp;
-    <span  class="readonly_span"  id="address_2_alternative_selection">Alt Address 2 Placeholder</span>&nbsp;&nbsp;</label>
-
-  <label class="readonly_label">City;County;Region;State:&nbsp;
-    <span class="readonly_span" id="city_alternative_selection">Alt City Placeholder</span>;&nbsp;&nbsp;
-    <span class="readonly_span" id="province_alternative_selection">Alt County Placeholder</span>;&nbsp;&nbsp;
-    <span class="readonly_span" id="state_id_string_alternative_selection">Alt Region Placeholder</span>;&nbsp;&nbsp;
-    <span class="readonly_span" id="state_alternative_selection">Alt State Placeholder</span></label>
-  <br />
-  <label class="readonly_label">Country; Postal Code:&nbsp;
-    <span class="readonly_span" id="country_alternative_selection">Alt Country Placeholder;&nbsp;</span>
-    <span class="readonly_span" id="postal_code_alternative_selection">Alt Postal Code Placeholder</span></label>
+   <label class="readonly_label">Address Lines:&nbsp;
+    <span class="readonly_span" id="address_1_alternative_selection">Required Address Line 1</span>&nbsp;&nbsp;
+    <span class="readonly_span" id="address_2_alternative_selection">Address Line 2 Placeholder</span>&nbsp;&nbsp;</label>
+  	
+  	<label class="readonly_label">City:&nbsp;
+    <span class="readonly_span" id="city_alternative_selection">Required City; &nbsp;</span></label>
+    
+   	<label class="readonly_label">County:&nbsp;
+    <span class="readonly_span" id="province_alternative_selection">County Placeholder;&nbsp;</span></label>
+     
+     <label class="readonly_label">US State:&nbsp; 
+   	<span class="readonly_span" id="us_state_alternative_selection">&nbsp;</span></label>
+   
+   
+   
+    <label class="readonly_label">Region:&nbsp; 
+   	<span class="readonly_span" id="state_id_string_alternative_selection">Region Placeholder;&nbsp;</span></label>
+    
+    <label class="readonly_label">Country:&nbsp; 
+    <span class="readonly_span" id="country_alternative_selection">Required Country;&nbsp;</span></label>
+    
+    <label class="readonly_label">Postal Code:&nbsp; 
+    <span class="readonly_span" id="postal_code_alternative_selection">Required Postal Code</span></label>
+    
     </div>
   </div>
 

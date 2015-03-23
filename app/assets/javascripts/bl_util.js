@@ -7,7 +7,7 @@ function noNotContactAddress(myThis, whichType) {
         $("div#table_alternative_address_input").css("display", "inline-table");
 
     } else {
-        $("div#table_alternative_address_input").css("display", "none");
+        $("div#table_alternative_address_input").css("display", "inline-table");
     }
 }
 
