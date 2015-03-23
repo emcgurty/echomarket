@@ -46,18 +46,17 @@ class CommunityController < ApplicationController
   # PUT /communities/1.json
   def update
     session[:notice] = ''
-    @communities = Communities.find(params[:commuity_id])
-
-    respond_to do |format|
-      if @communities.update_attributes(params[:communities])
-        session[:notice] = "Your updates have completed successfully."
-        format.html { redirect_to :controller=> "home", :action => "items_listing"}
-
+    @communities = Communities.find(params[:community_id])
+    @communities.update_attributes(params[:communities])
+       respond_to do |format|
+      if @communities.save
+        session[:notice] = "Your updates were successful"
+        format.html { redirect_to communities_edit_url }
       else
-        format.html { render action: "edit" }
-
+        session[:notice] = "Failure in updating"
+        format.html { redirect_to communities_edit_url }  
       end
-    end
+    end    
   end
 
   # DELETE /communities/1

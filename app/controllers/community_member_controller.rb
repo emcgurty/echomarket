@@ -79,11 +79,18 @@ class CommunityMemberController < ApplicationController
   # POST /community_members
   # POST /community_members.json
   def update_row
-        
+    puts "UPdate Row"
+    puts     params[:id]
+    puts "params"
+    puts params[:community_members].to_yaml
     @cm = CommunityMembers.find(params[:id])
-    @saved_cm = @cm.update_attributes(params[:community_members])
+    @cm.update_attributes(params[:community_members])
+    @cm_saved = @cm.save
+    puts "cm saved?"
+    puts @cm_saved
+    
     respond_to do |format|
-      if @saved_cm
+      if @cm_saved
         if params[:view] == 'm_list'
           format.html { redirect_to :action=>'m_list'}
         else

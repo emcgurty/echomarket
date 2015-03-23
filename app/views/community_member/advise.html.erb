@@ -94,7 +94,7 @@
 			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
 			
 			<tr class="<%= rowClass %>" >
-
+			<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "update_row", :id=>@community_members[rowCount][:community_member_id], :view=> 'm_list'}, :html => {:class=>"register_community", :id=>"register_community"} do |lf| %>
 				<td width= "20%"> <%= nf.text_field :first_name, {:size=>24}  %></td>
 				<td width='5%'><%= nf.text_field :mi,  {:size=>1} %></td>
 				<td width='20%'><%= nf.text_field (:last_name), {:size=>24} %></td>
@@ -104,17 +104,19 @@
 			    <%= nf.hidden_field :community_id %>
 				
 				<% if  @community_members[rowCount][:is_creator] == 1 %>
-					<%= link_to "Update Member", community_member_update_row_url(@community_members[rowCount][:community_member_id]) %>
+					<%= lf.submit "Update Member" %>
 				    <%= nf.hidden_field :is_creator, :value => 1 %>
 				<% else %>
 					<%= link_to "Remove Member", community_member_remove_url(@community_members[rowCount][:community_member_id]) %>
 					<br />
 					<%= nf.hidden_field :is_creator, :value => 0 %>
-					<%= link_to "Update Member", community_member_update_row_url(@community_members[rowCount][:community_member_id]) %> 
+					<%= lf.submit "Update Member" %> 
 				<% end%>
-				
+				<% end%>
 				 </td>
 			</tr>
+			
+			
 			<% rowCount = rowCount + 1 %>
 			
 
