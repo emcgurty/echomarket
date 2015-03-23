@@ -2,16 +2,29 @@ class BorrowerController < ApplicationController
 
  def b_list
      session[:background] = true
-end
+ end
 
   def borrower_item_detail
-      session[:background] = true
-    @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
- end
+    session[:background] = true
+    unless params[:id].blank?
+        session[:reuse] = (params[:commit] == 'reuse' ? true : false)
+        @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
+        @borrowers = Borrowers.new if @borrowers.blank?
+      else
+        @borrowers = Borrowers.new
+      end
+  end
  
    def community_borrower_item_detail
-       session[:background] = true
-    @borrowers = Borrowers.find(:first, :readonly => true, :conditions => ["borrower_item_id = ?", params[:id]])
+      session[:background] = true
+     unless params[:id].blank?
+        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
+        @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
+        @borrowers = Borrowers.new if @borrowers.blank?
+      else
+        @borrowers = Borrowers.new
+      end
+   
  end
 
   def borrower_history
@@ -19,10 +32,16 @@ end
     session[:background] = true
     session[:notice] = ""
     @which_view = (session[:community_id].blank? ? "borrower_seeking" : "community_borrower_seeking" )
-     unless (params[:commit].blank?)
-      if params[:commit] == "edit"
+    puts "asdasdasdasdasdasdasdsd"
+    puts params['commit']
+    
+     unless (params['commit'].blank?)
+      if params['commit'] == "edit"
         redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
-      elsif params[:commit] == "reuse"
+        session[:reuse] = false
+      elsif params['commit'] == "reuse"
+        puts "request reuse"
+        session[:reuse] = true
         redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
       else
         @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
@@ -38,7 +57,7 @@ end
 
   def delete_borrower_record
     session[:background] = true
-    if params[:commit] == "delete"
+    if params['commit'] == "delete"
       @l = Borrowers.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
       @l.save
       @ld  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
@@ -253,22 +272,14 @@ end
             @img.update_attributes(@myupdatehash)
             @img.save
           end
-
-
           redirect_to  :action => 'borrower_history', :commit => ""
         else
           return false
         end
       end
     else
-      unless params[:id].blank?
-        session[:reuse] = (params[:commit] == 'reuse' ? true : false)
-        @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
-        @borrowers = Borrowers.new if @borrowers.blank?
-      else
-        @borrowers = Borrowers.new
-      end
-
+      session[:notice]  = "Error in updating borrower record"
+      redirect_to home_items_listing_url
     end
   end
 

@@ -11,7 +11,9 @@
     <% @borrowers = @borrowers[0] %>
   <% end  %>
   <% if not @borrowers.blank?  %>
-    <% unless session[:reuse] %>
+    <% if session[:reuse] %>
+      <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
+    <% else %>
       <%= nf.hidden_field( :borrower_item_id) %>
     <% end %>
     <%= nf.hidden_field( :is_active) %>

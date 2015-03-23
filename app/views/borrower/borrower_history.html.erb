@@ -50,9 +50,9 @@
             </td>
             <td >
 
-              <%= link_to "Edit", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>isq.borrower_item_id  %><br style="margin:0;"/>
-              <%= link_to "Reuse", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> isq.borrower_item_id %><br style="margin:0;"/>
-              <%= link_to "Delete", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>isq.borrower_item_id} ,
+              <%= link_to "EDIT", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>isq.borrower_item_id  %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "REUSE", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> isq.borrower_item_id %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "DELETE", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>isq.borrower_item_id} ,
                 
                  {:confirm => "Are you sure you wish to delete this record?"}  %>
 
