@@ -29,24 +29,27 @@ class LenderController < ApplicationController
 
   def lender_history
 
+    ###  looking for :id and/or :commit: This method delegates to _offering if :commit
     session[:background] = true
     session[:notice] = ""
     @which_view = (session[:community_id].blank? ? "lender_offering" : "community_lender_offering" )
-    unless (params['commit'].blank?)
-      if params['commit'] == "edit"
+   
+    if !(params[:commit].blank?) && params[:id]
+         if params['commit'] == "edit"
           session[:reuse] = false
           redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
-      elsif params['commit'] == "reuse"
-       session[:reuse] = true   
-        redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
-      else
-         @lenders  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
-      end
-    else
-       @lenders  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
-       session[:notice]  = "Echo Market could not find your lender history, prehaps it has items not yet approved. Here you may offer a new item to lend."
-       redirect_to  :controller => "lender", :action => @which_view, :id=>session[:user_id]  if @lenders.blank?
-    end
+         elsif params['commit'] == "reuse"
+          session[:reuse] = true   
+          redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
+        end  
+    else  
+        @lenders = Lenders.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
+        if @lenders.blank?
+          session[:notice]  = "Echo Market could not find your lender history, prehaps it has items not yet approved. Here you may seek a new item to lend."
+          redirect_to  :controller => "lender", :action => @which_view , :id => params[:id]
+        end
+   end     
+        
   end
 
  def delete_lender_record
@@ -65,16 +68,19 @@ class LenderController < ApplicationController
   end
 
   def lender_offering
-    session[:notice] = ''
+    
     if params[:id].blank?
     @lenders = Lenders.new
     else
-      @lenders = Lenders.find(params[:id])
+      @lenders = Lenders.find(:all, :conditions => ["user_id = ?", params[:id]])
+      if @lenders.blank?
+        @lenders = Lenders.new
+      end
     end
   end
   
   def community_lender_offering
-    session[:notice] = ''
+   
     if params[:id].blank?
     @lenders = Lenders.new
     else

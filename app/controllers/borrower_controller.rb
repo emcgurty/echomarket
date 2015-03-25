@@ -27,29 +27,30 @@ class BorrowerController < ApplicationController
       end
  end
 
-  def borrower_history
-puts "session user id"
-puts session[:user_id]
-puts "end session user id"
 
+  def borrower_history
+
+    ###  looking for :id and/or :commit: This method delegates to _offering if :commit
     session[:background] = true
     session[:notice] = ""
     @which_view = (session[:community_id].blank? ? "borrower_seeking" : "community_borrower_seeking" )
-     unless (params[:commit].blank?)
-      if params[:commit] == "edit"
-        session[:reuse] = false
-        redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
-      elsif params[:commit] == "reuse"
-        session[:reuse] = true
-        redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
-      else
-        @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
-      end
-    else
-      @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
-      session[:notice]  = "Echo Market could not find your borrower history, prehaps it has items not yet approved. Here you may seek a new item to borrow."
-      redirect_to  :controller => "borrower", :action => @which_view, :id=>session[:user_id]  if @borrowers.blank?
-    end
+   
+    if !(params[:commit].blank?) && params[:id]
+         if params['commit'] == "edit"
+          session[:reuse] = false
+          redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
+         elsif params['commit'] == "reuse"
+          session[:reuse] = true   
+          redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
+        end  
+    else  
+        @borrowers = Borrowers.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
+        if @borrowers.blank?
+          session[:notice]  = "Echo Market could not find your borrower history, prehaps it has items not yet approved. Here you may seek a new item to borrorer."
+          redirect_to  :controller => "borrower", :action => @which_view , :id => params[:id]
+        end
+   end     
+        
   end
 
   def delete_borrower_record
@@ -59,7 +60,7 @@ puts "end session user id"
       @l.save
       @ld  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       unless  @ld.blank?
-        redirect_to :action => "borrower_history", :commit => "NA", :id=> session[:user_id]  
+        redirect_to :action => "borrower_history", :id=> session[:user_id]  
       else
         session[:notice] = "Seems that you have deleted all your records.  Hope it is because you were able to borrow an item."
         redirect_to :controller => "home", :action => "items_listing"
@@ -68,7 +69,7 @@ puts "end session user id"
   end
 
   def borrower_seeking
-    session[:notice] = ''
+    
     if params[:id].blank?
     @borrowers = Borrowers.new
     else
@@ -77,7 +78,7 @@ puts "end session user id"
   end
   
   def community_borrower_seeking
-    session[:notice] = ''
+    
      if params[:id].blank?
         @borrowers = Borrowers.new
     else
@@ -171,7 +172,7 @@ puts "end session user id"
               :is_active => 1)
             @img.save
           end
-          redirect_to :action => 'borrower_history', :commit => "NA"
+          redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
         end
@@ -266,7 +267,7 @@ puts "end session user id"
             @img.update_attributes(@myupdatehash[0])
             @img.save
           end
-          redirect_to  :action => 'borrower_history', :commit => "NA"
+          redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
         end

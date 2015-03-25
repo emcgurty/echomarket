@@ -285,7 +285,7 @@
 	</div>
 
 	<% display_div = 'none' %>
-	<% unless @borrowers.useWhichContactAddress.blank? %>
+	<% unless @lenders.useWhichContactAddress.blank? %>
 	<% if @lenders.useWhichContactAddress == 1 || @lenders.useWhichContactAddress == 2 || @lenders.useWhichContactAddressAlternative == 1 %>
 	<% display_div =  'block'%>
 	<% end %>
