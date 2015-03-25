@@ -1,24 +1,9 @@
 class CommunityMemberController < ApplicationController
-  def advise
-    session[:notice] = ''
-    session[:background] = true
-    if params[:id].blank?
-      @community_members = CommunityMembers.new()
-
-    else
-      session[:community_id] = params[:id]
-      @community_members = CommunityMembers.find(:all)
-
-    end
-
-    respond_to do |format|
-      format.html # new.html.erb
-    end
-  end
-
+ 
   def m_list
-    session[:notice] = ''
-    @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+      session[:notice] = ''
+      session[:background] = true
+      @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
 
   # POST /community_members
@@ -32,8 +17,7 @@ class CommunityMemberController < ApplicationController
       if @community_members.save && @community_members.errors.empty? 
         if params[:commit] == 'Add'
           format.html { redirect_to :action=>'m_list' }
-        else
-         format.html { redirect_to :action=>'advise' , :id => @community_members.community_id}
+       
         end
       
       else
@@ -46,15 +30,20 @@ class CommunityMemberController < ApplicationController
  # POST /community_members
   # POST /community_members.json
   def add
+  #Parameters: {"utf8"=>"√", "authenticity_token"=>"8b3H95PyT131qgJxSIR9+19VxS9A4MyV579W9KywLvU=", "community_members"=>{"first_name_h"=>"Liz", "mi_h"=>"m", "last_name_h"=>"mcgurty", "alias_h"=>"", "first_name"=>"d", "mi"=
+  #>"m", "last_name"=>"l", "alias"=>"", "is_creator"=>"0"}, "commit"=>"Add", "view"=>"m_list"}
+    myaddhash = Hash.new
+    myaddhash = [:community_id => session[:community_id], :first_name => params[:community_members][:first_name], :mi=>params[:community_members][:mi], :last_name => params[:community_members][:last_name], :alias=> params[:community_members][:alias]]
 
-    @community_members = CommunityMembers.new(params[:community_members])
+    @community_members = CommunityMembers.new(myaddhash[0])
 
     respond_to do |format|
       if @community_members.save
-        format.html { redirect_to :action=>'edit'}
+        format.html { redirect_to :action=>'m_list'}
 
       else
-        format.html { render action: "new" }
+        session[:notice]  = "Echo Market error in adding new community mmber."
+        format.html { redirect_to home_items_listing_url }
 
       end
     end
@@ -68,56 +57,35 @@ class CommunityMemberController < ApplicationController
     @community_members.destroy
     respond_to do |format|
       if @community_members.save
-        format.html { redirect_to :action=>'advise' , :id => @community_members.community_id}
+        format.html { redirect_to :action=>'m_list' , :id => @community_members.community_id}
       else
-        format.html { render action: "new" }
+        session[:notice] = 'Echo Market application error in removing a member'
+        format.html { redirect home_items_listin_url}
 
       end
     end
   end
 
-  # POST /community_members
-  # POST /community_members.json
-  def update_row
-    puts "UPdate Row"
-    puts     params[:id]
-    puts "params"
-    puts params[:community_members].to_yaml
-    @cm = CommunityMembers.find(params[:id])
-    @cm.update_attributes(params[:community_members])
-    @cm_saved = @cm.save
-    puts "cm saved?"
-    puts @cm_saved
-    
-    respond_to do |format|
-      if @cm_saved
-        if params[:view] == 'm_list'
-          format.html { redirect_to :action=>'m_list'}
-        else
-          format.html { redirect_to :action=>'advise' , :id => session[:community_id]}
-        end    
-      else
-        format.html { render action: "new" }
-
-      end
-    end
-  end
-
+  
   # PUT /community_members/1
-  # PUT /community_members/1.json
-  def update
-    @community_member = CommunityMember.find(params[:id])
+  # PUT /community_members/1.json :  :       /*  'community_member/update_row/(:f)/(:m)/(:la)/(:al)/(:ci)' */
+  def update_row
+    @community_member = CommunityMembers.find(params[:ci])
+    unless @community_member.blank?
+      myupdatehash = Hash.new
+      myupdatehash = [:first_name => params[:fi], :mi => params[:mi],:last_name => params[:la], :alias => params[:al], :is_creator => 0, :date_updated=> Time.now]
+    end
 
     respond_to do |format|
-      if @community_member.update_attributes(params[:community_member])
-        format.html { redirect_to @community_member, notice: 'Community member was successfully updated.' }
-
+      if @community_member.update_attributes(myupdatehash[0])
+        format.html { redirect_to :action=>'m_list' , :id => @community_members.community_id}
       else
+        session[:notice] = "The Echo Market Application encoutered an error in updating you selected Community Member row."        
         format.html { render action: "edit" }
-
       end
     end
   end
+
 
   # DELETE /community_members/1
   # DELETE /community_members/1.json

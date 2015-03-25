@@ -115,7 +115,8 @@ class CommunityController < ApplicationController
         session[:user_alias] = (@cm_l.first_name.blank? ? @cm_l.alias : @cm_l.first_name + " " + (@cm_l.mi.blank? ? "": @cm_l.mi) + " " + @cm_l.last_name)
         session[:notice] = @current_user.community_name + ", you have already activated your registration, and you are now logged in."
       end
-      redirect_to :controller=> "community_member", :action=>"advise", :id => @cm.community_id
+        session[:advise] = false
+        redirect_to :controller=> "community_member", :action=>"m_list", :id => @cm.community_id
     else
       session[:notice] = "Seems that you may have not properly copied the Activation url provided in your email.  Please try again."
       redirect_to :controller=> "home", :action=>"items_listing"

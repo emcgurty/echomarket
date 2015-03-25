@@ -69,6 +69,29 @@ $(document).ready(function() {
 	
 });
 
+function submitUpdateMember(rdt, c_id)  {
+	 	
+	    $("[id*='_h']").trigger('change');
+	    /*  'community_member/update_row/(:f)/(:m)/(:la)/(:al)/(:ci)' */
+		var queryString = "/community_member/update_row/" + $("span#thisFirstName" + rdt).text() +"/" + $("span#thisMI" + rdt).text() + "/" + $("span#thisLastName" + rdt).text() +"/" + $("span#thisAlias" + rdt).text() +"/" + c_id;
+		window.location.replace(queryString);
+}
+
+
+function update_row(myThis,rct) {
+	
+
+	if (myThis.id == "community_members_first_name_h") {
+		$("span#thisFirstName"+rct).text(myThis.value);	
+	}  else	if (myThis.id == "community_members_mi_h") {
+		$("span#thisMI"+rct).text(myThis.value);	
+	}  else	if (myThis.id == "community_members_last_name_h") {
+		$("span#thisLastName"+rct).text(myThis.value);	
+	}  else	if (myThis.id == "community_members_alias_h") {
+		$("span#thisAlias"+rct).text(myThis.value);	
+	}  else {}
+	}
+
 function submitPasswordReset() {
 
 	

@@ -367,6 +367,20 @@ h2 span{
     color:black;
     font-size:16px;
 }
+
+.form_wrapper a.update_member{
+    text-decoration:none;
+    color:#0000FF;
+    font-size:16px;
+}
+
+.form_wrapper a.remove_member{
+    text-decoration:none;
+    color:#FF0000;
+    font-size:16px;
+}
+
+
 /*Getting lazy*/
 .form_wrapper a.search2{
     text-decoration:none;

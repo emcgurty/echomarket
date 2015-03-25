@@ -76,6 +76,7 @@
 		<li><a href="#s1">Login/Registration</a>
 				<ul>
 				<li>
+					<% session[:advise] = true %>
 					<%= link_to 'Login', user_login_path(type: 'all', id: '')   %>
 					
 				</li>	
@@ -115,6 +116,7 @@
 		
 			
 			<li>
+				<% session[:advise] = true %>
 				<%= link_to "Community Members", community_member_m_list_url  %>
 			</li>
 		</ul>

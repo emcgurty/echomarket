@@ -32,8 +32,9 @@
 
 </style>
 
-	<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
-
+<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "add", :view=> 'm_list'}, :html => {:class=>"register_community", :id=>"register_community"} do |lf| %>
+ 
+<% if  session[:advise]  %> 
 <div class="top" >
 
 	<p>
@@ -52,6 +53,41 @@
 
 </div>
 
+<% else %>
+
+<div class="top" >
+
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+
+	<p >
+		COMMUNITY REGISTRATION, continued...
+	</p>
+
+	<% if session[:notice] %>
+	<p>
+		<%= session[:notice] %>
+	</p>
+	<% end %>
+
+</div>
+<div class="top_notice_5" id="commmunity_info">
+	
+<p>	Your Echo Market Community presence has been activated. </p>
+	<p>
+		Would you like to add members to your Community?
+	</p>
+	<p>
+		Adding members is optional, but recommended as it adds a layer of security to your Community. You may choose later to add members, and of course update or delete members.
+	</p>
+	<p>
+		Frankly, adding members seems to be a great opportunity to <span class="logo_smaller">Throw A Echo Market Commmunity Member Party!</span>
+	</p>
+</div>
+
+<% end %>
+
 
 <div id="community_members_build" style="display:block;float:left;width:96%;">
 	<p>
@@ -62,9 +98,8 @@
 		<div id="add_community_members" style="display:block;float:left;width:96%;height:auto;margin-left:5px;">
 		
 			<% rowCount = 0 %>	
-
-	<% numRows = @community_members.count %>
-
+	        <% numRows = @community_members.count %>
+         
 		<table style="margin-left:-5px;">
 
 			<tr >
@@ -76,49 +111,52 @@
 				<th>Function</th>
 			</tr>
 
-	
-    
-            <%= nf.hidden_field :community_id, {:value=> session[:community_id]} %>
-			
-		
-			<% while rowCount < numRows %>
-				<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
+		   <% for cm in @community_members %>
+			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
 			<tr class="<%= rowClass %>" >
-               <%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "update_row", :id=>@community_members[rowCount][:community_member_id], :view=> 'm_list'}, :html => {:class=>"register_community", :id=>"register_community"} do |lf| %>
-				<td width= "20%"><%= nf.text_field :first_name,  { :value =>"#{@community_members[rowCount][:first_name]}" , :maxlength=>24, :size=>20}  %></td>
-				<td width='5%'><%= nf.text_field :mi,  {:value =>"#{@community_members[rowCount][:mi]}" ,:maxlength=>1, :size=>2} %></td>
-				<td width='20%'><%= nf.text_field (:last_name), {:value =>"#{@community_members[rowCount][:last_name]}" ,:maxlength=>24,:size=>20} %></td>
+               
+				<td width= "20%"><%= lf.text_field :first_name_h,  {:value =>"#{cm[:first_name]}" , :maxlength=>24, :size=>20, :onchange=>"update_row(this,#{rowCount});" }  %>
+					<span class="error" id="thisFirstName#{rowCount}" )>first_name</span>
+				</td>
+				<td width='5%'><%= lf.text_field :mi_h,  {:value =>"#{cm[:mi]}" ,:maxlength=>1, :size=>2, :onchange=>"update_row(this,#{rowCount});"} %>
+					<span class="error" id="thisMI#{rowCount}" )>mi</span>
+				</td>
+				<td width='20%'><%= lf.text_field :last_name_h,  {:value =>"#{cm[:last_name]}" , :maxlength=>24, :size=>20, :onchange=>"update_row(this,#{rowCount});"} %>
+					<span class="error" id="thisLastName#{rowCount}" )>last_name</span>
+				</td>
 				<td width="5%">OR</td>
-				<td width='20%'><%= nf.text_field :alias, {:value =>"#{@community_members[rowCount][:alias]}" ,:maxlength=>50, :size=>40} %></td>
+				<td width='20%'><%= lf.text_field :alias_h, {:value =>"#{cm[:alias]}" ,:maxlength=>50, :size=>40, :onchange=>"update_row(this,#{rowCount});"} %>
+					<span class="error" id="thisAlias#{rowCount}" )>alias</span>
+				</td>
 				
 				<td width='20%'>
-					<% if  @community_members[rowCount][:is_creator] == 1 %>
-					<%= lf.submit "Update Member" %>
-				    <%= nf.hidden_field :is_creator, :value => 1 %>
-				<% else %>
-					<%= link_to "Remove Member", community_member_remove_url(@community_members[rowCount][:community_member_id]) %>
+					<% if  cm[:is_creator] == 1 %>
+					<a href="#" class="update_member",onclick="submitUpdateMember(#{rowCount}, #{cm[:community_member_id]}));" >Update Member</a>
+				    <% else %>
+					
+					<%= link_to "Remove Member", community_member_remove_url(@community_members[rowCount][:community_member_id], :html=>{:class=>"remove_member"}) %>
 					<br />
-					<%= nf.hidden_field :is_creator, :value => 0 %>
-					<%= lf.submit 'Update Member' %> 
-				<% end%>
+				    <a href="#" class="update_member", onclick="submitUpdateMember(#{rowCount}, #{cm[:community_member_id]}));" >Update Member</a>
+				       
+					<% end %>
 				</td>
-				<% end %>
+				
 			</tr>
 			<% rowCount = rowCount + 1 %>
 			
-            <% if rowCount == numRows %>
-			<tr>
-				<td width= '20%'> <%= nf.text_field :first_name, {:value=> '', :maxlength=>24, :size=>20}  %></td>
-				<td width='5%'><%= nf.text_field :mi, {:value=> '', :maxlength=>1, :size=>2}  %></td>
-				<td width= '20%'><%= nf.text_field :last_name, {:value=> '', :maxlength=>24, :size=>20}  %></td>
-				<td width='5%'>&nbsp;</td>
-				<td width='20%'><%= nf.text_field :alias, {:value=> '',:maxlength=>50, :size=>40}  %></td>
-				<td width='20%'>
-				<%= nf.hidden_field :is_creator, :value => 0 %>
-				<%= nf.submit "Add" %>
-			</tr>
-			
-			<% end %><%  end  %>
+	            <% if rowCount == numRows %>
+					<tr>
+						<td width= '20%'> <%= lf.text_field :first_name, {:value=> '', :maxlength=>24, :size=>20}  %></td>
+						<td width='5%'><%= lf.text_field :mi, {:value=> '', :maxlength=>1, :size=>2}  %></td>
+						<td width= '20%'><%= lf.text_field :last_name, {:value=> '', :maxlength=>24, :size=>20}  %></td>
+						<td width='5%'>&nbsp;</td>
+						<td width='20%'><%= lf.text_field :alias, {:value=> '',:maxlength=>50, :size=>40}  %></td>
+						<td width='20%'>
+						<%= lf.hidden_field :is_creator, :value => 0 %>
+						<%= lf.submit "Add" %>
+					</tr>
+				<% end %>
+			<%  end  %>
 		</table>
 		
 	</div>
