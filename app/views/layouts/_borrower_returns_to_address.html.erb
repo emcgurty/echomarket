@@ -1,21 +1,21 @@
   <div class="<%= which_class %>">
     <ul>
       <li><label class="radio" for="borrowerreturnsToContactAddress" >Contact Address?:&nbsp;
-          <%= radio_button(object,"b_returns_to_which_address", "3", {:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToContactAddress"}) %>
+          <%= radio_button(object,"b_returns_to_which_address", "3", {:style=>"vertical-align: middle;width:15px;", :id =>"borrowerreturnsToContactAddress"}) %>
         </label>
       </li>
       <li><label class="radio" for="borrowerReturnsToAlternativeAddress" >Alternative Address?:&nbsp;
-          <%= radio_button(object,"b_returns_to_which_address", "2",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToAlternativeAddress"}) %>
+          <%= radio_button(object,"b_returns_to_which_address", "2",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerReturnsToAlternativeAddress"}) %>
         </label>
       </li>
       <li>
         <label class="radio" for="borrowerReturnsToEitherAddress" >Either address is fine.&nbsp;
-          <%= radio_button(object,"b_returns_to_which_address", "1",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToEitherAddress"}) %>
+          <%= radio_button(object,"b_returns_to_which_address", "1",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerReturnsToEitherAddress"}) %>
         </label>
       </li>
       <li>
         <label class="radio" for="borrowerReturnsToNeitherAddress" >Neither? No pick up at any address.&nbsp;
-          <%= radio_button(object,"b_returns_to_which_address", "0",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerComesToNeitherAddress"}) %>
+          <%= radio_button(object,"b_returns_to_which_address", "0",{:style=>"vertical-align: middle;width:15px;", :id =>"borrowerReturnsToNeitherAddress"}) %>
         </label>
       </li>
     </ul>

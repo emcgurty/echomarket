@@ -28,15 +28,18 @@ class BorrowerController < ApplicationController
  end
 
   def borrower_history
+puts "session user id"
+puts session[:user_id]
+puts "end session user id"
 
     session[:background] = true
     session[:notice] = ""
     @which_view = (session[:community_id].blank? ? "borrower_seeking" : "community_borrower_seeking" )
-     unless (params['commit'].blank?)
-      if params['commit'] == "edit"
+     unless (params[:commit].blank?)
+      if params[:commit] == "edit"
         session[:reuse] = false
         redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
-      elsif params['commit'] == "reuse"
+      elsif params[:commit] == "reuse"
         session[:reuse] = true
         redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
       else
@@ -56,7 +59,7 @@ class BorrowerController < ApplicationController
       @l.save
       @ld  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       unless  @ld.blank?
-        redirect_to :action => "borrower_history", :commit => ""
+        redirect_to :action => "borrower_history", :commit => "NA", :id=> session[:user_id]  
       else
         session[:notice] = "Seems that you have deleted all your records.  Hope it is because you were able to borrow an item."
         redirect_to :controller => "home", :action => "items_listing"
@@ -76,9 +79,9 @@ class BorrowerController < ApplicationController
   def community_borrower_seeking
     session[:notice] = ''
      if params[:id].blank?
-    @borrowers = Borrowers.new
+        @borrowers = Borrowers.new
     else
-      @borrowers = Borrowers.find(params[:id])
+        @borrowers = Borrowers.find(params[:id])
     end
   end
    
@@ -168,7 +171,7 @@ class BorrowerController < ApplicationController
               :is_active => 1)
             @img.save
           end
-          redirect_to :action => 'borrower_history', :commit => ""
+          redirect_to :action => 'borrower_history', :commit => "NA"
         else
           return false
         end
@@ -263,7 +266,7 @@ class BorrowerController < ApplicationController
             @img.update_attributes(@myupdatehash[0])
             @img.save
           end
-          redirect_to  :action => 'borrower_history', :commit => ""
+          redirect_to  :action => 'borrower_history', :commit => "NA"
         else
           return false
         end

@@ -68,7 +68,7 @@ class UserController < ApplicationController
   end
 
   def register
-
+    reset_session
     session[:background] = true
     if session[:user_id].blank?
       session[:register_type] = (params[:type].blank? ? 'all': params[:type])
@@ -80,7 +80,7 @@ class UserController < ApplicationController
 
   def login
     
-    
+    reset_session
     session[:edit_user] = false
     session[:background] = true
     session[:register_type] = (params[:type].blank? ? 'all': params[:type])
@@ -268,7 +268,6 @@ class UserController < ApplicationController
       :user_type => user_type_,
       :user_alias => user_alias_)
     if @users.save(:validate => true) && @users.errors.empty?
-      reset_session
       session[:reset] = true
       session[:notice] = "Thanks for signing up! Please check your email, #{params[:users][:email]}, to activate your account."
       redirect_to home_items_listing_url
@@ -387,7 +386,6 @@ class UserController < ApplicationController
   end
 
   def get_reset_password
-    reset_session
     session[:background] = true
     session[:notice] = ''
     @users = Users.find(:first, :conditions => ["reset_code =?", params[:id]])

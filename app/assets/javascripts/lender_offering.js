@@ -1093,7 +1093,7 @@ function showBorrowersContactPreferences() {
 
 
     var foundInvalid = validateContactPreferences();
-
+    
     var home_phone_contact = $("#lenders_home_phone");
     var cell_phone_contact = $("#lenders_cell_phone");
     var alternative_phone_contact = $("#lenders_alternative_phone");
@@ -1262,7 +1262,9 @@ function validateContactPreferences() {
 
 		foundInvalid = false;
 	}
-	
+	if (!(foundInvalid)) {
+		alert("You have invalid or incomplete information under Contact Information.");
+	}
 	return foundInvalid;
 	
 	}

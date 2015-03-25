@@ -19,7 +19,7 @@ class LenderController < ApplicationController
    def community_lender_item_detail
       session[:background] = true
       unless params[:id].blank?
-        session[:reuse] = (params['commit' == 'reuse' ? true : false)
+        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
         @lenders = Lenders.new if @lenders.blank?
       else
@@ -56,7 +56,7 @@ class LenderController < ApplicationController
       @l.save
       @ld  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
      unless  @ld.blank?
-        redirect_to :action => "lender_history", :commit => ""
+        redirect_to :action => "lender_history", :commit => "",  :id=> session[:user_id]  
       else
         session[:notice] = "Seems that you have deleted all your records.  Hope it is because your item(s) have been borrowed."
         redirect_to :controller => "home", :action => "items_listing"

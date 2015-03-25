@@ -177,7 +177,6 @@ class CommunityController < ApplicationController
   end
 
   def get_reset_community_password
-    reset_session
     session[:background] = true
     
     @communities = Communities.find(:first, :conditions => ["reset_code =?", params[:id]])

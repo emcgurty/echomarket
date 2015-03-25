@@ -937,16 +937,14 @@ function showBorrowersContactPreferences() {
 		$("#menu_item_1").css("display", "inline");
 		$("#form_borrower_preference").css("display", "inline-table");
 		$("#menu_item_2").css("display", "inline");
+		
 	} else {
 
+		alert("You have invalid or incomplete information under Contact Information.");
 		location.href = "#menu_item_1";
 	}
 	return foundInvalid;
 }
-
-
-
-
 
 function showReview() {
 
