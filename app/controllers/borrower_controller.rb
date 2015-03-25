@@ -1,13 +1,14 @@
 class BorrowerController < ApplicationController
 
  def b_list
-     session[:background] = true
+      session[:notice] = ''
+      session[:background] = true
  end
 
   def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
-        session[:reuse] = (params[:commit] == 'reuse' ? true : false)
+        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
         @borrowers = Borrowers.new if @borrowers.blank?
       else
@@ -16,7 +17,7 @@ class BorrowerController < ApplicationController
   end
  
    def community_borrower_item_detail
-      session[:background] = true
+     session[:background] = true
      unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
@@ -24,7 +25,6 @@ class BorrowerController < ApplicationController
       else
         @borrowers = Borrowers.new
       end
-   
  end
 
   def borrower_history
@@ -32,27 +32,21 @@ class BorrowerController < ApplicationController
     session[:background] = true
     session[:notice] = ""
     @which_view = (session[:community_id].blank? ? "borrower_seeking" : "community_borrower_seeking" )
-    puts "asdasdasdasdasdasdasdsd"
-    puts params['commit']
-    
      unless (params['commit'].blank?)
       if params['commit'] == "edit"
-        redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
         session[:reuse] = false
+        redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
       elsif params['commit'] == "reuse"
-        puts "request reuse"
         session[:reuse] = true
         redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
       else
         @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       end
     else
-
       @borrowers  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       session[:notice]  = "Echo Market could not find your borrower history, prehaps it has items not yet approved. Here you may seek a new item to borrow."
       redirect_to  :controller => "borrower", :action => @which_view, :id=>session[:user_id]  if @borrowers.blank?
     end
-
   end
 
   def delete_borrower_record
@@ -88,9 +82,7 @@ class BorrowerController < ApplicationController
     end
   end
    
-  
   def update_borrower_seeking
-
     session[:notice] = ''
     unless params[:borrowers].blank?
       if (params[:borrowers][:borrower_item_id].blank?)  ## then it is a new record
@@ -176,8 +168,6 @@ class BorrowerController < ApplicationController
               :is_active => 1)
             @img.save
           end
-
-
           redirect_to :action => 'borrower_history', :commit => ""
         else
           return false
@@ -187,7 +177,8 @@ class BorrowerController < ApplicationController
         ## do update
         @ltmp = Borrowers.find(:first, :conditions => ["borrower_item_id = ?",params[:borrowers][:borrower_item_id] ])
         @req = params[:borrowers]
-        if (@req[:useWhichContactAddressAlternative] == '1')
+        @makeUseWhichStr = @req[:useWhichContactAddressAlternative].to_s
+        if (@makeUseWhichStr == '1')
           @useWhichContactAddress = 2
         else
           @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
@@ -269,7 +260,7 @@ class BorrowerController < ApplicationController
               :date_created => Time.now,
               :date_updated => Time.now,
               :is_active => 1]
-            @img.update_attributes(@myupdatehash)
+            @img.update_attributes(@myupdatehash[0])
             @img.save
           end
           redirect_to  :action => 'borrower_history', :commit => ""
@@ -278,7 +269,7 @@ class BorrowerController < ApplicationController
         end
       end
     else
-      session[:notice]  = "Error in updating borrower record"
+      session[:notice]  = "Echo Market error in updating borrower record"
       redirect_to home_items_listing_url
     end
   end

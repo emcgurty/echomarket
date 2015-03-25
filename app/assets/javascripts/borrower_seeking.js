@@ -579,7 +579,7 @@ $("input[name='borrowers[notify_lenders]']").trigger('change');
 	});
 	$("#borrowers_item_count").trigger('change');
 
-
+/* Beginning of contact address */
 
 	$("input#borrowers_address_line_1").bind('change', function() {
 		address1 = $(this).val();
@@ -944,129 +944,7 @@ function showBorrowersContactPreferences() {
 	return foundInvalid;
 }
 
-function validateContactPreferences() {
-	var foundInvalid = true;
-    var y_n = "";
-	$("span.error").css("visibility", "hidden");
-	
-	y_n = $("input[name='borrowers[displayBorrowerOrganizationName]']:checked").val();
-	if ((y_n == 1) && ($("#borrowers_organization_name").val() == "")) {
-		$("span#organization_name_error").text("Please provide an organization name.");
-		$("span#organization_name_error").css("visibility", "visible");
-		foundInvalid = false;
-	} 
 
-	y_n = $("input[name='borrowers[displayBorrowerAddress]']:checked").val();
-	if (y_n == 1) {
-	if (
-		($("#borrowers_address_line_1").val() == "") || 
-		($("#borrowers_postal_code").val() == "") || 
-		($("#borrowers_city").val() == "") || 
-		($("#borrowers_country_id option:selected").text() == "Please select")
-	) {
-		
-		$("span#display_address_error").text("Please provide a complete address.");
-		$("span#display_address_error").css("visibility", "visible");
-		foundInvalid = false;
-	} 
-	}
-	
-	
-	y_n = $("input[name='borrowers[displayBorrowerName]']:checked").val();
-	if (y_n == 1) {
-	if (
-		($("#borrowers_first_name").val() == "") || 
-		($("#borrowers_last_name").val() == "") 
-	) {
-		
-		$("span#public_display_name_error").text("Please provide a complete name.");
-		$("span#public_display_name_error").css("visibility", "visible");
-		foundInvalid = false;
-	} 
-	}
-		
-	
-	
-	if ($("#borrowers_describe_yourself option:selected").text() == "Please select") {
-		$("#describe_yourself_combo_error").text("Please chooose an option to describe yourself.");
-		$("#describe_yourself_combo_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-	if (($("#borrowers_describe_yourself option:selected").text() == "Other") && ($("#borrowers_other_describe_yourself").val() == "")) {
-
-		$("#other_describe_yourself_error").text("Other description is required.");
-		$("#other_describe_yourself_error").css("visibility", "visible");
-		foundInvalid = false;
-	} else {
-		$("#other_describe_yourself_error").text("");
-		$("#other_describe_yourself_error").css("visibility", "hidden");
-	}
-
-	if ($("#borrowers_first_name").val() == "") {
-		$("#first_name_error").text("First name is required.");
-		$("#first_name_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-	if ($("#borrowers_last_name").val() == "") {
-		$("#last_name_error").text("Last name is required.");
-		$("#last_name_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-	if ($("#borrowers_city").val() == "") {
-		$("#city_error").text("City name is required.");
-		$("#city_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-	if ($("#borrowers_address_line_1").val() == "") {
-		$("#address_line_1_error").text("Address Line 1 is required.");
-		$("#address_line_1_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-	if ($("#borrowers_postal_code").val() != "") {
-		var re = /^[A-Za-z]+$/;
-		if (re.test(document.getElementById("borrowers_postal_code").value)) {
-			$("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
-			$("#postal_code_error").css("visibility", "visible");
-			foundInvalid = false;
-		}
-	}
-
-	if ($("#borrowers_postal_code").val() == "") {
-		$("#postal_code_error").text("Postal code is required.");
-		$("#postal_code_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-	if ($("#borrowers_country_id option:selected").text() == "Please select") {
-		$("#country_error").text("Please select a Country.");
-		$("#country_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-
-
-
-	if ( ($("#borrowers_country_id option:selected").text() == "Please select")   &&  ($("input#borrowers_state_id_string").val() == "")) {
-		$("#state_error").text("Please provide a Region.");
-		$("#state_error").css("visibility", "visible");
-		foundInvalid = false;
-	}
-	
-	if ((($("#borrowers_state_id option:selected").text() == "Please select") || ($("#borrowers_state_id option:selected").val() == '')) && ($("#borrowers_country_id option:selected").text() == "United States")) {
-
-		$("#state_error").text("Please select a State.");
-		$("#state_error").css("visibility", "visible");
-
-		foundInvalid = false;
-	}
-	
-	return foundInvalid;
-	
-	}
 
 
 
