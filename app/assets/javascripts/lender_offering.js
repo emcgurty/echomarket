@@ -101,15 +101,7 @@ $(document).ready(function() {
 	});
 $("input[name='lenders[displayLenderName]']").trigger('change');
 
-
-
-
-
-
-    	
-	
-	
-    $("#lenders_age_18_or_more").bind('change', function() {
+$("#lenders_age_18_or_more").bind('change', function() {
         if ($("#lenders_age_18_or_more").is (':checked')) {
             $("span#18_selection").html("Yes");
         } else {
@@ -904,8 +896,7 @@ notChecked = true;
 
 function validateUseWhichLenderContactAddress() {
     var return_value = true;
-    var whichType = 'lenders';
-	var use_which_ca = $("input[name='lenders[useWhichContactAddress]']:checked").val();
+    var use_which_ca = $("input[name='lenders[useWhichContactAddress]']:checked").val();
 	var useAddressAlternative = $('input#lenders_useWhichContactAddressAlternative').is(':checked');
 	if ((use_which_ca == 1) || (use_which_ca == 2 || useAddressAlternative )) {
 
@@ -1013,7 +1004,7 @@ function saveAll() {
     }
 
     if (!(validContactAdress)){
-
+		alert("You have selected to provide an Alternative address with incomplete content.  Please go to '2. Your Borrowers Contact Preferences' to correct this matters.");
         $("span#whichContactAddressError").css("visibility", "visible");
         $("div#table_alternative_address_input").css("display", "block");
         location.href = "#menu_item_2";
@@ -1023,7 +1014,7 @@ function saveAll() {
         
         $("#lenders_is_active").val('1');
         $("#lenders_is_saved").val('1');
-        $("form.update_lender_offering").submit();
+        $("form.lender_offering").submit();
     }
     return;
 }
@@ -1158,7 +1149,7 @@ function validateContactPreferences() {
 	
 	
 	if ($("#lenders_describe_yourself option:selected").text() == "Please select") {
-		$("#describe_yourself_combo_error").text("Please chooose an option to describe yourself.");
+		$("#describe_yourself_combo_error").text("Please choose an option to describe yourself.");
 		$("#describe_yourself_combo_error").css("visibility", "visible");
 		foundInvalid = false;
 	}

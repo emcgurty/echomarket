@@ -203,7 +203,7 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states}) %> 
+				<%= nf.select(:state_id, @states) %> 
 			</div>
 
 		   <% if @lenders.state_id_string.blank? %>
@@ -296,7 +296,7 @@
 	<% display_div =  'block'%>
 	<% end %>
 	<% end %>
-	<div id="table_alternative_address_input" style="display:<%= display_div %>;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
+	<div id="table_alternative_address_input" style="display:block;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
 		<label id="personal" >Provide your alternative contact address here:</label>
 		<br />
 		<table class="alternative_address_table" id="table_address_input" >
@@ -304,7 +304,7 @@
 				<td><label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :address_line_1_alternative, :size=>20, :maxlength=>24) %> <span class="error" id="address_line_1_alternative_error">&nbsp;</span></td>
 				<td><label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :address_line_2_alternative, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
 				<td><label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :city_alternative, :size=>20, :maxlength=>20) %> <span class="error" id="city_alternative_error">&nbsp;</span></td>
-				<td><label>County/Province:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province_alternative, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+				<td><label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province_alternative, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
 			</tr>
 			<tr>
 

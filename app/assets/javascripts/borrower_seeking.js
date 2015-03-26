@@ -972,7 +972,7 @@ function validateContactPreferences() {
 	
 	
 	if ($("#borrowers_describe_yourself option:selected").text() == "Please select") {
-		$("#describe_yourself_combo_error").text("Please chooose an option to describe yourself.");
+		$("#describe_yourself_combo_error").text("Please choose an option to describe yourself.");
 		$("#describe_yourself_combo_error").css("visibility", "visible");
 		foundInvalid = false;
 	}

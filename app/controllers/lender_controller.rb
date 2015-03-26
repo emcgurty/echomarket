@@ -207,8 +207,10 @@ class LenderController < ApplicationController
               :is_active => 1)
             @img.save
           end
-          redirect_to :action => 'lender_history', :commit => ""
+          puts "Save okay with picture"
+          redirect_to :action => 'lender_history', :id => session[:user_id]
         else
+          puts "Returning false"
           return false
         end
       
