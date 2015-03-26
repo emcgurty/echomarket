@@ -81,10 +81,13 @@ class LenderController < ApplicationController
   
   def community_lender_offering
    
-    if params[:id].blank?
+     if params[:id].blank?
     @lenders = Lenders.new
     else
-      @lenders = Lenders.find(params[:id])
+      @lenders = Lenders.find(:all, :conditions => ["user_id = ?", params[:id]])
+      if @lenders.blank?
+        @lenders = Lenders.new
+      end
     end
   end
   

@@ -46,15 +46,15 @@ class CommunityController < ApplicationController
   # PUT /communities/1.json
   def update
     session[:notice] = ''
-    @communities = Communities.find(params[:community_id])
+    @communities = Communities.find(params[:communities][:community_id])
     @communities.update_attributes(params[:communities])
        respond_to do |format|
       if @communities.save
-        session[:notice] = "Your updates were successful"
-        format.html { redirect_to communities_edit_url }
+        session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
+        format.html { redirect_to home_items_listing_url }
       else
-        session[:notice] = "Failure in updating"
-        format.html { redirect_to communities_edit_url }  
+        session[:notice] = "Failure in updating your Community information.  Echo Market and its database may be busy.  Please try again.."
+        format.html { redirect_to home_items_listing_url}  
       end
     end    
   end
