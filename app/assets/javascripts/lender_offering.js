@@ -54,44 +54,58 @@ $(document).ready(function() {
    	$("input[name='lenders[displayLenderAddress]']").bind('change', function() {
 	var	y_n = $("input[name='lenders[displayLenderAddress]']:checked").val();
 	if (y_n == 1) {
-	if (
-		($("#lenders_address_line_1").val() == "") || 
-		($("#lenders_postal_code").val() == "") || 
-		($("#lenders_city").val() == "") || 
-		($("#lenders_country_id option:selected").text() == "Please select")
-	) {
-		
-		$("span#display_address_error").text("Please provide a complete address.");
-		$("span#display_address_error").css("visibility", "visible");
-		
-	} else {
-		$("span#display_address_error").text("");
-		$("span#display_address_error").css("visibility", "hidden");
-	}
-	}
+		       $("#postalWithContactAddress").css("display", "block");
+               $("span#display_address_selection").html("Yes");
+				if (
+					($("#lenders_address_line_1").val() == "") || 
+					($("#lenders_postal_code").val() == "") || 
+					($("#lenders_city").val() == "") || 
+					($("#lenders_country_id option:selected").text() == "Please select")
+				) {
+					
+					$("span#display_address_error").text("Please provide a complete address.");
+					$("span#display_address_error").css("visibility", "visible");
+					
+				} else {
+					$("span#display_address_error").text("");
+					$("span#display_address_error").css("visibility", "hidden");
+				}
+	} else if (y_n == 0 )  {
+		    $("#postalWithOutContactAddress").css("display", "block");
+            $("span#display_address_selection").html("No");
+	}	
 	});
 	$("input[name='lenders[displayLenderAddress]']").trigger('change');
 	
-
-
 	$("input[name='lenders[displayLenderName]']").bind('change', function() {
-    	var y_n = $("input[name='lenders[displayLenderName]']:checked").val();
-	if (y_n == 1) {
-	if (
-		($("input#lenders_first_name").val() == "") || 
-		($("input#lender_last_name").val() == "") 
-	) {
 		
-		$("span#public_display_name_error").text("Please provide a complete name.");
-		$("span#public_display_name_error").css("visibility", "visible");
+    var y_n = $("input[name='lenders[displayLenderName]']:checked").val();
+	if (y_n == 1) {
+		 $("span#display_name_selection").html("Yes");
+			if (
+				($("input#lenders_first_name").val() == "") || 
+				($("input#lender_last_name").val() == "") 
+			) {
+				
+				$("span#public_display_name_error").text("Please provide a complete name.");
+				$("span#public_display_name_error").css("visibility", "visible");
+			
+			} else {
+				$("span#public_display_name_error").text("");
+				$("span#public_display_name_error").css("visibility", "hidden");
+			}
+	} else if (y_n == 0) {
+		 $("span#display_name_selection").html("No");
+	}
 	
-	} else {
-		$("span#public_display_name_error").text("");
-		$("span#public_display_name_error").css("visibility", "hidden");
-	}
-	}
 	});
 $("input[name='lenders[displayLenderName]']").trigger('change');
+
+
+
+
+
+
     	
 	
 	
@@ -282,28 +296,22 @@ $("input[name='lenders[displayLenderName]']").trigger('change');
 
     $("#lenders_home_phone").bind('change', function() {
 
+               $("span#home_phone_error").text("");
+                $("span#home_phone_error").css("visibility", "hidden");
+        
         if ($("#lenders_home_phone").val() !=  '')  {
             if (($("#lenders_home_phone").val() == $("#lenders_cell_phone").val())  ||
                 ($("#lenders_home_phone").val() == $("#lenders_alternative_phone").val()))   {
 
                 $("span#home_phone_error").text("Home phone should be distinct from others.");
                 $("span#home_phone_error").css("visibility", "visible");
-            } else {
-                $("span#home_phone_error").text("");
-                $("span#home_phone_error").css("visibility", "hidden");
-
-            }
+            } 
         }
 
         if (($("#lenders_home_phone").val() ==  '') && ($("#lenders_public_display_home_phone").prop ('checked') > -1)) {
             $("span#home_phone_error").text("Empty Home phone will not be displayed.");
             $("span#home_phone_error").css("visibility", "visible");
-        } else {
-            $("span#home_phone_error").text("");
-            $("span#home_phone_error").css("visibility", "hidden");
-
-        }
-        
+        }         
 
         $("span#home_phone_contact_selection").html($(this).val());
         $("span#contact_home_phone").html($(this).val());
@@ -316,27 +324,21 @@ $("input[name='lenders[displayLenderName]']").trigger('change');
 
     $("#lenders_cell_phone").bind('change', function() {
 
+        $("span#cell_phone_error").text("");
+        $("span#cell_phone_error").css("visibility", "hidden");
         if ($("#lenders_cell_phone").val() !=  '')  {
             if (($("#lenders_cell_phone").val() == $("#lenders_home_phone").val())  ||
                 ($("#lenders_cell_phone").val() == $("#lenders_alternative_phone").val()))   {
 
                 $("span#cell_phone_error").text("Cell phone should be distinct from others.");
                 $("span#cell_phone_error").css("visibility", "visible");
-            } else {
-                $("span#cell_phone_error").text("");
-                $("span#cell_phone_error").css("visibility", "hidden");
-
-            }
+            } 
         }
 
         if (($("#lenders_cell_phone").val() ==  '') && ($("#lenders_public_display_cell_phone").prop ('checked') > -1)) {
             $("span#cell_phone_error").text("Empty Cell phone will not be displayed.");
             $("span#cell_phone_error").css("visibility", "visible");
-        } else {
-            $("span#cell_phone_error").text("");
-            $("span#cell_phone_error").css("visibility", "hidden");
-
-        }
+        } 
         $("span#cell_phone_contact_selection").html($(this).val());
         $("span#contact_cell_phone").html($(this).val());
         $("span#cell_phone_selection").html($(this).val());
@@ -346,26 +348,20 @@ $("input[name='lenders[displayLenderName]']").trigger('change');
 
     $("#lenders_alternative_phone").bind('change', function() {
 
-        if ($("#lenders_alternative_phone").val() !=  '')  {
+          $("span#alternative_phone_error").text("");
+          $("span#alternative_phone_error").css("visibility", "hidden");
+          if ($("#lenders_alternative_phone").val() !=  '')  {
             if (($("#lenders_alternative_phone").val() == $("#lenders_home_phone").val())  ||
                 ($("#lenders_alternative_phone").val() == $("#lenders_cell_phone").val()))   {
 
                 $("span#alternative_phone_error").text("Alternative phone should be distinct from others.");
                 $("span#alternative_phone_error").css("visibility", "visible");
-            } else {
-                $("span#alternative_phone_error").text("");
-                $("span#alternative_phone_error").css("visibility", "hidden");
-
-            }
+            } 
         }
         if (($("#lenders_alternative_phone").val() ==  '') && ($("#lenders_public_display_alternative_phone").prop ('checked') > -1)) {
             $("span#alternative_phone_error").text("Empty Alternative phone will not be displayed.");
             $("span#alternative_phone_error").css("visibility", "visible");
-        } else {
-            $("span#alternative_phone_error").text("");
-            $("span#alternative_phone_error").css("visibility", "hidden");
-
-        }
+        } 
         $("span#alternative_phone_contact_selection").html($(this).val());
         $("span#contact_alternative_phone").html($(this).val());
         $("span#alternative_phone_selection").html($(this).val());
@@ -480,35 +476,10 @@ $("input[name='lenders[useWhichContactAddressAlternative]']").bind('change', fun
     });
     $("input[name='lenders[notify_lenders]']").trigger('change');
 
-    $("input[name='lenders[displayLenderName]']").bind('change', function() {
-        var y_n = $("input[name='lenders[displayLenderName]']:checked").val();
-        if (y_n == 1) {
-            $("span#display_name_selection").html("Yes");
-        } else {
-            $("span#display_name_selection").html("No");
-        }
-
-    });
-    $("input[name='lenders[displayLenderName]']").trigger('change');
+  
 
 
 
-    $("input[name='lenders[displayLenderAddress]']").bind('change', function() {
-
-        $("#postalWithContactAddress").css("display", "none");
-        $("#postalWithOutContactAddress").css("display", "none");
-        var y_n = $("input[name='lenders[displayLenderAddress]']:checked").val();
-        if (y_n == 1) {
-            $("#postalWithContactAddress").css("display", "block");
-            $("span#display_address_selection").html("Yes");
-        }
-        if (y_n == 0) {
-            $("#postalWithOutContactAddress").css("display", "block");
-            $("span#display_address_selection").html("No");
-        }
-
-    });
-    $("input[name='lenders[displayLenderAddress]']").trigger('change');
 
 
 

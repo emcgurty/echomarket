@@ -46,7 +46,7 @@ class BorrowerController < ApplicationController
     else  
         @borrowers = Borrowers.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
         if @borrowers.blank?
-          session[:notice]  = "Echo Market could not find your borrower history, prehaps it has items not yet approved. Here you may seek a new item to borrorer."
+          
           redirect_to  :controller => "borrower", :action => @which_view
         end
    end     

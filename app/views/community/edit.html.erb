@@ -34,14 +34,14 @@
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community Name:&nbsp; </label>
-	<%= nf.text_field(:community_name, {:maxlength=>50,:tabindex=>"1"}) %>
+	<%= nf.text_field(:community_name, {:maxlength=>50) %>
 	<span style="color:indigo;font-size:12px;">Required Community name, displayed only to members.</span>
 	<span class="error" id="registration_community_name_error">This is an error</span>
 </div>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community E-Mail:&nbsp; </label>
-	<%= nf.text_field(:email, {:maxlength=>50,:tabindex=>"2" }) %>
+	<%= nf.text_field(:email, {:maxlength=>50) %>
 	<span style="color:indigo;font-size:12px;">Required Community email, displayed only to members.</span>
 	<span class="error" id="registration_community_email_error">This is an error</span>
 </div>
@@ -50,7 +50,7 @@
 	<div  >
 		<label>Community Password:&nbsp;
 			<br />
-			<%= nf.password_field(:password, {:maxlength=>16,:tabindex=>"3"})  %></label>
+			<%= nf.password_field(:password, {:maxlength=>16)  %></label>
 		<span style="color:indigo;font-size:12px;">Between 8 - 16 alpha-numeric characters.</span>
 		<span class="error" id="registration_password_error">This is an error</span>
 	</div>
@@ -62,7 +62,7 @@
 	<div  >
 		<label>Re-enter Community Password: &nbsp;
 			<br />
-			<%= nf.password_field(:password_confirmation, {:maxlength=>16,:tabindex=>"4"})  %></label>
+			<%= nf.password_field(:password_confirmation, {:maxlength=>16)  %></label>
 		<span style="color:indigo;font-size:12px;">Password and re-entered password must match.</span>
 		<span class="error" id="registration_password_confirmation_error">This is an error</span>
 	</div>
@@ -127,7 +127,7 @@
 
 			</tr>
 			<tr class="even">
-			<td style="width:25%;"><label>County:<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20, :tabindex=>"12") %> <span class="error">&nbsp;</span>
+			<td style="width:25%;"><label>County:<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
 					</td>
 				
 				<td style="width:25%;">
@@ -138,7 +138,7 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries, {:tabindex=>13}) %> 
+				<%= nf.select(:country_id, @countries) %> 
 				<span class="error" id="country_error">&nbsp;</span>
 				</td>
 				
@@ -152,12 +152,12 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				<%= nf.select(:state_id, @states) %> 
 				</div>
 
 				<div id="provide_country_state" style="display:none;">
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
+					<%= nf.text_field(:state_id_string) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>

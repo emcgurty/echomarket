@@ -370,7 +370,7 @@
            <% end %>
              
            <div id="choose_us_state_alternative"  style="display:#{display_state_id};" >
-				<label>Select Alternative State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
 				<% unless @borrowers.state_id_alternative.blank?  %>
 					<% current_selected = @borrowers.state_id_alternative %>
 				<% else %>
@@ -389,7 +389,7 @@
            <% end %>
 
 
-           	<div id="provide_country_state" style="display:#{display_state_id_string};" >
+           	<div id="provide_country_state_alternative" style="display:#{display_state_id_string};" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string_alternative) %>
 		   </div>

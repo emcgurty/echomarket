@@ -130,7 +130,7 @@
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Name?:</label>
 					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
-					<span class="public_display_name_error">&nbsp;</span>
+					<span class="error" id="public_display_name_error">&nbsp;</span>
 				</div></td>
 
 			</tr>
@@ -203,7 +203,7 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				<%= nf.select(:state_id, @states}) %> 
 			</div>
 
 		   <% if @lenders.state_id_string.blank? %>
@@ -214,7 +214,7 @@
            
            	<div id="provide_country_state"  style="display:<%= @display_state_id_string %>" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
+					<%= nf.text_field(:state_id_string) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>
@@ -224,15 +224,18 @@
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Address?:</label>
 					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
-					<span class="error">&nbsp;</span>
+					<span class="error"id="display_address_error">&nbsp;</span>
 				</div>
 				</td>
 			</tr>
 		</table>
 		<table class="personal">
 			<tr class="odd">
-				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="displayLenderHomePhone" >Public display your home phone?&nbsp;
-					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error"   id="home_phone_error">&nbsp;</span></td>
+				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label>
+					 <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %> 
+					 <label style="font-size:12px" for="displayLenderHomePhone" >Public display your home phone?&nbsp;
+					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label>
+					<span class="error"   id="home_phone_error">&nbsp;</span></td>
 				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="displayLenderCellPhone" >Public display your cell phone?&nbsp;
 					<%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="cell_phone_error">&nbsp;</span></td>
 				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="displayLenderAlternativePhone" >Public display your alternative phone?&nbsp;
@@ -332,7 +335,7 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				<%= nf.select(:state_id, @states) %> 
 		  </div>
 
 		   <% if @lenders.state_id_string_alternative.blank? %>
@@ -342,7 +345,7 @@
            <% end %>
            	<div id="provide_country_state" style="display:<%= @display_state_id_string %>" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string_alternative, {:tabindex=>14}) %>
+					<%= nf.text_field(:state_id_string_alternative) %>
 			</div>
 			<span class="error" id="state_alternative_error">&nbsp;</span>
 				
@@ -441,45 +444,48 @@
 	<div   class="div_white" >
 		&nbsp;
 	</div>
-	<div style="float:left;width:92%;margin-left:25px;background-color:#CCEBD6;">
+		<div style="float:left;width:92%;margin-left:25px;background-color:#CCEBD6;">
 		<label class="readonly_label_underline" >Contact Option: By Internet Social Media?</label>
-		<br />
-		<div class="column50">
-			<div>
-				<label>Your Facebook Account:</label>
-				<%= nf.text_field( :borrower_contact_by_Facebook, {:tabindex=>"1"}) %>
-				<span class="error">&nbsp;</span>
-			</div>
-			<div>
-				<label>Your LinkedIn Account:</label>
-				<%= nf.text_field( :borrower_contact_by_LinkedIn,{:tabindex=>"3"}) %>
-				<span class="error">&nbsp;</span>
-			</div>
-			<div>
-				<label>Other Social Media:</label>
-				<%= nf.text_field( :borrower_contact_by_Other_Social_Media,{:tabindex=>"5"}) %>
-				<span class="error">&nbsp;</span>
-			</div>
-		</div>
-		<div class="column50">
-			<div>
-				<label>Your Twitter Account:</label>
-				<%= nf.text_field( :borrower_contact_by_Twitter,{:tabindex=>"2"}) %>
+		<table class="personal" style="margin-left:15px;">
+      	<tr>
+        <td>
+          <label>Your Facebook Account:</label>
+          <%= nf.text_field( :borrower_contact_by_Facebook) %>
+          <span class="error">&nbsp;</span>
+        </td>
+        <td>
+          <label>Your LinkedIn Account:</label>
+          <%= nf.text_field( :borrower_contact_by_LinkedIn) %>
+          <span class="error">&nbsp;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Your Twitter Account:</label>
+          <%= nf.text_field( :borrower_contact_by_Twitter) %>
+          <span class="error">&nbsp;</span>
+        </td>
+        <td>
+          <label>Your Instagram Account:</label>
+          <%= nf.text_field( :borrower_contact_by_Instagram) %>
+          <span class="error">&nbsp;</span>
+         </td>
+</tr>
+        <tr>
+       	<td>
+          <label>Other Social Media:</label>
+          <%= nf.text_field( :borrower_contact_by_Other_Social_Media) %>
+          <span class="error">&nbsp;</span>
+        </td>
 
-				<span class="error">&nbsp;</span>
-			</div>
-			<div>
-				<label>Your Instagram Account:</label>
-				<%= nf.text_field( :borrower_contact_by_Instagram,{:tabindex=>"4"}) %>
-				<span class="error">&nbsp;</span>
-			</div>
-			<div>
-				<label>Other Social Media Access:</label>
-				<%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access, {:tabindex=>"6"}) %>
-				<span class="error">&nbsp;</span>
-			</div>
-		</div>
-	</div>
+        <td>
+          <label>Other Social Media Access:</label>
+          <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access) %>
+          <span class="error">&nbsp;</span>
+        </td>
+        </tr>
+      </table>
+      </div>
 	<div   class="div_white" >
 		&nbsp;
 	</div>

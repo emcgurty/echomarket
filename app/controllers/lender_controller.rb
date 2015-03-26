@@ -45,7 +45,6 @@ class LenderController < ApplicationController
     else  
         @lenders = Lenders.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
         if @lenders.blank?
-          session[:notice]  = "Echo Market could not find your lender history, prehaps it has items not yet approved. Here you may seek a new item to lend."
           redirect_to  :controller => "lender", :action => @which_view 
         end
    end     

@@ -198,7 +198,7 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states, {:tabindex=>14}) %> 
+				<%= nf.select(:state_id, @states) %> 
 			</div>
 
 			<% unless @lenders.state_id_string.blank? %>
@@ -209,7 +209,7 @@
            
            	<div id="provide_country_state" style="display:#{display_state_id_string};" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string, {:tabindex=>14}) %>
+					<%= nf.text_field(:state_id_string) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>
