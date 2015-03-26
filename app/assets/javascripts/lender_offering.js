@@ -1262,9 +1262,7 @@ function validateContactPreferences() {
 
 		foundInvalid = false;
 	}
-	if (!(foundInvalid)) {
-		alert("You have invalid or incomplete information under Contact Information.");
-	}
+	
 	return foundInvalid;
 	
 	}
