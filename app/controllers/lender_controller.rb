@@ -7,7 +7,7 @@ class LenderController < ApplicationController
 
   def lender_item_detail
       unless params[:id].blank?
-        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
+        
         @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
         @lenders = Lenders.new if @lenders.blank?
       else

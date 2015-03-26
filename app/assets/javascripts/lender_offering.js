@@ -1004,7 +1004,7 @@ function saveAll() {
     }
 
     if (!(validContactAdress)){
-		alert("You have selected to provide an Alternative address with incomplete content.  Please go to '2. Your Borrowers Contact Preferences' to correct this matters.");
+		alert("You have selected to provide an Alternative address with incomplete content.  Please go to '2. Your Borrowers Contact Preferences' to correct this matter.");
         $("span#whichContactAddressError").css("visibility", "visible");
         $("div#table_alternative_address_input").css("display", "block");
         location.href = "#menu_item_2";

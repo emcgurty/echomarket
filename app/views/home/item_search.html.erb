@@ -89,12 +89,12 @@
       <div style="margin-left:15px;margin-top:10px;float:left;">
 
         <% if (@lc > 0 && @bc = 0) %>
-          <p>4There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
+          <p>There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
           </p>
         <% elsif @lc = 0 && @bc > 0 %>
-          <p>5There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
+          <p>There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
         <% else %>
-          <p>6There are <%= @lc %> items available for lending, and <%= @bc %>  borrowers seeking items. </p>
+          <p>There are <%= @lc %> items available for lending, and <%= @bc %>  borrowers seeking items. </p>
 
         <% end %>
 

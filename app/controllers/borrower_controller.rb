@@ -8,7 +8,7 @@ class BorrowerController < ApplicationController
   def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
-        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
+        
         @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
         @borrowers = Borrowers.new if @borrowers.blank?
       else
