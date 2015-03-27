@@ -75,11 +75,9 @@
 		<% @icond = Itemconditions.find(:first, :readonly=> true, :order => "item_conditions_id", :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
 		<label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
 		
-			<% if session[:community_id].blank? %>
-				<%= link_to "Details..." , lender_item_detail_url(:id => ldr.lender_item_id), {:class=>"item_details"}  %>
-			<% else %>
-				<%= link_to "Details..." , community_lender_item_detail_url(:id => ldr.lender_item_id), {:class=>"item_details"}  %>
-			<% end %>
+			
+	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.lender_item_id), {:class=>"item_details"}  %>
+			
 			
 		
 		<hr style="color:indigo;" />
@@ -136,11 +134,9 @@
 		<label id="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 		<% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
 		<label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
-        <% if session[:community_id].blank? %>		
+        		
 			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.borrower_item_id), {:class=>"item_details"} %>
-		<% else %>
-			<%= link_to "Details..." , community_borrower_item_detail_url(:id => ldr.borrower_item_id), {:class=>"item_details"} %>
-		<% end %>
+		
 		<hr style="color:indigo;" />
 
 		<% end %>

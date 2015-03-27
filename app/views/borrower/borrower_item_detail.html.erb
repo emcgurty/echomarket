@@ -32,7 +32,12 @@
     <p><span class="logo_white" >The Echo Market</span></p>
     <p>
       
-      <%= session[:user_alias] unless session[:user_alias].blank?  %>
+      <% if  session[:community_id] %>
+      <%= session[:user_alias]   %>
+      <% else  %>
+      <% @u = Users.find(:first, :readonly, :select => "user_alias", :conditions => ["user_id = ?", ldr.user_id ] )  %>
+      <%= @u.user_alias   %>
+      <% end  %>
       : BORROWER ITEM DETAIL</p>
     <%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
   </div>
@@ -55,20 +60,19 @@
       <% end %></p>
   </div>
 
- <% unless  (ldr.displayBorrowerAddress == 0  && ldr.useWhichContactAddress == 0)%>
-  <% if (ldr.displayBorrowerAddress.abs == 1  && ldr.useWhichContactAddress == 3)%>
-    <div class="div_p_detail" >Borrower Contact - Address:</div>
+ <% if (ldr.displayLenderAddress == 1 && ((ldr.useWhichContactAddress == 3)  || (ldr.useWhichContactAddress == 1))) %>
+    <div class="div_p_detail" >Lender Contact - Address:</div>
     <div class="div_p_detail_sub">
 
       <p><%= ldr.address_line_1 %><%= (ldr.address_line_2.blank? ? " ": ldr.address_line_2) %><br />
         <%= ldr.city + ","%><%= (ldr.province.blank? ? "": ldr.province) + " " %>
 
-        <% if  ldr.state_id_string.blank? %>
+        <% if ldr.state_id_string.blank? %>
           <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", ldr.state_id ]) %>
           <%= @s_c.state_name %>
         <% else %>
-        <%= ldr.state_id_string %>
-         <% end %>
+         <%= ldr.state_id_string %>
+        <% end %>
         <br />
         <% unless ldr.country_id.blank? %>
           <% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", ldr.country_id ]) %>
@@ -76,18 +80,18 @@
         <% end %>
         <%= ldr.postal_code %></p>
     </div>
-  <% elsif (ldr.displayBorrowerAddress == 0 && ldr.useWhichContactAddress == 2)%>
-    <div class="div_p_detail" >Borrower Contact - Address:</div>
+  <% elsif (ldr.displayLenderAddress == 0 && ((ldr.useWhichContactAddress == 2)  || (ldr.useWhichContactAddress == 1))) %>
+    <div class="div_p_detail" >Lender Contact - Alternative Address:</div>
     <div class="div_p_detail_sub">
 
       <p><%= ldr.address_line_1_alternative %><%= (ldr.address_line_2_alternative.blank? ? " ": ldr.address_line_2_alternative) %><br />
         <%= ldr.city_alternative + ","%><%= (ldr.province_alternative.blank? ? "": ldr.province_alternative) + " " %>
 
-        <% if  ldr.state_id_string_alternative.blank? %>
+        <% if ldr.state_id_string_alternative.blank? %>
           <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", ldr.state_id_alternative ]) %>
           <%= @s_c.state_name + " " %>
         <% else %>  
-          <%= ldr.state_id_string_alternative + " " %>
+        <%= ldr.state_id_string_alternative + " " %>
         <% end %>
         <br />
         <% unless ldr.country_id_alternative.blank? %>
@@ -96,48 +100,7 @@
         <% end %>
         <%= ldr.postal_code_alternative %></p>
     </div>
-  <% else (ldr.displayBorrowerAddress == 1 && ldr.useWhichContactAddress == 1)%>
-    <div class="div_p_detail"  >Borrower Contact - Addresses:</div>
-    <div class="div_p_detail_sub">
-
-      <div class="column30">
-        <p>Contact Address:<%= ldr.address_line_1 %><%= (ldr.address_line_2.blank? ? " ": ldr.address_line_2) %><br />
-          <%= ldr.city + ","%><%= (ldr.province.blank? ? "": ldr.province) + " " %>
-
-          <% if  ldr.state_id_string.blank? %>
-            <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", ldr.state_id ]) %>
-            <%= @s_c.state_name + " " %>
-          <% else %>  
-          <%= @s_c.state_id_string + " " %>
-          <% end %>
-          <br />
-          <% unless ldr.country_id.blank? %>
-            <% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", ldr.country_id ]) %>
-            <%= @s_c.country_name + " " %>
-          <% end %>
-          <%= ldr.postal_code %></p>
-      </div>
-      <div class="column30">
-        <p>Alternative Address:<%= ldr.address_line_1_alternative %><%= (ldr.address_line_2_alternative.blank? ? " ": ldr.address_line_2_alternative) %><br />
-          <%= ldr.city_alternative + ","%><%= (ldr.province_alternative.blank? ? "": ldr.province_alternative) + " " %>
-
-          <% if ldr.state_id_alternative.blank? %>
-            <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", ldr.state_id_alternative ]) %>
-            <%= @s_c.state_name + " " %>
-          <% else %>  
-          	<%= @s_c.state_id_alternative + " " %>
-          <% end %>
-          <br />
-          <% unless ldr.country_id_alternative.blank? %>
-            <% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", ldr.country_id_alternative ]) %>
-            <%= @s_c.country_name + " " %>
-          <% end %>
-          <%= ldr.postal_code_alternative %></p>
-      </div>
-    </div>
-
-
-  <% end %>
+  <% else %>  
   <% end %>
 
 
@@ -168,17 +131,29 @@
 
     <div class="div_p_detail_sub">
       <p>
-        <% if ldr.borrower_contact_by_email == '3' %>
+      <% if ldr.borrower_contact_by_email == 3 %>
+        <% if  session[:community_id] %>
+     		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
+      	<% else  %>
           <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
+      	<% end  %>
         <% end %>
+        
+        
+        
+        
         <% if ldr.borrower_contact_by_email == '2' %>
           <%= mail_to ldr.email_alternative,"#{ldr.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
         <% end %>
         <% if ldr.borrower_contact_by_email.to_i.abs == 1 %>
           <%= mail_to ldr.email_alternative, "#{ldr.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
-          <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>
-          <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"} %>
+         <% if  session[:community_id] %>
+     		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
+      	<% else  %>
+          <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
+          <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
+      	<% end  %>
         <% end %>
       </p>
 

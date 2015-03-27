@@ -34,14 +34,14 @@
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community Name:&nbsp; </label>
-	<%= nf.text_field(:community_name, {:maxlength=>50) %>
+	<%= nf.text_field(:community_name, {:maxlength=>50}) %>
 	<span style="color:indigo;font-size:12px;">Required Community name, displayed only to members.</span>
 	<span class="error" id="registration_community_name_error">This is an error</span>
 </div>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community E-Mail:&nbsp; </label>
-	<%= nf.text_field(:email, {:maxlength=>50) %>
+	<%= nf.text_field(:email, {:maxlength=>50}) %>
 	<span style="color:indigo;font-size:12px;">Required Community email, displayed only to members.</span>
 	<span class="error" id="registration_community_email_error">This is an error</span>
 </div>
@@ -50,7 +50,7 @@
 	<div  >
 		<label>Community Password:&nbsp;
 			<br />
-			<%= nf.password_field(:password, {:maxlength=>16)  %></label>
+			<%= nf.password_field(:password, {:maxlength=>16})  %></label>
 		<span style="color:indigo;font-size:12px;">Between 8 - 16 alpha-numeric characters.</span>
 		<span class="error" id="registration_password_error">This is an error</span>
 	</div>
@@ -62,7 +62,7 @@
 	<div  >
 		<label>Re-enter Community Password: &nbsp;
 			<br />
-			<%= nf.password_field(:password_confirmation, {:maxlength=>16)  %></label>
+			<%= nf.password_field(:password_confirmation, {:maxlength=>16})  %></label>
 		<span style="color:indigo;font-size:12px;">Password and re-entered password must match.</span>
 		<span class="error" id="registration_password_confirmation_error">This is an error</span>
 	</div>
