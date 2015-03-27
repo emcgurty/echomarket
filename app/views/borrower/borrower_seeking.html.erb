@@ -234,7 +234,7 @@
           <td style="width:33%;">
             <label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label>
             <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %>
-            <label style="font-size:12px" for="displayBorrowerHomePhone" >Public display your home phone?&nbsp;
+            <label style="font-size:12px" for="borrowers_public_display_home_phone" >Public display your home phone?&nbsp;
               <%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %>
             </label>
             <span class="error"   id="home_phone_error">&nbsp;</span>
@@ -243,7 +243,7 @@
           <td style="width:33%;">
             <label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label>
             <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %>
-            <label style="font-size:12px" for="displayBorrowerCellPhone" >Public display your cell phone?&nbsp;
+            <label style="font-size:12px" for="borrowers_public_display_cell_phone" >Public display your cell phone?&nbsp;
               <%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %>
             </label>
             <span class="error" id="cell_phone_error">&nbsp;</span>
@@ -251,7 +251,7 @@
           <td style="width:34%;">
             <label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label>
             <%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %>
-            <label style="font-size:12px" for="displayBorrowerAlternativePhone" >Public display your alternative phone?&nbsp;
+            <label style="font-size:12px" for="borrowers_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
               <%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %>
 
             </label>

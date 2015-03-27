@@ -233,12 +233,14 @@
 			<tr class="odd">
 				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label>
 					 <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %> 
-					 <label style="font-size:12px" for="displayLenderHomePhone" >Public display your home phone?&nbsp;
+					 <label style="font-size:12px" for="lenders_public_display_home_phone" >Public display your home phone?&nbsp;
 					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label>
 					<span class="error"   id="home_phone_error">&nbsp;</span></td>
-				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="displayLenderCellPhone" >Public display your cell phone?&nbsp;
+				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> 
+					<label style="font-size:12px" for="lenders_public_display_cell_phone" >Public display your cell phone?&nbsp;
 					<%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="cell_phone_error">&nbsp;</span></td>
-				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="displayLenderAlternativePhone" >Public display your alternative phone?&nbsp;
+				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> 
+					<%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="lenders_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
 					<%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="alternative_phone_error">&nbsp;</span></td>
 
 			</tr>
@@ -737,8 +739,8 @@
 					None provided.
 					<% end %></label>
 				<label>Image of Item:</label>
-				<% file_path_str = "../images/item_images/" + @ig[0].image_file_name %>
-				<img  height="100" width="200" src="<%= file_path_str %>" alt="Uploaded image file" />
+				<% file_path_str = @ig[0].image_file_name %>
+				<img  height="100" width="200" src="<%= get_image_path(file_path_str) %>" alt="Uploaded image file" />
 				<span class="file_image_error">&nbsp;</span>
 			</div></td>
 			<td style="width:50%;">

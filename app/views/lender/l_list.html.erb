@@ -42,9 +42,9 @@
 	<% if @imgs %>
 	<% @imgs.each do |oimg| %>
 
-	<% file_path_str = "../images/item_images/" + oimg.image_file_name %>
+	<% file_path_str = oimg.image_file_name %>
 	<% icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption)  %>
-	<img src='<%= file_path_str.to_s %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
+	<img src='<%= get_image_path(file_path_str.to_s) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
 	<% unless icaption.blank? %>
 	<label id="item_listing"><%= icaption %></label>
 	<% end %>
