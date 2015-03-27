@@ -6,8 +6,9 @@ class LenderController < ApplicationController
   end
 
   def lender_item_detail
+         session[:background] = true
       unless params[:id].blank?
-        
+        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
         @lenders = Lenders.new if @lenders.blank?
       else
@@ -34,7 +35,7 @@ class LenderController < ApplicationController
     session[:notice] = ""
     @which_view = (session[:community_id].blank? ? "lender_offering" : "community_lender_offering" )
    
-    if !(params[:commit].blank?) && params[:id]
+    if !(params['commit'].blank?) && params[:id]
          if params['commit'] == "edit"
           session[:reuse] = false
           redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
@@ -71,7 +72,7 @@ class LenderController < ApplicationController
     if params[:id].blank?
     @lenders = Lenders.new
     else
-      @lenders = Lenders.find(:all, :conditions => ["user_id = ?", params[:id]])
+      @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
       if @lenders.blank?
         @lenders = Lenders.new
       end
@@ -83,7 +84,7 @@ class LenderController < ApplicationController
      if params[:id].blank?
     @lenders = Lenders.new
     else
-      @lenders = Lenders.find(:all, :conditions => ["user_id = ?", params[:id]])
+      @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
       if @lenders.blank?
         @lenders = Lenders.new
       end
@@ -208,9 +209,9 @@ class LenderController < ApplicationController
             @img.save
           end
           puts "Save okay with picture"
-          redirect_to :action => 'lender_history', :id => session[:user_id]
+          redirect_to  :action => 'lender_history', :id => session[:user_id], :commit => ""
         else
-          puts "Returning false"
+          puts "Returning false becuase save failed"
           return false
         end
       
@@ -321,7 +322,7 @@ class LenderController < ApplicationController
         @ltmp.update_attributes(@myupdatehash[0])
         @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
         if @ltmp.save(:validate => @shouldvalidate) && @ltmp.errors.empty?
-
+          puts "asdasdassd"
           unless (@hold_picture_file.blank?)
             @img = Itemimages.find(:first, :conditions => ["lender_item_id = ?", @ltmp.lender_item_id])
             @myupdatehash = Hash.new
@@ -335,8 +336,10 @@ class LenderController < ApplicationController
             @img.update_attributes(@myupdatehash[0])
             @img.save
           end
-          redirect_to  :action => 'lender_history', :commit => ""
+          puts "fdgfgdgfgdfgfgf"
+          redirect_to  :action => 'lender_history', :id => session[:user_id], :commit => ""
         else
+          puts "Failed to save lender record"
           return false
         end
       end

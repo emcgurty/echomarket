@@ -58,13 +58,9 @@
       <% if ldr.displayBorrowerName.abs == 1%>
         Borrower Name:&nbsp;<%= ldr.first_name %>&nbsp;<%= (ldr.mi.blank? ? "": ldr.mi) %>&nbsp;<%= ldr.last_name %><br />
       <% end %></p>
-  </div>
-
- <% if (ldr.displayLenderAddress == 1 && ((ldr.useWhichContactAddress == 3)  || (ldr.useWhichContactAddress == 1))) %>
-    <div class="div_p_detail" >Lender Contact - Address:</div>
-    <div class="div_p_detail_sub">
-
-      <p><%= ldr.address_line_1 %><%= (ldr.address_line_2.blank? ? " ": ldr.address_line_2) %><br />
+         <% if (ldr.displayBorrowerAddress == 1) %>
+     <p>Borrower Address:<br />
+           <%= ldr.address_line_1 %><%= (ldr.address_line_2.blank? ? " ": ldr.address_line_2) %><br />
         <%= ldr.city + ","%><%= (ldr.province.blank? ? "": ldr.province) + " " %>
 
         <% if ldr.state_id_string.blank? %>
@@ -79,9 +75,12 @@
           <%= @s_c.country_name + " " %>
         <% end %>
         <%= ldr.postal_code %></p>
-    </div>
-  <% elsif (ldr.displayLenderAddress == 0 && ((ldr.useWhichContactAddress == 2)  || (ldr.useWhichContactAddress == 1))) %>
-    <div class="div_p_detail" >Lender Contact - Alternative Address:</div>
+        <% end %>
+      
+  </div>
+
+  <% if ((ldr.useWhichContactAddress == 2)  || (ldr.useWhichContactAddress == 1)) %>
+    <div class="div_p_detail" >Borrower Contact - Alternative Address:</div>
     <div class="div_p_detail_sub">
 
       <p><%= ldr.address_line_1_alternative %><%= (ldr.address_line_2_alternative.blank? ? " ": ldr.address_line_2_alternative) %><br />
