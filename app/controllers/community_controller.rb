@@ -31,11 +31,11 @@ class CommunityController < ApplicationController
           format.html { redirect_to :controller => "home", :action => "items_listing" }
         else
           session[:notice]= "Error in creating Community record"
-          format.html { render action: "new" }  
+          format.html { render :action => "new" }  
           
         end
       else
-        format.html { render action: "new" }
+        format.html { render :action => "new" }
       end  #ends if saved
     end # ends do
   end  # ends def

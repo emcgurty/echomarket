@@ -64,8 +64,8 @@
         <%= ldr.city + ","%><%= (ldr.province.blank? ? "": ldr.province) + " " %>
 
         <% if ldr.state_id_string.blank? %>
-          <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", ldr.state_id ]) %>
-          <%= @s_c.state_name %>
+          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["state_id = ?", ldr.state_id ]) %>
+          <%= (@s_c.state_id == '99' ? "" : @s_c.state_name) %>
         <% else %>
          <%= ldr.state_id_string %>
         <% end %>
@@ -87,8 +87,8 @@
         <%= ldr.city_alternative + ","%><%= (ldr.province_alternative.blank? ? "": ldr.province_alternative) + " " %>
 
         <% if ldr.state_id_string_alternative.blank? %>
-          <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", ldr.state_id_alternative ]) %>
-          <%= @s_c.state_name + " " %>
+          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["state_id = ?", ldr.state_id_alternative ]) %>
+          <%= (@s_c.state_id == '99' ? "" : @s_c.state_name) %>
         <% else %>  
         <%= ldr.state_id_string_alternative + " " %>
         <% end %>

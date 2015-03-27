@@ -18,8 +18,11 @@ class Notifier < ActionMailer::Base
  def signup_notification_community(communities)
     setup_email_community(communities)
     @subject    += ' Please activate your new account'
+    
     @url  = "http://"
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{communities.community_id}"
+    @community_name = communities.community_name
+    @password =  communities.password
 
   end
   
@@ -30,6 +33,8 @@ class Notifier < ActionMailer::Base
     @subject    += ' Please activate your new account'
     @url  = "http://"
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/activate/#{users.activation_code}/#{users.user_id}"
+    @username = users.username
+    @password =  users.password
 
   end
 
@@ -46,6 +51,7 @@ class Notifier < ActionMailer::Base
     @subject    += ' Your account has been activated!'
     @url  = "http://"
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}"
+    @community_name = communities.community_name
 
   end
 
