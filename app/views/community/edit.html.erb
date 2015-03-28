@@ -164,33 +164,21 @@
 				</td>
 			</tr>
 			
-			
-			
-
-			
-			
-			
-			
-			
-			
-			
 			<tr class="odd">
 				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
 				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
 				<td colspan="2"> &nbsp;</td>
 
 			</tr>
-			
-			
-		</table>
 		
-
-
+		</table>
+	
 </div >
 
 <div class="bottom" >
 	<%= nf.submit "Update" %>
-		<a href="#" onclick="window.location.replace('/home/items_listing');">=> I'll make my updates later. Let's see what is being offered to borrow or lend.</a>
+	<%= link_to "=> Delete this Community Record", community_destroy_url(:id=> @communities.community_id), {:class=>"search1"} %>
+	<a href="#" onclick="window.location.replace('/home/items_listing');">=> I'll make my updates later. Let's see what is being offered to borrow or lend.</a>
 </div>
 
 <% end %>
