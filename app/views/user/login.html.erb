@@ -37,7 +37,7 @@
 	</p>
 	<div style="margin-left:25px;">
 		<label>Community Name: <a href="#" onclick="showForgotCommunityName();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community Name?</span></a> </label>
-		<%= nf.text_field(:community_name, {:maxlength=>16, :value=>"" })  %>
+		<%= nf.text_field(:community_name, {:maxlength=>50, :value=>"" })  %>
 		&nbsp;&nbsp; <span class="error" id="login_community_name_error">This is an error</span>
 	
 	

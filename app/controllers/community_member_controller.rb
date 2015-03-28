@@ -54,14 +54,12 @@ class CommunityMemberController < ApplicationController
   def remove
 
     @community_members = CommunityMembers.find(params[:id])
-    @community_members.destroy
     respond_to do |format|
-      if @community_members.save
+      if @community_members.destroy
         format.html { redirect_to :action=>'m_list' , :id => @community_members.community_id}
       else
         session[:notice] = 'Echo Market application error in removing a member'
-        format.html { redirect home_items_listin_url}
-
+        format.html { redirect home_items_listing_url}
       end
     end
   end
@@ -80,8 +78,8 @@ class CommunityMemberController < ApplicationController
       if @community_member.update_attributes(myupdatehash[0])
         format.html { redirect_to :action=>'m_list' , :id => @community_members.community_id}
       else
-        session[:notice] = "The Echo Market Application encoutered an error in updating you selected Community Member row."        
-        format.html { render action: "edit" }
+        session[:notice] = "The Echo Market Application encoutered an error in updating your selected Community Member row."        
+        format.html { render :action => "edit" }
       end
     end
   end

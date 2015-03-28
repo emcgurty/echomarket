@@ -77,7 +77,7 @@
 				<ul>
 				<li>
 					<% session[:advise] = true %>
-					<%= link_to 'Login', user_login_path(type: 'all', id: '')   %>
+					<%= link_to 'Login', user_login_path(:type =>'all', :id => '')   %>
 					
 				</li>	
 				<li>
