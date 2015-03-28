@@ -49,7 +49,12 @@ class CommunityController < ApplicationController
     @communities = Communities.find(params[:communities][:community_id])
     @communities.update_attributes(params[:communities])
        respond_to do |format|
-      if @communities.save
+      if @communities.save && @communities.errors.empty? 
+        @cm = CommunityMembers.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:communities][:community_id] ])
+        @cm.first_name = params[:communities][:first_name]
+        @cm.mi = params[:communities][:mi]
+        @cm.last_name = params[:communities][:last_name]
+        @cm.save(:validate => false)
         session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
         format.html { redirect_to home_items_listing_url }
       else
