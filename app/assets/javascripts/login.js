@@ -69,11 +69,18 @@ $(document).ready(function() {
 	
 });
 
-function submitUpdateMember(rdt, c_id)  {
+function submitUpdateMember(rdt, c_id, com_id, is_c)  {
 	 	
 	    $("[id*='_h']").trigger('change');
-	    /*  'community_member/update_row/(:f)/(:m)/(:la)/(:al)/(:ci)' */
-		var queryString = "/community_member/update_row/" + $("span#thisFirstName" + rdt).text() +"/" + $("span#thisMI" + rdt).text() + "/" + $("span#thisLastName" + rdt).text() +"/" + $("span#thisAlias" + rdt).text() +"/" + c_id;
+	    var queryString = '';
+	    /*    match 'community_member/update_row/(:fi)/(:m)/(:la)/(:al)/(:ci)/(:com_id)/(:is_c)'=> "community_member#update_row", :as=> :community_member_update_row */
+		if (is_c == 1)  {
+		queryString = "/community_member/update_row/" + $("span#thisFirstName" + rdt).text() +"/" + 
+		$("span#thisMI" + rdt).text() + "/" + $("span#thisLastName" + rdt).text() +"/na/" + c_id + "/" + com_id + "/" + is_c;
+		} else {
+			queryString = "/community_member/update_row/" + $("span#thisFirstName" + rdt).text() +"/" + 
+		$("span#thisMI" + rdt).text() + "/" + $("span#thisLastName" + rdt).text() +"/" + $("span#thisAlias" + rdt).text() +"/" + c_id + "/" + com_id + "/" + is_c;
+		}
 		window.location.replace(queryString);
 }
 

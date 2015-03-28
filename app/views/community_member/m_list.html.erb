@@ -118,7 +118,7 @@
 				<td width= "20%">
 					<%= lf.text_field :first_name_h,  {:value =>"#{cm[:first_name]}" , :maxlength=>24, :size=>20, :onchange=>"#{get_onchange}" }  %>
 					  <% get_span = "thisFirstName" + rowCount.to_s  %>
-					<span class="error" id="<%= get_span %>" )>first_name</span>
+					<span class="1error" id="<%= get_span %>" )>first_name</span>
 				</td>
 				<td width='5%'><%= lf.text_field :mi_h,  {:value =>"#{cm[:mi]}" ,:maxlength=>1, :size=>2, :onchange=>"#{get_onchange}"} %>
 					<% get_span = "thisMI" + rowCount.to_s  %>
@@ -126,22 +126,27 @@
 				</td>
 				<td width='20%'><%= lf.text_field :last_name_h,  {:value =>"#{cm[:last_name]}" , :maxlength=>24, :size=>20, :onchange=>"#{get_onchange}"} %>
 					<% get_span = "thisLastName" + rowCount.to_s  %>
-					<span class="error" id="<%= get_span %>" >last_name</span>
+					<span class="1error" id="<%= get_span %>" >last_name</span>
 				</td>
+				<% if  (cm[:is_creator] == 0) %>
 				<td width="5%">OR</td>
 				<td width='20%'><%= lf.text_field :alias_h, {:value =>"#{cm[:alias]}" ,:maxlength=>50, :size=>40, :onchange=>"#{get_onchange}"} %>
 					<% get_span = "thisAlias" + rowCount.to_s  %>
-					<span class="error" id="<%= get_span %>" >alias</span>
+					<span class="1error" id="<%= get_span %>" >alias</span>
 				</td>
-				
+				<% else %> 
+				<% get_span = "thisAlias" + rowCount.to_s  %>
+				<td width="5%">&nbsp;</td>
+				<td width='20%'><span class="1error" id="<%= get_span %>" >alias</span></td>
+				<% end %>
 				<td width="20%">
-					<% get_onclick = "submitUpdateMember(" + rowCount.to_s + ",'" + cm[:community_member_id].to_s + "');" %>
 					<% if  (cm[:is_creator] == 1) %>
-					
-					<a href="#" onclick="<%= get_onclick %>" class="update_member" >Update Member</a>
+						<% get_onclick = "submitUpdateMember(" + rowCount.to_s + ",'" + cm[:community_member_id].to_s + "','"  + cm[:community_id].to_s + "',1);" %>
+						
+						<a href="#" onclick="<%= get_onclick %>" class="update_member" >Update Member</a>
 				    <% else %>
-					
-					<%= link_to "Remove Member", community_member_remove_url(@community_members[rowCount][:community_member_id], :html=>{:class=>"remove_member"}) %>
+						<% get_onclick = "submitUpdateMember(" + rowCount.to_s + ",'" + cm[:community_member_id].to_s + "','"  + cm[:community_id].to_s + "',0);" %>
+						<%= link_to "Remove Member", community_member_remove_url(@community_members[rowCount][:community_member_id], :html=>{:class=>"remove_member"}) %>
 					<br />
 				    <a href="#"  onclick="<%= get_onclick %>" class="update_member">Update Member</a>
 				       

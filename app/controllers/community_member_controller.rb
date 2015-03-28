@@ -66,22 +66,34 @@ class CommunityMemberController < ApplicationController
 
   
   # PUT /community_members/1
-  # PUT /community_members/1.json :  :       /*  'community_member/update_row/(:f)/(:m)/(:la)/(:al)/(:ci)' */
+  # PUT /community_members/1.json :  :       /*  /*    match 'community_member/update_row/(:fi)/(:m)/(:la)/(:al)/(:ci)/(:com_id)/(:is_c)'=> "community_member#update_row", :as=> :community_member_update_row */ */
   def update_row
     @community_member = CommunityMembers.find(params[:ci])
+    
     unless @community_member.blank?
       myupdatehash = Hash.new
-      myupdatehash = [:first_name => params[:fi], :mi => params[:mi],:last_name => params[:la], :alias => params[:al], :is_creator => 0, :date_updated=> Time.now]
+      myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => params[:al], :date_updated=> Time.now]
     end
 
-    respond_to do |format|
+    
       if @community_member.update_attributes(myupdatehash[0])
-        format.html { redirect_to :action=>'m_list' , :id => @community_members.community_id}
+        if (params[:is_c] == '1')
+          @c = Communities.find(params[:com_id])
+          @c.first_name = params[:fi]
+          @c.mi = params[:m]
+          @c.last_name = params[:la]
+          @c.date_updated = Time.now
+          @c.save(:validate => false)
+                 
+        end
+        redirect_to :action=>'m_list' , :id => params[:ci]
       else
-        session[:notice] = "The Echo Market Application encoutered an error in updating your selected Community Member row."        
-        format.html { render :action => "edit" }
+        session[:notice] = "The Echo Market Application encountered an error in updating your selected Community Member row."        
+        redirect_to :action=>'m_list' , :id => params[:ci]
       end
-    end
+    
+ 
+ 
   end
 
 

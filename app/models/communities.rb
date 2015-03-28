@@ -2,7 +2,6 @@ require 'digest/sha1'
 
 class Communities < ActiveRecord::Base
   
-  has_many :community_members
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   name_alpha_regex = /\A[ a-zA-Z'-]+\z/
@@ -15,8 +14,8 @@ class Communities < ActiveRecord::Base
   attr_accessible :password, :password_confirmation
   attr_accessible :community_name, :remote_ip, :crypted_password, :salt , :reset_code, :approved, :user_type
   attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :state_id, :country_id, :state_id_string
-  attr_accessible :home_phone,:cell_phone, :email, :goodwill, :age_18_or_more, :is_active ,:is_saved  
-  before_save :encrypt_password
+  attr_accessible :home_phone,:cell_phone, :email, :goodwill, :age_18_or_more, :is_active ,:is_saved, :date_deleted, :date_updated  
+  before_save :encrypt_password 
   before_create :make_activation_code
   validates  :community_name, :password, :password_confirmation, :email, :presence => true
   
@@ -25,8 +24,7 @@ class Communities < ActiveRecord::Base
   validates_length_of :password, :if => :password, :in => 8..16, :message => "must be between 8 and 16 characters"
   validates_confirmation_of :password ,:if => :password, :message => "and re-entered password must match."
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
-    
-
+   
   def activate
     @activated = true
     self.activated_at = Time.now.utc
