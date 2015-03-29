@@ -1,7 +1,7 @@
 class CommunityMemberController < ApplicationController
  
   def m_list
-      session[:notice] = ''
+
       session[:background] = true
       @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
@@ -54,16 +54,15 @@ class CommunityMemberController < ApplicationController
   # POST /community_members
   # POST /community_members.json
   def remove
-
-    @community_members = CommunityMembers.find(params[:id])
-    respond_to do |format|
-      if @community_members.destroy
-        format.html { redirect_to :action=>'m_list' , :id => @community_members.community_id}
-      else
-        session[:notice] = 'Echo Market application error in removing a member'
-        format.html { redirect home_items_listing_url}
-      end
+    
+    begin
+      CommunityMembers.delete(params[:id])
+      redirect_to :action=>'m_list' , :id => @community_members.community_id
+    rescue 
+        session[:notice] = 'Echo Market application error in removing your selected member.'
+        redirect_to :action=>'m_list' , :id => @community_members.community_id
     end
+    
   end
 
   
