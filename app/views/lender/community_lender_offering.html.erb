@@ -6,24 +6,35 @@
 <%= form_for @lenders, :url=> {:controller=>"lender", :action => "update_lender_offering"}, :html=>
 {:width=> "100%",:height=> "100%", :class=>"lender_offering", :multipart=>true, :id=>"lender_item_registration"} do |nf| %>
 
-<%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @lenders}  %>
-<% unless @lenders[0].blank? %>
-	<% @lenders = @lenders[0] %>
-<% end  %>
-<% if not @lenders.blank?  %>
-<% unless session[:reuse] %>
-	<%= nf.hidden_field( :lender_item_id) %>
-<% end %>
-	<%= nf.hidden_field( :is_active) %>
-	<%= nf.hidden_field( :is_saved) %>
-	<%= nf.hidden_field( :user_id) %>
-<% end %>
+ <%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @lenders}  %>
+  <% if @lenders.blank? %>
+  	<% @br = @lenders[0] %>
+  <% else %>
+  	<% @br = @lenders %>
+  <% end %>  
+    
+    <% if session[:reuse] %>
+      <%= nf.hidden_field( :lender_item_id, :value=>'') %>
+    <% else %>
+      <%= nf.hidden_field( :lender_item_id) %>
+    <% end %>
+    <%= nf.hidden_field( :is_active) %>
+    <%= nf.hidden_field( :is_saved) %>
+    <%= nf.hidden_field( :user_id) %>
+ 
 
-<% @st = UsStates.find(:all, :order => "state_name") %>
-<% @ct = Countries.find(:all, :order => "country_name") %>
-<% @cdetails = CommunityMembers.find(:first, :readonly, :conditions => ["user_id = ?", session[:user_id]])  %>
-<% @caddress = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
-
+ <% @st = UsStates.find(:all, :order => "state_name") %>
+  <% @ct = Countries.find(:all, :order => "country_name") %>
+  <% @community_name  = (session[:community_name].blank? ? false : true) %>
+	<% if @community_name  %>
+		<% @cdetails = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
+	<% end  %>
+ 
+    <% unless session[:reuse] || session[:edit] %>
+      <% @getValue = @cdetails %>
+    <% else %>
+      <% @getValue = @br %>
+    <% end %>
 
 <div class="top" >
 
@@ -52,8 +63,8 @@
 	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
 		<div style="width: 50%;float:left;">
 			<label id="personal" >As a lender, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			<% unless @lenders.describe_yourself.blank? %>
-			<% current_selected = @lenders.describe_yourself %>
+			<% unless @br.describe_yourself.blank? %>
+			<% current_selected = @br.describe_yourself %>
 			<% else %>
 			<% current_selected = '99' %>
 			<% end  %>
@@ -64,8 +75,8 @@
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
 		<% display_div = 'none' %>
-		<% unless @lenders.describe_yourself.blank? %>
-		<% if @lenders.describe_yourself == 100 %>
+		<% unless @br.describe_yourself.blank? %>
+		<% if @br.describe_yourself == 100 %>
 		<% display_div =  'inline'%>
 		<% else %>
 		<% display_div =  'none'%>
@@ -108,21 +119,21 @@
 				<td style="width:25%;">
 				<div>
 					<label>First Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24, :value=> @getValue.first_name) %>
 					<span class="error" id="first_name_error">&nbsp;</span>
 				</div></td>
 
 				<td style="width:25%;">
 				<div>
 					<label>Middle Initial:</label>
-					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
+					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1",:value=> @getValue.mi) %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 
 				<td style="width:25%;">
 				<div>
 					<label>Last Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24, :value=> @getValue.last_name) %>
 					<span class="error" id="last_name_error">&nbsp;</span>
 				</div></td>
 
@@ -139,25 +150,25 @@
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24,:value=> @getValue.address_line_1) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 2:</label>
-					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24, :value=> @getValue.address_line_2) %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
+					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15, :value=> @getValue.postal_code) %>
 					<span class="error" id="postal_code_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
+					<%= nf.text_field( :city, :maxlength=>20, :size=>20, :value=> @getValue.city) %>
 					<span class="error" id="city_error">&nbsp;</span>
 				</div></td>
 
@@ -165,31 +176,25 @@
 			<tr class="even">
 				<td style="width:25%;">
 					<label>County:&nbsp;<span class="max_length">(20)</span></label> 
-					<%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
+					<%= nf.text_field( :province,  :maxlength=>20, :size=>20, :value=> @getValue.province) %> <span class="error">&nbsp;</span>
 					
 				</td>
 				
 				
 				<td style="width:25%;">
 				<label>Country:</label>	
-				<% unless @lenders.country_id.blank? %>
-				<% current_selected = @lenders.country_id %>
+				<% unless @getValue.country_id.blank? %>
+				<% current_selected = @getValue.country_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
 				<%= nf.select(:country_id, @countries, {:onchange=>"select#lenders_country_id();"}) %> <span class="error" id="country_error">&nbsp;</span>
-					
-					
-					
-				
-		
 				</td>
 				
-				
-				
+								
 				<td style="width:25%;"> 
-		 		<% if @lenders.state_id_string.blank? %>
+		 		<% if @getValue.state_id_string.blank? %>
            			<% @display_state_id = 'inline' %>
            		<% else %>
            			<% @display_state_id = 'none' %>
@@ -197,8 +202,8 @@
              
             <div id="choose_us_state"  style="display:<%= @display_state_id %>" >
 				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @lenders.state_id.blank? %>
-				<% current_selected = @lenders.state_id %>
+				<% unless @getValue.state_id.blank? %>
+				<% current_selected = @getValue.state_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -206,7 +211,7 @@
 				<%= nf.select(:state_id, @states) %> 
 			</div>
 
-		   <% if @lenders.state_id_string.blank? %>
+		   <% if @getValue.state_id_string.blank? %>
            		<% @display_state_id_string = 'none' %>
            <% else %>
            		<% @display_state_id_string = 'inline' %>
@@ -269,7 +274,7 @@
 	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
 		<label class="readonly_label_underline">Contact Option: By Postal Mail?:</label>
 		<% display_div = 'none' %>
-		<% unless @lenders.useWhichContactAddress.blank? %> <% if @lenders.useWhichContactAddress != -1 %>
+		<% unless @br.useWhichContactAddress.blank? %> <% if @br.useWhichContactAddress != -1 %>
 		<% display_div =  'block'%> <% end %>
 		<% end %>
 		<div id="postalWithContactAddress" style="display: <%= display_div %>;">
@@ -278,7 +283,8 @@
 		</div>
 
 		<% display_div = 'none' %>
-		<% unless @lenders.displayLenderAddress.blank? %> <% if @lenders.displayLenderAddress == 0 %>
+		<% unless @br.displayLenderAddress.blank? %> 
+		<% if @br.displayLenderAddress == 0 %>
 		<% display_div =  'block'%> <% end %>
 		<% end %>
 		<div id="postalWithOutContactAddress" style="display:<%= display_div %>;">
@@ -293,8 +299,8 @@
 	</div>
 
 	<% display_div = 'none' %>
-	<% unless @lenders.useWhichContactAddress.blank? %>
-	<% if @lenders.useWhichContactAddress == 1 || @lenders.useWhichContactAddress == 2 || @lenders.useWhichContactAddressAlternative == 1 %>
+	<% unless @br.useWhichContactAddress.blank? %>
+	<% if @br.useWhichContactAddress == 1 || @br.useWhichContactAddress == 2 || @br.useWhichContactAddressAlternative == 1 %>
 	<% display_div =  'block'%>
 	<% end %>
 	<% end %>
@@ -311,8 +317,8 @@
 			<tr>
 
 			<td>
-				<label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> <% unless @lenders.country_id_alternative.blank? %>
-				<% current_selected = @lenders.country_id_alternative %>
+				<label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> <% unless @getValue.country_id_alternative.blank? %>
+				<% current_selected = @br.country_id_alternative %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -323,7 +329,7 @@
 				
 			<td>
 						
-			<% if @lenders.state_id_string_alternative.blank? %>
+			<% if @br.state_id_string_alternative.blank? %>
            			<% @display_state_id = 'inline' %>
            	<% else %>
            			<% @display_state_id = 'none' %>
@@ -331,8 +337,8 @@
              
             <div id="choose_us_state"  style="display:<%= @display_state_id %>" >
 				<label>Select Alternative State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @lenders.state_id_alternative.blank? %>
-				<% current_selected = @lenders.state_id_alternative %>
+				<% unless @br.state_id_alternative.blank? %>
+				<% current_selected = @br.state_id_alternative %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -340,7 +346,7 @@
 				<%= nf.select(:state_id, @states) %> 
 		  </div>
 
-		   <% if @lenders.state_id_string_alternative.blank? %>
+		   <% if @br.state_id_string_alternative.blank? %>
            <% @display_state_id_string = 'none' %>
            <% else %>
            <% @display_state_id_string = 'inline' %>
@@ -379,8 +385,8 @@
 				<td >
 				<div>
 					<label>Login E-Mail:</label>
-					<% @lender_email = Users.find(:first) %>
-					<label style="font-size:14px;"><%= @lender_email.email %></label>
+					
+					<label style="font-size:14px;"><%= session[:email] %></label>
 					<span class="error" id="email1_contact_error">&nbsp;</span>
 				</div></td>
 				<td >
@@ -544,8 +550,8 @@
 		<span class="error">&nbsp;</span>
 	</div>
 	<% display_div = 'none' %>
-	<% unless @lenders.thirdPartyPresenceL2B.blank? %>
-	<% if @lenders.thirdPartyPresenceL2B.abs == 1 %>
+	<% unless @br.thirdPartyPresenceL2B.blank? %>
+	<% if @br.thirdPartyPresenceL2B.abs == 1 %>
 	<% display_div =  'inline'%>
 	<% end %>
 	<% end %>
@@ -599,8 +605,8 @@
 		<span class="error">&nbsp;</span>
 	</div>
 	<% display_div = 'none' %>
-	<% unless @lenders.thirdPartyPresenceB2L.blank? %>
-	<% if @lenders.thirdPartyPresenceB2L.abs == 1 %>
+	<% unless @br.thirdPartyPresenceB2L.blank? %>
+	<% if @br.thirdPartyPresenceB2L.abs == 1 %>
 	<% display_div =  'inline'%>
 	<% end %>
 	<% end %>
@@ -640,8 +646,8 @@
 		<tr class="odd">
 			<td width="50%">
 			<div style="margin-left:25px;margin-top:5px;">
-				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @lenders.item_category_id.blank? %>
-					<% current_selected = @lenders.item_category_id %>
+				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @br.item_category_id.blank? %>
+					<% current_selected = @br.item_category_id %>
 					<% else %>
 					<% current_selected = '99' %>
 					<% end  %>
@@ -652,8 +658,8 @@
 
 			</div></td>
 			<td  style="width:50%;"> <% display_div = 'none' %>
-			<% unless @lenders.item_category_id.blank? %>
-			<% if @lenders.item_category_id == 0 %>
+			<% unless @br.item_category_id.blank? %>
+			<% if @br.item_category_id == 0 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
@@ -686,8 +692,8 @@
 			<div style="margin-left:25px;margin-top:5px;">
 				<label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
 
-				<% unless @lenders.item_condition_id.blank? %>
-				<% current_selected = @lenders.item_condition_id %>
+				<% unless @br.item_condition_id.blank? %>
+				<% current_selected = @br.item_condition_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -712,7 +718,7 @@
 			</div></td>
 		</tr>
 
-		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_item_id =?", @lenders.lender_item_id]) %>
+		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_item_id =?", @br.lender_item_id]) %>
 		<% if @ig.blank? %>
 		<tr class="odd">
 			<td  style="width:50%;">
@@ -906,8 +912,8 @@
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td style="vertical-align:top;"> <% display_div = 'none' %>
-			<% unless @lenders.present_during_borrowing_period.blank? %>
-			<% if @lenders.present_during_borrowing_period.abs == 1 %>
+			<% unless @br.present_during_borrowing_period.blank? %>
+			<% if @br.present_during_borrowing_period.abs == 1 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
