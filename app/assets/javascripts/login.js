@@ -69,6 +69,29 @@ $(document).ready(function() {
 	
 });
 
+
+function addMember(){
+	
+	var foundIncomplete = false;
+	$("span#incomplete_information_error").css("visibility", "hidden");
+	/*  f l a : all blank*/
+	if (($("input#community_members_first_name").val() == "") && ($("input#community_members_last_name").val() == "") && ($("input#community_members_alias").val() == ""))
+	{
+		foundIncomplete = true;
+		/* incomplete_information_error */
+		$("span#incomplete_information_error").text("You need to provide either a Full Name with middle initial optional, or an Alias.");
+		$("span#incomplete_information_error").css("visibility", "visible");
+	}
+				
+	if (!(foundIncomplete)) {
+		
+		$("form.register_community").submit();
+	}
+	
+}
+
+
+
 function submitUpdateMember(rdt, c_id, com_id, is_c)  {
 	 	
 	    $("[id*='_h']").trigger('change');
@@ -87,8 +110,8 @@ function submitUpdateMember(rdt, c_id, com_id, is_c)  {
 
 function update_row(myThis,rct) {
 	
-
-	if (myThis.id == "community_members_first_name_h") {
+ 
+	if (myThis.id == "community_members_first_name_h"){
 		$("span#thisFirstName"+rct).text(myThis.value);	
 	}  else	if (myThis.id == "community_members_mi_h") {
 		$("span#thisMI"+rct).text(myThis.value);	

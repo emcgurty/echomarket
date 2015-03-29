@@ -165,7 +165,9 @@
 						<td width='20%'><%= lf.text_field :alias, {:value=> '',:maxlength=>50, :size=>40}  %></td>
 						<td width='20%'>
 						<%= lf.hidden_field :remote_ip, :value => request.remote_ip %>
-						<%= lf.submit "Add" %>
+						<a href="#"  onclick="addMember();" class="update_member">Add Member</a>
+						<span class="error" id="incomplete_information_error" >incomplete</span>
+						</td>
 					</tr>
 				<% end %>
 			<%  end  %>
