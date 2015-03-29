@@ -165,8 +165,8 @@ class UserController < ApplicationController
                   
                    
                     @member_parse = params[:users][:community_alias] unless params[:users][:community_alias].blank?
-                    puts @member_parse
-                    puts 'sb bitty'
+                    
+                    
                       if @member_parse.blank?
                         @fin = (params[:users][:community_first_name].blank? ? "" : params[:users][:community_first_name].to_s)
                         @mn = (params[:users][:community_mi].blank? ? "" : params[:users][:community_mi].to_s)
@@ -446,8 +446,8 @@ class UserController < ApplicationController
         
    end
    
-   puts "is one of them found"
-   puts (@b_find_member_name.blank?  &&  @b_find_member_alias.blank?)
+   
+   
    if (@b_find_member_name.blank?  &&  @b_find_member_alias.blank?)
 
       return_result = false
@@ -487,16 +487,14 @@ end
            
            @cm_a = CommunityMembers.new
            unless pm[:community_alias].blank?
-             puts "sb be trying to find bitty"
+   
               @cm_a = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and alias = ?",
                 c.community_id, pm[:community_alias]])
-                puts "this should not be blank"
-                puts @cm_a.to_yaml
+   
+   
             end
 
             unless @cm_a.blank?
-              puts pm[:community_alias]
-              puts "alias above"
               session[:user_id] = @cm_a.community_member_id
               session[:user_alias] = pm[:community_alias]
               @r_success = @cm_a   

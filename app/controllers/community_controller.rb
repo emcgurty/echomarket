@@ -68,22 +68,20 @@ class CommunityController < ApplicationController
   # DELETE /communities/1.json
   def destroy
     reset_session
-    session[:notice] = ''
-    @communities = Communities.find(params[:id])
-    @communities.destroy
-   # @cm = CommunityMembers.find(:all, :conditions => ["community_id = ?", params[:id]])
-   # @community_member_id = @cm.community_member_id
-   # @cm = CommunityMembers.find(@community_member_id)
-   # @cm.destroy
-    respond_to do |format|
-      if @communities.destroy 
-           session[:notice] = "Your Community Record with associated members have been deleted from the Echo Market database."
-           format.html { redirect_to home_items_listing_url }
-      else
-        session[:notice] = "Echo Market has experienced an error in deleting your Community Market record. Please Refresh your browser, and try again"
-        format.html { redirect_to home_items_listing_url  }  
-      end
+        
+    begin
+    Communities.delete(params[:id])
+    @cm = CommunityMembers.find(:all, :conditions => ["community_id = ?", params[:id]])
+      @cm.each do |val|
+       CommunityMembers.delete(val.community_member_id)
+      end 
+       session[:notice] = "Your Community Record with associated members, if any beyond Community creator member, has been deleted from the Echo Market database."
+       redirect_to home_items_listing_url
+    rescue 
+        session[:notice] = "Echo Market has experienced an error in deleting your Community Market record. Please refresh your browser, and try again. Otherwise if this matter persists, please contact Echo Market."
+        redirect_to home_items_listing_url  
     end
+    
   end
   
     def logout
