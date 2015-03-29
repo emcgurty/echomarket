@@ -10,7 +10,7 @@
   <% unless @borrowers[0].blank? %>
     <% @borrowers = @borrowers[0] %>
   <% end  %>
-  <% if not @borrowers.blank?  %>
+
     <% if session[:reuse] %>
       <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
     <% else %>
@@ -19,7 +19,7 @@
     <%= nf.hidden_field( :is_active) %>
     <%= nf.hidden_field( :is_saved) %>
     <%= nf.hidden_field( :user_id) %>
-  <% end %>
+
 
   <% @st = UsStates.find(:all, :order => "state_name") %>
   <% @ct = Countries.find(:all, :order => "country_name") %>
@@ -194,7 +194,7 @@
            <% display_state_id = 'none' %>
            <% end %>
              
-            <div id="choose_us_state"  style="display:#{display_state_id};" >
+            <div id="choose_us_state"  style="display:<%= display_state_id %>;" >
 				<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
 				<% unless @borrowers.state_id.blank? %>
 				<% current_selected = @borrowers.state_id %>
@@ -210,7 +210,7 @@
            <% else %>
            <% display_state_id_string = 'none' %>
            <% end %>
-           	<div id="provide_country_state" style="display:#{display_state_id_string};" >
+           	<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string) %>
 					
@@ -364,7 +364,7 @@
            <% display_state_id = 'none' %>
            <% end %>
              
-            <div id="choose_us_state_alternative"  style="display:#{display_state_id};" >
+            <div id="choose_us_state_alternative"  style="display:<%= display_state_id %>;" >
 				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
 				<% unless @borrowers.state_id_alternative.blank? %>
 				<% current_selected = @borrowers.state_id_alternative %>
@@ -380,7 +380,7 @@
            <% else %>
            <% display_state_id_string = 'none' %>
            <% end %>
-           	<div id="provide_country_state_alternative" style="display:#{display_state_id_string};" >
+           	<div id="provide_country_state_alternative" style="display:<%= display_state_id_string %>;" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string_alternative) %>
 					
