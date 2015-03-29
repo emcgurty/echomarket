@@ -160,12 +160,12 @@ class CommunityController < ApplicationController
         @communities.create_reset_code(which)
         if which == 'community_name'
           # respond_to do |format|
-          Notifier.get_username_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_community_name_get?
+          Notifier.get_community_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_community_name_get?
           #format.html
           session[:notice] = "Path to retrieve Community name sent to #{@communities.email}"
         #end
         else
-          Notifier.reset_password_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_password_reset?
+          Notifier.reset_community_password_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_password_reset?
           session[:notice] = "Path to reset password code sent to #{@communities.email}"
         end
         redirect_to home_items_listing_url
