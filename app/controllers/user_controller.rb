@@ -80,7 +80,11 @@ class UserController < ApplicationController
 
   def login
     
+    if session[:notice]
+      @hold_s = session[:notice]
+    end
     reset_session
+    session[:notice] = @hold_s
     session[:edit_user] = false
     session[:background] = true
     session[:register_type] = (params[:type].blank? ? 'all': params[:type])
@@ -161,6 +165,8 @@ class UserController < ApplicationController
                   
                    
                     @member_parse = params[:users][:community_alias] unless params[:users][:community_alias].blank?
+                    puts @member_parse
+                    puts 'sb bitty'
                       if @member_parse.blank?
                         @fin = (params[:users][:community_first_name].blank? ? "" : params[:users][:community_first_name].to_s)
                         @mn = (params[:users][:community_mi].blank? ? "" : params[:users][:community_mi].to_s)
@@ -426,20 +432,25 @@ class UserController < ApplicationController
     
   def get_member_login_info(c, pm)
    puts "get member_login"
-   return_result = false
+   
+   puts "pm[:community_alias]"
+   puts pm[:community_alias]
+   return_result = true
    
    @b_find_member_name = find_member_name(c, pm) unless pm[:community_first_name].blank? && pm[:community_mi].blank? && pm[:community_first_name].blank?
       
-   unless  @b_find_member_name.count < 1
-       
+   if  @b_find_member_name.blank?
+       puts "sb false"
        @b_find_member_alias = find_member_alias(c, pm) unless pm[:community_alias].blank?
        
         
    end
    
-   if (@b_find_member_name.count < 1  &&  @b_find_member_alias.count < 1)
+   puts "is one of them found"
+   puts (@b_find_member_name.blank?  &&  @b_find_member_alias.blank?)
+   if (@b_find_member_name.blank?  &&  @b_find_member_alias.blank?)
 
-      return_result = true
+      return_result = false
    end
                      
    return return_result
@@ -476,11 +487,16 @@ end
            
            @cm_a = CommunityMembers.new
            unless pm[:community_alias].blank?
+             puts "sb be trying to find bitty"
               @cm_a = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and alias = ?",
                 c.community_id, pm[:community_alias]])
+                puts "this should not be blank"
+                puts @cm_a.to_yaml
             end
 
             unless @cm_a.blank?
+              puts pm[:community_alias]
+              puts "alias above"
               session[:user_id] = @cm_a.community_member_id
               session[:user_alias] = pm[:community_alias]
               @r_success = @cm_a   

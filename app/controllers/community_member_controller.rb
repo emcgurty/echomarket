@@ -33,7 +33,9 @@ class CommunityMemberController < ApplicationController
   #Parameters: {"utf8"=>"√", "authenticity_token"=>"8b3H95PyT131qgJxSIR9+19VxS9A4MyV579W9KywLvU=", "community_members"=>{"first_name_h"=>"Liz", "mi_h"=>"m", "last_name_h"=>"mcgurty", "alias_h"=>"", "first_name"=>"d", "mi"=
   #>"m", "last_name"=>"l", "alias"=>"", "is_creator"=>"0"}, "commit"=>"Add", "view"=>"m_list"}
     myaddhash = Hash.new
-    myaddhash = [:community_id => session[:community_id], :first_name => params[:community_members][:first_name], :mi=>params[:community_members][:mi], :last_name => params[:community_members][:last_name], :alias=> params[:community_members][:alias]]
+    myaddhash = [:community_id => session[:community_id], :first_name => params[:community_members][:first_name], 
+    :mi=>params[:community_members][:mi], :last_name => params[:community_members][:last_name], 
+    :alias=> params[:community_members][:alias], :is_creator => 0, :remote_ip => params[:community_members][:remote_ip]]
 
     @community_members = CommunityMembers.new(myaddhash[0])
 
@@ -72,7 +74,12 @@ class CommunityMemberController < ApplicationController
     
     unless @community_member.blank?
       myupdatehash = Hash.new
-      myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => params[:al], :date_updated=> Time.now]
+       if (params[:is_c] == '1')
+            my_alias_str = params[:fi] + (params[:m].blank? ? "" : params[:m]) + params[:la]
+           myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => my_alias_str, :date_updated=> Time.now]
+       else
+           myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => params[:al], :date_updated=> Time.now]
+       end      
     end
 
     
