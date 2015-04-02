@@ -21,6 +21,7 @@ class LenderController < ApplicationController
       session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
+	   session[:edit_record] = (params['commit'] == 'edit' ? true : false)
         @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
         @lenders = Lenders.new if @lenders.blank?
       else
@@ -38,9 +39,11 @@ class LenderController < ApplicationController
     if !(params['commit'].blank?) && params[:id]
          if params['commit'] == "edit"
           session[:reuse] = false
+		session[:edit_record] = true
           redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
          elsif params['commit'] == "reuse"
-          session[:reuse] = true   
+          session[:reuse] = true  
+		session[:edit_record] = true 
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
@@ -98,11 +101,7 @@ class LenderController < ApplicationController
 
         @req = params[:lenders]
 
-        if (@req[:useWhichContactAddressAlternative] == '1')
-          @useWhichContactAddress = 2
-        else
-          @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
-        end
+        @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
         @lenders = Lenders.new(
           :user_id => session[:user_id],
@@ -120,10 +119,9 @@ class LenderController < ApplicationController
           :postal_code=> @req[:postal_code],
           :city=> @req[:city],
           :province=> @req[:province],
-          :state_id=> @req[:state_id],
+          :state_id=> (@req[:state_id_string].blank? ? @req[:state_id] : '99'),
           :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id],
-          :useWhichContactAddressAlternative => @req[:useWhichContactAddressAlternative],
           :useWhichContactAddress => @useWhichContactAddress,
           :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
           :address_line_2_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_2_alternative]: ''),
@@ -219,12 +217,7 @@ class LenderController < ApplicationController
         ## do update
         @ltmp = Lenders.find(:first, :conditions => ["lender_item_id = ?",params[:lenders][:lender_item_id] ])
         @req = params[:lenders]
-          @makeUseWhichStr = @req[:useWhichContactAddressAlternative].to_s
-        if (@makeUseWhichStr== '1')
-          @useWhichContactAddress = 2
-        else
-          @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
-        end
+        @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
         @myupdatehash = Hash.new
         @myupdatehash = [:describe_yourself =>  @req[:describe_yourself].to_i,
@@ -241,10 +234,9 @@ class LenderController < ApplicationController
           :postal_code=> @req[:postal_code],
           :city=> @req[:city],
           :province=> @req[:province],
-          :state_id=> @req[:state_id],
+          :state_id=> (@req[:state_id_string].blank? ? @req[:state_id] : '99'),
           :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id],
-          :useWhichContactAddressAlternative => @req[:useWhichContactAddressAlternative],
           :useWhichContactAddress => @useWhichContactAddress,
           :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
           :address_line_2_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_2_alternative]: ''),

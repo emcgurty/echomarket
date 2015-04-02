@@ -1,7 +1,6 @@
 class CommunityMemberController < ApplicationController
  
   def m_list
-
       session[:background] = true
       @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
@@ -30,7 +29,7 @@ class CommunityMemberController < ApplicationController
  # POST /community_members
   # POST /community_members.json
   def add
-  #Parameters: {"utf8"=>"√", "authenticity_token"=>"8b3H95PyT131qgJxSIR9+19VxS9A4MyV579W9KywLvU=", "community_members"=>{"first_name_h"=>"Liz", "mi_h"=>"m", "last_name_h"=>"mcgurty", "alias_h"=>"", "first_name"=>"d", "mi"=
+  #Parameters: {"utf8"=>"?", "authenticity_token"=>"8b3H95PyT131qgJxSIR9+19VxS9A4MyV579W9KywLvU=", "community_members"=>{"first_name_h"=>"Liz", "mi_h"=>"m", "last_name_h"=>"mcgurty", "alias_h"=>"", "first_name"=>"d", "mi"=
   #>"m", "last_name"=>"l", "alias"=>"", "is_creator"=>"0"}, "commit"=>"Add", "view"=>"m_list"}
     myaddhash = Hash.new
     myaddhash = [:community_id => session[:community_id], :first_name => params[:community_members][:first_name], 
@@ -44,9 +43,8 @@ class CommunityMemberController < ApplicationController
         format.html { redirect_to :action=>'m_list'}
 
       else
-        session[:notice]  = "Echo Market error in adding new community mmber."
-        format.html { redirect_to home_items_listing_url }
-
+        session[:notice]  = "Echo Market error in adding new community member."
+        format.html { redirect_to :action=>'m_list'}
       end
     end
   end
@@ -57,10 +55,10 @@ class CommunityMemberController < ApplicationController
     
     begin
       CommunityMembers.delete(params[:id])
-      redirect_to :action=>'m_list' , :id => @community_members.community_id
+      redirect_to :action=>'m_list'
     rescue 
         session[:notice] = 'Echo Market application error in removing your selected member.'
-        redirect_to :action=>'m_list' , :id => @community_members.community_id
+        redirect_to :action=>'m_list'
     end
     
   end

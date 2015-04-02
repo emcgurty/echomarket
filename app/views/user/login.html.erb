@@ -41,7 +41,7 @@
 		&nbsp;&nbsp; <span class="error" id="login_community_name_error">This is an error</span>
 	
 	
-		<label>Community Password (case sensitive): <a href="#" onclick="showForgotCommunityPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your Community password?</span></a> </label>
+		<label>Community Password (case sensitive): <a href="#" onclick="showForgotCommunityPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot or reset your Community password?</span></a> </label>
 		<%= nf.password_field(:community_password, {:maxlength=>16,  :value=>""}) %>
 		&nbsp;&nbsp;<span class="error" id="login_community_password_error">This is an error</span>
 
@@ -116,7 +116,7 @@
 	</div>
 
 	<div style="margin-left:25px;">
-		<label>Password (case sensitive): <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot your password?</span></a> </label>
+		<label>Password (case sensitive): <a href="#" onclick="showForgotPassword();" tabindex="-1"> &nbsp;&nbsp;<span class="validation">Forgot or reset your password?</span></a> </label>
 		<%= nf.password_field(:password, {:maxlength=>16, :value=>""}) %>
 		&nbsp;&nbsp;<span class="error" id="login_password_error">This is an error</span>
 	</div>
@@ -133,7 +133,7 @@
 
 	<a href="#" onclick="showCommunityRegistration();">=> I don't have a login...Register here as a Community.</a>
 	<a href="#" onclick="showRegistration();">=> I don't have a login...Register here as a lender, borrower or guest.</a>
-	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see that is being offered to borrow or lend.</a>
+	<a href="#" onclick="window.location.replace('/home/items_listing');">=> Let's see what is being offered to borrow or lend.</a>
 </div>
 <div   class="div_white" >&nbsp;</div>
 <% end %>

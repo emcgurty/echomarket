@@ -399,11 +399,11 @@ class UserController < ApplicationController
 
   def reset_password
 
-    @users = Users.find(:first, :conditions => ["reset_code =?", params[:users][:reset_code]])
+    @users = Users.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
     if @users
       @myupdatehash = Hash.new
       @myupdatehash = [:password => params[:users][:password], :password_confirmation => params[:users][:password_confirmation]]
-      @users.update_attributes(@myupdatehash)
+      @users.update_attributes(@myupdatehash[0])
       @users.delete_reset_code
       session[:notice] = "Password reset successfully for #{@users.email}. Please login"
       redirect_to home_items_listing_url

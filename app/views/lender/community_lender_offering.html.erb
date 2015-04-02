@@ -7,12 +7,10 @@
 {:width=> "100%",:height=> "100%", :class=>"lender_offering", :multipart=>true, :id=>"lender_item_registration"} do |nf| %>
 
  <%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @lenders}  %>
-  <% if @lenders.blank? %>
-  	<% @br = @lenders[0] %>
-  <% else %>
-  	<% @br = @lenders %>
-  <% end %>  
-    
+ <% unless @lenders[0].blank? %>
+<% @lenders = @lenders[0] %>
+<% end %>
+ 
     <% if session[:reuse] %>
       <%= nf.hidden_field( :lender_item_id, :value=>'') %>
     <% else %>
@@ -23,26 +21,28 @@
     <%= nf.hidden_field( :user_id) %>
  
 
- <% @st = UsStates.find(:all, :order => "state_name") %>
+  <% @st = UsStates.find(:all, :order => "state_name") %>
   <% @ct = Countries.find(:all, :order => "country_name") %>
   <% @community_name  = (session[:community_name].blank? ? false : true) %>
 	<% if @community_name  %>
 		<% @cdetails = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
 	<% end  %>
  
-    <% unless session[:reuse] || session[:edit] %>
-      <% @getValue = @cdetails %>
+    <% if session[:edit_record] %>
+      <% @getValue = @lenders %>
     <% else %>
-      <% @getValue = @br %>
+      <% @getValue = @cdetails %>
     <% end %>
 
+   
+    
 <div class="top" >
 
 	<p>
 		<span class="logo_white" >The Echo Market</span>
 	</p>
 	<p>
-		<%= session[:user_alias] + ": " unless session[:user_alias].blank? %>
+<%= session[:user_alias] + " of " + session[:community_name] unless session[:community_id].blank? %>&nbsp;
 		LENDER ITEM REGISTRATION
 		<%#*<a href="#" class="registration_header" style="display:none;" onclick="saveAndFinishLater();" >Save and Finish Later</a>%> <a href="#" class="registration_header" style="display:none;" onclick="saveAll();">Save Lender Item Registration</a>
 	</p>
@@ -63,8 +63,8 @@
 	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
 		<div style="width: 50%;float:left;">
 			<label id="personal" >As a lender, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			<% unless @br.describe_yourself.blank? %>
-			<% current_selected = @br.describe_yourself %>
+			<% unless @lenders.describe_yourself.blank? %>
+			<% current_selected = @lenders.describe_yourself %>
 			<% else %>
 			<% current_selected = '99' %>
 			<% end  %>
@@ -75,8 +75,8 @@
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
 		<% display_div = 'none' %>
-		<% unless @br.describe_yourself.blank? %>
-		<% if @br.describe_yourself == 100 %>
+		<% unless @lenders.describe_yourself.blank? %>
+		<% if @lenders.describe_yourself == 100 %>
 		<% display_div =  'inline'%>
 		<% else %>
 		<% display_div =  'none'%>
@@ -96,7 +96,7 @@
 				<td style="width:25%;">
 				<div>
 					<label>Organization Name:&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :organization_name,  :maxlength=>24, :size=>24) %>
+					<%= nf.text_field(:organization_name,  :maxlength=>24, :size=>24) %>
 					<span class="error" id="organization_name_error">&nbsp;</span>
 				</div></td>
 
@@ -189,7 +189,8 @@
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries, {:onchange=>"select#lenders_country_id();"}) %> <span class="error" id="country_error">&nbsp;</span>
+				<%= nf.select(:country_id, @countries, {:onchange=>"select#lenders_country_id();"}) %>
+				 <span class="error" id="country_error">&nbsp;</span>
 				</td>
 				
 								
@@ -201,14 +202,14 @@
            		<% end %>
              
             <div id="choose_us_state"  style="display:<%= @display_state_id %>" >
-				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
 				<% unless @getValue.state_id.blank? %>
 				<% current_selected = @getValue.state_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> 
+				<%= nf.select(:state_id, @states) %>
 			</div>
 
 		   <% if @getValue.state_id_string.blank? %>
@@ -273,8 +274,8 @@
 
 	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
 		<label class="readonly_label_underline">Contact Option: By Postal Mail?:</label>
-		<% display_div = 'none' %>
-		<% unless @br.useWhichContactAddress.blank? %> <% if @br.useWhichContactAddress != -1 %>
+		<% display_div = 'block' %>
+		<% unless @lenders.useWhichContactAddress.blank? %> <% if @lenders.useWhichContactAddress != -1 %>
 		<% display_div =  'block'%> <% end %>
 		<% end %>
 		<div id="postalWithContactAddress" style="display: <%= display_div %>;">
@@ -282,28 +283,10 @@
 			{:object => "lenders", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'lenders');"} %>
 		</div>
 
-		<% display_div = 'none' %>
-		<% unless @br.displayLenderAddress.blank? %> 
-		<% if @br.displayLenderAddress == 0 %>
-		<% display_div =  'block'%> <% end %>
-		<% end %>
-		<div id="postalWithOutContactAddress" style="display:<%= display_div %>;">
-
-			<p>
-				You have selected above to not display your contact address.
-			</p>
-			<label for="useWhichContactAddressAlternative" >Use an alternative address?:&nbsp;
-				<%= nf.check_box(:useWhichContactAddressAlternative) %> </label>
-
-		</div>
+		
 	</div>
 
-	<% display_div = 'none' %>
-	<% unless @br.useWhichContactAddress.blank? %>
-	<% if @br.useWhichContactAddress == 1 || @br.useWhichContactAddress == 2 || @br.useWhichContactAddressAlternative == 1 %>
-	<% display_div =  'block'%>
-	<% end %>
-	<% end %>
+
 	<div id="table_alternative_address_input" style="display:block;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
 		<label id="personal" >Provide your alternative contact address here:</label>
 		<br />
@@ -317,8 +300,9 @@
 			<tr>
 
 			<td>
-				<label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> <% unless @getValue.country_id_alternative.blank? %>
-				<% current_selected = @br.country_id_alternative %>
+				<label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label>
+				 <% unless @lenders.country_id_alternative.blank? %>
+				<% current_selected = @lenders.country_id_alternative %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -329,29 +313,29 @@
 				
 			<td>
 						
-			<% if @br.state_id_string_alternative.blank? %>
+			<% if @lenders.state_id_string_alternative.blank? %>
            			<% @display_state_id = 'inline' %>
            	<% else %>
            			<% @display_state_id = 'none' %>
            	<% end %>
              
-            <div id="choose_us_state"  style="display:<%= @display_state_id %>" >
-				<label>Select Alternative State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @br.state_id_alternative.blank? %>
-				<% current_selected = @br.state_id_alternative %>
+            <div id="choose_us_state_alternative"  style="display:<%= @display_state_id %>" >
+				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
+				<% unless @lenders.state_id_alternative.blank? %>
+				<% current_selected = @lenders.state_id_alternative %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
 				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> 
+				<%= nf.select(:state_id_alternative, @states) %> 
 		  </div>
 
-		   <% if @br.state_id_string_alternative.blank? %>
+		   <% if @lenders.state_id_string_alternative.blank? %>
            <% @display_state_id_string = 'none' %>
            <% else %>
            <% @display_state_id_string = 'inline' %>
            <% end %>
-           	<div id="provide_country_state" style="display:<%= @display_state_id_string %>" >
+           	<div id="provide_country_state_alternative" style="display:<%= @display_state_id_string %>" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string_alternative) %>
 			</div>
@@ -536,7 +520,7 @@
 	</div>
 	<div style="float:left;width:92%;padding-left: 25px;padding-top: 5px;margin-left:25px;background-color:#CFBDAE;">
 		<label for="borrower_preferred_location_radio">Will deliver to borrower preferred location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true,:field=>"willDeliverToBorrowerPreferredL2B", :radio_id => "borrower_preferred_location_radio", :radio_num => "borrowerpreferredlocationradio", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=>true,:field=>"willDeliverToBorrowerPreferredL2B", :radio_id => "borrower_preferred_location_radio", :radio_num => "borrowerpreferredlocationradio", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 	<div   class="div_white" >
@@ -545,24 +529,24 @@
 
 	<div style="float:left;width:92%;padding-left: 25px;padding-top: 5px;margin-left:25px;background-color:#C2B9BC;">
 		<label for="third_party_present_lender">Would you like a third-party present during transfer to borrower?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true, :field=>"thirdPartyPresenceL2B", :radio_id => "third_party_present_lender", :radio_num => "thirdpartypresentlender", :which_class=>"radio",
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=>true, :field=>"thirdPartyPresenceL2B", :radio_id => "third_party_present_lender", :radio_num => "thirdpartypresentlender", :which_class=>"radio",
 		:onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
-	<% display_div = 'none' %>
-	<% unless @br.thirdPartyPresenceL2B.blank? %>
-	<% if @br.thirdPartyPresenceL2B.abs == 1 %>
+	<% display_div = 'inline' %>
+	<% unless @lenders.thirdPartyPresenceL2B.blank? %>
+	<% if @lenders.thirdPartyPresenceL2B.abs == 1 %>
 	<% display_div =  'inline'%>
 	<% end %>
 	<% end %>
 	<div style="float:left;width:92%;padding-left: 25px;padding-top:5px;margin-left:25px;background-color:#E1F5A9;display:<%= display_div  %>;" id="which_delivery_locationL2B_div">
 		<div class="column30">
 			<label  for="which_delivery_location_lender">Your choice?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true, :field=> "lenderThirdPartyChoiceL2B",:radio_id => "which_delivery_location_lender", :radio_num => "whichdeliverylocationlender", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=>true, :field=> "lenderThirdPartyChoiceL2B",:radio_id => "which_delivery_location_lender", :radio_num => "whichdeliverylocationlender", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 		<div class="column30">
 			<label  for="mutually_agreed_radio_lender">Mutually agreed?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true, :field=>"agreedThirdPartyChoiceL2B", :radio_id => "mutually_agreed_radio_lender", :radio_num => "mutuallyagreedradiolender", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=>true, :field=>"agreedThirdPartyChoiceL2B", :radio_id => "mutually_agreed_radio_lender", :radio_num => "mutuallyagreedradiolender", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 	</div>
 
@@ -588,25 +572,25 @@
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Will meet with borrower at an agreed location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true, :field=>"meetBorrowerAtAgreedB2L",:radio_id => "agreed_location_radio_borrower", :radio_num => "agreedlocationradioborrower", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true, :field=>"meetBorrowerAtAgreedB2L",:radio_id => "agreed_location_radio_borrower", :radio_num => "agreedlocationradioborrower", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Will pick up at borrower's location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true,:field=>"willPickUpPreferredLocationB2L",:radio_id => "borrower_location_pick_up", :radio_num => "borrowerlocationpickup", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"willPickUpPreferredLocationB2L",:radio_id => "borrower_location_pick_up", :radio_num => "borrowerlocationpickup", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Would you like a third-party present during transfer from borrower?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true,:field=>"thirdPartyPresenceB2L",:radio_id => "third_party_present_borrower", :radio_num => "thirdpartypresentborrower", :which_class=>"radio",
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"thirdPartyPresenceB2L",:radio_id => "third_party_present_borrower", :radio_num => "thirdpartypresentborrower", :which_class=>"radio",
 		:onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
-	<% display_div = 'none' %>
-	<% unless @br.thirdPartyPresenceB2L.blank? %>
-	<% if @br.thirdPartyPresenceB2L.abs == 1 %>
+	<% display_div = 'inline' %>
+	<% unless @lenders.thirdPartyPresenceB2L.blank? %>
+	<% if @lenders.thirdPartyPresenceB2L.abs == 1 %>
 	<% display_div =  'inline'%>
 	<% end %>
 	<% end %>
@@ -615,7 +599,7 @@
 		<div class="column30" >
 
 			<label >Your choice?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true,:field=>"lenderThirdPartyChoiceB2L",:radio_id => "your_choice_location_radio_borrower", :radio_num => "lenderThirdPartyChoiceB2L", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"lenderThirdPartyChoiceB2L",:radio_id => "your_choice_location_radio_borrower", :radio_num => "lenderThirdPartyChoiceB2L", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 
 		<div class="column30" >
@@ -646,8 +630,8 @@
 		<tr class="odd">
 			<td width="50%">
 			<div style="margin-left:25px;margin-top:5px;">
-				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @br.item_category_id.blank? %>
-					<% current_selected = @br.item_category_id %>
+				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @lenders.item_category_id.blank? %>
+					<% current_selected = @lenders.item_category_id %>
 					<% else %>
 					<% current_selected = '99' %>
 					<% end  %>
@@ -658,8 +642,8 @@
 
 			</div></td>
 			<td  style="width:50%;"> <% display_div = 'none' %>
-			<% unless @br.item_category_id.blank? %>
-			<% if @br.item_category_id == 0 %>
+			<% unless @lenders.item_category_id.blank? %>
+			<% if @lenders.item_category_id == 0 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
@@ -675,7 +659,7 @@
 			<td colspan='2'>
 			<div style="margin-left:25px;margin-top:5px;">
 				<label>Based on this category, would you like to notify borrowers seeking items in this category?:&nbsp;
-					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",
+					<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",
 					:field=>"notify_borrowers",:radio_id => "notify_borrowers", :radio_num => "notify_borrowers1", :which_class=>"radio", :onchange_call => ""} %></label>
 
 			</div></td>
@@ -692,8 +676,8 @@
 			<div style="margin-left:25px;margin-top:5px;">
 				<label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
 
-				<% unless @br.item_condition_id.blank? %>
-				<% current_selected = @br.item_condition_id %>
+				<% unless @lenders.item_condition_id.blank? %>
+				<% current_selected = @lenders.item_condition_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
@@ -718,7 +702,7 @@
 			</div></td>
 		</tr>
 
-		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_item_id =?", @br.lender_item_id]) %>
+		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_item_id =?", @lenders.lender_item_id]) %>
 		<% if @ig.blank? %>
 		<tr class="odd">
 			<td  style="width:50%;">
@@ -912,8 +896,8 @@
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td style="vertical-align:top;"> <% display_div = 'none' %>
-			<% unless @br.present_during_borrowing_period.blank? %>
-			<% if @br.present_during_borrowing_period.abs == 1 %>
+			<% unless @lenders.present_during_borrowing_period.blank? %>
+			<% if @lenders.present_during_borrowing_period.abs == 1 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>

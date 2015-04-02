@@ -20,6 +20,7 @@ class BorrowerController < ApplicationController
      session[:background] = true
      unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
+        session[:edit_record] = (params['commit'] == 'edit' ? true : false)
         @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
         @borrowers = Borrowers.new if @borrowers.blank?
       else
@@ -38,9 +39,12 @@ class BorrowerController < ApplicationController
     if !(params[:commit].blank?) && params[:id]
          if params['commit'] == "edit"
           session[:reuse] = false
+		session[:edit_record] = true
           redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
          elsif params['commit'] == "reuse"
           session[:reuse] = true   
+		session[:edit_record] = true
+
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
@@ -92,12 +96,7 @@ class BorrowerController < ApplicationController
       if (params[:borrowers][:borrower_item_id].blank?)  ## then it is a new record
 
         @req = params[:borrowers]
-
-        if (@req[:useWhichContactAddressAlternative] == '1')
-          @useWhichContactAddress = 2
-        else
-          @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
-        end
+        @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
         @borrowers = Borrowers.new(
           :user_id => session[:user_id],
@@ -118,7 +117,6 @@ class BorrowerController < ApplicationController
           :state_id=> @req[:state_id].to_s,
           :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id].to_s,
-          :useWhichContactAddressAlternative => @req[:useWhichContactAddressAlternative],
           :useWhichContactAddress => @useWhichContactAddress,
           :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
           :address_line_2_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_2_alternative]: ''),
@@ -181,12 +179,7 @@ class BorrowerController < ApplicationController
         ## do update
         @ltmp = Borrowers.find(:first, :conditions => ["borrower_item_id = ?",params[:borrowers][:borrower_item_id] ])
         @req = params[:borrowers]
-        @makeUseWhichStr = @req[:useWhichContactAddressAlternative].to_s
-        if (@makeUseWhichStr == '1')
-          @useWhichContactAddress = 2
-        else
-          @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
-        end
+        @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
         @myupdatehash = Hash.new
         @myupdatehash = [:describe_yourself =>  @req[:describe_yourself].to_i,
@@ -206,7 +199,6 @@ class BorrowerController < ApplicationController
           :state_id=> @req[:state_id].to_s,
           :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id].to_s,
-          :useWhichContactAddressAlternative => @req[:useWhichContactAddressAlternative],
           :useWhichContactAddress => @useWhichContactAddress,
           :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
           :address_line_2_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_2_alternative]: ''),
@@ -250,9 +242,7 @@ class BorrowerController < ApplicationController
           :approved => 0]
 
 
-        @ltmp.update_attributes(@myupdatehash[0])
-        @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
-        if @ltmp.save(:validate => @shouldvalidate) && @ltmp.errors.empty?
+        if @ltmp.update_attributes(@myupdatehash[0])
 
           unless (@hold_picture_file.blank?)
             @img = Itemimages.find(:first, :conditions => ["borrower_item_id = ?", @ltmp.borrower_item_id])

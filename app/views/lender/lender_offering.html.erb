@@ -221,7 +221,7 @@
 				<td style="width:25%;">
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Address?:</label>
-					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
+					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error" id="display_address_error">&nbsp;</span>
 				</div></td>
 			</tr>
@@ -269,7 +269,7 @@
 
 	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
 		<label class="readonly_label_underline">Contact Option: By Postal Mail?:</label>
-		<% display_div = 'none' %>
+		<% display_div = 'block' %>
 		<% unless @lenders.useWhichContactAddress.blank? %> <% if @lenders.useWhichContactAddress != -1 %>
 		<% display_div =  'block'%> <% end %>
 		<% end %>
@@ -278,27 +278,10 @@
 			{:object => "lenders", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'lenders');"} %>
 		</div>
 
-		<% display_div = 'none' %>
-		<% unless @lenders.displayLenderAddress.blank? %> <% if @lenders.displayLenderAddress == 0 %>
-		<% display_div =  'block'%> <% end %>
-		<% end %>
-		<div id="postalWithOutContactAddress" style="display:<%= display_div %>;">
-
-			<p>
-				You have selected above to not display your contact address.
-			</p>
-			<label for="useWhichContactAddressAlternative" >Use an alternative address?:&nbsp;
-				<%= nf.check_box(:useWhichContactAddressAlternative) %> </label>
-
-		</div>
+	
 	</div>
 
-	<% display_div = 'none' %>
-	<% unless @lenders.useWhichContactAddress.blank? %>
-	<% if @lenders.useWhichContactAddress == 1 || @lenders.useWhichContactAddress == 2 || @lenders.useWhichContactAddressAlternative == 1 %>
-	<% display_div =  'block'%>
-	<% end %>
-	<% end %>
+
 	   <div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
       <label id="personal" >Provide your alternative contact address here:</label>
       <br />
@@ -569,7 +552,7 @@
 		:onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
-	<% display_div = 'none' %>
+	<% display_div = 'inline' %>
 	<% unless @lenders.thirdPartyPresenceL2B.blank? %>
 	<% if @lenders.thirdPartyPresenceL2B.abs == 1 %>
 	<% display_div =  'inline'%>
@@ -624,7 +607,7 @@
 		:onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
-	<% display_div = 'none' %>
+	<% display_div = 'inline' %>
 	<% unless @lenders.thirdPartyPresenceB2L.blank? %>
 	<% if @lenders.thirdPartyPresenceB2L.abs == 1 %>
 	<% display_div =  'inline'%>

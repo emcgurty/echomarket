@@ -21,12 +21,12 @@ class CommunityController < ApplicationController
     @communities = Communities.new(params[:communities])
     respond_to do |format|
       
-      if @communities.save(:validate => true) && @communities.errors.empty?
+      if @communities.save(:validate =>false)
         @cm = CommunityMembers.new(
         :community_id => @communities.community_id, 
         :first_name => @communities.first_name, 
         :mi => @communities.mi,:last_name => @communities.last_name, :remote_ip => @communities.remote_ip, :date_created => Time.now, :is_active => 1, :is_creator => 1)
-        if @cm.save(:validate => true) && @cm.errors.empty?
+        if @cm.save(:validate => false) 
           session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
           format.html { redirect_to :controller => "home", :action => "items_listing" }
         else
@@ -46,21 +46,23 @@ class CommunityController < ApplicationController
   # PUT /communities/1.json
   def update
     session[:notice] = ''
-    @communities = Communities.find(params[:communities][:community_id])
-    @communities.update_attributes(params[:communities])
-       respond_to do |format|
-      if @communities.save && @communities.errors.empty? 
-        @cm = CommunityMembers.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:communities][:community_id] ])
+    @communities = Communities.find(params[:id])
+    
+     respond_to do |format|
+
+      if @communities.update_attributes(params[:communities]) && @communities.errors.empty? 
+        @cm = CommunityMembers.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
         @cm.first_name = params[:communities][:first_name]
         @cm.mi = params[:communities][:mi]
         @cm.last_name = params[:communities][:last_name]
         @cm.save(:validate => false)
         session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
         format.html { redirect_to home_items_listing_url }
-      else
-        session[:notice] = "Failure in updating your Community information.  Echo Market and its database may be busy.  Please try again.."
-        format.html { redirect_to home_items_listing_url}  
-      end
+	else      
+	   session[:notice] = "Echo Market encountered errors  in your update.  Please try again.  If the matter persists, would you please contact Echo Market from the application menu."
+        format.html { redirect_to home_items_listing_url }
+
+end
     end    
   end
 
@@ -182,20 +184,30 @@ class CommunityController < ApplicationController
   # format.html
   #end
   end
+      
 
-  def get_reset_community_password
-    session[:background] = true
-    
-    @communities = Communities.find(:first, :conditions => ["reset_code =?", params[:id]])
+
+  def get_community_name
+    session[:notice] = ''
+    @c = Communities.find_by_reset_code(params[:id]) unless params[:id].blank?
+    if @c
+      @c.delete_reset_code
+      session[:notice] = "Your Community Name is #{@c.community_name}. Please login."
+      redirect_to home_items_listing_url
+    else
+      session[:notice] = "Your Community Name was previously reported to you. Please try to login again."
+      redirect_to home_items_listing_url
+    end
+
   end
 
-  def reset_password
+  def reset_community_password
 
-    @communities= Communities.find(:first, :conditions => ["reset_code =?", params[:communities][:reset_code]])
+    @communities= Communities.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
     unless @communities.blank?
       @myupdatehash = Hash.new
       @myupdatehash = [:password => params[:communities][:password], :password_confirmation => params[:communities][:password_confirmation]]
-      @communities.update_attributes(@myupdatehash)
+      @communities.update_attributes(@myupdatehash[0])
       @communities.delete_reset_code
       session[:notice] = "Password reset successfully for #{@communities.email}. Please login"
       redirect_to home_items_listing_url
@@ -204,6 +216,11 @@ class CommunityController < ApplicationController
       redirect_to home_items_listing_url
     end
 
+  end
+
+  def get_reset_community_password
+    session[:background] = true
+    @communities = Communities.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
 
 end

@@ -10,7 +10,6 @@
   <% unless @borrowers[0].blank? %>
     <% @borrowers = @borrowers[0] %>
   <% end  %>
-
     <% if session[:reuse] %>
       <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
     <% else %>
@@ -19,7 +18,6 @@
     <%= nf.hidden_field( :is_active) %>
     <%= nf.hidden_field( :is_saved) %>
     <%= nf.hidden_field( :user_id) %>
-
 
   <% @st = UsStates.find(:all, :order => "state_name") %>
   <% @ct = Countries.find(:all, :order => "country_name") %>
@@ -223,7 +221,7 @@
           <td style="width:25%;">
             <div style="display:inline-block;vertical-align:top;">
               <label >Public Display Address?:</label>
-              <%= render :partial => 'layouts/yes_no', :locals => {:object=> "borrowers",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
+              <%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "borrowers",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
               <span class="error" id="display_address_error">&nbsp;</span>
             </div>
           </td>
@@ -291,22 +289,7 @@
         <%= render :partial => 'layouts/with_contact_address', :locals =>
           {:object => "borrowers", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'borrowers');"} %>
       </div>
-
-
-      <% display_div = 'none' %>
-      <% unless @borrowers.displayBorrowerAddress.blank? %> 
-          <% if @borrowers.displayBorrowerAddress == 0 %>
-         	 <% display_div =  'block'%>
-          <% end %>
-      	<% end %>
-      <div id="postalWithOutContactAddress" style="display:<%= display_div %>;">
-
-        <p>You have selected above to not display your contact address.</p>
-        <label for="useWhichContactAddressAlternative" >Use an alternative address?:&nbsp;
-          <%= nf.check_box(:useWhichContactAddressAlternative, {:style=>"vertical-align: middle;width:15px;", :id =>"useWhichContactAddressAlternative"}) %>
-        </label>
-
-      </div>
+      
     </div>
 
     

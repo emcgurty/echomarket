@@ -37,9 +37,11 @@
 		</p>
 
 		<% if session[:user_type] == 'lender' || session[:user_type] == 'both' %>
-			
-                     <%= link_to "Would you like to offer something to lend?", {:controller=> "lender", :action=> "lender_history", :id => session[:user_id]}, {:class => "search1"}  %>
-			
+			<% unless session[:community_id].blank? %>
+				<%= link_to "Would you like to offer something to lend?", lender_offering_path(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+			<% else %>
+				<%= link_to "Would you like to offer something to lend?", community_lender_offering_path(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
+			<% end %>
 		
 		<% else %>
 		<%= link_to "Please login or register as a 'lender' to offer an item.", user_login_path(:id => '', :type => 'lender'), {:class=> "search1"}   %>
@@ -99,10 +101,7 @@
 			Seems that no one is seeking to borrow anything...
 		</p>
 		<% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>
-
-	      <%= link_to "Would you like to borrow something?", {:controller => "borrower", :action=> "borrower_history", :id=> session[:user_id]}, {:class=>"search1"}  %>
-
-
+		<%= link_to "Would you like to borrow something?", borrower_seeking_url(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"} %>
 		<% else %>
 		<%= link_to "Please login or register as a 'borrower' to seek an item.", user_login_url(:id => '', :type => 'borrower'),  {:class => "search1"}   %>
 		<% end %>
@@ -185,10 +184,10 @@
 	
 	<div class="bottom_flash">
 		<p class="offering">
-		<span class="logo_white" >Create Your Own Echo Market Community {BETA}</span> </p>
+		<span class="logo_white" >Create Your Own Echo Market Community</span> </p>
 		<p>Register your Community name, list members by name or alias if you choose so, and then community members login into your Echo Market Community.
 		</p>
-           <p>If you encounter errors, please let me know. Otherwise, I will check error logs frequently to make corrections as quickly as I can.  But please keep coming back....</p>
+
 		<%= link_to 'Just what I was hoping for... I want to create my Echo Market Community now', community_new_url( :id=>'', :type=>'all'), :class=> "search"   %>
 		<div   class="div_white" >&nbsp;</div>
 	</div>

@@ -1,0 +1,14 @@
+
+    <div class="<%= which_class %>" >
+      <div style="float:left;" >
+        <label class="radio" for="displayYes<%=  radio_num %>" >Yes:
+          <%= radio_button(object, field, "1", {:style=>"vertical-align: middle;width:15px;", :id =>"displayYes" + radio_num } ) %>
+        </label>
+      </div>
+      <div style="float:left;" >
+        <label class="radio" for="displayNo<%=  radio_num %>" >&nbsp;&nbsp;No:
+          <%= radio_button(object, field, "0", {:style=>"vertical-align: middle;width:15px;", :id =>"displayNo" + radio_num, :checked=>"checked" }  ) %>
+        </label>
+      </div>
+    </div>
+
