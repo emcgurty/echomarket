@@ -1,0 +1,26 @@
+<% if session[:community_id] %>
+	<% @l_c =  Lenders.where("user_id = ?", session[:user_id]) %>
+	<% @b_c =  Borrowers.where("user_id = ?", session[:user_id]) %>
+<% else %>
+	<% @l_c =  Lenders.where("is_community = 0 and is_active = 1") %>
+	<% @b_c =  Borrowers.where("is_community = 0 and is_active = 1") %>
+<% end %>
+
+
+<div class="<%= which_class %>">
+  <ul  >
+    <% if @l_c.count > 0 %>
+      <li><label class="radio" for="search_lender_or_borrower_1" >You are borrower: Search what lenders have offered...:&nbsp;
+          <%= radio_button :searches, :lender_or_borrower, "1" %>
+        </label>
+      </li>
+    <% end %>
+    <% if @b_c.count > 0 %>
+      <li><label class="radio" for="search_lender_or_borrower_2" >You are a lender: Search what borrowers need..:&nbsp;
+          <%= radio_button :searches, :lender_or_borrower, "2" %>
+        </label>
+      </li>
+    <% end %>
+
+  </ul>
+</div>

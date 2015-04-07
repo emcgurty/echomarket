@@ -3,7 +3,7 @@
 	<head>
 
 		<%= stylesheet_link_tag 'echo_market.css' %>
-		<%= javascript_include_tag 'google_analytics.js' %> 
+		<!--<%= javascript_include_tag 'google_analytics.js' %> -->
 
 		<% if session[:background] %>
 		<%= stylesheet_link_tag 'menu_nav.css' %>
@@ -43,7 +43,7 @@
 		<% end %>
 
 		<%= yield :center %>
-<% if false %>
+<% if true %>
 <pre>
   <%= session.to_yaml %>
 </pre>

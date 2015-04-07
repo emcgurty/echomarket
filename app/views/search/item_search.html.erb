@@ -1,0 +1,202 @@
+<script>
+
+
+  $(document).ready(function() {
+
+    $.fn.center = function () {
+    	
+      var element = $(this);
+      var e_width = element.width();
+      var win_width = $(window).width();
+      var left_margin_calc =  (win_width - e_width) / 2;
+      element.css('margin-left', (left_margin_calc + "px"));
+
+    };
+
+
+    $("div.form_wrapper").center();
+  });
+
+
+  /*
+  function submitSearch(){
+        alert("hit");
+        
+      if ($("[id^=searches_]").val == "")){
+        $("span#echo_market_search_error").text("You have to provide at least one criteria.");
+        $("span#echo_market_search_error").css("color", "red");
+        $("span#echo_market_search_error").css("visibility", "visible");
+  
+      } else{
+       
+        $("form.item_search").submit();
+      }
+    }*/
+  
+</script>
+<%= form_for @search, :url => {:controller => "search", :action => "create"}, :html => {:class => "item_search"} do |nf| %>
+  <% @s_get_items = @search.get_items %>
+ 
+  <div class="top" >
+    <p><span class="logo_white" >The Echo Market</span></p>
+    <p>SEARCH</p>
+   </div>
+   
+  
+ <div  style="float:left;margin-top:5px;margin-left:15px;">
+
+    <label>Items to borrower or items to lend?:</label>
+<% if session[:community_id] %>
+	<% @l_c =  Lenders.where("user_id = ?", session[:user_id]) %>
+	<% @b_c =  Borrowers.where("user_id = ?", session[:user_id]) %>
+<% else %>
+	<% @l_c =  Lenders.where("is_community = 0 and is_active = 1") %>
+	<% @b_c =  Borrowers.where("is_community = 0 and is_active = 1") %>
+<% end %>
+
+
+ <div  style="float:left;margin-top:5px;margin-left:20px;">
+  <ul  >
+    <% if @l_c.count > 0 %>
+      <li><label class="radio" for="search_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+          <%= nf.radio_button (:lender_or_borrower, "1") %>
+        </label>
+      </li>
+    <% end %>
+    <% if @b_c.count > 0 %>
+      <li><label class="radio" for="search_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+          <%= nf.radio_button (:lender_or_borrower, "2") %>
+        </label>
+      </li>
+    <% end %>
+
+  </ul>
+</div>
+
+
+
+  </div>
+
+  <div  style="float:left;margin-top:5px;margin-left:15px;" >
+    <label>Enter your search value(s) here, each separated by a space:&nbsp;</label>
+      <span class="max_length" style="float:left;width:94%;">60 characters permitted</span>
+    <%= nf.text_field :keyword , :html=> {:maxlength=> 60, :size=> 62} %>
+    <span class="offering" style="float:left;">Please be specific, just use one singular noun or verb if they describe a product.</span>
+  </div>
+
+ <div  style="float:left;margin-top:5px;margin-left:15px;">
+    <label>Item category</label>
+    <%= nf.collection_select :category_id, Categories.all, :category_id, :category_type, :include_blank => true %> 
+</div>
+  
+  
+  
+  <div  style="float:left;margin-top:5px;margin-left:15px;">
+    <label>Location. Enter a postal code here.</label>
+    <%= nf.text_field :postal_code , :html => { :maxlength=> 12, :size=> 14} %>
+    <span class="offering" style="float:left;">You can use the '*' wildcard. Find all items in the Boston, MA area, use wildcard search value '021*' without the single quotes.</span>
+
+  </div>
+  
+   <div  style="float:left;margin-top:5px;margin-left:15px;">
+    <label>Date Range: (format mm/dd/yyyy)</label>
+    <%= nf.text_field :start_date, :html => { :maxlength=> 10, :size=> 10} %> - through- <%= nf.text_field :end_date, :html => { :maxlength=> 10, :size=> 10} %> 
+    <span class="offering" style="float:left;">Blank start date, all items before end date...</span>
+
+  </div>
+  <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
+    <span class="error" id="echo_market_search_error">Error message</span>
+<%= nf.submit "Fingers crossed! Please search...", {:style=>"width:auto;"} %>
+  </div>
+
+
+  <% unless session[:community_id].blank? %>
+  	<% @lc = Lenders.count(:conditions =>   ["user_id = ?", session[:user_id]]) %>
+  	<% @bc = Borrowers.count(:conditions => ["user_id = ?", session[:user_id]]) %>
+  <% else %>
+ 	<% @lc = Lenders.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+  	<% @bc = Borrowers.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+  <% end %>
+  <% if @s_get_items.blank? %>
+
+    <% unless session[:on_search_open] %>
+      <div style="margin-left:15px;margin-top:5px;float:left;">
+        <% if @lc > 0 && @bc = 0 %>
+          <p>Sorry but your search criteria did not produce any results, please try again...  There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
+          </p>
+        <% elsif @lc = 0 && @bc > 0 %>
+          <p>Sorry but your search criteria did not produce any results, please try again...  There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
+        <% else %>
+          <p>Sorry but your search criteria did not produce any results, please try again...  There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
+
+        <% end %>
+
+
+      </div>
+    <% else %>
+      <div style="margin-left:15px;margin-top:10px;float:left;">
+
+        <% if (@lc > 0 && @bc = 0) %>
+          <p>There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
+          </p>
+        <% elsif @lc = 0 && @bc > 0 %>
+          <p>There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
+        <% else %>
+          <p>There are <%= @lc %> items available for lending, and <%= @bc %>  borrowers seeking items. </p>
+
+        <% end %>
+
+      </div>
+    <% end %>
+  <% else %>
+    <div style="margin-left:15px;margin-top:10px;">
+      <p style="margin:15px;color:red;float:left;">Your search for above criteria produced the following results.  Confused?  Please notice Option above, 'Items to borrower or items to lend?'.</p>
+    </div>
+
+
+    <table class="personal" >
+      <tr>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Model</th>
+        <th>Condition</th>
+        <th>Postal Code</th>
+        <th>Detail</th>
+      </tr>
+    
+      <% @s_get_items.each do |isq| %>
+
+        <tr>
+          <td>
+            <% @cats = Categories.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
+            <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
+          </td>
+          <td>
+            <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
+          <td>
+            <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
+          <td>
+            <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_conditions_id = ?", isq.item_condition_id]) %>
+            <%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
+          </td>
+          <td>
+            <%= (isq.postal_code.blank? ? "NA": isq.postal_code) %></td>
+          <td>
+            
+            <% unless isq.borrower_item_id.blank? %>
+            	<%= link_to "More..."  , borrower_item_detail_url(:id => isq.borrower_item_id), {:style=>"color:#ff4500;"} %>
+    
+           <% else %> 		
+       		<%= link_to "More..."  , lender_item_detail_url(:id => isq.lender_item_id), {:style=>"color:#ff4500;"} %>
+            		
+          <% end %>
+            
+            
+          </td>
+
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+
+  <% end %>

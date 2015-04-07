@@ -54,14 +54,14 @@
 	<% if session[:community_id].blank? %>
 		<% unless Lenders.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 0"]) == 0 && Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 0"]) == 0 %>
 			<li>
-				<%= link_to "Search", home_item_search_url %>
+				<%= link_to "Search", search_item_search_url %>
 			</li>
 		<% end %>
 	<% else %>
-		<% unless Lenders.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 1"]) == 0 && Borrowers.count(:conditions => ["is_active = 1 && is_saved = 1 && is_community = 1"]) == 0 %>
+		<% unless Lenders.count(:conditions => ["user_id  = ?", session[:user_id]]) == 0 && Borrowers.count(:conditions => ["user_id= ?", session[:user_id]]) == 0 %>
 		
 		<li>
-				<%= link_to "Search", home_item_search_url %>
+				<%= link_to "Search", search_item_search_url %>
 		</li>
 		<% end %>
 	<% end %>

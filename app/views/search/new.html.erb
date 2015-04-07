@@ -1,0 +1,24 @@
+<%= form_for @search, :url => {:controller => "search", :action => "create"} do |f| %>
+
+
+  <p>
+    <%= f.label :keyword %><br />
+    <%= f.text_field :keyword %>
+  </p>
+  
+  <p>
+    <%= f.label :postal_code %><br />
+    <%= f.text_field :postal_code %>
+  </p>
+    
+  <p>
+    <%= f.label :category_id %><br />
+    <%= f.collection_select :category_id, Categories.all, :category_id, :category_type, :include_blank => true %>
+  </p>
+  <p>
+    Date Range<br />
+    <%= f.text_field :start_date %> -
+    <%= f.text_field :end_date %>
+  </p>
+  <p><%= f.submit "Submit" %></p>
+<% end %>

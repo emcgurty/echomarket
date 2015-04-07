@@ -57,9 +57,9 @@
         <label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
 		<% unless session[:community_id].blank? %>
         <%= link_to "Details..." , borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>
-<% else %>
- <%= link_to "Details..." , community_borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>
-<% end %>
+		<% else %>
+ 		<%= link_to "Details..." , community_borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>
+		<% end %>
         <hr style="color:indigo;" />
 
       <% end %>
