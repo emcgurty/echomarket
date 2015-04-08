@@ -10,4 +10,7 @@ module ApplicationHelper
     end
     return_string
   end
+  
+  
+  
 end

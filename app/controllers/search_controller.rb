@@ -1,5 +1,7 @@
 class SearchController < ApplicationController
   
+
+  
   def item_search
     
     if params[:id]
