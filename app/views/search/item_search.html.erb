@@ -30,6 +30,43 @@ $( "input#searches_end_date").datepicker({
   dateFormat: "yy-mm-dd"
 });
 
+ 	$( "input#searches_end_date").change(function() {
+		
+	   $("#start_date_error").css("visibility", "hidden");
+	   $("#end_date_error").css("visibility", "hidden");
+
+        var start_date_value = $("input#searches_start_date").val();
+        var end_date_value   = $("input#searches_end_date").val();
+
+		if ((start_date_value == '') && (end_date_value != '')){
+			$("#start_date_error").text("Now please provide a Start Date.");
+			$("#start_date_error").css("visibility", "visible");
+		} else if (start_date_value > end_date_value) {
+			$("#start_date_error").text("Please provide a Start Date earlier than your End Date.");
+			$("#start_date_error").css("visibility", "visible");
+		}
+		
+	});
+
+		$( "input#searches_start_date").change(function() {
+		
+		$("#end_date_error").css("visibility", "hidden");
+		$("#start_date_error").css("visibility", "hidden");
+        var start_date_value = $("input#searches_start_date").val();
+        var end_date_value   = $("input#searches_end_date").val();
+
+		if ((end_date_value == '') && (start_date_value != '')) {
+			$("#end_date_error").text("Now please provide an End Date.");
+			$("#end_date_error").css("visibility", "visible");
+		} else if (start_date_value > end_date_value) {
+			$("#end_date_error").text("Please provide an End Date later than your Start Date.");
+			$("#end_date_error").css("visibility", "visible");
+		}
+		
+		
+	});
+
+
   });
 
   /*
@@ -77,13 +114,13 @@ $( "input#searches_end_date").datepicker({
   <ul  >
     <% if @l_c.count > 0 %>
       <li><label class="radio" for="search_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
-          <%= nf.radio_button (:lender_or_borrower, "1") %>
+          <%= nf.radio_button :lender_or_borrower, "1" %>
         </label>
       </li>
     <% end %>
     <% if @b_c.count > 0 %>
       <li><label class="radio" for="search_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
-          <%= nf.radio_button (:lender_or_borrower, "2") %>
+          <%= nf.radio_button :lender_or_borrower, "2" %>
         </label>
       </li>
     <% end %>
@@ -95,9 +132,9 @@ $( "input#searches_end_date").datepicker({
 
   <div  style="float:left;margin-top:5px;margin-left:15px;" >
     <label>Enter your search value:&nbsp;</label>
-      <span class="max_length" style="float:left;width:94%;">60 characters permitted</span>
-    <%= nf.text_field :keyword , :html=> {:maxlength=> 60, :size=> 62} %>
-    <span class="offering" style="float:left;">Please be specific, just use one singular noun or verb if they describe an item.</span>
+      <span class="max_length" style="float:left;width:94%;">24 characters permitted</span>
+    <%= nf.text_field :keyword , :html=> {:maxlength=> 24, :size=> 24} %>
+    <span class="offering" style="float:left;">Please be specific, just use one singular noun or a verb if they describe an item.</span>
   </div>
 
  <div  style="float:left;margin-top:5px;margin-left:15px;">
@@ -110,19 +147,27 @@ $( "input#searches_end_date").datepicker({
   <div  style="float:left;margin-top:5px;margin-left:15px;">
     <label>Location. Enter a postal code here.</label>
     <%= nf.text_field :postal_code , :html => { :maxlength=> 12, :size=> 14} %>
-    <span class="offering" style="float:left;">You can use the '*' wildcard. Find all items in the Boston, MA area, use wildcard search value '021*' without the single quotes.</span>
+    <span class="offering" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
 
   </div>
   
    <div  style="float:left;margin-top:5px;margin-left:15px;">
-    <label>Date Range:</label>
-    <%= nf.text_field :start_date, :html => { :maxlength=> 10, :size=> 10} %> - through- <%= nf.text_field :end_date, :html => { :maxlength=> 10, :size=> 10} %> 
-    <span class="offering" style="float:left;">Blank start date, all items before end date...</span>
-
+    <p style="margin-left:-2px; padding:2px;">Date Created Range:</p>    
+     <% @s_d = (@search.start_date.blank? ? "" : @search.start_date.strftime("%Y-%m-%d")) %>
+     <% @e_d = (@search.end_date.blank? ? ""  : @search.end_date.strftime("%Y-%m-%d")) %>
+  <label>Start Date:</label>    
+    <%= nf.text_field :start_date, :value => @s_d  %>
+ <span class="error" id="start_date_error"></span>
+ - through- <label>End Date:</label>    
+<%= nf.text_field :end_date, :value => @e_d %>
+ <span class="error" id="end_date_error"></span>
+ 
+    <span class="offering" style="float:left;">If you choose to search by a Date Created Range, you must provide both a Start Date and an End Date.  To find a single Create Date, select the Start Date and End Date as the same date.</span>
   </div>
+
   <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
     <span class="error" id="echo_market_search_error">Error message</span>
-<%= nf.submit "Fingers crossed! Please search...", {:style=>"width:auto;"} %>
+<%= nf.submit "Fingers crossed! Please search...", {:style=>"width:auto;margin:5px;"} %>
   </div>
 
 
@@ -135,20 +180,19 @@ $( "input#searches_end_date").datepicker({
   <% end %>
   <% if @s_get_items.blank? %>
 
-    <% unless session[:on_search_open] %>
+    <% unless @search.blank? %>
       <div style="margin-left:15px;margin-top:5px;float:left;">
         <% if @lc > 0 && @bc = 0 %>
-          <p>Sorry but your search criteria did not produce any results, please try again...  There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
+          <p>There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
           </p>
         <% elsif @lc = 0 && @bc > 0 %>
-          <p>Sorry but your search criteria did not produce any results, please try again...  There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
+          <p>There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
         <% else %>
-          <p>Sorry but your search criteria did not produce any results, please try again...  There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
+          <p>There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
 
         <% end %>
-
-
       </div>
+
     <% else %>
       <div style="margin-left:15px;margin-top:10px;float:left;">
 
@@ -166,7 +210,7 @@ $( "input#searches_end_date").datepicker({
     <% end %>
   <% else %>
     <div style="margin-left:15px;margin-top:10px;">
-      <p style="margin:15px;color:red;float:left;">Your search for above criteria produced the following results.  Confused?  Please notice Option above, 'Items to borrower or items to lend?'.</p>
+      <p style="margin:-2px;color:red;float:left;">Your search for above criteria produced the following results.</p>
     </div>
 
 
