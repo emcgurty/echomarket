@@ -69,21 +69,81 @@ $( "input#searches_end_date").datepicker({
 
   });
 
-  /*
-  function submitSearch(){
-        
-      if ($("[id^=searches_]").val == "")){
-        $("span#echo_market_search_error").text("You have to provide at least one criteria.");
+   
+</script>
+
+  <script>
+  
+  
+  	 function submitSearch(){
+  
+  	 var choose_l_or_b = $("input[name='searches[lender_or_borrower]']:checked");
+ 	 
+      $("span#echo_market_search_error").css("visibility", "hidden");
+      if ( !(choose_l_or_b.val()) )   {
+        $("span#echo_market_search_error").text("From the above option 'Items to borrower or items to lend?', you need to choose to either search for what is being offered or what is needed.");
         $("span#echo_market_search_error").css("color", "red");
         $("span#echo_market_search_error").css("visibility", "visible");
   
-      } else{
+      } else if (($("input#searches_keyword").val() == "")   && ($("input#searches_postal_code").val() == "")  &&
+        ($("input#searches_start_date").val() == "")  && ($("input#searches_end_date").val() == "")  && ($("select#searches_category_id").val() == "") )
+      {
+        $("span#echo_market_search_error").text("You have to provide at least one search criteria.");
+        $("span#echo_market_search_error").css("color", "red");
+        $("span#echo_market_search_error").css("visibility", "visible");
+  
+      } else if ( 
+      	
+      	
+      	  (($("input#searches_start_date").val() != "")  && ($("input#searches_end_date").val() == ""))  || 
+      	  (($("input#searches_start_date").val() == "")  && ($("input#searches_end_date").val() != "")) 
+      	  
+      	  
+      	  )
+      {
+        $("span#echo_market_search_error").text("If you want to do a Date Create search, you have to provide both a Start Date and an End Date.");
+        $("span#echo_market_search_error").css("color", "red");
+        $("span#echo_market_search_error").css("visibility", "visible");
+  
+      } else {
        
         $("form.item_search").submit();
       }
-    }*/
-  
-</script>
+      
+      
+    
+    }
+
+ </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <%= form_for @search, :url => {:controller => "search", :action => "create"}, :html => {:class => "item_search"} do |nf| %>
   <% @s_get_items = @search.get_items %>
  
@@ -132,14 +192,15 @@ $( "input#searches_end_date").datepicker({
 
   <div  style="float:left;margin-top:5px;margin-left:15px;" >
     <label>Enter your search value:&nbsp;</label>
-      <span class="max_length" style="float:left;width:94%;">24 characters permitted</span>
+     
     <%= nf.text_field :keyword , :html=> {:maxlength=> 24, :size=> 24} %>
+    <span class="max_length" style="float:left;">24 characters permitted: &nbsp;&nbsp;</span>
     <span class="offering" style="float:left;">Please be specific, just use one singular noun or a verb if they describe an item.</span>
   </div>
 
  <div  style="float:left;margin-top:5px;margin-left:15px;">
     <label>Item category:</label>
-    <%= nf.collection_select :category_id, Categories.all, :category_id, :category_type, :include_blank => true %> 
+    <%= nf.collection_select :category_id, Categories.order('category_type ASC'), :category_id, :category_type, :include_blank => true %> 
 </div>
   
   
@@ -151,23 +212,23 @@ $( "input#searches_end_date").datepicker({
 
   </div>
   
-   <div  style="float:left;margin-top:5px;margin-left:15px;">
+   <div  style="float:left;margin-top:5px;margin-left:15px;width:96%;">
     <p style="margin-left:-2px; padding:2px;">Date Created Range:</p>    
      <% @s_d = (@search.start_date.blank? ? "" : @search.start_date.strftime("%Y-%m-%d")) %>
      <% @e_d = (@search.end_date.blank? ? ""  : @search.end_date.strftime("%Y-%m-%d")) %>
   <label>Start Date:</label>    
     <%= nf.text_field :start_date, :value => @s_d  %>
- <span class="error" id="start_date_error"></span>
+ <span class="error" id="start_date_error" style="clear:both;"></span>
  - through- <label>End Date:</label>    
 <%= nf.text_field :end_date, :value => @e_d %>
- <span class="error" id="end_date_error"></span>
+ <span class="error" id="end_date_error" style="clear:both;"></span>
  
     <span class="offering" style="float:left;">If you choose to search by a Date Created Range, you must provide both a Start Date and an End Date.  To find a single Create Date, select the Start Date and End Date as the same date.</span>
   </div>
 
-  <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
+  <div  style="float:left;margin:5px;width:76%;margin-left:15px;" >
     <span class="error" id="echo_market_search_error">Error message</span>
-<%= nf.submit "Fingers crossed! Please search...", {:style=>"width:auto;margin:5px;"} %>
+ <a href="#" onclick="submitSearch();" class="update_member" >Fingers Crossed! Please submit search.</a>
   </div>
 
 
@@ -178,9 +239,8 @@ $( "input#searches_end_date").datepicker({
  	<% @lc = Lenders.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
   	<% @bc = Borrowers.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
   <% end %>
-  <% if @s_get_items.blank? %>
+  <% if @s_get_items.blank? && @search.blank? %>
 
-    <% unless @search.blank? %>
       <div style="margin-left:15px;margin-top:5px;float:left;">
         <% if @lc > 0 && @bc = 0 %>
           <p>There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
@@ -193,21 +253,21 @@ $( "input#searches_end_date").datepicker({
         <% end %>
       </div>
 
-    <% else %>
-      <div style="margin-left:15px;margin-top:10px;float:left;">
+  <% elsif @s_get_items.blank? && !@search.blank? %>
 
-        <% if (@lc > 0 && @bc = 0) %>
-          <p>There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
+      <div style="margin-left:15px;margin-top:5px;float:left;">
+        <% if @lc > 0 && @bc = 0 %>
+          <p>Your search did not produced any results. There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
           </p>
         <% elsif @lc = 0 && @bc > 0 %>
-          <p>There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
+          <p>Your search did not produced any results. There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
         <% else %>
-          <p>There are <%= @lc %> items available for lending, and <%= @bc %>  borrowers seeking items. </p>
+          <p>Your search did not produced any results. There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
 
         <% end %>
-
       </div>
-    <% end %>
+
+
   <% else %>
     <div style="margin-left:15px;margin-top:10px;">
       <p style="margin:-2px;color:red;float:left;">Your search for above criteria produced the following results.</p>
