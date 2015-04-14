@@ -1,12 +1,14 @@
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+ 
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<script type="text/javascript">
 
 
-<script>
-
-
-  $(document).ready(function() {
+    $(document).ready(function() {
+  	
 
     $.fn.center = function () {
     	
@@ -20,8 +22,14 @@
 
 
     $("div.form_wrapper").center();
+    
+   	var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";
+	var cache = {};
+     var cache_placeholder = '';
+	var container = $("div.location");
+	
+	var errorDiv = container.find("span#postal_code_error");
   
-
 $( "input#searches_start_date").datepicker({
   dateFormat: "yy-mm-dd"
 });
@@ -30,13 +38,26 @@ $( "input#searches_end_date").datepicker({
   dateFormat: "yy-mm-dd"
 });
 
- 	$( "input#searches_end_date").change(function() {
+///
+  $("input[name='searches[zip_code_radius]']").bind('change', function() {
+     var test_is_checked = $("input[name='searches[zip_code_radius]']:checked").val()
+	      if (test_is_checked) {
+			$("input[name='searches[postal_code]']").trigger('change');
+		}
+
+	});
+
+
+////
+$( "input#searches_end_date.hasDatepicker").bind('change', function() {
+
 		
 	   $("#start_date_error").css("visibility", "hidden");
 	   $("#end_date_error").css("visibility", "hidden");
 
-        var start_date_value = $("input#searches_start_date").val();
-        var end_date_value   = $("input#searches_end_date").val();
+        var start_date_value   = $("input#searches_start_date.hasDatepicker").val();
+        var end_date_value   = $(this).val();
+
 
 		if ((start_date_value == '') && (end_date_value != '')){
 			$("#start_date_error").text("Now please provide a Start Date.");
@@ -44,16 +65,18 @@ $( "input#searches_end_date").datepicker({
 		} else if (start_date_value > end_date_value) {
 			$("#start_date_error").text("Please provide a Start Date earlier than your End Date.");
 			$("#start_date_error").css("visibility", "visible");
-		}
+		} 
 		
 	});
+	
 
-		$( "input#searches_start_date").change(function() {
+$( "input#searches_start_date.hasDatepicker").bind('change', function() {
+
 		
 		$("#end_date_error").css("visibility", "hidden");
 		$("#start_date_error").css("visibility", "hidden");
-        var start_date_value = $("input#searches_start_date").val();
-        var end_date_value   = $("input#searches_end_date").val();
+        var start_date_value = $(this).val();
+        var end_date_value   = $("input#searches_end_date.hasDatepicker").val();
 
 		if ((end_date_value == '') && (start_date_value != '')) {
 			$("#end_date_error").text("Now please provide an End Date.");
@@ -61,21 +84,99 @@ $( "input#searches_end_date").datepicker({
 		} else if (start_date_value > end_date_value) {
 			$("#end_date_error").text("Please provide an End Date later than your Start Date.");
 			$("#end_date_error").css("visibility", "visible");
-		}
+		}  
 		
+});
+
+  $("input[name='searches[postal_code]']").bind('change', function() {
+	///alert("postal code change");
+		var distance = $("input[name='searches[zip_code_radius]']:checked").val(); 
 		
-	});
+	///alert(distance);
+
+		if (distance) {
+				// Get zip code
+				var zipcode = $("input[name='searches[postal_code]']").val().substring(0, 5);
+		///		alert(zipcode);		
+				if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
+							
+					cache_placeholder = zipcode + distance;
+///alert(cache_placeholder);		
+					// Clear error
+								
+							// Check cache
+							if (cache_placeholder in cache){
+								handleResp(cache[zipcode]);
+							} else 	{
+								// Build url
+								var url = "https://www.zipcodeapi.com/rest/"+clientKey +"/radius.json/"+ zipcode +  "/" +  distance + "/mile";
+							
+								$.ajax({
+									"url": url,
+									"dataType": "json"
+								}).done(function(data) {
+									///alert("okay");
+									handleResp(data);
+									
+									// Store in cache
+									cache[cache_placeholder] = data;
+								}).fail(function(data) {
+									////alert("FAIL");
+									if (data.responseText && (json = $.parseJSON(data.responseText)))
+									{
+										// Store in cache
+										cache[cache_placeholder] = json;
+										
+										// Check for error
+										if (json.error_msg) errorDiv.text(json.error_msg);
+									} else  {
+										errorDiv.text('Request failed.'); }
+								});
+							} 
+					}
+			}
+			
+		});
+		
+	
+	  $( "input#searches_start_date.hasDatepicker").trigger('change');
+	  $( "input#searches_end_date.hasDatepicker").trigger('change');
+	  $("input[name='searches[postal_code]']").trigger('change');
+	  $("input[name='searches[zip_code_radius]']").trigger('change');
+	   
+	  	  function handleResp(data) 	{
+			///		alert("function within function?");
+					var mystr = "";
+					
+					if(data) {
+							///alert("Data found");
+							if (data.error_msg)  { 
+							    //errorDiv.text(data.error_msg); 
+							   ///alert("No error okay");
+							} else {
+						       ///alert(data.zip_codes);
+							 $.each( data.zip_codes, function( i, zip ) {
+				             		mystr = mystr + "'" + zip.zip_code + "',"; });
+							/// alert(mystr);
+							var set_hidden_field = $("input#searches_found_zip_codes");
+							if (set_hidden_field) {
+								set_hidden_field.val() = mystr.chomp(",");	 }
+ else { ///alert("Field not found"); }
+								
+
+							                      } 
+						    }
+		                               }
+	 });
+	 
 
 
-  });
 
-   
 </script>
 
-  <script>
+<script type="text/javascript">
   
-  
-  	 function submitSearch(){
+	 function submitSearch(){
   
   	 var choose_l_or_b = $("input[name='searches[lender_or_borrower]']:checked");
  	 
@@ -116,37 +217,9 @@ $( "input#searches_end_date").datepicker({
 
  </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <%= form_for @search, :url => {:controller => "search", :action => "create"}, :html => {:class => "item_search"} do |nf| %>
   <% @s_get_items = @search.get_items %>
- 
+   <%= nf.hidden_field :found_zip_codes, :value=> '' %>
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
     <p>SEARCH</p>
@@ -173,13 +246,13 @@ $( "input#searches_end_date").datepicker({
  
   <ul  >
     <% if @l_c.count > 0 %>
-      <li><label class="radio" for="search_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+      <li><label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
           <%= nf.radio_button :lender_or_borrower, "1" %>
         </label>
       </li>
     <% end %>
     <% if @b_c.count > 0 %>
-      <li><label class="radio" for="search_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+      <li><label class="radio" for="searches_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
           <%= nf.radio_button :lender_or_borrower, "2" %>
         </label>
       </li>
@@ -195,7 +268,7 @@ $( "input#searches_end_date").datepicker({
      
     <%= nf.text_field :keyword , :html=> {:maxlength=> 24, :size=> 24} %>
     <span class="max_length" style="float:left;">24 characters permitted: &nbsp;&nbsp;</span>
-    <span class="offering" style="float:left;">Please be specific, just use one singular noun or a verb if they describe an item.</span>
+    <span class="radius" style="float:left;">Please be specific, just use one singular noun or a verb if they describe an item.</span>
   </div>
 
  <div  style="float:left;margin-top:5px;margin-left:15px;">
@@ -205,30 +278,50 @@ $( "input#searches_end_date").datepicker({
   
   
   
-  <div  style="float:left;margin-top:5px;margin-left:15px;">
+  <div  class="location" style="float:left;margin-top:5px;margin-left:15px;">
     <label>Location. Enter a postal code here.</label>
-    <%= nf.text_field :postal_code , :html => { :maxlength=> 12, :size=> 14} %>
-    <span class="offering" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
+    <%= nf.text_field :postal_code , { :maxlength=> 12, :size=> 14} %>
+    <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
+    <label>Radius: Select number of miles from your entered postal code.</label>
+	
 
-  </div>
+<div style="float:left;width:96%;padding:0px;">
+		<label for="searches_zip_code_radius_1" class="radius">One Mile:&nbsp;<%= nf.radio_button( 'zip_code_radius', 1) %></label> 
+
+		<label for="searches_zip_code_radius_5" class="radius">Five Miles:&nbsp;<%= nf.radio_button(  'zip_code_radius', 5) %></label>
+
+		<label for="searches_zip_code_radius_10" class="radius">Ten Miles:&nbsp;<%= nf.radio_button( 'zip_code_radius', 10) %></label>
+	
+		<label for="searches_zip_code_radius_25" class="radius">25 Miles:&nbsp;<%= nf.radio_button('zip_code_radius', 25)%></label>
+ </div>
+	
+   <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit zip code above.</span>
+   <span class="error" id="postal_code_error">error</span>
+</div>
+ 
   
    <div  style="float:left;margin-top:5px;margin-left:15px;width:96%;">
-    <p style="margin-left:-2px; padding:2px;">Date Created Range:</p>    
+    <label>Date Created Range:</label>    
      <% @s_d = (@search.start_date.blank? ? "" : @search.start_date.strftime("%Y-%m-%d")) %>
      <% @e_d = (@search.end_date.blank? ? ""  : @search.end_date.strftime("%Y-%m-%d")) %>
-  <label>Start Date:</label>    
-    <%= nf.text_field :start_date, :value => @s_d  %>
- <span class="error" id="start_date_error" style="clear:both;"></span>
- - through- <label>End Date:</label>    
-<%= nf.text_field :end_date, :value => @e_d %>
- <span class="error" id="end_date_error" style="clear:both;"></span>
- 
-    <span class="offering" style="float:left;">If you choose to search by a Date Created Range, you must provide both a Start Date and an End Date.  To find a single Create Date, select the Start Date and End Date as the same date.</span>
-  </div>
 
-  <div  style="float:left;margin:5px;width:76%;margin-left:15px;" >
+<table class="search">
+<tr>
+<th>Start Date</th>
+<th>- through - </th>
+<th>End Date</th>
+</tr>
+<tr>
+<td><%= nf.text_field :start_date, :value => @s_d,   :maxlength=> 10, :size=> 10 %><span class="error" id="start_date_error">error</span></td>
+<td>&nbsp;</td>
+<td><%= nf.text_field :end_date, :value => @e_d,   :maxlength=> 10, :size=> 10 %><span class="error" id="end_date_error">error</span><td>
+</tr>
+</table> 
+</div>
+
+  <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
     <span class="error" id="echo_market_search_error">Error message</span>
- <a href="#" onclick="submitSearch();" class="update_member" >Fingers Crossed! Please submit search.</a>
+   <a href="#" onclick="submitSearch();" class="update_member" >Fingers Crossed! Please submit search.</a>
   </div>
 
 
@@ -239,31 +332,18 @@ $( "input#searches_end_date").datepicker({
  	<% @lc = Lenders.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
   	<% @bc = Borrowers.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
   <% end %>
-  <% if @s_get_items.blank? && @search.blank? %>
+ 
+  <% if @s_get_items.blank? %>
 
-      <div style="margin-left:15px;margin-top:5px;float:left;">
+ 
+     <div style="margin-left:15px;margin-top:5px;float:left;">
         <% if @lc > 0 && @bc = 0 %>
-          <p>There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
+          <p style="color:green;" >There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
           </p>
         <% elsif @lc = 0 && @bc > 0 %>
-          <p>There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
+          <p style="color:green;" >There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
         <% else %>
-          <p>There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
-
-        <% end %>
-      </div>
-
-  <% elsif @s_get_items.blank? && !@search.blank? %>
-
-      <div style="margin-left:15px;margin-top:5px;float:left;">
-        <% if @lc > 0 && @bc = 0 %>
-          <p>Your search did not produced any results. There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
-          </p>
-        <% elsif @lc = 0 && @bc > 0 %>
-          <p>Your search did not produced any results. There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
-        <% else %>
-          <p>Your search did not produced any results. There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
-
+          <p style="color:green;" >There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
         <% end %>
       </div>
 
