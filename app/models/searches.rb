@@ -3,8 +3,8 @@ class Searches < ActiveRecord::Base
 ##  Thanks to Ryan Bates RailsCast 111
 require 'date'
    
-     
-    attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :lender_or_borrower, :is_community, :user_id, :zip_code_radius
+attr_accessor   :found_zip_codes
+attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :lender_or_borrower, :is_community, :user_id , :zip_code_radius  
     
     
   def get_items
@@ -16,7 +16,7 @@ require 'date'
     end  
   end
 
-  
+   
 
 private
 
@@ -67,11 +67,12 @@ def date_conditions
 end
 
 def postalcode_conditions
-  ["postal_code like '#{postal_code}%' "]  if postal_code.present?
+if found_zip_codes.present?
+  ["postal_code IN '(#{found_zip_codes})' "]  
+elsif postal_code.present? 
+  ["postal_code like '#{postal_code}%' "]  
 end
 
-def zip_code_radius_conditions
-  ""  if zip_code_radius.present?
 end
 
 def conditions

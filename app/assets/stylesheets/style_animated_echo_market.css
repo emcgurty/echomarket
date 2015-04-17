@@ -105,8 +105,13 @@ form.login{
 }
 
 
-form.item_search , form.l_list, form.b_list{
+form.l_list, form.b_list{
     width:540px;
+
+}
+
+form.item_search{
+    width:680px;
 
 }
 

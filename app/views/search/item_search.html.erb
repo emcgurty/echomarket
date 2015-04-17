@@ -160,8 +160,10 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
 							/// alert(mystr);
 							var set_hidden_field = $("input#searches_found_zip_codes");
 							if (set_hidden_field) {
-								set_hidden_field.val() = mystr.chomp(",");	 }
- else { ///alert("Field not found"); }
+								set_hidden_field.val() = mystr.chomp(",");	 
+							}  else { 
+								 
+							}
 								
 
 							                      } 
@@ -182,7 +184,7 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
  	 
       $("span#echo_market_search_error").css("visibility", "hidden");
       if ( !(choose_l_or_b.val()) )   {
-        $("span#echo_market_search_error").text("From the above option 'Items to borrower or items to lend?', you need to choose to either search for what is being offered or what is needed.");
+        $("span#echo_market_search_error").text("From the above option 'Items to Borrow or items to Lend?', you need to choose to either search for what is being offered or what is needed.");
         $("span#echo_market_search_error").css("color", "red");
         $("span#echo_market_search_error").css("visibility", "visible");
   
@@ -208,7 +210,7 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
   
       } else {
        
-        $("form.item_search").submit();
+        $("form.items_listing").submit();
       }
       
       
@@ -217,12 +219,13 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
 
  </script>
 
-<%= form_for @search, :url => {:controller => "search", :action => "create"}, :html => {:class => "item_search"} do |nf| %>
+<%= form_for @search, :url => {:controller => "search", :action => "create"}, :html => {:class=>"items_listing"} do |nf| %>
   <% @s_get_items = @search.get_items %>
    <%= nf.hidden_field :found_zip_codes, :value=> '' %>
   <div class="top" >
-    <p><span class="logo_white" >The Echo Market</span></p>
-    <p>SEARCH</p>
+    <p><span class="logo_white" >Echo Market&nbsp;&copy;: Your Goodwill Resource For Lending, Borrowing, Sharing or Trading Items</span></p>
+    <p>ITEM SEARCH
+<a href="#" onclick="submitSearch();" style="color:white;clear:both; float:right;padding-right:4px;">Fingers Crossed! Submit search.</a></p>
    </div>
    
   
@@ -243,9 +246,40 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
 
 <% end %>
 
+ <% if session[:user_id].blank? %>
+
+  <ul  >
+  
+
+      <li><label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+          <%= nf.radio_button :lender_or_borrower, "1" %>
+        </label>
+      </li>
+      <li><label class="radio" for="searches_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+          <%= nf.radio_button :lender_or_borrower, "2" %>
+        </label>
+      </li>
+
+
+
+
+  </ul>
+
+
+
+
+
+
+
+
+
+
+<% else %>
  
   <ul  >
-    <% if @l_c.count > 0 %>
+  
+
+  <% if @l_c.count > 0 %>
       <li><label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
           <%= nf.radio_button :lender_or_borrower, "1" %>
         </label>
@@ -258,17 +292,20 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
       </li>
     <% end %>
 
+
+
+
   </ul>
+
+<% end %>
 </div>
  
 
 
-  <div  style="float:left;margin-top:5px;margin-left:15px;" >
-    <label>Enter your search value:&nbsp;</label>
-     
-    <%= nf.text_field :keyword , :html=> {:maxlength=> 24, :size=> 24} %>
-    <span class="max_length" style="float:left;">24 characters permitted: &nbsp;&nbsp;</span>
-    <span class="radius" style="float:left;">Please be specific, just use one singular noun or a verb if they describe an item.</span>
+   <div  style="float:left;margin-top:5px;margin-left:15px;width:75%;">
+    <label>Enter your Item search value:</label>&nbsp;
+    <%= nf.text_field :keyword , {:maxlength=> 24, :size=> 20} %>
+    <span class="radius" style="float:left;">Use one singular noun or verb to describe an item, you can use a partial word.</span>
   </div>
 
  <div  style="float:left;margin-top:5px;margin-left:15px;">
@@ -279,24 +316,25 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
   
   
   <div  class="location" style="float:left;margin-top:5px;margin-left:15px;">
+<div style="float:left;width:96%;padding:0px;">
     <label>Location. Enter a postal code here.</label>
     <%= nf.text_field :postal_code , { :maxlength=> 12, :size=> 14} %>
     <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
-    <label>Radius: Select number of miles from your entered postal code.</label>
-	
+</div>
 
 <div style="float:left;width:96%;padding:0px;">
-		<label for="searches_zip_code_radius_1" class="radius">One Mile:&nbsp;<%= nf.radio_button( 'zip_code_radius', 1) %></label> 
 
-		<label for="searches_zip_code_radius_5" class="radius">Five Miles:&nbsp;<%= nf.radio_button(  'zip_code_radius', 5) %></label>
-
-		<label for="searches_zip_code_radius_10" class="radius">Ten Miles:&nbsp;<%= nf.radio_button( 'zip_code_radius', 10) %></label>
+    <label>Radius: Select number of miles from your entered postal code.</label>
 	
-		<label for="searches_zip_code_radius_25" class="radius">25 Miles:&nbsp;<%= nf.radio_button('zip_code_radius', 25)%></label>
+	<label for="searches_zip_code_radius_1" class="radius">One Mile:&nbsp;<%= nf.radio_button( 'zip_code_radius', 1) %></label> 
+	<label for="searches_zip_code_radius_5" class="radius">Five Miles:&nbsp;<%= nf.radio_button(  'zip_code_radius', 5) %></label>
+	<label for="searches_zip_code_radius_10" class="radius">Ten Miles:&nbsp;<%= nf.radio_button( 'zip_code_radius', 10) %></label>
+	<label for="searches_zip_code_radius_25" class="radius">25 Miles:&nbsp;<%= nf.radio_button('zip_code_radius', 25)%></label>
+	
+   <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit postal code above.</span>
+   <span class="error" id="postal_code_error"></span>
  </div>
-	
-   <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit zip code above.</span>
-   <span class="error" id="postal_code_error">error</span>
+
 </div>
  
   
@@ -307,9 +345,9 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
 
 <table class="search">
 <tr>
-<th>Start Date</th>
-<th>- through - </th>
-<th>End Date</th>
+<th style="text-align:left;">Start Date</th>
+<th style="text-align:left;">- through - </th>
+<th style="text-align:left;">End Date</th>
 </tr>
 <tr>
 <td><%= nf.text_field :start_date, :value => @s_d,   :maxlength=> 10, :size=> 10 %><span class="error" id="start_date_error">error</span></td>
@@ -320,8 +358,8 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
 </div>
 
   <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
-    <span class="error" id="echo_market_search_error">Error message</span>
-   <a href="#" onclick="submitSearch();" class="update_member" >Fingers Crossed! Please submit search.</a>
+    <span class="error" id="echo_market_search_error"></span>
+   
   </div>
 
 
@@ -335,22 +373,23 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
  
   <% if @s_get_items.blank? %>
 
- 
-     <div style="margin-left:15px;margin-top:5px;float:left;">
-        <% if @lc > 0 && @bc = 0 %>
-          <p style="color:green;" >There are <%= @lc %> items available for lending, and at the moment no one is seeking to borrow.
-          </p>
-        <% elsif @lc = 0 && @bc > 0 %>
-          <p style="color:green;" >There are <%= @bc %> borrowers seeking items, and at the moment no one is offering items.</p>
-        <% else %>
-          <p style="color:green;" >There are <%= @lc %> items available for lending, and <%= @bc %>  borrows seeking items. </p>
-        <% end %>
-      </div>
+
+
+<div class="bottom_flash">
+<% if @search.id.blank? %>
+	<p style="color:#ccff99;">Your search result will be displayed below.</p>
+<%  else  %>
+	<p style="color:#ffcc99;">Your search did not produce any results.</p>
+<% end %>
+
+</div>
+
+    
 
 
   <% else %>
-    <div style="margin-left:15px;margin-top:10px;">
-      <p style="margin:-2px;color:red;float:left;">Your search for above criteria produced the following results.</p>
+    <div class="bottom_flash">
+      <p style="color:red;float:left;">Your search for above criteria produced the following results.</p>
     </div>
 
 
@@ -396,6 +435,19 @@ $( "input#searches_start_date.hasDatepicker").bind('change', function() {
         </tr>
       <% end %>
     </table>
+  <% end %>
+  <% if session[:user_id].blank? %>
+    <div class="bottom_flash">
+		<p class="offering">
+		<span class="logo_white" >Create Your Own Echo Market Community</span> </p>
+		
+		<%= link_to 'Just what I was hoping for... I want to create my Echo Market Community now', community_new_url( :id=>'', :type=>'all'), :class=> "search"   %>
+           <p style="color:indigo;font-size:16px;font-weight:normal;margin-bottom:3px;">Register as a Community before May, 2015, and Echo Market will provide Five-Point Customization for free.</p> 
+
+		<%= link_to 'Registered as lender or borrower...', user_register_url(:type=>'all', :id=>''), {:class=> "search"}   %>
+
+		<div   class="div_white" >&nbsp;</div>
+	</div>
   <% end %>
 
   <% end %>

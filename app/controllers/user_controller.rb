@@ -178,7 +178,7 @@ class UserController < ApplicationController
                     
                     if @current_user.blank?
                       puts "1"
-                       session[:notice] = "Sorry about this, but your Community name, #{@comm_name}, was recognized by www.echomarket.org. Please try again. "
+                       session[:notice] = "Sorry about this, but your Community name, #{@comm_name}, was not recognized by www.echomarket.org. Please try again. "
                        redirect_to :action => "login"
                     elsif !@current_user.activation_code.blank?
                       puts "2" 

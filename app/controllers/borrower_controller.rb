@@ -269,4 +269,3 @@ class BorrowerController < ApplicationController
   end
 
 end
-

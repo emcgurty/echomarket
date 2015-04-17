@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
 
   helper :all
   protect_from_forgery
+  #skip_before_action :verify_authenticity_token
+	skip_before_filter :verify_authenticity_token
   #before_filter :check_browser  
   # http://ruby-journal.com/how-to-block-old-ie-version-with-rails/
   # https://rubygems.org/gems/browser
