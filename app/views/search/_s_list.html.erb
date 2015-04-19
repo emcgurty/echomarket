@@ -1,0 +1,106 @@
+<%= javascript_include_tag 'add_item.js' %>
+<style>
+	input#form_submit1 {
+		background-color: indigo;
+		color: white;
+		font-size: 12px;
+		width: auto;
+		height: auto;
+		border: none;
+		margin-left: 15px;
+		padding: 0;
+		float: left;
+	}
+	th {
+		width: auto;
+		text-align: left;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	p {
+		padding: 5x;
+		margin-left: 5px;
+		color: black;
+		font-size: 12px;
+		/*    border-bottom:1px solid #ddd;*/
+		font-weight: normal;
+		width: 94%;
+	}
+
+</style>
+
+<% if @search.lender_or_borrower == 1 %> 
+	 <% @which = Lenders.new %>
+	 <% displayBL = "block" %>
+<% elsif @search.lender_or_borrower == 2 %> 
+	 <% @which = Borrowers.new %>
+	 <% displayBL = "block" %>
+<% else %>
+    <% displayBL = "none" %>	 
+<% end %> 
+
+ 
+<div id="rapid" style="display:''<%= displayBL %>';float:left;width:96%;">
+
+
+	<p>
+		<% if @search.lender_or_borrower == 2 %> 
+		RAPID LENDING: Offered items will remain on Echo Market database for 90 days
+		<% elsif @search.lender_or_borrower == 1 %> 
+		RAPID BORROWING: Sought items will remain on Echo Market database for 90 days
+		<% end %> 
+	</p>
+
+
+
+<div id="community_members_build" style="display:block;float:left;width:96%;">
+		
+			<% rowCount = 0 %>	
+	        <% numRows = 1  %>
+         
+		<table class="search">
+
+			<tr >
+				<th >Email</th>
+				<th >Category</th>
+				<th >Item Description</th>
+				<th>Function</th>
+			</tr>
+
+		
+			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
+			<tr class="<%= rowClass %>" >
+               <% get_onchange = "update_row(this," + rowCount.to_s + ");"  %>
+				<td width= "20%">
+					<%= text_field :email,  { :maxlength=>50, :size=>20, :onchange=>"#{get_onchange}" }  %>
+					  <% get_span = "thisEmail" + rowCount.to_s  %>
+					<span class="error" id="<%= get_span %>" )>email</span>
+				</td>
+				<td width='5%'>
+					<%= text_field :category_id,  {:onchange=>"#{get_onchange}"} %>
+					<% get_span = "thisCID" + rowCount.to_s  %>
+					<span class="error" id="<%= get_span %>"  >category_id</span>
+				</td>
+				<td width='20%'><%= text_field :item_description,  { :maxlength=>24, :size=>20, :onchange=>"#{get_onchange}"} %>
+					<% get_span = "thisItem" + rowCount.to_s  %>
+					<span class="error" id="<%= get_span %>" >item_description</span>
+				</td>
+		
+				<td width="20%">
+					
+					<a href="#"  onclick="addItem();" class="">Add Item</a> 
+					
+				</td>
+				
+			</tr>
+			
+		</table>
+		
+	</div>
+</div>
+
+
+

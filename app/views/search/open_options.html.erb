@@ -1,0 +1,246 @@
+<%= form_for @search, :url => {:controller => "search", :action => "delegate"}, :html => {:class=>"items_listing"} do |nf| %>
+  
+  <div class="top" >
+    <p><span class="logo_white" >Echo Market&nbsp;&copy;: Your Goodwill Resource For Lending, Borrowing, Donating or Trading Items</span></p>
+
+   </div>
+   
+  
+ <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+
+    <label>Items to borrower or items to lend?:</label>
+<% if session[:community_id] %>
+	<% @l_c =  Lenders.where("user_id = ?", session[:user_id]) %>
+	<% @b_c =  Borrowers.where("user_id = ?", session[:user_id]) %>
+	<%= nf.hidden_field :is_community, :value=> 1 %>
+	<%= nf.hidden_field :user_id, :value=> session[:user_id] %>
+
+<% else %>
+	<% @l_c =  Lenders.where("is_community = 0 and is_active = 1") %>
+	<% @b_c =  Borrowers.where("is_community = 0 and is_active = 1") %>
+	<%= nf.hidden_field :is_community, :value=> 0 %>
+	<%= nf.hidden_field :user_id, :value=> '' %>
+
+<% end %>
+
+ <% if session[:user_id].blank? %>
+
+  <ul  >
+  
+
+      <li><label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+          <%= nf.radio_button :lender_or_borrower, "1" %>
+        </label>
+      </li>
+      <li><label class="radio" for="searches_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+          <%= nf.radio_button :lender_or_borrower, "2" %>
+        </label>
+      </li>
+  </ul>
+
+<% else %>
+ 
+  <ul  >
+  
+
+  <% if @l_c.count > 0 %>
+      <li><label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+          <%= nf.radio_button :lender_or_borrower, "1" %>
+        </label>
+      </li>
+    <% end %>
+    <% if @b_c.count > 0 %>
+      <li><label class="radio" for="searches_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+          <%= nf.radio_button :lender_or_borrower, "2" %>
+        </label>
+      </li>
+    <% end %>
+
+
+
+
+  </ul>
+
+<% end %>
+</div>
+ 
+ <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+    <label>By Date Created Range:</label>    
+     <% @s_d = (@search.start_date.blank? ? "" : @search.start_date.strftime("%Y-%m-%d")) %>
+     <% @e_d = (@search.end_date.blank? ? ""  : @search.end_date.strftime("%Y-%m-%d")) %>
+
+<table class="search">
+<tr>
+<td style="text-align:left;font-size:12px;width:40%;">Start Date</td>
+<td style="text-align:left;font-size:12px;width:20%;">- through - </td>
+<td style="text-align:left;font-size:12px;width:40%;">End Date</td>
+</tr>
+<tr>
+<td><%= nf.text_field :start_date, :value => @s_d,   :maxlength=> 10, :size=> 10 %></td>
+<td>&nbsp;</td>
+<td><%= nf.text_field :end_date, :value => @e_d,   :maxlength=> 10, :size=> 10 %></td>
+</tr>
+<tr>
+<td><span class="error" style="width:100%;" id="start_date_error">error</span></td>
+<td>&nbsp;</td>
+<td><span class="error" style="width:100%;" id="end_date_error">error</span><td>
+</tr>
+</table> 
+</div>
+
+    <div  style="clear:both;float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+    <label>By Item Description or Model:&nbsp;
+    <%= nf.text_field :keyword , {:maxlength=> 24, :size=> 20} %></label>
+    <span class="radius" style="float:left;">Use one singular noun or verb to describe an item, you can use a partial word.</span>
+  </div>
+
+ <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+    <label>By Item category:</label>
+    <%= nf.collection_select :category_id, Categories.order('category_type ASC'), :category_id, :category_type, {:include_blank => true}, {:style=>"
+     border: solid 1px #E5E5E5;
+    background: #BDAEC6;
+    padding: 1px;
+    display:inline-table;
+    font-size:16px;
+    width:92%;
+    -moz-box-shadow: 0px 0px 8px #f0f0f0;
+    -webkit-box-shadow: 0px 0px 8px #f0f0f0;"}
+    
+     %> 
+</div>
+  
+  
+  
+<div  class="location" style="float:left;">
+<div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+    <label>By Postal Code Location:</label>
+    <%= nf.text_field :postal_code , { :maxlength=> 12, :size=> 14} %>
+    <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
+</div>
+
+ <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+
+    <label>Within Radius: Select number of miles from your entered postal code.</label>
+	
+	<label for="searches_zip_code_radius_1" class="radius">One Mile:&nbsp;<%= nf.radio_button( 'zip_code_radius', 1) %></label> 
+	<label for="searches_zip_code_radius_5" class="radius">Five Miles:&nbsp;<%= nf.radio_button(  'zip_code_radius', 5) %></label>
+	<label for="searches_zip_code_radius_10" class="radius">Ten Miles:&nbsp;<%= nf.radio_button( 'zip_code_radius', 10) %></label>
+	<label for="searches_zip_code_radius_25" class="radius">25 Miles:&nbsp;<%= nf.radio_button('zip_code_radius', 25)%></label>
+	
+   <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit Postal Code Location.</span>
+   <span class="error" id="postal_code_error"></span>
+ </div>
+
+</div>
+ 
+  
+
+
+  <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
+    <span class="error" id="echo_market_search_error"></span>
+   
+  </div>
+
+
+  <% unless session[:community_id].blank? %>
+  	<% @lc = Lenders.count(:conditions =>   ["user_id = ?", session[:user_id]]) %>
+  	<% @bc = Borrowers.count(:conditions => ["user_id = ?", session[:user_id]]) %>
+  <% else %>
+ 	<% @lc = Lenders.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+  	<% @bc = Borrowers.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+  <% end %>
+ 
+  <% if @s_get_items.blank? %>
+
+
+
+<div class="bottom_flash">
+<% if @search.id.blank? %>
+	<p style="color:#ccff99;">Your search result will be displayed below.</p>
+<%  else  %>
+	<p style="color:#ffcc99;">Your search did not produce any results.</p>
+	<div>
+		<% if @search.lender_or_borrower == 2 %>
+		<p style="color:#ffcc99;">QUICK Lender Offering</p>
+		For 90 days, your lender offering item will remain active on Echo Market  
+		<% nf.text_field :quick_lender_email %>
+		<% nf.text_field :quick_lender_item %>
+		
+		<% else %>
+		<p style="color:#ffcc99;">QUICK Borrowers Seeking</p>
+		For 90 days, your borrower seeking item will remain active on Echo Market
+		<% nf.text_field :quick_borrower_email %>
+		<% nf.text_field :quick_borrower_item %>
+		<% end %>
+	</div>
+<% end %>
+
+</div>
+
+    
+
+
+  <% else %>
+    <div class="bottom_flash">
+      <p style="color:red;float:left;">Your search for above criteria produced the following results.</p>
+    </div>
+
+
+    <table class="personal" >
+      <tr>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Model</th>
+        <th>Condition</th>
+        <th>Postal Code</th>
+        <th>Detail</th>
+      </tr>
+    
+      <% @s_get_items.each do |isq| %>
+
+        <tr>
+          <td>
+            <% @cats = Categories.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
+            <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
+          </td>
+          <td>
+            <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
+          <td>
+            <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
+          <td>
+            <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_conditions_id = ?", isq.item_condition_id]) %>
+            <%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
+          </td>
+          <td>
+            <%= (isq.postal_code.blank? ? "NA": isq.postal_code) %></td>
+          <td>
+            
+            <% if @search.lender_or_borrower == 2 %>
+            	<%= link_to "More..."  , borrower_item_detail_url(:id => isq.borrower_item_id), {:style=>"color:#ff4500;"} %>
+            <% else %> 		
+       		<%= link_to "More..."  , lender_item_detail_url(:id => isq.lender_item_id), {:style=>"color:#ff4500;"} %>
+           		
+          <% end %>
+            
+            
+          </td>
+
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+  <% if session[:user_id].blank? %>
+    <div class="bottom_flash">
+		<p class="offering">
+		<span class="logo_white" >Create Your Own Echo Market Community</span> </p>
+		
+		<%= link_to 'Just what I was hoping for... I want to create my Echo Market Community now', community_new_url( :id=>'', :type=>'all'), :class=> "search"   %>
+           <p style="color:indigo;font-size:16px;font-weight:normal;margin-bottom:3px;">Register as a Community before May, 2015, and Echo Market will provide Five-Point Customization for free.</p> 
+
+		<%= link_to 'Registered as lender or borrower...', user_register_url(:type=>'all', :id=>''), {:class=> "search"}   %>
+
+		<div   class="div_white" >&nbsp;</div>
+	</div>
+  <% end %>
+
+  <% end %>

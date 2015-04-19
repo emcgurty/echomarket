@@ -629,7 +629,7 @@ input#lenders_other_describe_yourself.hidden_input {
 }
 
 .form_wrapper table.search {
-    width:76%;
+    width:100%;
     border:none;
     padding:0px;
     border-spacing:0px;
@@ -845,6 +845,7 @@ select#lenders_describe_yourself {
     margin:5px;
     width:76%;
 }
+
 
 .form_wrapper span.error_no_float{
     visibility:hidden;
