@@ -1,0 +1,148 @@
+<%= javascript_include_tag 'add_item.js' %>
+<%= javascript_include_tag 'borrower_seeking.js' %>
+<%= stylesheet_link_tag 'rapid_echo_market.css' %>
+<div id="rapid_borrower" style="display:none;">
+	
+<% @borrowers = Borrowers.new %>
+
+<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "rapid_update_borrower_seeking"},  :html=>   {:class=>"borrower_seeking", :id=>"borrower_item_registration"} do |nf| %>
+
+<% unless @borrowers[0].blank? %>
+<% @borrowers = @borrowers[0] %>
+<% end  %>
+<%= nf.hidden_field( :is_active) %>
+<%= nf.hidden_field( :is_saved) %>
+<%= nf.hidden_field( :is_community, :value=> 3) %>
+<%= nf.hidden_field( :item_count, :value=> 1) %>
+
+<% @st = UsStates.find(:all, :order => "state_name") %>
+<% @ct = Countries.find(:all, :order => "country_name") %>
+<div class="top" >
+	<p><span class="logo_white" >RAPID BORROWER ITEM REGISTRATION</span></p>
+	<p><a href="#" style="float:right; color:white;" onclick="saveBAll();">Save Rapid Item Registration&nbsp;</a></p>
+</div>
+<div>
+	<span class="registration_header" style="display:block;color:black;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;">All fields are required.</span>
+</div>
+
+	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
+		<label>Please provide an email address for lender contact:</label>
+					<%= nf.text_field( :email_alternative ) %>
+					<span class="error" id="email_error">&nbsp;</span></label>
+    </div>
+    
+    <p>A key aspect of Echo Market is locating items within the vicinity of the lender and borrower.</p>
+    
+    
+	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
+		<label>Your Postal Code:
+					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %></label>
+					<span class="error" id="postal_code_error">&nbsp;</span>
+	
+	
+	<label>Country:
+				<% @current_selected = '99' %>
+				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %></label>
+				<%= nf.select(:country_id, @countries) %>
+				<span class="error" id="country_error">&nbsp;</span>
+
+				<% display_state_id = 'none' %>
+				<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
+					<label>US State:
+					<% current_selected = '99' %>
+					<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
+					<%= nf.select(:state_id, @states) %></label>
+				</div> 
+	
+				<% unless @borrowers.state_id_string.blank? %>
+				<% display_state_id_string = 'inline' %>
+				<% else %>
+				<% display_state_id_string = 'none' %>
+				<% end %>
+				<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
+					<label>Region:
+					<%= nf.text_field(:state_id_string) %></label>
+
+				</div>
+				<span class="error" id="state_error">&nbsp;</span>
+	</div>
+
+	<label class="personal" style="margin-left:25px;margin-top:5px;">Item you would like to borrow</label>
+
+			<div style="margin-left:25px;margin-top:5px;">
+				<label>Category:</span> 
+					<% @current_selected = '99' %>
+					<% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
+					<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
+					<%= nf.select( :item_category_id, @cats,{ :onchange=>"borrowers_item_category_id();", :style=>"width:auto;" }) %></label>
+				    <span class="error" id="item_category_id_error">Choose a 'Category'.</span>
+
+			</div>
+			<% display_div = 'none' %>
+			<% unless @borrowers.item_category_id.blank? %>
+			<% if @borrowers.item_category_id == 0 %>
+			<% display_div =  'inline'%>
+			<% end %>
+			<% end %>
+			<div style="display:<%= display_div %>;margin-left:25px;margin-top:5px;" id="other_category">
+				<label>Add another category:<span class="required_fields">&nbsp;&nbsp;*</span></label>
+				<%= nf.text_field( :other_item_category, {:class=>"hidden_input"}) %>
+
+			</div>
+
+				<div style="margin-left:25px;margin-top:5px;">
+				<label for="item_description">Description:<span class="required_fields">&nbsp;&nbsp;*</span></label>
+				<%= nf.text_field( :item_description) %>
+				<span class="error" id="item_description_error">Please provide a item description.</span>
+			</div>
+			
+			<div style="margin-left:25px;margin-top:5px;">
+				<label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
+
+				<% unless @borrowers.item_condition_id.blank? %>
+				<% @current_selected = @borrowers.item_condition_id %>
+				<% else %>
+				<% @current_selected = '99' %>
+				<% end  %>
+				<% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
+				<% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
+				<%= nf.select( :item_condition_id, @bl) %>
+				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
+			</div>
+			<div style="margin-left:25px;margin-top:5px;">
+				<label for="item_model">Model:</label>
+				<%= nf.text_field( :item_model) %>
+
+			</div>
+		
+</div>
+		
+
+<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
+
+	<div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
+		<p class="offering">
+			Echo Market is offered as a goodwill facilitating service to introduce borrowers to lenders and vice versa, seeking or offering nonperishable/ethical items. 
+			Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.
+		</p>
+	
+		<ul >
+			<li style="margin:5px;">
+				<label for="borrowers_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
+					<%= nf.check_box( :goodwill) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
+				<span class="error" id="goodwill_error"  >&nbsp;</span>
+			</li>
+			<li style="margin:5px;">
+				<label for="borrowers_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
+					<%= nf.check_box( :age_18_or_more) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
+				<span class="error" id="18_or_more_error">&nbsp;</span>
+			</li>
+		</ul>
+
+	</div>
+
+</div>
+
+<% end %>
+
+</div>

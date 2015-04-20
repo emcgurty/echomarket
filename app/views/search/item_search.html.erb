@@ -2,7 +2,6 @@
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-
 <script type="text/javascript">
 	$(document).ready(function() {
 
@@ -355,12 +354,15 @@
 		Your search result will be displayed below.
 	</p>
 	<%  else  %>
-	<p style="color:#ffcc99;">
-		Your search did not produce any results.
-	</p>
-	<%= render :partial => 'search/s_list' %>
+	<% if @search.lender_or_borrower == 2 %> 
+	<%= render :partial => 'search/s_l_list' %>
+	<% elsif @search.lender_or_borrower == 1 %>
+	<script>
+	$("div#rapid_borrower').css("display", "block");
+    </script>
+	
 	<% end %>
-
+<% end %>
 </div>
 
 <% else %>
@@ -418,6 +420,11 @@
 		&nbsp;
 	</div>
 </div>
+<% end %>
+
+<% if @search.lender_or_borrower == 1 %>
+<%= render :template => "borrower/rapid_borrower_seeking" %>
+
 <% end %>
 
 <% end %>

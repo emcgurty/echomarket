@@ -4,23 +4,22 @@
  
 <div id="rapid_lender" >
 	
-<% @borrower = Borrowers.new %>
+<% @lender = Lenders.new %>
 
-<%= form_for @borrower, :url => {:controller => "search", :action => "create"}, :html => {:class=>"items_listing"} do |nf| %>
-
-        <p>Seems you are seeking to borrow.  Here you may seek a RAPID Borrower Item</p>
+<%= form_for @lender, :url => {:controller => "search", :action => "create"}, :html => {:class=>"items_listing"} do |nf| %>
+        <p>Seems that you want to offer something to lend.  Here you may offer a RAPID Lender Item</p>
          
-       	<label>Your borrower email, so folks can contact you
+       	<label>Your lender email, so folks can contact you
          <%= nf.text_field :email_alternative,  { :maxlength=>50, :size=>20}  %>
-	    <span class="error" id="email_error" >email</span>
+	    <span class="error" id="email_error">email</span>
 
    	    <label>Please select an Item Category
       	 <%= nf.collection_select :item_category_id, Categories.order('category_type ASC'), :category_id, :category_type, {:include_blank => true} %></label> 	
-		<span class="error" id="ccid_error" >category_id</span>
+		<span class="error" id="cat_error">category_id</span>
 		
 		<label>Item Description
-        <%= nf.text_field :item_description,  { :maxlength=>50, :size=>20}  %></label> 	
-	    <span class="error" id="id_error" )>email</span>
+         <%= nf.text_field :item_description,  { :maxlength=>50, :size=>20}  %></label> 	
+	    <span class="error" id="id">id</span>
 
 		<a href="#"  onclick="addItem();" class="">Add Item</a> 
 				

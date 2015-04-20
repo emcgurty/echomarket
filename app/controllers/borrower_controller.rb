@@ -1,5 +1,14 @@
 class BorrowerController < ApplicationController
 
+
+def rapid_borrower_seeking
+  
+  
+end
+  def rapid_update_borrower_seeking
+    
+    
+  end
  def b_list
       session[:notice] = ''
       session[:background] = true

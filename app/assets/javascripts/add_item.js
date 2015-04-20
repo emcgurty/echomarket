@@ -1,12 +1,38 @@
+  $(document).ready(function() {
+  	
+  	$(function() {
+    $( "div#rapid_lender" ).dialog(
+    	
+    	{ title: "No Lender Search Results Found"}
+    	
+    	
+    	);
+
+});
+
+  	$(function() {
+    $( "div#rapid_borrower" ).dialog(
+    	
+    	{ title: "No Borrower Search Results Found"}
+    	
+    	
+    	);
+
+});  
+
+});
+
 function addItem(){
 	
 	var foundIncomplete = false;
+	alert("add item");
+	/*
 	$("span#incomplete_information_error").css("visibility", "hidden");
-	/*  f l a : all blank*/
+	
 	if ($("input#community_members_alias").val() == "") {
 		if (($("input#community_members_first_name").val() == "") || ($("input#community_members_last_name").val() == "")) {
 			foundIncomplete = true;
-			/* incomplete_information_error */
+			
 			$("span#incomplete_information_error").text("You need to provide either a Full Name with middle initial optional, or an Alias.");
 			$("span#incomplete_information_error").css("visibility", "visible");
 		}
@@ -33,7 +59,7 @@ function addItem(){
 			
 	if (!(foundIncomplete)) {
 		$("form.register_community").submit();
-	}
+	} */
 	
 }
 
