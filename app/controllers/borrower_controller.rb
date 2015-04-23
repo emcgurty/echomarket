@@ -2,13 +2,92 @@ class BorrowerController < ApplicationController
 
 
 def rapid_borrower_seeking
-  
-  
+    distance_sought = '' 
+    session[:notice] = ''
+    session[:background] = true 
+    @current_search = Searches.find(session[:rapid_id])
+    @build_search_query_string = ""
+    @build_search_query_string = "Item Description/Model" + @current_search.keyword unless @current_search.keyword.blank?
+    unless  @build_search_query_string.blank? 
+      @build_search_query_string = @build_search_query_string + "; "
+    end
+    @build_search_query_string = @build_search_query_string + "Item Postal Code " + @current_search.postal_code unless @current_search.postal_code.blank?
+    unless  @build_search_query_string.blank? 
+      @build_search_query_string = @build_search_query_string + "; "
+    end
+    unless @current_search.zip_code_radius.blank?
+      if (@current_search.zip_code_radius  == 1)
+        distance_sought = "One Mile"
+      elsif (@current_search.zip_code_radius  == 5)
+        distance_sought = "Five Miles"      
+       elsif (@current_search.zip_code_radius  == 10)
+        distance_sought = "Ten Miles"
+        elsif (@current_search.zip_code_radius  == 25)
+        distance_sought = "25 Miles"   
+      end
+    end
+    
+    @build_search_query_string = @build_search_query_string + "Item Postal Code Radius:" + distance_sought unless @current_search.zip_code_radius.blank?
+     unless  @build_search_query_string.blank? 
+      @build_search_query_string = @build_search_query_string + "; "
+    end
+    @build_search_query_string = @build_search_query_string + "Item Date Range" + @current_search.start_date +  @current_search.start_date unless @current_search.start_date.blank? && @current_search.end_date.blank?
+     unless  @build_search_query_string.blank? 
+      @build_search_query_string = @build_search_query_string + "; "
+    end
+    
+    
+    @build_search_query_string = @build_search_query_string +  (@current_search.lender_or_borrower == 1 ? "Lender" : "Borrower") unless @current_search.lender_or_borrower.blank?
+     unless  @build_search_query_string.blank? 
+      @build_search_query_string = @build_search_query_string + "; "
+    end
+    unless @current_search.category_id.blank?
+      @cat = Categories.find(:first, :conditions => ["category_id = ?", @current_search.category_id]) 
+      if @cat
+        @build_search_query_string = @build_search_query_string + "Category" + @cat.category_type
+      end   
+    end  
+    session[:query_string] = @build_search_query_string 
+    @borrowers = Borrowers.new
 end
-  def rapid_update_borrower_seeking
-    
-    
-  end
+
+ def rapid_update_borrower_seeking
+   session[:notice] = ''
+    unless params[:borrowers].blank?
+        @req = params[:borrowers]
+        @borrowers = Borrowers.new(
+          :user_id => 'NA',
+          :describe_yourself => -1,
+          :first_name => 'NA',
+          :last_name => 'NA',
+          :displayBorrowerName => 0,
+          :address_line_1 => 'NA',
+          :state_id=> @req[:state_id].to_s,
+          :state_id_string=> @req[:state_id_string],
+          :country_id=> @req[:country_id].to_s,
+          :displayBorrowerAddress  => 0,
+          :useWhichContactAddress => 0,
+          :email_alternative=> @req[:email_alternative],
+          :borrower_contact_by_email=> 2,
+          :item_category_id => @req[:item_category_id].to_i,
+          :item_description=> @req[:item_description],
+          :item_condition_id=> @req[:item_condition_id].to_i,
+          :other_item_category=> @req[:other_item_category],
+          :item_model=> @req[:item_model],
+          :item_count=> @req[:item_count].to_i,
+          :goodwill=> @req[:goodwill].to_i,
+          :age_18_or_more=>@req[:age_18_or_more].to_i,
+          :is_active => @req[:is_active].to_i,
+          :is_saved => @req[:is_saved].to_i,
+          :is_community => @req[:is_community].to_i,
+          :date_created => Time.now,
+          :approved => 0)
+         if @borrowers.save(:validate => false) 
+         session[:notice] = "Your borrower's record has been saved."
+         end
+     end       
+ end
+
  def b_list
       session[:notice] = ''
       session[:background] = true

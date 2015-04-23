@@ -3,10 +3,9 @@ class SearchController < ApplicationController
   def item_search
     
     # session[:notice] = ''
-    session[:background] = true
- if params[:id]
+   session[:background] = true
+    if params[:id]
       @search = Searches.find(params[:id].to_i)
-      
     else
       @search = Searches.new
     end    
@@ -16,7 +15,9 @@ class SearchController < ApplicationController
   def create
     @search = Searches.new(params[:searches])
     @save_search = @search.save(:validate => false)
+    session[:rapid_id] = @search.id
     redirect_to :action => :item_search, :id => @search.id 
+    
   end
   
   def index

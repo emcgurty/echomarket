@@ -1,5 +1,46 @@
 class LenderController < ApplicationController
 
+ def rapid_lender_offering
+end
+
+ def rapid_update_lender_offering
+    session[:notice] = ''
+    unless params[:lenders].blank?
+        @req = params[:lenders]
+        @lenders = Lenders.new(
+          :user_id => 'NA',
+          :describe_yourself => -1,
+          :first_name => 'NA',
+          :last_name => 'NA',
+          :displayBorrowerName => 0,
+          :address_line_1 => 'NA',
+          :state_id=> @req[:state_id].to_s,
+          :state_id_string=> @req[:state_id_string],
+          :country_id=> @req[:country_id].to_s,
+          :displayBorrowerAddress  => 0,
+          :useWhichContactAddress => 0,
+          :email_alternative=> @req[:email_alternative],
+          :borrower_contact_by_email=> 2,
+          :item_category_id => @req[:item_category_id].to_i,
+          :item_description=> @req[:item_description],
+          :item_condition_id=> @req[:item_condition_id].to_i,
+          :other_item_category=> @req[:other_item_category],
+          :item_model=> @req[:item_model],
+          :item_count=> @req[:item_count].to_i,
+          :goodwill=> @req[:goodwill].to_i,
+          :age_18_or_more=>@req[:age_18_or_more].to_i,
+          :is_active => @req[:is_active].to_i,
+          :is_saved => @req[:is_saved].to_i,
+          :is_community => @req[:is_community].to_i,
+          :date_created => Time.now,
+          :approved => 0)
+         if @lenders.save(:validate => false) 
+         session[:notice] = "Your lender's record has been saved."
+         end
+   
+   
+ end
+ 
   def l_list
     session[:notice] = ''
     session[:background] = true
