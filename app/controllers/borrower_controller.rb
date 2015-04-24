@@ -2,52 +2,8 @@ class BorrowerController < ApplicationController
 
 
 def rapid_borrower_seeking
-    distance_sought = '' 
     session[:notice] = ''
     session[:background] = true 
-    @current_search = Searches.find(session[:rapid_id])
-    @build_search_query_string = ""
-    @build_search_query_string = "Item Description/Model" + @current_search.keyword unless @current_search.keyword.blank?
-    unless  @build_search_query_string.blank? 
-      @build_search_query_string = @build_search_query_string + "; "
-    end
-    @build_search_query_string = @build_search_query_string + "Item Postal Code " + @current_search.postal_code unless @current_search.postal_code.blank?
-    unless  @build_search_query_string.blank? 
-      @build_search_query_string = @build_search_query_string + "; "
-    end
-    unless @current_search.zip_code_radius.blank?
-      if (@current_search.zip_code_radius  == 1)
-        distance_sought = "One Mile"
-      elsif (@current_search.zip_code_radius  == 5)
-        distance_sought = "Five Miles"      
-       elsif (@current_search.zip_code_radius  == 10)
-        distance_sought = "Ten Miles"
-        elsif (@current_search.zip_code_radius  == 25)
-        distance_sought = "25 Miles"   
-      end
-    end
-    
-    @build_search_query_string = @build_search_query_string + "Item Postal Code Radius:" + distance_sought unless @current_search.zip_code_radius.blank?
-     unless  @build_search_query_string.blank? 
-      @build_search_query_string = @build_search_query_string + "; "
-    end
-    @build_search_query_string = @build_search_query_string + "Item Date Range" + @current_search.start_date +  @current_search.start_date unless @current_search.start_date.blank? && @current_search.end_date.blank?
-     unless  @build_search_query_string.blank? 
-      @build_search_query_string = @build_search_query_string + "; "
-    end
-    
-    
-    @build_search_query_string = @build_search_query_string +  (@current_search.lender_or_borrower == 1 ? "Lender" : "Borrower") unless @current_search.lender_or_borrower.blank?
-     unless  @build_search_query_string.blank? 
-      @build_search_query_string = @build_search_query_string + "; "
-    end
-    unless @current_search.category_id.blank?
-      @cat = Categories.find(:first, :conditions => ["category_id = ?", @current_search.category_id]) 
-      if @cat
-        @build_search_query_string = @build_search_query_string + "Category" + @cat.category_type
-      end   
-    end  
-    session[:query_string] = @build_search_query_string 
     @borrowers = Borrowers.new
 end
 
@@ -62,6 +18,8 @@ end
           :last_name => 'NA',
           :displayBorrowerName => 0,
           :address_line_1 => 'NA',
+          :city => "na",
+          :postal_code => @req[:postal_code].to_s,
           :state_id=> @req[:state_id].to_s,
           :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id].to_s,
@@ -84,6 +42,7 @@ end
           :approved => 0)
          if @borrowers.save(:validate => false) 
          session[:notice] = "Your borrower's record has been saved."
+          redirect_to  :controller => "search", :action => 'item_search' 
          end
      end       
  end

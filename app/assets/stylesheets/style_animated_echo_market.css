@@ -115,6 +115,11 @@ form.item_search{
 
 }
 
+form.rapid_item{
+    width:480px;
+
+}
+
 form.edit_users, form.contact_us{
     width:580px;
 
@@ -359,6 +364,14 @@ h2 span{
     margin-right:15px;
     
 
+}
+.form_wrapper .top a{
+    display:block;
+    clear:both;
+    float:right;
+    padding:2px 2px;  /* Two settings, top and bottom*/
+    color:#ffa800;
+    /*    text-shadow:1px 1px 1px #000;*/
 }
 
 .form_wrapper .bottom a{

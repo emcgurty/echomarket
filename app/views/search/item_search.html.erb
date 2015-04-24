@@ -1,6 +1,7 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -211,6 +212,9 @@
 	<p>
 		ITEM SEARCH <a href="#" onclick="submitSearch();" style="color:white;clear:both; float:right;padding-right:4px;">Fingers Crossed! Submit search.</a>
 	</p>
+	<% if session[:notice] %>
+	<p style='color:red;'><%= session[:notice]%></p>
+	<% end %>
 </div>
 
 <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
@@ -232,7 +236,7 @@
 
 	<% if session[:user_id].blank? %>
 
-	<ul  >
+	<ul >
 
 		<li>
 			<label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;

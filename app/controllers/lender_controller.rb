@@ -1,6 +1,10 @@
 class LenderController < ApplicationController
 
  def rapid_lender_offering
+    session[:notice] = ''
+    session[:background] = true 
+    @lenders = Lenders.new
+ 
 end
 
  def rapid_update_lender_offering
@@ -12,12 +16,14 @@ end
           :describe_yourself => -1,
           :first_name => 'NA',
           :last_name => 'NA',
-          :displayBorrowerName => 0,
+          :displayLenderName => 0,
           :address_line_1 => 'NA',
           :state_id=> @req[:state_id].to_s,
           :state_id_string=> @req[:state_id_string],
           :country_id=> @req[:country_id].to_s,
-          :displayBorrowerAddress  => 0,
+          :city => "NA",
+          :postal_code => @req[:postal_code].to_s,
+          :displayLenderAddress  => 0,
           :useWhichContactAddress => 0,
           :email_alternative=> @req[:email_alternative],
           :borrower_contact_by_email=> 2,
@@ -36,8 +42,9 @@ end
           :approved => 0)
          if @lenders.save(:validate => false) 
          session[:notice] = "Your lender's record has been saved."
+          redirect_to  :controller => "search", :action => 'item_search' 
          end
-   
+   end
    
  end
  

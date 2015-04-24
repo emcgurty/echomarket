@@ -27,7 +27,7 @@
     	$("div#rapid_borrower").css('display', 'block');
     	$("div#country_selected").css("display", "none");
 
-});
+
 
 
 	$("select#borrowers_country_id").bind('change', function() {
@@ -65,7 +65,7 @@
 
 	$("#borrowers_item_category_id").trigger('change');
 	
-	////
+
 		$("select#lenders_country_id").bind('change', function() {
 
 		
@@ -101,7 +101,7 @@
 
 	$("#lenders_item_category_id").trigger('change');
 	
-
+});
 
 
 function addLenderItem(){
@@ -123,7 +123,7 @@ function addLenderItem(){
 	 $("span#incomplete_rapid_information").css("visibility", "visible");	
      
     } else {
-	
+	$('form.rapid_item').submit();
 	}
 
 	
@@ -148,13 +148,12 @@ function addBorrowerItem(){
 	 $("span#incomplete_rapid_information").css("visibility", "visible");	
      
     } else {
-	
+	  $('form.rapid_item').submit();
 	}
 
 	
 }
 
-/// Lazy but I just dont't want to fool around with typos
 function validLenderCountryState() {
 	
 	var foundIncomplete = false;
@@ -193,7 +192,7 @@ function validBorrowerCountryState() {
 	return foundIncomplete;
 }
 
-// Realize could have just passed args
+
 function checkBorrowerLegal() {
 
 	var notChecked = false;
