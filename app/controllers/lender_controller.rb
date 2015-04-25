@@ -39,10 +39,19 @@ end
           :is_saved => @req[:is_saved].to_i,
           :is_community => @req[:is_community].to_i,
           :date_created => Time.now,
-          :approved => 0)
+          :approved => 1,
+          :remote_ip => @req[:remote_ip])
          if @lenders.save(:validate => false) 
+         @un = 'rapid_' + @lenders.item_description
+         @user = Users.new(:username => @un, :email => @lenders.email_alternative, :created_at => Time.now, 
+                    :remote_ip => @lenders.remote_ip, :user_alias => @un, :approved => 1, :user_type => 'lender', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
+         @user.save(:validate => false)
+         @myupdatehash = [:user_id => @user.user_id]
+         if @lenders.update_attributes(@myupdatehash[0])
+         Notifier.notify_rapid(@user).deliver 
          session[:notice] = "Your lender's record has been saved."
-          redirect_to  :controller => "search", :action => 'item_search' 
+         redirect_to  :controller => "search", :action => 'item_search'
+         end 
          end
    end
    
@@ -389,6 +398,15 @@ end
      end
   end
   
+    
+  def get_random_password
+    length = 8
+    characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
+    @password = SecureRandom.random_bytes(length).each_char.map do |char|
+      characters[(char.ord % characters.length)]
+    end.join
+    @password
+  end
 
 end
 

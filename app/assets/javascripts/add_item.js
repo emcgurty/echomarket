@@ -104,55 +104,122 @@
 });
 
 
+function addBorrowerItem(){
+	
+	 var incomplete_information = '';
+	 
+	 $("div.error_warning").css("display", "none");
+	 $("span#incomplete_rapid_information").text("");	
+	 $("span#incomplete_rapid_information").css("visibility", "hidden");
+    
+    var current_email = $("input#lenders_email_alternative").val(); 
+	
+	if (validEmail(current_email)) {
+		incomplete_information = incomplete_information + "- Your email address is improperly formatted<br />";
+	}
+	  if ($("input#lenders_postal_code").val() == '' ) {
+		incomplete_information = incomplete_information + "- A postal code is required<br />";
+	}
+	
+	if (validLenderCountryState()) {
+		incomplete_information = incomplete_information + "- Country with either State or Region is required<br />";
+	}
+	
+	if (checkLenderCategory()) {
+		incomplete_information = incomplete_information + "- If you choose an 'Other' category, you must provide your suggested 'Other' category option. Otherwise a Category selection is required.<br />";
+	}
+	
+	if ($("input#lenders_item_description").val() == '' ) {
+		incomplete_information = incomplete_information + "- An Item Desription is required<br />";
+    }
+    
+	if ($("select#lenders_item_condition_id option:selected").text() == 'Please select' ) {
+		incomplete_information = incomplete_information + "- Please select an Item Condition<br />";
+		
+	}
+	
+	
+	
+	if (checkLenderLegal()) {
+		incomplete_information = incomplete_information + "- You must confirm that you are acting in goodwill and you are at least 18 years old<br />";
+	}
+
+    if (incomplete_information == '') {
+	  $('form.rapid_item').submit(); 	}
+	else {
+	 $("div.error_warning").css("display", "block");
+	 $("span#incomplete_rapid_information").html(incomplete_information);
+	 $("span#incomplete_rapid_information").css("visibility", "visible");	
+    
+	}
+
+	
+}
+
+
+
 function addLenderItem(){
+	
+ var incomplete_information = '';
 	
 	 $("div.error_warning").css("display", "none");
 	 $("span#incomplete_rapid_information").text("");	
 	 $("span#incomplete_rapid_information").css("visibility", "hidden");
     
+    var current_email = $("#borrowers_email_alternative").val(); 
 	
-	if (
-	$("#lenders_postal_code").val() == '' ||
-	$("#lenders_email_alternative").val() == '' ||
-	$("#lenders_item_description").val() == '' ||
-	$("#lenders_item_condition_id").val() == '' ||  validLenderCountryState() ||  checkLenderLegal() || checkLenderCategory()
-	)
-	{ $("div.error_warning").css("display", "block");
-	 $("span#incomplete_rapid_information").text("All fields are required.");
-	 
-	 $("span#incomplete_rapid_information").css("visibility", "visible");	
-     
-    } else {
-	$('form.rapid_item').submit();
+	if (validEmail(current_email)) {
+		incomplete_information = incomplete_information + "- Your email address is improperly formatted<br />";
+	}
+	if ($("#borrowers_postal_code").val() == '' ) {
+		incomplete_information = incomplete_information + "- A postal code is required<br />";
+	}
+	
+	if (validBorrowerCountryState()) {
+		incomplete_information = incomplete_information + "- Country with either State or Region is required<br />";
 	}
 
+		if (checkBorrowerCategory()) {
+		incomplete_information = incomplete_information + "- If you choose an 'Other' category, you must provide your suggested 'Other' category option. Otherwise a Category selection is required.<br />";
+	}
 	
-}
-
-function addBorrowerItem(){
-	alert('submit borrow1');
-	 $("div.error_warning").css("display", "none");
-	 $("span#incomplete_rapid_information").text("");
-	 $("span#incomplete_rapid_information").css("visibility", "hidden");	
-     
-	
+	if ($("#borrowers_item_description").val() == '' ) {
+		incomplete_information = incomplete_information + "- An item description is required<br />";
+    }
+    
+	if ($("select#borrowers_item_condition_id option:selected").text() == 'Please select' ) {
+		incomplete_information = incomplete_information + "- Please select an Item Condition<br />";
+			
+	}
 		
-	if ($("select#borrowers_item_category_id option:selected").val() == '' ||
-	$("#borrowers_postal_code").val() == '' ||
-	$("#borrowers_email_alternative").val() == '' ||
-	$("#borrowers_item_description").val() == '' ||
-	$("#borrowers_item_condition_id").val() == '' ||  validBorrowerCountryState() ||  checkBorrowerLegal() || checkBorrowerCategory()
-	)
-	{ $("div.error_warning").css("display", "block");
-	 $("span#incomplete_rapid_information").text("All fields are required");
+
+	if (checkBorrowerLegal()) {
+		incomplete_information = incomplete_information + "- You must confirm that you are acting in goodwill and you are at least 18 years old\<br />";
+	} 
+    if (incomplete_information == '') {
+	$('form.rapid_item').submit(); 	}
+	else {
+	 $("div.error_warning").css("display", "block");
+	 $("span#incomplete_rapid_information").html(incomplete_information);
 	 $("span#incomplete_rapid_information").css("visibility", "visible");	
-     
-    } else {
-	  $('form.rapid_item').submit();
+    
 	}
 
 	
 }
+
+function validEmail(em) {
+	
+	
+	 var foundIncomplete = false;
+	 var emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+	  if (!( emailRegex.test(em) ) ) {
+	  	foundIncomplete = true;
+	  } 
+	 
+	return foundIncomplete;
+}
+
 
 function validLenderCountryState() {
 	
@@ -160,8 +227,10 @@ function validLenderCountryState() {
 	var cid = $("select#lenders_country_id option:selected").val();
 	var sid = $("select#lenders_state_id option:selected").val(); 
 	var sis = $("input#lenders_state_id_string").val();
+	
 		
 	if (cid == '99') { 
+	
 		foundIncomplete = true;
 	} else if ((cid != 'US') && (sis == '')){
 		foundIncomplete = true;
@@ -233,10 +302,10 @@ function checkBorrowerCategory() {
 
 	var notChecked = false;
 	var cat_id = $("select#borrowers_item_category_id option:selected").text();
-	var o_i_c =  $("input#borrowers_other_item_category_id").val();
+	var o_i_c =  $("input#borrowers_other_item_category").val();
 	if ((cat_id == 'Other') && (o_i_c == '')){
 		notChecked = true;
-	} else if (cat_id == '') {
+	} else if (cat_id == 'Please select') {
 		notChecked = true;
 		
 	}
@@ -248,10 +317,10 @@ function checkLenderCategory() {
 
 	var notChecked = false;
 	var cat_id = $("select#lenders_item_category_id option:selected").text();
-	var o_i_c =  $("input#lenderers_other_item_category_id").val();
+	var o_i_c =  $("input#lenders_other_item_category").val();
 	if ((cat_id == 'Other') && (o_i_c == '')){
 		notChecked = true;
-	} else if (cat_id == '') {
+	} else if (cat_id == 'Please select') {
 		notChecked = true;
 		
 	}

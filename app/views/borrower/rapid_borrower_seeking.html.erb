@@ -2,15 +2,16 @@
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "rapid_update_borrower_seeking", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item"} do |nf| %>
+<%= form_for @borrowers, :url=> {:controller=>"lender", :action => "rapid_update_lender_offering", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item"} do |nf| %>
 
 <% unless @borrowers[0].blank? %>
 <% @borrowers = @borrowers[0] %>
 <% end  %>
-<%= nf.hidden_field( :is_active) %>
-<%= nf.hidden_field( :is_saved) %>
+<%= nf.hidden_field( :is_active, :value => 1) %>
+<%= nf.hidden_field( :is_saved, :value => 1) %>
 <%= nf.hidden_field( :is_community, :value=> 3) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
+<%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 <% @current_selected = '99' %>
 <% @st = UsStates.find(:all, :order => "state_name") %>
 <% @ct = Countries.find(:all, :order => "country_name") %>
@@ -26,34 +27,34 @@
 	<p>
 		<span >RAPID LENDER ITEM REGISTRATION</span>
 	</p>
-	<a href="#" onclick="addBorrowerItem();">==> Save your Item Offered</a>
+	<a href="#" onclick="addLenderItem();">==> Save your Item Offered</a>
 	<%= link_to '==> Return to New Search', search_item_search_url %>
 	<br />
 </div>
 
-<div class="error_warning" style="display:none;">
+<div class="error_warning" style="display:none;float:left;">
 	<span class="error" id="incomplete_rapid_information" style="font-size:14px;"></span>
 </div>
 
-<div>
+<div style="float:left;;width:92%;">
 	<label>Please provide an email address for borrower contact:</label>
 	<br />
-	<%= nf.text_field( :email_alternative, :maxlength=>50, :size=>40 ) %>
+	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40 ) %>
 </div>
 
-<div>
+<div style="float:left;;width:92%;">
 	<label>Your Postal Code: </label>
 	<br />
 	<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
 </div>
 
-<div>
+<div style="float:left;;width:92%;">
 	<label>Your Country: </label>
 	<br />
 	<%= nf.select(:country_id, @countries) %>
 </div>
 
-<div id="country_selected" style="display:none;">
+<div id="country_selected" style="display:none;float:left;;width:92%;">
 
 	<label>Your State or Region: </label>
 	<br />
@@ -69,6 +70,8 @@
 		<%= nf.text_field(:state_id_string, :maxlength=>40, :size=>40) %>
 	</div>
 </div>
+
+<div style="float:left;width:92%;">
 <label>Item Category: </label>
 <br />
 <% @current_selected = '99' %>
@@ -81,18 +84,25 @@
 	<br />
 	<%= nf.text_field( :other_item_category,:maxlength=>24, :size=>24) %>
 </div>
+</div>
 
+<div style="float:left;width:92%;">
 <label for="item_description">Item Description:</label>
 <br />
 <%= nf.text_field( :item_description, :maxlength=>50, :size=>50) %>
+</div>
 
-<label>The Condition of Your Item:</label>
+<div style="float:left;width:92%;">
+<label>The Condition of Item:</label>
 <br />
 
 <% @current_selected = '99' %>
 <% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
 <% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
 <%= nf.select( :item_condition_id, @bl) %>
+</div>
+
+<div style="float:left;width:92%;">
 
 <p >
 	Echo Market is provided as a goodwill facilitating service to introduce borrowers to lenders and vice versa, seeking or offering nonperishable/ethical items.
@@ -105,7 +115,7 @@
 <label for="borrowers_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
 	<%= nf.check_box( :age_18_or_more) %></label>
 <br/>
-
+</div>
 <div class="top">
 	<p>
 		Echo Market is dedicated to fostering community development through goodwill lending and borrowing

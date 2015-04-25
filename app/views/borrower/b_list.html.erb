@@ -8,12 +8,7 @@
 
   <div class="column">
     <h2 id="h2_listing" >What is sought to borrow...</h2>
-    <% if session[:community_name].blank? %>
-       <% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and is_community = 0"])  %>
-    <% else  %>   
-      <% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions =>
-               ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
-    <%end %>
+   
     <% if @borrower.blank? %>
       <p>Seems that no one is seeking to borrow anything...</p>
       <% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>

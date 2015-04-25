@@ -39,10 +39,19 @@ end
           :is_saved => @req[:is_saved].to_i,
           :is_community => @req[:is_community].to_i,
           :date_created => Time.now,
-          :approved => 0)
+          :approved => 1,
+          :remote_ip => @req[:remote_ip])
          if @borrowers.save(:validate => false) 
-         session[:notice] = "Your borrower's record has been saved."
+         @un = 'rapid_' + @borrowers.item_description
+         @user = Users.new(:username => @un, :email => @borrowers.email_alternative, :created_at => Time.now, 
+                    :remote_ip => @borrowers.remote_ip, :user_alias => @un, :approved => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
+         @user.save(:validate => false)
+         @myupdatehash = [:user_id => @user.user_id]
+         if @borrowers.update_attributes(@myupdatehash[0])
+          Notifier.notify_rapid(@user).deliver
+          session[:notice] = "Your borrower's record has been saved."
           redirect_to  :controller => "search", :action => 'item_search' 
+         end
          end
      end       
  end
@@ -50,6 +59,15 @@ end
  def b_list
       session[:notice] = ''
       session[:background] = true
+      
+      if session[:community_name].blank? 
+        @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and is_community = 0"])  
+    else    
+       @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions =>
+               ["is_active=1 AND (is_community = 1 OR is_community = 3) AND (user_id = ? OR user_id = 'NA'", session[:user_id]]) 
+    end 
+    
+       @borrower
  end
 
   def borrower_item_detail
@@ -313,6 +331,16 @@ end
       session[:notice]  = "Echo Market error in updating borrower record"
       redirect_to home_items_listing_url
     end
+  end
+  
+  
+  def get_random_password
+    length = 8
+    characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
+    @password = SecureRandom.random_bytes(length).each_char.map do |char|
+      characters[(char.ord % characters.length)]
+    end.join
+    @password
   end
 
 end

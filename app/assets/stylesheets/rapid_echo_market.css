@@ -182,8 +182,9 @@ div.column50{
 input[type="text"] {
     border: solid 1px #E5E5E5;
     background: #B5C4AB;
-    padding: 1px;
-    margin:0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin:2px;
     display:block;
     font-size:14px;
     width:76%;
@@ -194,7 +195,8 @@ input[type="text"] {
     input[type="email"] {
     border: solid 1px #E5E5E5;
     background: #B5C4AB;
-    padding: 1px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     margin:0px;
     display:block;
     font-size:14px;
@@ -207,8 +209,9 @@ input[type="text"] {
     select  {
     border: solid 1px #E5E5E5;
     background: #B5C4AB;
-    padding: 1px;
-    margin:0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin:2px;
     display:block;
     
     width:76%;

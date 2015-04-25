@@ -26,7 +26,7 @@
 		<h2 id="h2_listing" >What is offered to lend...</h2>
 
 		<% if session[:community_name].blank? %>
-		<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 0"])  %>
+		<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
 		<% else %>
 		<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 		<% end %>
@@ -40,6 +40,7 @@
 			
                      <%= link_to "Would you like to offer something to lend?", {:controller=> "lender", :action=> "lender_history", :id => session[:user_id]}, {:class => "search1"}  %>
 			
+		
 		
 		<% else %>
 		<%= link_to "Please login or register as a 'lender' to offer an item.", user_login_path(:id => '', :type => 'lender'), {:class=> "search1"}   %>
@@ -89,7 +90,7 @@
 		<h2 id="h2_listing" >What is sought to borrow...</h2>
 
 		<% if session[:community_name].blank? %>
-		<% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 0"])  %>
+		<% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
 		<% else %>
 		<% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 		<% end %>
