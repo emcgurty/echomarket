@@ -58,8 +58,10 @@ end
  end
  
   def l_list
-    session[:notice] = ''
-    session[:background] = true
+      session[:notice] = ''
+      session[:background] = true
+      
+
   end
 
   def lender_item_detail

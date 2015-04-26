@@ -60,14 +60,8 @@ end
       session[:notice] = ''
       session[:background] = true
       
-      if session[:community_name].blank? 
-        @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and is_community = 0"])  
-    else    
-       @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions =>
-               ["is_active=1 AND (is_community = 1 OR is_community = 3) AND (user_id = ? OR user_id = 'NA'", session[:user_id]]) 
-    end 
-    
-       @borrower
+ 
+      
  end
 
   def borrower_item_detail

@@ -352,26 +352,7 @@
 
 <% if @s_get_items.blank? %>
 
-<div class="bottom_flash">
-	<% if @search.id.blank? %>
-	<p style="color:#ccff99;">
-		Your search result will be displayed below.
-	</p>
-	<%  else  %>
-	<% if @search.lender_or_borrower == 1  %> 
-  		<script>
-        var strlocation = "/lender/rapid_lender_offering";
-        window.location.replace(strlocation);
-        </script>
-	<% elsif @search.lender_or_borrower == 2 %>
-        <script>
-        var strlocation = "/borrower/rapid_borrower_seeking";
-        window.location.replace(strlocation);
-        </script>
-    <% else %>
-	<% end %>
-<% end %>
-</div>
+
 
 <% else %>
 <div class="bottom_flash">

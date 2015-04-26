@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'echo_market.js' %>
 
-<%= form_for :borrowers, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
+<%= form_for :borrower, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
     <p><%= session[:community_name].to_s unless session[:community_name].blank? %> Borrower Items</p>
@@ -8,7 +8,13 @@
 
   <div class="column">
     <h2 id="h2_listing" >What is sought to borrow...</h2>
-   
+      if session[:community_name].blank? 
+        @borrower = Borrowers.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"])  
+    else    
+       @borrower = Borrowers.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions =>
+               ["is_active=1 AND is_community = 1 AND user_id = ?", session[:user_id]]) 
+    end 
+    @borrower = Borrowers.new if @borrower.blank?
     <% if @borrower.blank? %>
       <p>Seems that no one is seeking to borrow anything...</p>
       <% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>
@@ -19,8 +25,6 @@
 			<%= link_to "Would you like to seek something to borrow?", borrower_seeking_url(:id => session[:user_id], :type => session[:user_type]), {:class=> "search1"}   %>
 		<% end %>
         
-     
-     
      
       <% else %>
         <%= link_to "Please login or register as a 'borrower' to seek an item.", user_login_path(:id => '', :type => 'borrower'), {:class=> "search1"}   %>
