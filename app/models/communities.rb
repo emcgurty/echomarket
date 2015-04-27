@@ -11,7 +11,7 @@ class Communities < ActiveRecord::Base
   
   set_primary_key :community_id
   attr_accessor :password, :password_confirmation
-  attr_accessible :password, :password_confirmation, :distance
+  attr_accessible :password, :password_confirmation
   attr_accessible :community_name, :remote_ip, :crypted_password, :salt , :reset_code, :approved, :user_type
   attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :state_id, :country_id, :state_id_string
   attr_accessible :home_phone,:cell_phone, :email, :is_active ,:is_saved, :date_deleted, :date_updated  

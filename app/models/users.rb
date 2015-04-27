@@ -11,7 +11,7 @@ class Users < ActiveRecord::Base
   attr_accessor :password, :password_confirmation
   attr_accessor :community_name, :community_password, :community_first_name, :community_mi, :community_last_name, :community_alias
   attr_accessible :username, :email, :remote_ip, :user_alias, :community_name, :community_password
-  attr_accessible :user_id, :password, :password_confirmation, :user_type, :approved
+  attr_accessible :user_id, :password, :password_confirmation, :user_type, :approved, :is_rapid
   attr_accessible    :salt, :crypted_password,  :reset_code
   before_save :encrypt_password
   before_create :make_activation_code

@@ -8,14 +8,16 @@ class UsersObserver < ActiveRecord::Observer
   end
 
   def after_create(users)
-    Notifier.signup_notification(users).deliver
+    Notifier.signup_notification(users).deliver unless users.is_rapid == 1
   end
 
   def after_save(users)
 
-    Notifier.activation(users).deliver if users.recently_activated?
+    unless users.is_rapid == 1
+    Notifier.activation(users).deliver if users.recently_activated?  
     Notifier.reset_password_notification(users).deliver if users.recently_reset? && users.recently_password_reset?
     Notifier.get_username_notification(users).deliver if users.recently_reset? && users.recently_username_get?
+    end
   end
 
 

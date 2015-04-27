@@ -3,11 +3,16 @@ class LenderController < ApplicationController
  def rapid_lender_offering
     session[:notice] = ''
     session[:background] = true 
-    @lenders = Lenders.new
+    if params[:lenders]
+		create
+    else
+
+ @lenders = Lenders.new
+	end
  
 end
 
- def rapid_update_lender_offering
+ def create
     session[:notice] = ''
     unless params[:lenders].blank?
         @req = params[:lenders]
@@ -44,7 +49,7 @@ end
          if @lenders.save(:validate => false) 
          @un = 'rapid_' + @lenders.item_description
          @user = Users.new(:username => @un, :email => @lenders.email_alternative, :created_at => Time.now, 
-                    :remote_ip => @lenders.remote_ip, :user_alias => @un, :approved => 1, :user_type => 'lender', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
+                    :remote_ip => @lenders.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'lender', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
          @user.save(:validate => false)
          @myupdatehash = [:user_id => @user.user_id]
          if @lenders.update_attributes(@myupdatehash[0])
@@ -61,7 +66,6 @@ end
       session[:notice] = ''
       session[:background] = true
       
-
   end
 
   def lender_item_detail

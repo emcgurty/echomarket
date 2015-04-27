@@ -11,12 +11,12 @@
 <div class="column">
 	<h2 id="h2_listing" >What is offered to lend...</h2>
 <% if session[:community_name].blank? %>
-	<% @lender = Lenders.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3"])  %>
+	<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"])  %>
 	<% else %>
-	<% @lender = Lenders.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions => 
+	<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => 
 	           ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 	<% end %>
-	
+
 	<% if @lender.blank? %>
 	<p>
 		Seems that no one has offered to lend anything...
@@ -74,6 +74,10 @@
 		<a href="/lender/lender_offering" >=> Offer an Item to Lend</a>
 		<a href="/borrower/borrower_seeking" >=> Seek an Item to Borrow</a>
 	<% end %>
+	
+	
+
+	
 	
 	<% end %>
 	

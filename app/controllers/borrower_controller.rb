@@ -4,10 +4,14 @@ class BorrowerController < ApplicationController
 def rapid_borrower_seeking
     session[:notice] = ''
     session[:background] = true 
-    @borrowers = Borrowers.new
+if params[:borrowers]
+    create
+    else
+@borrowers = Borrowers.new
+end
 end
 
- def rapid_update_borrower_seeking
+ def create
    session[:notice] = ''
     unless params[:borrowers].blank?
         @req = params[:borrowers]
@@ -44,7 +48,7 @@ end
          if @borrowers.save(:validate => false) 
          @un = 'rapid_' + @borrowers.item_description
          @user = Users.new(:username => @un, :email => @borrowers.email_alternative, :created_at => Time.now, 
-                    :remote_ip => @borrowers.remote_ip, :user_alias => @un, :approved => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
+                    :remote_ip => @borrowers.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
          @user.save(:validate => false)
          @myupdatehash = [:user_id => @user.user_id]
          if @borrowers.update_attributes(@myupdatehash[0])
@@ -60,8 +64,7 @@ end
       session[:notice] = ''
       session[:background] = true
       
- 
-      
+   
  end
 
   def borrower_item_detail

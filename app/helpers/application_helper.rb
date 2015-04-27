@@ -12,7 +12,7 @@ module ApplicationHelper
   end
   
   def get_search_query_string()
-    distance_sought =""
+    distance_south =""
     @current_search = Searches.find(session[:rapid_id])
     build_search_query_string = ""
     build_search_query_string << "<ul>" +   (@current_search.lender_or_borrower == 2 ? "Borrower Seeking Search Criteria" : "Lender Offering Search Criteria")  unless @current_search.lender_or_borrower.blank? 

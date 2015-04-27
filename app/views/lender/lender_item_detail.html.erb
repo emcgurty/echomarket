@@ -207,7 +207,7 @@
     <% elsif  @user_response == "0" %>
       <p>No pick up at lender address</p>
     <% else %>
-      <p>...At either lender contact or alternative address</p>
+      <p>...This is a Rapid Item Registered Participant...No addresses required.</p>
     <% end %>
 
 
@@ -257,7 +257,7 @@
     <% elsif  @user_response == "0" %>
       <p>No return to lender address</p>
     <% else %>
-      <p>Can return to either lender contact or alternative address</p>
+      <p>This is a Rapid Item Registered Participant. No addresses required.</p>
     <% end %>
 
     <% unless  ldr.meetBorrowerAtAgreedB2L == 0  %>

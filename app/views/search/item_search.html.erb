@@ -18,7 +18,7 @@
 
 		$("div.form_wrapper").center();
 
-		var clientKey = "";
+		var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";		
 		var cache = {};
 		var cache_placeholder = '';
 		var container = $("div.location");
@@ -352,7 +352,14 @@
 
 <% if @s_get_items.blank? %>
 
+<div class="bottom_flash">
+	<% if @search.id.blank? %>
+	<p style="color:#ccff99;">	Your search result will be displayed below.</p>
+	<%  else  %>
+		<p style="color:#ccff99;">	Your search did not locate any records.</p>
+    <% end %>
 
+</div>
 
 <% else %>
 <div class="bottom_flash">

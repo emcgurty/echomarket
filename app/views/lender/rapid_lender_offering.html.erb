@@ -2,14 +2,14 @@
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<%= form_for @lenders, :url=> {:controller=>"borrower", :action => "rapid_update_borrower_seeking", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item"} do |nf| %>
+<%= form_for @lenders, :url=> {:controller=>"lender", :action => "rapid_lender_offering", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method=> 'post'} do |nf| %>
 
 <% unless @lenders[0].blank? %>
 <% @lenders = @lenders[0] %>
 <% end  %>
 <%= nf.hidden_field( :is_active, :value => 1) %>
 <%= nf.hidden_field( :is_saved, :value => 1) %>
-<%= nf.hidden_field( :is_community, :value=> 3) %>
+<%= nf.hidden_field( :is_community, :value=> 0) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 <% @current_selected = '99' %>
@@ -25,9 +25,9 @@
 	</p>
 	<%= get_search_query_string.html_safe %>
 	<p>
-		<span >RAPID BORROWER ITEM REGISTRATION</span>
+		<span >RAPID LENDER ITEM REGISTRATION</span>
 	</p>
-	<a href="#" onclick="addBorrowerItem();">==> Save your Item Sought</a>
+	<a href="#" onclick="addBorrowerItem();">==> Save your Item Offered</a>
 	<%= link_to '==> Return to New Search', search_item_search_url %>
 	<br />
 </div>
@@ -37,7 +37,7 @@
 </div>
 
 <div style="float:left;width:92%;">
-	<label>Please provide an email address for lender contact:</label>
+	<label>Please provide an email address for borrower contact:</label>
 	<br />
 	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40 ) %>
 </div>
