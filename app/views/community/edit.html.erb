@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'login.js' %>
 
-<%= form_for @communities,  :url=>  {:controller=>"community", :action => "update", :id=> @communities.community_id }, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+<%= form_for @communities,  :url=>  {:controller=>"community", :action => "edit", :id=> @communities.community_id }, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 
 <div class="top" >
 

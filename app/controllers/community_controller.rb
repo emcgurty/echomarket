@@ -11,7 +11,11 @@ class CommunityController < ApplicationController
 
   # GET /communities/1/edit
   def edit
-    @communities = Communities.find(session[:community_id])
+    if params[:communities]
+      update
+    else
+      @communities = Communities.find(session[:community_id])
+    end   
   end
 
   # POST /communities
@@ -46,25 +50,50 @@ class CommunityController < ApplicationController
   # PUT /communities/1.json
   def update
     session[:notice] = ''
-    @communities = Communities.find(params[:id])
-    
-     respond_to do |format|
+    if params[:id]
+      myupdatehash = Hash.new
+      if params[:communities]
+        @c = params[:communities]
+        myupdatehash = [:remote_ip=> @c[:remote_ip],
+                        :approved=> 1,
+                        :is_active=>1,
+                        :is_saved=>1,
+                        :community_name=> @c[:community_name], 
+                        :email=> @c[:email],
+                        :password=> @c[:password], 
+                        :password_confirmation=> @c[:password_confirmation],
+                        :first_name=> @c[:first_name], 
+                        :mi=> @c[:mi], 
+                        :last_name=> @c[:last_name], 
+                        :address_line_1=> @c[:address_line_1], 
+                        :address_line_2=>@c[:address_line_2], 
+                        :postal_code=>@c[:postal_code], 
+                        :city=>@c[:city],  
+                        :province=>@c[:province], 
+                        :country_id=>@c[:country_id].to_s, 
+                        :state_id=>@c[:state_id].to_s,  
+                        :state_id_string=>@c[:state_id_string], 
+                        :home_phone=>@c[:home_phone], 
+                        :cell_phone => @c[:cell_phone] ]
 
-      if @communities.update_attributes(params[:communities]) && @communities.errors.empty? 
+     puts myupdatehash[0].to_yaml
+     @communities = Communities.find(params[:id])
+     puts @communities.to_yaml
+     if @communities.update_attributes(myupdatehash[0]) && @communities.errors.empty?
         @cm = CommunityMembers.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
         @cm.first_name = params[:communities][:first_name]
         @cm.mi = params[:communities][:mi]
         @cm.last_name = params[:communities][:last_name]
         @cm.save(:validate => false)
         session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
-        format.html { redirect_to home_items_listing_url }
-	else      
-	   session[:notice] = "Echo Market encountered errors  in your update.  Please try again.  If the matter persists, would you please contact Echo Market from the application menu."
-        format.html { redirect_to home_items_listing_url }
-
-end
-    end    
+        redirect_to home_items_listing_url 
+	    end
+     end
+    end
   end
+  
+  
+  
 
   # DELETE /communities/1
   # DELETE /communities/1.json
