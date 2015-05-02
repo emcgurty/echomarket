@@ -116,7 +116,7 @@ form.item_search{
 }
 
 form.rapid_item{
-    width:480px;
+    width:640px;
 
 }
 
@@ -492,6 +492,14 @@ h2 span{
     float:left;
 }
 
+
+
+.form_wrapper .column50_rapid{
+    width: 45%;
+    float:left;
+    padding-left:5px;
+    padding-right:15px;    
+}
 
 .form_wrapper .column50_withborder{
     float:left;

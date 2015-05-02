@@ -45,7 +45,8 @@ end
           :date_created => Time.now,
           :approved => 1,
           :remote_ip => @req[:remote_ip],
-          :comment => @req[:comment] )
+		:comment => @req[:comment]          
+ )
          if @borrowers.save(:validate => false) 
          @un = 'rapid_' + @borrowers.item_description
          @user = Users.new(:username => @un, :email => @borrowers.email_alternative, :created_at => Time.now, 
@@ -71,13 +72,12 @@ end
   def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
-        @borrowers = Borrowers.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
-    end
-    if @borrowers.blank? || params[:id].blank?
-          session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
-          redirect_to home_items_listing_url
-      end 
-      
+        
+        @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
+        @borrowers = Borrowers.new if @borrowers.blank?
+      else
+        @borrowers = Borrowers.new
+      end
   end
  
    def community_borrower_item_detail
@@ -85,14 +85,11 @@ end
      unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @borrowers = Borrowers.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
-     end
-     
-     if @borrowers.blank? || params[:id].blank?
-          session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
-          redirect_to home_items_listing_url
+        @borrowers = Borrowers.find(:all, :conditions => ["borrower_item_id = ?", params[:id]])
+        @borrowers = Borrowers.new if @borrowers.blank?
+      else
+        @borrowers = Borrowers.new
       end
-      
  end
 
 

@@ -1,4 +1,5 @@
-<%= javascript_include_tag 'add_item.js' %>
+<%= javascript_include_tag 'add_item.js', :type=>"text/javascript" %>
+
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
@@ -7,11 +8,15 @@
 <% unless @borrowers[0].blank? %>
 <% @borrowers = @borrowers[0] %>
 <% end  %>
+
+<div style="display:none;">
 <%= nf.hidden_field( :is_active, :value => 1) %>
 <%= nf.hidden_field( :is_saved, :value => 1) %>
 <%= nf.hidden_field( :is_community, :value=> 0) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
+</div>
+
 <% @current_selected = '99' %>
 <% @st = UsStates.find(:all, :order => "state_name") %>
 <% @ct = Countries.find(:all, :order => "country_name") %>
@@ -49,15 +54,15 @@
 </div>
 
 <div style="float:left;;width:92%;">
-	<label>Your Country: </label>
-	<br />
-	<%= nf.select(:country_id, @countries) %>
-</div>
+	<div class="column50_rapid"> 
+	<label>Your Country:
+	<%= nf.select(:country_id, @countries) %> </label>
+	</div>
 
-<div id="country_selected" style="display:none;float:left;;width:92%;">
-
+	
+	<div id="country_selected" style="display:none;">
+    <div class="column50_rapid">
 	<label>Your State or Region: </label>
-	<br />
 	<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
 		<%= nf.select(:state_id, @states) %>
 	</div>
@@ -67,39 +72,58 @@
 	<% display_state_id_string = 'none' %>
 	<% end %>
 	<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
-		<%= nf.text_field(:state_id_string, :maxlength=>40, :size=>40) %>
+		<%= nf.text_field(:state_id_string, :maxlength=>40, :size=>25) %>
+	</div>
 	</div>
 </div>
 
 <div style="float:left;width:92%;">
-<label>Item Category: </label>
-<br />
 <% @current_selected = '99' %>
 <% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
 <% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
-<%= nf.select( :item_category_id, @cats,{ :onchange=>"borrowers_item_category_id();"}) %>
 
+<div class="column50_rapid"><label>Item Category:
+<%= nf.select( :item_category_id, @cats,{ :onchange=>"borrowers_item_category_id();"}) %> </label>
+</div>
+
+<div class="column50_rapid"> 
 <div style="display:none;" id="other_category">
-	<label>Add another category:</label>
-	<br />
-	<%= nf.text_field( :other_item_category,:maxlength=>24, :size=>24) %>
+	<label>Add another category:
+	<%= nf.text_field( :other_item_category,:maxlength=>24, :size=>25) %>
+	</label>
+</div>
 </div>
 </div>
 
 <div style="float:left;width:92%;">
+<div class="column50_rapid">	
 <label for="item_description">Item Description:</label>
 <br />
-<%= nf.text_field( :item_description, :maxlength=>50, :size=>50) %>
+<%= nf.text_field( :item_description, :maxlength=>50, :size=>25) %>
+</div>
+
+<div class="column50_rapid">	
+<label for="item_model">Item Model:</label>
+<br />
+<%= nf.text_field( :item_model, :maxlength=>50, :size=>25) %>
+</div>
 </div>
 
 <div style="float:left;width:92%;">
-<label>The Condition of Item:</label>
-<br />
 
+<div class="column50_rapid">
+<label>The Condition of Item:
 <% @current_selected = '99' %>
 <% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
 <% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
 <%= nf.select( :item_condition_id, @bl) %>
+</div>
+
+<div class="column50_rapid">
+<label>Comments:
+<%= nf.text_area(:comment, :rows=>10, :cols=> 40) %></label>
+</div>
+
 </div>
 
 <div style="float:left;width:92%;">

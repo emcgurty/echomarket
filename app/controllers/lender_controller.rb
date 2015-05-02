@@ -69,27 +69,33 @@ end
   end
 
   def lender_item_detail
-         session[:background] = true
+      session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-        @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
-        @lenders = Lenders.new if @lenders.blank?
-      else
-        @lenders = Lenders.new
+        @lenders = Lenders.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
+     
       end
+      
+      if @lenders.blank? || params[:id].blank?
+          session[:notice]  = "The lender item you were seeking does not exist in the Echo Market database."  
+          redirect_to home_items_listing_url
+      end 
+      
+      
   end
-  
    
    def community_lender_item_detail
       session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-	   session[:edit_record] = (params['commit'] == 'edit' ? true : false)
+	      session[:edit_record] = (params['commit'] == 'edit' ? true : false)
         @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
-        @lenders = Lenders.new if @lenders.blank?
-      else
-        @lenders = Lenders.new
       end
+      
+      if @lenders.blank? || params[:id].blank?
+          session[:notice]  = "The Community lender item you were seeking does not exist in the Echo Market database."  
+          redirect_to home_items_listing_url
+      end 
   end
 
   def lender_history
