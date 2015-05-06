@@ -50,47 +50,49 @@
 		</ul>
 	</li>
 
+	
 	<% if session[:community_id].blank? %>
-	<li>
-		<%= link_to "Search Items", search_item_search_url %>
-	</li>
+			<li>
+				<%= link_to "Search Items => Rapid Item Registration", search_item_search_url %>
+			</li>
 	<% else %>
-	<% unless Lenders.count(:conditions => ["user_id  = ?", session[:user_id]]) == 0 && Borrowers.count(:conditions => ["user_id= ?", session[:user_id]]) == 0 %>
-
-	<li>
-		<%= link_to "Search Items", search_item_search_url %>
-	</li>
+		<% unless Lenders.count(:conditions => ["user_id  = ?", session[:user_id]]) == 0 && Borrowers.count(:conditions => ["user_id= ?", session[:user_id]]) == 0 %>
+		
+		<li>
+				<%= link_to "Search Items", search_item_search_url %>
+		</li>
+		<% end %>
 	<% end %>
-	<% end %>
-
+	
+		
+	
 	<li>
 		<%= link_to "Contact Echo Market", contact_us_url  %>
 	</li>
 
 	<% if session[:user_id].blank? %>
-	<li>
-		<a href="#s1">Login/Registration</a>
-		<ul>
-			<li>
-				<% session[:advise] = true %>
-				<%= link_to 'Login', user_login_path(:type =>'all', :id => '')   %>
-
-			</li>
-			<li>
-				<%= link_to 'Community Registration',  community_new_url %>
-			</li>
-			<li>
-				<%= link_to "Lender, Borrower or Guest Registration" , user_register_url  %>
-			</li>
-		</ul>
-	</li>
+		<li><a href="#s1">Login/Registration</a>
+				<ul>
+				<li>
+					<% session[:advise] = true %>
+					<%= link_to 'Login', user_login_path(:type =>'all', :id => '')   %>
+					
+				</li>	
+				<li>
+					<%= link_to 'Community Registration',  community_new_url %>
+				</li>
+				<li>
+					<%= link_to "Lender, Borrower or Guest Registration" , user_register_url  %>
+				</li>
+			</ul>
+		</li>
 	<% else %>
 	<% @getUserType = (session[:user_type] == 'both' ? "Lender/Borrower": session[:user_type]).upcase %>
-	<li class="subs">
-		<a href="#s3"> <%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
-
+	<li class="subs"><a href="#s3">
+		<%= session[:user_alias] + ": " + @getUserType %>&nbsp; Options</a>
+		
 		<% if session[:community_id].blank? %>
-
+		
 		<ul>
 			<li>
 				<%= link_to 'Logout', :controller => 'user', :action => 'logout'  %>
@@ -99,9 +101,9 @@
 				<%= link_to "User Account", user_edit_path  %>
 			</li>
 		</ul>
-
+		
 		<% else %>
-
+		
 		<ul>
 			<li>
 				<%= link_to 'Logout', :controller => 'community', :action => 'logout'  %>
@@ -109,15 +111,49 @@
 			<li>
 				<%= link_to "Community Account", community_edit_url(session[:community_id])  %>
 			</li>
-
+		
+			
 			<li>
 				<% session[:advise] = true %>
 				<%= link_to "Community Members", community_member_m_list_url  %>
 			</li>
 		</ul>
 		<% end%>
-
+		
 	</li>
 	<% end %>
 </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

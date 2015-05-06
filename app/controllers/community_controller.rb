@@ -48,6 +48,8 @@ class CommunityController < ApplicationController
  
   # PUT /communities/1
   # PUT /communities/1.json
+# PUT /communities/1
+  # PUT /communities/1.json
   def update
     session[:notice] = ''
     if params[:id]
@@ -78,8 +80,7 @@ class CommunityController < ApplicationController
 
      puts myupdatehash[0].to_yaml
      @communities = Communities.find(params[:id])
-     puts @communities.to_yaml
-     if @communities.update_attributes(myupdatehash[0]) && @communities.errors.empty?
+     if @communities.update_attributes(myupdatehash[0]) && @communities.errors.empty? 
         @cm = CommunityMembers.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
         @cm.first_name = params[:communities][:first_name]
         @cm.mi = params[:communities][:mi]
@@ -87,12 +88,10 @@ class CommunityController < ApplicationController
         @cm.save(:validate => false)
         session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
         redirect_to home_items_listing_url 
-	    end
+     end
      end
     end
   end
-  
-  
   
 
   # DELETE /communities/1

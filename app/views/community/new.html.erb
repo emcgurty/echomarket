@@ -1,6 +1,6 @@
-<%= javascript_include_tag 'login.js' %>
-<%= javascript_include_tag 'postal_code_distance.js' %>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<%= javascript_include_tag 'login.js', :type => "text/javascript" %>
+
+
 
 <%= form_for @communities,  :url=>  {:controller=>"community", :action => "create", :commit=>"create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 
@@ -22,12 +22,13 @@
 <% unless @communities.errors.empty? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @communities}  %>
 <% end %>
-
+<div style="display:none;"> 
 <%= nf.hidden_field :user_type, :value=> 'both' %>
 <%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
 <%= nf.hidden_field :approved, :value => 0 %>
 <%= nf.hidden_field :is_active, :value => 1 %>
 <%= nf.hidden_field :is_saved, :value => 1 %>
+</div>
 
 <% @st = UsStates.find(:all, :order => "state_name") %>
 <% @ct = Countries.find(:all, :order => "country_name") %>
@@ -74,21 +75,23 @@
 		<table class="personal">
 
 			<tr class="even">
-				<td style="width:25%;">
+				<td style="width:25%;text-align:left;">
 				<div>
 					<label>First Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24) %>
 					<span class="error" id="first_name_error">&nbsp;</span>
 				</div></td>
 
-				<td style="width:25%;">
+				<td style="width:25%;text-align:left;">
+
 				<div>
 					<label>Middle Initial:</label>
 					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 
-				<td style="width:25%;">
+				<td style="width:25%;text-align:left;">
+
 				<div>
 					<label>Last Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
@@ -100,20 +103,22 @@
 			</tr>
 
 			<tr class="odd">
-				<td style="width:25%;">
+				<td style="width:25%;text-align:left;">
+
 				<div>
 					<label>Address Line 1: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
-				<td style="width:25%;">
+				<td style="width:25%;text-align:left;">
+
 				<div>
 					<label>Address Line 2:</label>
 					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 				
-				<td style="width:25%;">
+<td style="width:25%;text-align:left;">
 				<div>
 					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
 					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
@@ -121,7 +126,8 @@
 				</div>
 		     	</td>
 				
-				<td style="width:25%;">
+				<td style="width:25%;text-align:left;">
+
 				<div>
 				<label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
 				</div>
@@ -130,7 +136,7 @@
 
 			</tr>
 			<tr class="even">
-				<td style="width:25%;">
+<td style="width:25%;text-align:left;">
 				<label>Country: <span class="required_fields">&nbsp;&nbsp;*</span></label> 
 				<% unless @communities.country_id.blank? %>
 				<% current_selected = @communities.country_id %>
@@ -142,7 +148,7 @@
 				<span class="error" id="country_error">&nbsp;</span>
 				</td>
 				
-				<td style="width:25%;">
+<td style="width:25%;text-align:left;">
 				
 				<div id="choose_us_state"  style="display:inline;" >
 				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
@@ -162,7 +168,8 @@
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>
 				</td>
-					<td style="width:25%;">
+					<td style="width:25%;text-align:left;">
+
 					<div>
 					<label>Postal Code: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
 					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>14) %>
@@ -174,8 +181,11 @@
 
 			</tr>
 			<tr class="odd">
-				<td style="width:25%;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
-				<td style="width:25%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
+				<td style="width:25%;text-align:left;">
+
+<label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
+<td style="width:25%;text-align:left;">
+<label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
 				<td colspan="2"> &nbsp;</td>
 
 			</tr>

@@ -1,28 +1,23 @@
 $(document).ready(function() {
     
- 	$.fn.center = function() {
 
-		$(this).css("width: " + $("form").width() + "15px", "height: " + $("form").height() + "15px");
+    
+	$.fn.center = function() {
+
+		
 		var element = $(this);
 		var e_width = element.width();
 		var win_width = $(window).width();
 		var left_margin_calc = (win_width - e_width) / 2;
 		element.css('margin-left', (left_margin_calc + "px"));
-
+		element.css('border', '2px solid #4A572B');
 	};
 
-	$.fn.center_form = function() {
-		var element = $(this);
-		var e_width = element.width();
-		var win_width = $("div.form_wrapper").width();
-		var left_margin_calc = (win_width - e_width) / 2;
-		element.css('margin-left', (left_margin_calc + "px"));
 
-	};
- 
-    $("div.form_wrapper").center();
-   	$("form").center_form();
-    showFormContact();
+	$("div.form_wrapper").center();
+
+
+showFormContact();
     
     
     $( "input#lenders_organization_name" ).bind( 'change', function() {
@@ -71,7 +66,7 @@ $(document).ready(function() {
 					$("span#display_address_error").css("visibility", "hidden");
 				}
 	} else if (y_n == 0 )  {
-		    $("#postalWithOutContactAddress").css("display", "block");
+		 /*   $("#postalWithOutContactAddress").css("display", "block"); */
             $("span#display_address_selection").html("No");
 	}	
 	});
@@ -429,17 +424,6 @@ $("#lenders_age_18_or_more").bind('change', function() {
     $("#lenders_describe_yourself").trigger('change');
  
 
-$("input[name='lenders[useWhichContactAddressAlternative]']").bind('change', function() {
-     
-       if ($(this).is(':checked')) {
-            $("div#table_alternative_address_input").css("display", "block");
-        } else {
-            $("div#table_alternative_address_input").css("display", "block");
-        }
-    });
-   $("input[name='lenders[useWhichContactAddressAlternative]']").trigger('change');
-
-
     $("input#lenders_first_name").bind('change', function() {
         $("span#first_name_selection").html($(this).val());
     });
@@ -476,9 +460,9 @@ $("input[name='lenders[useWhichContactAddressAlternative]']").bind('change', fun
 
 
     $("input[name='lenders[useWhichContactAddress]']").bind('change', function() {
-        $("div#contactAddressWhich").css("display", "none");
+      /*  $("div#contactAddressWhich").css("display", "none");
         $("div#contactAddressOnly").css("display", "none");
-        $("div#contactAddressWithAlternative").css("display", "none");
+        $("div#contactAddressWithAlternative").css("display", "none"); */
         var y_n = $("input[name='lenders[useWhichContactAddress]']:checked").val();
         if (y_n == 0) {
             $("span#useWhichContactAddress_selection").html("Neither Address");
@@ -665,6 +649,122 @@ $("input[name='lenders[useWhichContactAddressAlternative]']").bind('change', fun
     });
     $("#lenders_trade_item").trigger('change');
 
+
+   $("input[name='lenders[thirdPartyPresenceL2B]']").bind('change', function() {
+        var y_n = $("input[name='lenders[thirdPartyPresenceL2B]']:checked").val();
+        if (y_n == 1) {
+            $("span#l2b_third_party_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#l2b_third_party_selection").html("No");
+        }
+    });
+    $("input[name='lenders[thirdPartyPresenceL2B]']").trigger('change');  
+
+   $("input[name='lenders[lenderThirdPartyChoiceL2B]']").bind('change', function() {
+        var y_n = $("input[name='lenders[lenderThirdPartyChoiceL2B]']:checked").val();
+        if (y_n == 1) {
+            $("span#l2b_your_choice_delivery_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#l2b_your_choice_delivery_selection").html("No");
+        }
+    });
+    $("input[name='lenders[lenderThirdPartyChoiceL2B]']").trigger('change');
+
+ $("input[name='lenders[thirdPartyPresenceB2L]']").bind('change', function() {
+        var y_n = $("input[name='lenders[thirdPartyPresenceB2L]']:checked").val();
+        if (y_n == 1) {
+            $("span#b2l_third_party_present_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#b2l_third_party_present_selection").html("No");
+        }
+    });
+    $("input[name='lenders[thirdPartyPresenceB2L]']").trigger('change');
+
+ $("input[name='lenders[lenderThirdPartyChoiceB2L]']").bind('change', function() {
+        var y_n = $("input[name='lenders[lenderThirdPartyChoiceB2L]']:checked").val();
+        if (y_n == 1) {
+            $("span#b2l_third_your_choice_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#b2l_third_your_choice_selection").html("No");
+        }
+    });
+    $("input[name='lenders[lenderThirdPartyChoiceB2L]']").trigger('change');
+
+ $("input[name='lenders[agreedThirdPartyChoiceB2L]']").bind('change', function() {
+        var y_n = $("input[name='lenders[agreedThirdPartyChoiceB2L]']:checked").val();
+        if (y_n == 1) {
+            $("span#b2l_third_mutual_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#b2l_third_mutual_selection").html("No");
+        }
+    });
+    $("input[name='lenders[agreedThirdPartyChoiceB2L]']").trigger('change');
+
+
+
+
+
+
+
+   $("input[name='lenders[willPickUpPreferredLocationB2L]']").bind('change', function() {
+        var y_n = $("input[name='lenders[willPickUpPreferredLocationB2L]']:checked").val();
+        if (y_n == 1) {
+            $("span#borrower_pick_up_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#borrower_pick_up_selection").html("No");
+        }
+    });
+    $("input[name='lenders[willPickUpPreferredLocationB2L]']").trigger('change');
+
+   $("input[name='lenders[agreedThirdPartyChoiceL2B]']").bind('change', function() {
+        var y_n = $("input[name='lenders[agreedThirdPartyChoiceL2B]']:checked").val();
+        if (y_n == 1) {
+            $("span#l2b_agreed_delivery_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#l2b_agreed_delivery_selection").html("No");
+        }
+    });
+    $("input[name='lenders[agreedThirdPartyChoiceL2B]']").trigger('change');
+
+
+
+
+
+
+
+
+
+
+ $("input[name='lenders[meetBorrowerAtAgreedB2L]']").bind('change', function() {
+        var y_n = $("input[name='lenders[meetBorrowerAtAgreedB2L]']:checked").val();
+        if (y_n == 1) {
+            $("span#b2lborrower_returns_to_agreed_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#b2lborrower_returns_to_agreed_selection").html("No");
+        }
+    });
+    $("input[name='lenders[meetBorrowerAtAgreedB2L]']").trigger('change');
+
+  $("input[name='lenders[willDeliverToBorrowerPreferredL2B]']").bind('change', function() {
+        var y_n = $("input[name='lenders[willDeliverToBorrowerPreferredL2B]']:checked").val();
+        if (y_n == 1) {
+            $("span#l2b_preferred_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#l2b_preferred_selection").html("No");
+        }
+    });
+    $("input[name='lenders[willDeliverToBorrowerPreferredL2B]']").trigger('change');
+
+ $("input[name='lenders[meetBorrowerAtAgreedL2B]']").bind('change', function() {
+        var y_n = $("input[name='lenders[meetBorrowerAtAgreedL2B]']:checked").val();
+        if (y_n == 1) {
+            $("span#l2b_agreed_selection").html("Yes");
+        } else if (y_n == 0){
+            $("span#l2b_agreed_selection").html("No");
+        }
+    });
+    $("input[name='lenders[meetBorrowerAtAgreedL2B]']").trigger('change');
+
     $("input[name='lenders[agreed_number_of_days]']").bind('change', function() {
         var y_n = $("input[name='lenders[agreed_number_of_days]']:checked").val();
         if (y_n == 1) {
@@ -782,15 +882,14 @@ $("input#lenders_address_line_1").bind('change', function() {
 
 	$("select#lenders_state_id").bind('change', function() {
 
-		state_cmb = $("select#lenders_state_id option:selected").text();
+		var statecmb = $("select#lenders_state_id option:selected").text();
 		
-		if (state_cmb != 'Please select') {
-		$("span#us_state_selection").html(state_cmb);
+		$("span#us_state_selection").html(statecmb);
 		$("span#state_id_string_selection").html("Region Placeholder");
-		}
+		
 
 	});
-	$("select#lenders_state_id").trigger('change');
+	$("select#lenders_state_id").trigger('change'); 
 
 
 	$("select#lenders_country_id").bind('change', function() {
@@ -798,13 +897,15 @@ $("input#lenders_address_line_1").bind('change', function() {
 		var country_text = $("select#lenders_country_id option:selected").text();
 		$("span#country_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
+                $("select#lenders_state_id option[value='99']" ).attr( "selected", "selected" );
+			$("span#us_state_selection").html('');
 
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
 
 
 		} else {
-
+			
 			$("div#provide_country_state").css("display", "none");
 			$("div#choose_us_state").css("display", "inline");
 		}
@@ -825,7 +926,8 @@ $("input#lenders_address_line_1").bind('change', function() {
 		var country_text = $("select#lenders_country_id_alternative option:selected").text();
 		$("span#country_alternative_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-
+$("select#lenders_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
+			$("span#state_alternative_selection").html('');
 			$("div#choose_us_state_alternative").css("display", "none");
 			$("div#provide_country_state_alternative").css("display", "inline");
 
@@ -841,7 +943,7 @@ $("input#lenders_address_line_1").bind('change', function() {
 	
 	
 	$("input#lenders_state_id_string_alternative").bind('change', function() {
-		$("span#state_id_string_alternativeselection").html($(this).val());
+		$("span#state_id_string_alternative_selection").html($(this).val());
 	});
 	$("input#lenders_state_id_string_alternative").trigger('change');
 	
@@ -897,8 +999,7 @@ notChecked = true;
 function validateUseWhichLenderContactAddress() {
     var return_value = true;
     var use_which_ca = $("input[name='lenders[useWhichContactAddress]']:checked").val();
-	var useAddressAlternative = $('input#lenders_useWhichContactAddressAlternative').is(':checked');
-	if ((use_which_ca == 1) || (use_which_ca == 2 || useAddressAlternative )) {
+	if ((use_which_ca == 1) || (use_which_ca == 2)) {
 
 	if	( ($("#lenders_address_line_1_alternative").val() == "") || 
 		  ($("#lenders_postal_code_alternative").val() == "") || 

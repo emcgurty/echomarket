@@ -1,26 +1,12 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js" type="text/javascript" ></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript" ></script>
+
 <%= javascript_include_tag 'item_search.js', :type => "text/javascript" %>
-<style >
-
-	select.format_category {
-	border: solid 1px #E5E5E5;
-	background: #BDAEC6;
-	padding: 1px;
-	display:inline-table;
-	font-size:16px;
-	width:92%;
-	-moz-box-shadow: 0px 0px 8px #f0f0f0;
-	-webkit-box-shadow: 0px 0px 8px #f0f0f0;
-	} 
-
-</style>
 
 <%= form_for @search, :url => {:controller => "search", :action => "create"}, :html => {:class=>"items_listing"} do |nf| %>
 <% @s_get_items = @search.get_items %>
-<%= nf.hidden_field :found_zip_codes, :value=> '' %>
+
 <div class="top" >
 	<p>
 		<span class="logo_white" >Echo Market&nbsp;&copy;: Your Goodwill Resource For Lending, Borrowing, Donating or Trading Items</span>
@@ -49,7 +35,8 @@
 	<%= nf.hidden_field :user_id, :value=> '' %>
 
 	<% end %>
-
+	<%= nf.hidden_field :remote_ip, :value=> request.remote_ip %>
+     <%= nf.hidden_field :found_zip_codes, :value=> '' %>
 	<% if session[:user_id].blank? %>
 
 	<ul >
@@ -105,7 +92,7 @@
 		<tr>
 			<td><span class="error" style="width:100%;" id="start_date_error">error</span></td>
 			<td>&nbsp;</td>
-			<td><span class="error" style="width:100%;" id="end_date_error">error</span><td>
+			<td><span class="error" style="width:100%;" id="end_date_error">error</span></td>
 		</tr>
 	</table>
 </div>
@@ -118,8 +105,17 @@
 
 <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
 	<label>By Item category:</label>
-	<%= nf.collection_select :category_id, Categories.order('category_type ASC'), :category_id, :category_type, {:include_blank => true}, {:class=>"format_category"} %>
- 
+	<%= nf.collection_select :category_id, Categories.order('category_type ASC'), :category_id, :category_type, {:include_blank => true}, {:style=>"
+	border: solid 1px #E5E5E5;
+	background: #BDAEC6;
+	padding: 1px;
+	display:inline-table;
+	font-size:16px;
+	width:92%;
+	-moz-box-shadow: 0px 0px 8px #f0f0f0;
+	-webkit-box-shadow: 0px 0px 8px #f0f0f0;"}
+
+%>
 </div>
 
 <div  class="location" style="float:left;">

@@ -45,7 +45,8 @@ end
           :date_created => Time.now,
           :approved => 1,
           :remote_ip => @req[:remote_ip],
-          :comment => @req[:comment] )
+		:comment => @req[:comment]          
+ )
          if @borrowers.save(:validate => false) 
          @un = 'rapid_' + @borrowers.item_description
          @user = Users.new(:username => @un, :email => @borrowers.email_alternative, :created_at => Time.now, 
@@ -68,7 +69,7 @@ end
    
  end
 
-  def borrower_item_detail
+ def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
         @borrowers = Borrowers.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
@@ -140,7 +141,7 @@ end
   end
 
   def borrower_seeking
-    
+    session[:no_border] = true
     if params[:id].blank?
     @borrowers = Borrowers.new
     else
@@ -149,7 +150,8 @@ end
   end
   
   def community_borrower_seeking
-    
+        session[:no_border] = true
+
      if params[:id].blank?
         @borrowers = Borrowers.new
     else

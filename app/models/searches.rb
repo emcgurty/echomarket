@@ -4,7 +4,7 @@ class Searches < ActiveRecord::Base
 require 'date'
    
 attr_accessor   :found_zip_codes
-attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :lender_or_borrower, :is_community, :user_id , :zip_code_radius  
+attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :lender_or_borrower, :is_community, :user_id , :zip_code_radius, :remote_ip  
     
     
   def get_items

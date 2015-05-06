@@ -9,7 +9,7 @@
 </div>
 
 <div class="column">
-	<h2 id="h2_listing" >What is offered to lend...</h2>
+	<h2 class="h2_listing" >What is offered to lend...</h2>
 <% if session[:community_name].blank? %>
 	<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"])  %>
 	<% else %>
@@ -46,14 +46,14 @@
 	<% icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption)  %>
 	<img src='<%= get_image_path(file_path_str.to_s) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
 	<% unless icaption.blank? %>
-	<label id="item_listing"><%= icaption %></label>
+	<label class="item_listing"><%= icaption %></label>
 	<% end %>
 	<% end %>
 	<% end %>
-	<label id="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
-	<label id="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
+	<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
+	<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 	<% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
-	<label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
+	<label class="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
 
 	<%= link_to "Details..." , lender_item_detail_url(:id=> ldr.lender_item_id), {:style=>"color:#ff4500;"} %>
 

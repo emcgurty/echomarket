@@ -89,7 +89,7 @@ end
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
 	      session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
+        @lenders = Lenders.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
       end
       
       if @lenders.blank? || params[:id].blank?
@@ -97,6 +97,7 @@ end
           redirect_to home_items_listing_url
       end 
   end
+
 
   def lender_history
 
@@ -140,7 +141,8 @@ end
   end
 
   def lender_offering
-    
+     session[:no_border] = true
+
     if params[:id].blank?
     @lenders = Lenders.new
     else
@@ -152,7 +154,8 @@ end
   end
   
   def community_lender_offering
-   
+    session[:no_border] = true
+
      if params[:id].blank?
     @lenders = Lenders.new
     else

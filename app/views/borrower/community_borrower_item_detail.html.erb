@@ -21,7 +21,7 @@
 
 
 
-<%= javascript_include_tag 'borrower_seeking.js' %>
+<%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
   <% @ldr = @borrowers %>
@@ -62,7 +62,7 @@
       <p><%= @ldr.address_line_1 %><%= (@ldr.address_line_2.blank? ? " ": @ldr.address_line_2) %><br />
         <%= @ldr.city + ","%><%= (@ldr.province.blank? ? "": @ldr.province) + " " %>
 
-        <% if @ldr.state_id_string.blank? >
+        <% if @ldr.state_id_string.blank? %>
           <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", @ldr.state_id ]) %>
           <%= @s_c.state_name %>
         <% else %>

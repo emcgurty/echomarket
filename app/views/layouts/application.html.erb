@@ -2,21 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 
-		<%= stylesheet_link_tag 'echo_market.css' %>
-		<!--<%= javascript_include_tag 'google_analytics.js' %> -->
-
+		<%= stylesheet_link_tag 'echo_market.css', :type => "text/css"  %>
 		<% if session[:background] %>
-		<%= stylesheet_link_tag 'menu_nav.css' %>
-		<%= stylesheet_link_tag 'style_animated_echo_market.css' %>
-		<%= javascript_include_tag  'http://code.jquery.com/jquery-1.10.1.min.js'  %>
-		<%= javascript_include_tag  'http://code.jquery.com/jquery.min.js'  %>
+		<%= stylesheet_link_tag 'menu_nav.css', :type => "text/css" %>
+		<%= stylesheet_link_tag 'style_animated_echo_market.css', :type => "text/css" %>
 
+		<%= javascript_include_tag  "https://code.jquery.com/jquery-1.10.1.min.js", :type => "text/javascript"  %>
+		<%= javascript_include_tag  "https://code.jquery.com/jquery.min.js",  :type => "text/javascript"  %>
+		<%= stylesheet_link_tag     "https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" %>
+           
 		<%  end %>
-		<title>The Echo Market  -- Lending and Borrowing</title>
+     <% unless session[:no_border] %>
+	<%= javascript_include_tag  "centering.js",  :type => "text/javascript"  %>
+     <% end%>
+	<title>The Echo Market  -- Lending and Borrowing</title>
 
 	</head>
 
 	<body>
+
+		<% @gip = Getipaddresses.new(:user_ip_address => request.remote_ip, :date_created => Time.now) %>
+		<% @gip.save(:validate => false) %>
 
 		<% content_for :header do %>
 			<%= render :partial => 'menus/echomarket_menu_options' %>
@@ -42,7 +48,7 @@
 		<% end %>
 
 		<%= yield :center %>
-<% if true %>
+<% if false %>
 <pre>
   <%= session.to_yaml %>
 </pre>

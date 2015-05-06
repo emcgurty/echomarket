@@ -1,17 +1,6 @@
 	$(document).ready(function() {
 
-		$.fn.center = function() {
-
-			var element = $(this);
-			var e_width = element.width();
-			var win_width = $(window).width();
-			var left_margin_calc = (win_width - e_width) / 2;
-			element.css('margin-left', (left_margin_calc + "px"));
-
-		};
-
-		$("div.form_wrapper").center();
-
+	
 		var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";		
 		var cache = {};
 		var cache_placeholder = '';

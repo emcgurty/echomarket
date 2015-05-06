@@ -1,14 +1,4 @@
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 480px) {
-  /* Styles */
-}
-
-/* Smartphones (landscape) ----------- */
-@media only screen 
-and (min-width : 321px) {
- .div_centered {
+.div_centered {
      margin: auto auto auto auto;
     top:50%;
     left:50%;
@@ -37,27 +27,7 @@ and (min-width : 321px) {
 
 
 
-}/*
-.app_tables {
-
-    margin: 0 auto;
-    padding:0;
-    border-collapse: collapse;
-    border-style:solid;
-    border-width:15px;	
-    border-color:transparent;
-
-
-
 }
-
-div.center_content  {
-    width: 960px;   Figure out sizing later 100%;  
-    margin-top:5px;
-
-}
-
-*/
 .logo  {
     font-weight:bold;
     font-size:38px;
@@ -99,7 +69,7 @@ div.center_content  {
 
 
 
-  .chamber_submit_buttons
+.chamber_submit_buttons
   {
     font-weight:bold;
     font-size:16px;
@@ -115,152 +85,3 @@ div.center_content  {
 
 
   }
-}
-
-/* Smartphones (portrait) ----------- */
-@media only screen 
-and (max-width : 320px) {
-  /* Styles */
-}
-
-/* iPads (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) {
-  /* Styles */
-}
-
-/* iPads (landscape) ----------- */
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) 
-and (orientation : landscape) {
-  /* Styles */
- .div_centered {
-     margin: auto auto auto auto;
-    top:50%;
-    left:50%;
-
-    position:absolute;
-    width:940px;
-    height:700px;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-
-}
-
-.div_centered_relative {
-
-    position:absolute;
-    width:940px;
-    height: 100px;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-
-
-
-}/*
-.app_tables {
-
-    margin: 0 auto;
-    padding:0;
-    border-collapse: collapse;
-    border-style:solid;
-    border-width:15px;	
-    border-color:transparent;
-
-
-
-}
-
-div.center_content  {
-    width: 960px;   Figure out sizing later 100%;  
-    margin-top:5px;
-
-}
-
-*/
-.logo  {
-    font-weight:bold;
-    font-size:38px;
-    color:indigo;
-    text-shadow: 1px 1px slategray;
-}
-
-.logo_small  {
-    font-weight:bold;
-    font-size:18px;
-    color:indigo;
-    text-shadow: 1px 1px slategray;
-}
-.logo_white  {
-    font-weight:bold;
-    font-size:24px;
-    color:white;
-    text-shadow: 1px 1px slategray;
-}
-
-
-
-.submit_buttons
-{
-    font-weight:bold;
-    font-size:16px;
-    color:indigo;
-    text-shadow: 1px 1px slategray;
-
-
-}
-
-
-
-  .chamber_submit_buttons
-  {
-    font-weight:bold;
-    font-size:16px;
-    color:indigo;
-    text-shadow: 1px 1px slategray;
-    height:50px;
-    width:160px;
-    border: 4px solid indigo;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-
-
-
-  }
- 
-}
-
-/* iPads (portrait) ----------- */
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) 
-and (orientation : portrait) {
-  /* Styles */
-}
-
-/* Desktops and laptops ----------- */
-@media only screen 
-and (min-width : 1224px) {
-  /* Styles */
-}
-
-/* Large screens ----------- */
-@media only screen 
-and (min-width : 1824px) {
-  /* Styles */
-}
-
-* { font-family:'Gotham Rounded A', 'Gotham Rounded B', sans-serif;}
-
-
-
-

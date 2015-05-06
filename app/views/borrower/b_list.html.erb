@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'echo_market.js' %>
+<%= javascript_include_tag 'echo_market.js' , :type => "text/javascript" %>
 
 <%= form_for :borrower, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
   <div class="top" >
@@ -7,7 +7,7 @@
   </div>
 
   <div class="column">
-    <h2 id="h2_listing" >What is sought to borrow...</h2>
+    <h2 class="h2_listing" >What is sought to borrow...</h2>
 	 <% if session[:community_name].blank? %>
 	<% @borrower = Borrowers.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0  OR is_community = 3)"])  %>
 	<% else %>
@@ -37,7 +37,7 @@
         <% @cats = Categories.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
         <% if @cats %>
           <% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
-            <label><%= @cats.category_type %></label><br />
+            <label class="item_listing" ><%= @cats.category_type %></label><br />
             <% hold_cat  = @cats.category_id %>
           <% end %>
         <% end %>
@@ -47,7 +47,7 @@
             <%  icaption = (oimg.item_image_caption.blank? ? 'None provided' : oimg.item_image_caption)  %>
             <img src='<%= get_image_path(oimg.image_file_name) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
             <% unless icaption.blank? %>
-              <label class="item_listing"><%= icaption %></label>
+              <label class="item_listing" ><%= icaption %></label>
             <% end %>
           <% end %>
         <% end %>
@@ -58,6 +58,7 @@
 	   <% unless ldr.comment.blank? %>
 	   <label class="item_listing">Borrower Comments:&nbsp;<%= ldr.comment %></label>
 	   <% end %>
+	  
         <%= link_to "Details..." , borrower_item_detail_url(:id=> ldr.borrower_item_id ), {:style=>"color:#ff4500;"} %>
 	
         <hr style="color:indigo;" />

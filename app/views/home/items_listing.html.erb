@@ -1,4 +1,3 @@
-
 <%= javascript_include_tag 'echo_market.js' %>
 <form class="items_listing"  id="lenders_item_form" >
 	<div class="top" >
@@ -23,7 +22,7 @@
 	<% end %>
 
 	<div class="column40">
-		<h2 id="h2_listing" >What is offered to lend...</h2>
+		<h2 class="h2_listing" >What is offered to lend...</h2>
 
 		<% if session[:community_name].blank? %>
 		<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
@@ -65,14 +64,14 @@
 		<% icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption)  %>
 		<img src='<%= get_image_path(file_path_str.to_s) %>' alt="<%= icaption  %>" style="margin:5px;"  height="50" width="50" />
 		<% unless icaption.blank? %>
-		<label id="item_listing"><%= icaption %></label>
+		<label class="item_listing"><%= icaption %></label>
 		<% end %>
 		<% end %>
 		<% end %>
-		<label id="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
-		<label id="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
+		<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
+		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 		<% @icond = Itemconditions.find(:first, :readonly=> true, :order => "item_conditions_id", :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
-		<label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
+		<label class="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
 		
 			
 	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.lender_item_id), {:class=>"item_details"}  %>
@@ -87,7 +86,7 @@
 	</div>
 
 	<div class="column40">
-		<h2 id="h2_listing" >What is sought to borrow...</h2>
+		<h2 class="h2_listing" >What is sought to borrow...</h2>
 
 		<% if session[:community_name].blank? %>
 		<% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
@@ -127,15 +126,15 @@
 		<% icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption) %>
 		<img src='<%= get_image_path(file_path_str.to_s) %>' alt="<%= icaption %>" style="margin:5px;" height="50" width="50" />
 		<% unless icaption.blank? %>
-		<label id="item_listing"><%= icaption %></label>
+		<label class="item_listing"><%= icaption %></label>
 		<% end %>
 
 		<% end %>
 		<% end %>
-		<label id="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
-		<label id="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
+		<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
+		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 		<% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
-		<label id="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
+		<label class="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
         		
 			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.borrower_item_id), {:class=>"item_details"} %>
 		
@@ -189,7 +188,7 @@
 		<span class="logo_white" >Create Your Own Echo Market Community</span> </p>
 		
 		<%= link_to 'Just what I was hoping for... I want to create my Echo Market Community now', community_new_url( :id=>'', :type=>'all'), :class=> "search"   %>
-           <p style="color:indigo;font-size:16px;font-weight:normal;">Register as a Community before May, 2015, and Echo Market will provide Five-Point Customization for free.</p> 
+           <p style="color:indigo;font-size:16px;font-weight:normal;">Register as a Community before June, 2015, and Echo Market will provide Five-Point Customization for free.</p> 
 		<div   class="div_white" >&nbsp;</div>
 	</div>
 	

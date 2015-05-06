@@ -1,5 +1,5 @@
-<%= javascript_include_tag 'borrower_seeking.js' %>
-<%= javascript_include_tag 'bl_util.js' %>
+<%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript"  %>
+<%= javascript_include_tag 'bl_util.js', :type => "text/javascript" %>
 
 <%= render :partial => 'menus/borrowers_menu' %>
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "update_borrower_seeking"},
@@ -10,14 +10,23 @@
   <% unless @borrowers[0].blank? %>
     <% @borrowers = @borrowers[0] %>
   <% end  %>
-    <% if session[:reuse] %>
-      <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
+   <% if session[:reuse] %>
+          <div style="display:none;">
+          <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
+		</div>
     <% else %>
+      <div style="display:none;">
       <%= nf.hidden_field( :borrower_item_id) %>
+	</div>
     <% end %>
+
+    <div style="display:none;">
+
     <%= nf.hidden_field( :is_active) %>
     <%= nf.hidden_field( :is_saved) %>
     <%= nf.hidden_field( :user_id) %>
+
+</div>
 
   <% @st = UsStates.find(:all, :order => "state_name") %>
   <% @ct = Countries.find(:all, :order => "country_name") %>
@@ -40,7 +49,7 @@
   <div id="form_contact_information" class="contact_information" style="display:none;">
     <div style="display:block;float:left;width:94%;height:auto;margin:5px;">
       <div style="width: 50%;float:left;">
-        <label id="personal" >As a borrower, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
+        <label class="personal" >As a borrower, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
         <% unless @borrowers.describe_yourself.blank? %>
           <% @current_selected = @borrowers.describe_yourself %>
         <% else %>
@@ -231,7 +240,7 @@
         <tr class="odd">
           <td style="width:33%;">
             <label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %>
+            <%= nf.text_field( :home_phone, :maxlength=>15, :size=>15) %>
             <label style="font-size:12px" for="borrowers_public_display_home_phone" >Public display your home phone?&nbsp;
               <%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %>
             </label>
@@ -240,7 +249,7 @@
           </td>
           <td style="width:33%;">
             <label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %>
+            <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %>
             <label style="font-size:12px" for="borrowers_public_display_cell_phone" >Public display your cell phone?&nbsp;
               <%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %>
             </label>
@@ -248,7 +257,7 @@
           </td>
           <td style="width:34%;">
             <label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %>
+            <%= nf.text_field( :alternative_phone, :maxlength=>15, :size=>15) %>
             <label style="font-size:12px" for="borrowers_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
               <%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %>
 
@@ -271,8 +280,8 @@
 
   <div id="form_borrower_preference" class="contact_information" style="display:none;">
     <div style="float:left;width:92%;margin-left:25px;margin-bottom:1px;">
-      <label id="personal" style="margin-left:50px;">How would you like interested lenders to make initial contact with you?</label>
-      <label id="personal" style="margin-left:55px;">...You are required to choose at least one option.</label>
+      <label class="personal" style="margin-left:50px;">How would you like interested lenders to make initial contact with you?</label>
+      <label class="personal" style="margin-left:55px;">...You are required to choose at least one option.</label>
     </div>
     <div   class="div_white" >&nbsp;</div>
 
@@ -294,7 +303,7 @@
 
     
     <div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
-      <label id="personal" >Provide your alternative contact address here:</label>
+      <label class="personal" >Provide your alternative contact address here:</label>
       <br />
       <table class="alternative_address_table" id="table_address_input" >
         <tr>
@@ -525,7 +534,7 @@
     <label class="personal" style="margin-left:25px;margin-top:5px;">Item you would like to lend</label>
     <table class="personal">
       <tr class="odd">
-        <td width="50%">
+        <td style="width:50%;">
 
           <div style="margin-left:25px;margin-top:5px;">
             <label>Category:<span class="required_fields">&nbsp;&nbsp;*</span>
@@ -541,7 +550,7 @@
 
           </div>
         </td>
-        <td  width="50%">
+        <td style="width:50%;">
           <% display_div = 'none' %>
           <% unless @borrowers.item_category_id.blank? %>
             <% if @borrowers.item_category_id == 0 %>
@@ -618,6 +627,7 @@
 
 
       <% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["borrower_item_id =?", @borrowers.borrower_item_id]) %>
+
       <% if @ig.blank? %>
         <tr class="odd">
           <td  style="width:50%;">
@@ -647,8 +657,7 @@
                   None provided.
                 <% end %></label>
               <label>Image of Item:</label>
-              
-              <img  height="100" width="200" src="<%= get_image_path(@ig[0].image_file_name) %>" alt="Uploaded image file" />
+              <img src="<%= get_image_path(@ig[0].image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
               <span class="file_image_error">&nbsp;</span>
             </div>
 

@@ -1,29 +1,22 @@
 $(document).ready(function() {
 
+
 	$.fn.center = function() {
 
-		$(this).css("width: " + $("form").width() + "15px", "height: " + $("form").height() + "15px");
+		
 		var element = $(this);
 		var e_width = element.width();
 		var win_width = $(window).width();
 		var left_margin_calc = (win_width - e_width) / 2;
 		element.css('margin-left', (left_margin_calc + "px"));
-
+		element.css('border', '2px solid #4A572B');
 	};
-
-	$.fn.center_form = function() {
-		var element = $(this);
-		var e_width = element.width();
-		var win_width = $("div.form_wrapper").width();
-		var left_margin_calc = (win_width - e_width) / 2;
-		element.css('margin-left', (left_margin_calc + "px"));
-
-	};
-
 
 
 	$("div.form_wrapper").center();
-	$("form").center_form();
+
+
+
 	showFormContact();
 		
 	$("input#borrowers_organization_name").bind('change', function() {
@@ -409,18 +402,6 @@ $("span#alternative_phone_error").text("");
 	});
 	$("#borrowers_describe_yourself").trigger('change');
 
-	$("input[name='borrowers[useWhichContactAddressAlternative]']").bind('change', function() {
-
-		if ($(this).is(':checked')) {
-			$("div#table_alternative_address_input").css("display", "block");
-		} else {
-			$("div#table_alternative_address_input").css("display", "block");
-		}
-	});
-	$("input[name='borrowers[useWhichContactAddressAlternative]']").trigger('change');
-
-
-
 
 	$("input#borrowers_first_name").bind('change', function() {
 		$("span#first_name_selection").html($(this).val());
@@ -450,15 +431,14 @@ $("span#alternative_phone_error").text("");
 
 	$("input[name='borrowers[displayBorrowerAddress]']").bind('change', function() {
 
-		$("#postalWithContactAddress").css("display", "none");
-		$("#postalWithOutContactAddress").css("display", "none");
+	/*	$("#postalWithContactAddress").css("display", "none"); */
 		var y_n = $("input[name='borrowers[displayBorrowerAddress]']:checked").val();
 		if (y_n == 1) {
 			$("#postalWithContactAddress").css("display", "block");
 			$("span#display_address_selection").html("Yes");
 		}
 		if (y_n == 0) {
-			$("#postalWithOutContactAddress").css("display", "block");
+		/*	$("#postalWithOutContactAddress").css("display", "block"); */
 			$("span#display_address_selection").html("No");
 		}
 
@@ -467,9 +447,9 @@ $("span#alternative_phone_error").text("");
 
 	$("input[name='borrowers[useWhichContactAddress]']").bind('change', function() {
 
-		$("div#contactAddressWhich").css("display", "block");
+	/*	$("div#contactAddressWhich").css("display", "block");
 		$("div#contactAddressOnly").css("display", "block");
-		$("div#contactAddressWithAlternative").css("display", "block");
+		$("div#contactAddressWithAlternative").css("display", "block"); */
 		var y_n = $("input[name='borrowers[useWhichContactAddress]']:checked").val();
 		if (y_n == 0) {
 			$("span#useWhichContactAddress_selection").html("Neither Address");
@@ -617,7 +597,8 @@ $("span#alternative_phone_error").text("");
 		var country_text = $("select#borrowers_country_id option:selected").text();
 		$("span#country_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-
+$("select#borrowers_state_id option[value='99']" ).attr( "selected", "selected" );
+			$("span#us_state_selection").html('');
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
 
@@ -646,7 +627,8 @@ $("span#alternative_phone_error").text("");
 		var country_text = $("select#borrowers_country_id_alternative option:selected").text();
 		$("span#country_alternative_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-
+$("select#borrowers_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
+			$("span#state_alternative_selection").html('');
 			$("div#choose_us_state_alternative").css("display", "none");
 			$("div#provide_country_state_alternative").css("display", "inline");
 
@@ -715,8 +697,7 @@ function validateUseWhichBorrowerContactAddress() {
 	var return_value = true;
 	var whichType = 'borrowers';
 	var use_which_ca = $("input[name='borrowers[useWhichContactAddress]']:checked").val();
-	var useAddressAlternative = $('input#borrowers_useWhichContactAddressAlternative').is(':checked');
-	if ((use_which_ca == 1) || (use_which_ca == 2 || useAddressAlternative )) {
+	if ((use_which_ca == 1) || (use_which_ca == 2 )) {
 
 	if	( ($("#borrowers_address_line_1_alternative").val() == "") || 
 		  ($("#borrowers_postal_code_alternative").val() == "") || 

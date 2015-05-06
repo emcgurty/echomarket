@@ -1,28 +1,5 @@
   $(document).ready(function() {
    
-   		$.fn.center = function() {
-
-		$(this).css("width: " + $("form").width() + "15px", "height: " + $("form").height() + "15px");
-		var element = $(this);
-		var e_width = element.width();
-		var win_width = $(window).width();
-		var left_margin_calc = (win_width - e_width) / 2;
-		element.css('margin-left', (left_margin_calc + "px"));
-
-	};
-
-	$.fn.center_form = function() {
-		var element = $(this);
-		var e_width = element.width();
-		var win_width = $("div.form_wrapper").width();
-		var left_margin_calc = (win_width - e_width) / 2;
-		element.css('margin-left', (left_margin_calc + "px"));
-
-	};
-
-	$("div.form_wrapper").center();
-	$("form").center_form();
-	
     $("span.error").css("visibility", "hidden");
     	$("div#rapid_borrower").css('display', 'block');
     	$("div#country_selected").css("display", "none");
@@ -232,9 +209,9 @@ function validLenderCountryState() {
 	if (cid == '99') { 
 	
 		foundIncomplete = true;
-	} else if ((cid != 'US') && (sis == '')){
+	} else if (cid != 'US' && sis == ''){
 		foundIncomplete = true;
-	} else if ((cid == 'US') && (sid == '99')) {
+	} else if (cid == 'US' && sid == '99') {
 		foundIncomplete = true; 
 	} 	
 			
@@ -252,9 +229,9 @@ function validBorrowerCountryState() {
 	if (cid == '99') { 
 		foundIncomplete = true;
 		
-	} else if ((cid != 'US') && (sis == '')){
+	} else if (cid != 'US' && sis == ''){
 		foundIncomplete = true;
-	} else if ((cid == 'US') && (sid == '99')) {
+	} else if (cid == 'US' && sid == '99') {
 		foundIncomplete = true; 
 	} 	
 			
@@ -303,7 +280,7 @@ function checkBorrowerCategory() {
 	var notChecked = false;
 	var cat_id = $("select#borrowers_item_category_id option:selected").text();
 	var o_i_c =  $("input#borrowers_other_item_category").val();
-	if ((cat_id == 'Other') && (o_i_c == '')){
+	if (cat_id == 'Other' && o_i_c == ''){
 		notChecked = true;
 	} else if (cat_id == 'Please select') {
 		notChecked = true;
@@ -318,7 +295,7 @@ function checkLenderCategory() {
 	var notChecked = false;
 	var cat_id = $("select#lenders_item_category_id option:selected").text();
 	var o_i_c =  $("input#lenders_other_item_category").val();
-	if ((cat_id == 'Other') && (o_i_c == '')){
+	if (cat_id == 'Other' && o_i_c == ''){
 		notChecked = true;
 	} else if (cat_id == 'Please select') {
 		notChecked = true;

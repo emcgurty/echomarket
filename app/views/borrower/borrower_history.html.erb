@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'borrower_seeking.js' %>
+<%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_history"}, :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"} do |nf| %>
 
 

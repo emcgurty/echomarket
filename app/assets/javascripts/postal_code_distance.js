@@ -23,10 +23,10 @@
 			else {
 			var mystr = "";
 			 $.each( data.zip_codes, function( i, zip ) {
-             alert(i + " my zip code " + zip.zip_code);
+             	 mystr = mystr + ":" + zip.zip_code;
         
       });	// Set city and state
-				 container.find("input[name='communities[city]']").val(data.zip_code);
+				 container.find("input[name='communities[city]']").val(mystr);
 				/* container.find("input[name='state']").val(data.state); */
 			}
 		}
@@ -38,7 +38,7 @@
 		var distance = 10;
 			// Get zip code
 			var zipcode = $(this).val().substring(0, 5);
-			alert(zipcode);
+			
 			if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode))
 			{
 				// Clear error
@@ -47,9 +47,6 @@
 				// Check cache
 				if (zipcode in cache)
 				{
-						$.each( cache, function( key, value ) {
-  						alert( key + ": " + value );
-					});
 					handleResp(cache[zipcode]);
 				}
 				else

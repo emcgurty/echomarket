@@ -1,27 +1,6 @@
 $(document).ready(function() {
 
-	$.fn.center = function() {
 
-		$(this).css("width: " + $("form").width() + "15px", "height: " + $("form").height() + "15px");
-		var element = $(this);
-		var e_width = element.width();
-		var win_width = $(window).width();
-		var left_margin_calc = (win_width - e_width) / 2;
-		element.css('margin-left', (left_margin_calc + "px"));
-
-	};
-
-	$.fn.center_form = function() {
-		var element = $(this);
-		var e_width = element.width();
-		var win_width = $("div.form_wrapper").width();
-		var left_margin_calc = (win_width - e_width) / 2;
-		element.css('margin-left', (left_margin_calc + "px"));
-
-	};
-
-	$("div.form_wrapper").center();
-	$("form").center_form();
     $("span.error").css("visibility", "hidden");
 			
 	$("#users_password_confirmation").change(function() {
@@ -69,6 +48,29 @@ $(document).ready(function() {
 	
 });
 
+function submitCommunityPasswordReset() {
+
+	   var foundInvalid= true;
+
+        if ($("#communities_password_confirmation").val() != $("#communities_password").val()) {
+            $("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
+            $("#registration_password_confirmation_error").css("visibility", "visible");
+		 foundInvalid= false;
+        } 
+
+        if ($("#communities_password_confirmation").val() == "" && $("#communities_password").val() == "") {
+            $("#registration_password_confirmation_error").text("Please provide a password and confirmation password.");
+            $("#registration_password_confirmation_error").css("visibility", "visible");
+		 foundInvalid= false;
+        }
+
+        if (foundInvalid) {
+
+        $("form.reset_password").submit();
+
+    }
+}
+
 
 function addMember(){
 	
@@ -111,6 +113,7 @@ function addMember(){
 
 
 
+
 function submitUpdateMember(rdt, c_id, com_id, is_c)  {
 	 	
 	    $("[id*='_h']").trigger('change');
@@ -127,11 +130,10 @@ function submitUpdateMember(rdt, c_id, com_id, is_c)  {
 		window.location.replace(queryString);
 }
 
-
 function update_row(myThis,rct) {
 	
- 
-	if (myThis.id == "community_members_first_name_h"){
+
+	if (myThis.id == "community_members_first_name_h") {
 		$("span#thisFirstName"+rct).text(myThis.value);	
 	}  else	if (myThis.id == "community_members_mi_h") {
 		$("span#thisMI"+rct).text(myThis.value);	

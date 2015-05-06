@@ -3,13 +3,13 @@
 	$(function() {
 		// IMPORTANT: Fill in your client key
 		var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";
-	
+		alert("hit1");
 		var cache = {};
 		var container = $("table.personal");
-	
+		alert(container);
 		var errorDiv = container.find("span#postal_code_error");
 		errorDiv.css("visibility", "visible");
-	
+		alert(errorDiv);
 		
 		/** Handle successful response */
 		function handleResp(data)
@@ -28,9 +28,11 @@
 		// Set up event handlers
 		// $("#users_password_confirmation").change(function() {
 		container.find("input[name='communities[postal_code]']").change(function() {
-			
+			alert("hit change1");
 			// Get zip code
 			var zipcode = $(this).val().substring(0, 5);
+			alert(zipcode);
+			alert((zipcode.length == 5 && /^[0-9]+$/.test(zipcode)));
 			if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode))
 			{
 				// Clear error
