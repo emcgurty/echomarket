@@ -1,0 +1,89 @@
+<%= javascript_include_tag 'advertiser.js', :type => "text/javascript"  %>
+
+<%= form_for @advertiser, :url=> {:controller=>"advertiser", :action => "new"},
+:html=>   {:class=>"advertiser", :multipart=>true} do |nf| %>
+
+<% if @advertiser.errors %>
+<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @advertiser}  %>
+<% end %>
+
+<div class="top" >
+
+	<p>
+		<span class="logo_white" >The Echo Market: Your Advertisement Information</span>
+	</p>
+	<p>
+		Place your advertisment here for free.  For free with a little effort on your part...
+	</p>
+	<p>
+		On a calendar monthly basis, free advertising requires that from your contacts at least six individuals/organizations will create some combination of new borrowing or lending records.
+	</p>
+	<p>	In creating those records they and actually other Echo Market Borrowers/Lenders will be able to identify you as their Echo Market reference.  In that fairly minor effort,
+		you will gain so much visibility. Echo Market continues to be discovered by thousands of returning users and dozens of search engines.  So make your entries here meaningful and specific to your purpose.
+	</p>
+	<% unless session[:notice].blank? %>
+	<p>
+		<%= session[:notice] %>
+	</p>
+	<% end  %>
+</div>
+
+<div style="float:left;;width:92%;">
+	<span class="registration_header" style="display:none;color:black;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;"> All fields are required.</span>
+</div>
+
+<div style="float:left;;width:92%;">
+	<label>Advertisement Title:&nbsp;
+	<%= nf.text_field( :title,  :maxlength=>50, :size=>24) %></label>
+	<span >Your company or service name... An annoucement of an event, a new resource...</span>
+	<span class="error" id="advertisement_title_error">&nbsp;</span>
+</div>
+
+<div style="float:left;;width:92%;">
+	<label>More Detailed Information:</label>
+	<%= nf.text_area( :description,  :cols=> 20, :rows=> 5) %>
+	<span class="error" id="advertisement_description_error">&nbsp;</span>
+</div>
+
+<div style="float:left;;width:92%;">
+	<label>Contact Email:
+	<%= nf.text_field( :advertiser_email,  :maxlength=>50, :size=>24) %></label>
+	<span class="error" id="advertisement_email_error">&nbsp;</span>
+</div>
+
+<div style="float:left;;width:92%;">
+	<label>Contact URL:
+	<%= nf.text_field( :advertiser_url,  :maxlength=>50, :size=>24) %></label>
+	<span class="error" id="advertisement_url_error">&nbsp;</span>
+</div>
+
+<div style="float:left;;width:92%;">
+	<label>Advertisement Category:
+	<% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
+	<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type) %>
+	<%= nf.select( :advertiser_category_id, @cats,{ :style=>"width:auto;" }) %></label>
+	<span class="error" id="advertiser_category_id_error">Choose a 'Category'.</span>
+
+</div>
+<div style="display:none;margin-left:25px;margin-top:5px;" id="other_category">
+	<label>Add another category:<span class="required_fields">&nbsp;&nbsp;*</span>
+	<%= nf.text_field( :category_other) %></label>
+
+</div>
+
+<div style="float:left;;width:92%;">
+	<label>Advertisement Icon/Logo:</label>
+	<input type="file" id="l2bimage" class="" name="advertises[item_image_upload]"  accept="image/*" />
+	<span class="file_image_error">&nbsp;</span>
+</div>
+
+<div   class="div_white" id="div_white" >
+	&nbsp;
+</div>
+
+<div class="bottom">
+	<a href="#" onclick="submitAdvertisement();">=> Submit My Advertisement</a>
+	<a href="" onclick="showItem();">=> Nevermind.. Let's see </a>
+</div>
+
+<% end %>

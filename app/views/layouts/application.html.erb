@@ -21,8 +21,8 @@
 
 	<body>
 
-		<% @gip = Getipaddresses.new(:user_ip_address => request.remote_ip, :date_created => Time.now) %>
-		<% @gip.save(:validate => false) %>
+	<% @gip = Getipaddresses.new(:user_ip_address => request.remote_ip, :date_created => Time.now, :whois => request.env["HTTP_USER_AGENT"]) %>
+	<% @gip.save(:validate => false) %>
 
 		<% content_for :header do %>
 			<%= render :partial => 'menus/echomarket_menu_options' %>
