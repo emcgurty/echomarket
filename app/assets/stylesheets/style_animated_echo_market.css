@@ -32,6 +32,18 @@ p.offering{
     width:94%;
 }
 
+p.offeringa{
+    padding:1px;
+    margin-left:15px;
+    color:black;
+    font-size:12px;
+    /*    border-bottom:1px solid #ddd;*/
+    font-weight:normal;
+    width:92%;
+}
+
+
+
 
 p.offering0{
     padding:0px;
