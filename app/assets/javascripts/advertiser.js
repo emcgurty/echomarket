@@ -143,8 +143,7 @@ function validEmail(em) {
 function picturePresent() {
 	
 	 var foundIncomplete = false;
-	 var image_source =  $("img#imagePreview");
-	 alert(image_source.attr('src')); 
+	 var image_source =  $("img#imagePreview").attr("src");
 	 if (image_source == '') {
 	  	foundIncomplete = true;
 	  } 

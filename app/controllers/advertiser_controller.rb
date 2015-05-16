@@ -61,13 +61,13 @@ class AdvertiserController < ApplicationController
 
   def activate
     if params[:id]
-      @ad = Advertisers.find(params[:id])
+      @ad = Advertiser.find(params[:id])
       @myupdatehash = [:is_active => 1, :is_activated => 1]
       if @ad.update_attributes(@myupdatehash[0])
         session[:notice] = "Your Advertisement account record has been activated.  Thanks so much for your participation...."
         redirect_to  :controller => "home", :action => 'items_listing'
       else
-        session[:notice] = "Forsome reason Echo Market was not able to activate your Advertisement account record.  Please try again, or kindly contact us."
+        session[:notice] = "For some reason Echo Market was not able to activate your Advertisement account record.  Please try again, or kindly contact us."
         redirect_to  :controller => "home", :action => 'items_listing'
       end
     end

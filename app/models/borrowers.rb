@@ -1,6 +1,7 @@
 class Borrowers < ActiveRecord::Base
 
-  set_primary_key :borrower_item_id
+  self.primary_key = :borrower_item_id
+  attr_accessor :found_zip_codes
   has_many :itemimages
   before_create :get_borrower_primary_key_value
 

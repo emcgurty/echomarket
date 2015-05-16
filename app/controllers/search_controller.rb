@@ -6,7 +6,6 @@ class SearchController < ApplicationController
     if params[:id]
       @search = Searches.find(params[:id].to_i)
 
-
       if session[:community_name].blank?
         unless @search.blank?
           @s_get_items = @search.get_items

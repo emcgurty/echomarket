@@ -19,6 +19,7 @@ class Notifier < ActionMailer::Base
     @subject = "Welcome Echo Market Advertiser"
     @recipients = ad.advertiser_email + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    @email = ad.advertiser_email
     @title = ad.title
     @description = ad.description
     @url = ad.advertiser_url
