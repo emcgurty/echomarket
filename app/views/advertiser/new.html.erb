@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'advertiser.js', :type => "text/javascript"  %>
 
-<%= form_for @advertiser, :url=> {:controller=>"advertiser", :action => "new"},
+<%= form_for @advertiser, :url=> {:controller=>"advertiser", :action => "create"},
 :html=>   {:class=>"advertiser", :multipart=>true} do |nf| %>
 
 
@@ -8,9 +8,9 @@
 
 	<p><span class="logo_smallw" >The Echo Market: Your Advertisement Information</span></p>
 	<p class="offeringa">Place your advertisment here for free.  For free with a little effort on your part...</p>
-	<p class="offeringa">On a calendar monthly basis, free advertising requires that from your contacts at least six individuals/organizations will create some combination of new borrowing or lending records.</p>
-	<p class="offeringa">In creating those records they and actually other Echo Market Borrowers/Lenders will be able to identify you as their Echo Market reference.  In that fairly minor effort,
-		you will gain so much visibility. Echo Market continues to be discovered by thousands of returning users and dozens of search engines.  So make your entries here meaningful and specific to your purpose.
+	<p class="offeringa">On a calendar monthly basis, free advertising requires that from your contacts at least one individual/organization creates some combination of four new borrowing or lending records.</p>
+	<p class="offeringa">In creating those records they and actually other Echo Market Borrowers/Lenders will be able to identify you as their Echo Market reference.  In this fairly simple process,
+		you will gain so much visibility. Echo Market continues to be sought by thousands of new or returning users and dozens of search engines.  So make your entries here meaningful and specific to your purpose.
 	</p>
 	<% unless session[:notice].blank? %>
 	<p class="offeringa">
@@ -19,7 +19,7 @@
 	<% end  %>
 </div>
 
-<% if @advertiser.errors %>
+<% unless  @advertiser.errors.empty? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @advertiser}  %>
 <% end %>
 
@@ -30,6 +30,7 @@
 
 <div class="column50_rapid" style="padding:15px;">
 	<div >
+	<%= nf.hidden_field( :remote_ip, :value => request.remote_ip) %>
 	<label>Advertisement Title:&nbsp;<span style="float:left;color:red;font-size:small;">Your company or service name... An annoucement of an event, a new resource...</span></label>
 	<%= nf.text_field( :title,  :maxlength=>50, :size=>24) %>
 	
@@ -37,13 +38,13 @@
 	</div>
 	
 	<div >
-	<label>Contact Email:</label>
+	<label>Contact Email:&nbsp;<span style="float:left;color:red;font-size:small;">Will not be publicly dislayed, only for purposes of Echo Market communication with you.</span></label>
 	<%= nf.text_field( :advertiser_email,  :maxlength=>50, :size=>24) %>
 	<span class="error" id="advertisement_email_error">&nbsp;</span>
 	</div>
 
 <div >
-	<label>Advertisement Category:&nbsp;<span style="float:left;color:red;font-size:small;">Try to choose an Item type category, otherwise choose 'Other'</span></label>
+	<label>Advertisement Category:&nbsp;<span style="float:left;color:red;font-size:small;">Choose an Item category that most parallels your advertisement, otherwise choose 'Other'</span></label>
 	<% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
 	<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type) %>
 	<%= nf.select( :advertiser_category_id, @cats,{ :style=>"width:auto;" }) %>
@@ -60,7 +61,7 @@
 </div>
 <div class="column50_rapid" style="padding:15px;">
 <div >
-	<label>More Detailed Information:</label>
+	<label>Advertisement Content:</label>
 	<%= nf.text_area( :description,  :cols=> 40, :rows=> 3, :maxlength=>255) %>
 	<span class="error" id="advertisement_description_error">&nbsp;</span>
 </div>
@@ -68,33 +69,34 @@
 
 
 <div >
-	<label>Contact URL:</label>
-	<%= nf.text_field( :advertiser_url,  :maxlength=>50, :size=>24) %>
+	<label>URL Link:&nbsp;<span style="float:left;color:red;font-size:small;">On user click of either your advertisement title or icon/logo, the user will be directed to this URL.</span></label>
+	<%= nf.url_field( :advertiser_url,  :maxlength=>50, :size=>24, :placeholder =>"http://") %>
 	<span class="error" id="advertisement_url_error">&nbsp;</span>
 </div>
 
 <div >
 	<label>Advertisement Icon/Logo:</label>
-	<input type="file" id="l2bimage" class="" name="advertises[item_image_upload]"  accept="image/*" />
-	<span class="file_image_error">&nbsp;</span>
+	<input type="file" id="l2bimage" class="" name="item_image_upload"  accept="image/*" />
+	
 </div>
 
 
 
-<div id='image_details' style="display:none;">
-	<img id="imagePreview" height="100" width="200" src="" alt="New uploaded image file" />
-		
+<div id='image_details' style="display:block;">
+	<img src="" id="imagePreview" height="100" width="200" alt="New uploaded image file" />
+	<span class="error" id="advertisement_file_image_error">&nbsp;</span>	
 </div>
 
 </div>
 
 <div   class="div_white" id="div_white" >
-	&nbsp;
+	
 </div>
 
 <div class="bottom">
 	<a href="#" onclick="submitAdvertisement();">=> Submit My Advertisement</a>
-	<a href="" onclick="showItem();">=> Nevermind.. Let's see </a>
+	<%= link_to "=> Nevermind..Let's see what's available for lending and borrowing.", home_items_listing_url  %>
+	
 </div>
 
 <% end %>

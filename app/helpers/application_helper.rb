@@ -4,6 +4,37 @@ module ApplicationHelper
 
    require 'date'
 
+   def get_active_advertisers()
+     @return_string = ''
+     @advert = Advertisers.find(:all, :readonly)
+     unless  @advert.blank?
+     d = Date.parse(Time.now)
+     current_year = d.year
+     current_month = d.mon
+     date_like = "#{current_year}-#{current_month}"
+   
+
+ for ad in @advert
+     
+     @borrower_source= Borrowers.find(:all, :readonly, 
+     :conditions => ["advertiser_id = ? AND date_created like '#{date_like}%'", ad.advertiser_id ])   
+     unless @borrower_source.blank?
+       for bb in @borrower_source
+         @return_string << bb.advertiser_id + ";"
+       end  
+     end  
+     
+      @lender_source= Lenders.find(:all, :readonly, 
+     :conditions => ["advertiser_id = ? AND date_created like '#{date_like}%'", ad.advertiser_id ])   
+     unless @lender_source.blank?
+       for ll in @lender_source
+         @return_string << ll.advertiser_id + ","
+       end  
+     end
+     end  
+   end
+     end
+ 
   def get_image_path(sought_image_file_name)
 
     return_string = ''

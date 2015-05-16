@@ -632,7 +632,7 @@ input#lenders_other_describe_yourself.hidden_input {
     /*    box-shadow: 0px 0px 8px #f0f0f0;*/
 }
 
-.form_wrapper input[type="text"],.form_wrapper input[type="email"],.form_wrapper input[type="tel"],
+.form_wrapper input[type="text"],.form_wrapper input[type="email"],.form_wrapper input[type="tel"], .form_wrapper input[type="url"],
 .form_wrapper input[type="password"], .form_wrapper div.radio, .form_wrapper div.checkbox_options {
     border: solid 1px #E5E5E5;
     background: #B5C4AB;

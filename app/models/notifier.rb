@@ -14,6 +14,17 @@ class Notifier < ActionMailer::Base
     @user_alias = user.user_alias
     @email = user.email
    end
+   
+    def notify_advertiser(ad)
+    @subject = "Welcome Echo Market Advertiser"
+    @recipients = ad.advertiser_email + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    @title = ad.title
+    @description = ad.description
+    @url = ad.advertiser_url
+    @advertiser_id = ad.advertiser_id
+   end
+  
   
   def comments_received(recipient, message, sent_at = Time.now)
     @subject = "The Echo Market Contact..."

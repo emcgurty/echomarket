@@ -1,0 +1,13 @@
+<%  @getActiveAdvertisers = get_active_advertisers   %>
+<%  unless @getActiveAdvertisers.blank?    %>
+
+<%  @getAds  = Advertisers.find(:all, :readonly, :condtions => ["advertiser_id IN   '(@getActiveAdvertisers)'"])    %>
+
+<div >
+  
+  <label>How did you hear about Echo Market?</label>
+  	<% @ads = options_from_collection_for_select(@getAds, :advertiser_id, :title) %>
+	<%= select(:advertiser_id, @ads,{ :style=>"width:auto;" }) %>
+</div>
+
+<% end %>

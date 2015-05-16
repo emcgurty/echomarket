@@ -1,24 +1,33 @@
+
 class Advertiser < ActiveRecord::Base
   
-  set_primary_key :advertiser_id
-    
+  require 'uri'
+ 
+  self.primary_key = :advertiser_id
   has_many :itemimages
   before_create :get_advertiser_primary_key_value
-    
-  name_alpha_regex = /\A[ a-zA-Z'-]+\z/
-  alpha_numeric_regex = /\A[0-9 a-zA-Z:;.,!?'-]+\z/
-  alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
-  alpha_numeric_regex_username = /\A[0-9 a-zA-Z\-\_]+\z/
-    
-  validates_uniqueness_of :advertiser_name,:if => :advertiser_name, :case_sensitive => true, :message =>  " already exists."
+  before_create :url_valid
+      
+  validates_uniqueness_of :title,:if => :title, :case_sensitive => true, :message =>  " already exists."
   validates_uniqueness_of :advertiser_email,:if => :advertiser_email, :case_sensitive => false, :message =>  " already exists"
   validates_uniqueness_of :advertiser_url,:if => :advertiser_url, :case_sensitive => false, :message =>  " already exists"
   
   
-  protected
+ def url_valid
+   uri = URI.parse(self.advertiser_url)
+   if uri.kind_of?(URI::HTTP)
+     return true
+   else
+     self.errors.add(:advertiser_url, ": URL Link improperly formatted: http://")
+     return false
+  end
+  
+ end 
+
+protected
 
   def get_advertiser_primary_key_value
-     advertiser_id = get_random unless advertiser_id.present?
+     self.advertiser_id = get_random 
   end
 
   def get_random
@@ -30,5 +39,4 @@ class Advertiser < ActiveRecord::Base
     @id
   end
   
-  
-end
+ end

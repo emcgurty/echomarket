@@ -1,8 +1,6 @@
 $(document).ready(function() {
 
     
-    alert("SADAS");
-    
     $("span.error").css("visibility", "hidden");
 	
 
@@ -67,17 +65,33 @@ function submitAdvertisement(){
 	}
 	
 	if ($("#advertiser_description").val() == "") {
-		$("#advertisement_description_error").text("Advertisment detail is required.");
+		$("#advertisement_description_error").text("Advertisment content is required.");
 		$("#advertisement_description_error").css("visibility", "visible");
 		foundInvalid = false;
 	} 
 	
-	if ($("#advertiser_advertiser_email").val() == "") {
-		$("#advertisement_email_error").text("Advertisement contact email is required.");
+	if ($("input#advertiser_advertiser_email").val() == "") {
+		$("#advertisement_email_error").text("Contact email is required.");
 		$("#advertisement_email_error").css("visibility", "visible");
 		foundInvalid = false;
+	} else {
+	
+		var advert_email = $("input#advertiser_advertiser_email").val();
+		 
+	    if (validEmail(advert_email)){
+		$("#advertisement_email_error").text("Contact email not properly formatted.");
+		$("#advertisement_email_error").css("visibility", "visible");
+		foundInvalid = false;
+		}
 	} 
 	
+	    if (picturePresent()){
+		$("#advertisement_file_image_error").text("An advertisement image is required.");
+		$("#advertisement_file_image_error").css("visibility", "visible");
+		$("div#image_details").css("display", "block");
+		foundInvalid = false;
+	} 
+		
 	if ($("#advertiser_advertiser_url").val() == "") {
 		$("#advertisement_url_error").text("Advertisement contact URL is required.");
 		$("#advertisement_url_error").css("visibility", "visible");
@@ -92,7 +106,8 @@ function submitAdvertisement(){
 		
 	} 
 	
-	var cat_other = $("#advertiser_category_other").text();
+	var cat_other = $("input#advertiser_category_other");
+	cat_other = cat_other.val();
 	if (cat_cmb == 'Other' && cat_other == ''){
 		$("#advertiser_category_id_error").text("Other Category information is required.");
 		$("#advertiser_category_id_error").css("visibility", "visible");
@@ -100,13 +115,9 @@ function submitAdvertisement(){
 		
 	} 
 	
-	var advert_email = $("#advertiser_advertiser_email").text();
-	if (validEmail(advert_email)){
-		$("#advertisement_email_error").text("Contact Email not properly formatted.");
-		$("#advertisement_email_error").css("visibility", "visible");
-		foundInvalid = false;
-		
-	} 
+
+    
+    
 	
     if (foundInvalid) {
 
@@ -128,6 +139,19 @@ function validEmail(em) {
 	 
 	return foundIncomplete;
 }
+
+function picturePresent() {
+	
+	 var foundIncomplete = false;
+	 var image_source =  $("img#imagePreview");
+	 alert(image_source.attr('src')); 
+	 if (image_source == '') {
+	  	foundIncomplete = true;
+	  } 
+	 
+	return foundIncomplete;
+}
+
 
 
 

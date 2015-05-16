@@ -2,6 +2,7 @@ class Itemimages < ActiveRecord::Base
 
   belongs_to :lenders
   belongs_to :borrowers
+  belongs_to :advertisers
 
   require 'fastimage'
   set_primary_key :item_image_id
