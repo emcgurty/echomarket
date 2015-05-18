@@ -47,7 +47,15 @@
 
 		<% else %>
 		<% hold_cat  = "" %>
-
+		<% @icond = Itemconditions.find(:all, :readonly) %>
+		<% @ih = Hash.new %>
+		<% @ih2 = Hash.new %>
+        <% @ih = @icond.to_a.map(&:serializable_hash) %>
+        <% for kv in @ih %>
+          <% @ih2[kv.fetch("item_conditions_id")]  = kv.fetch("conditions") %>
+         <% end %>
+       
+       
 		<% @lender.each do |ldr| %>
 		<% @cats = Categories.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
 		<% if @cats %>
@@ -70,8 +78,7 @@
 		<% end %>
 		<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
-		<% @icond = Itemconditions.find(:first, :readonly=> true, :order => "item_conditions_id", :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
-		<label class="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
+		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
 		
 			
 	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.lender_item_id), {:class=>"item_details"}  %>
@@ -108,12 +115,18 @@
 		<% end %>
 		<% else %>
 		<% hold_cat  = "" %>
-
+	    <% @icond = Itemconditions.find(:all, :readonly) %>
+		<% @ih = Hash.new %>
+		<% @ih2 = Hash.new %>
+        <% @ih = @icond.to_a.map(&:serializable_hash) %>
+        <% for kv in @ih %>
+          <% @ih2[kv.fetch("item_conditions_id")]  = kv.fetch("conditions") %>
+         <% end %>
 		<% @borrower.each do |ldr| %>
 		<% @cats = Categories.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
 		<% if @cats %>
 		<% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
-		<label>Category: &nbsp;<%= @cats.category_type %></label>
+		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
 		<br />
 		<% hold_cat  = @cats.category_id %>
 		<% end %>
@@ -133,8 +146,7 @@
 		<% end %>
 		<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
-		<% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
-		<label class="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
+		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
         		
 			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.borrower_item_id), {:class=>"item_details"} %>
 		
