@@ -29,7 +29,7 @@
           <%  rowCount = rowCount + 1 %>
           <tr class="<%= rowClass %>" >
             <td>
-              <% @cats = Categories.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
+              <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
               <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
             </td>
             <td>

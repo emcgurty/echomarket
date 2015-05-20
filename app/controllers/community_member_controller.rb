@@ -2,14 +2,14 @@ class CommunityMemberController < ApplicationController
  
   def m_list
       session[:background] = true
-      @community_members = CommunityMembers.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+      @community_members = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
   end
 
   # POST /community_members
   # POST /community_members.json
   def create
 
-    @community_members = CommunityMembers.new(params[:community_members])
+    @community_members = CommunityMember.new(params[:community_members])
     
     respond_to do |format|
       
@@ -36,7 +36,7 @@ class CommunityMemberController < ApplicationController
     :mi=>params[:community_members][:mi], :last_name => params[:community_members][:last_name], 
     :alias=> params[:community_members][:alias], :is_creator => 0, :remote_ip => params[:community_members][:remote_ip]]
 
-    @community_members = CommunityMembers.new(myaddhash[0])
+    @community_members = CommunityMember.new(myaddhash[0])
 
     respond_to do |format|
       if @community_members.save
@@ -54,7 +54,7 @@ class CommunityMemberController < ApplicationController
   def remove
     
     begin
-      CommunityMembers.delete(params[:id])
+      CommunityMember.delete(params[:id])
       redirect_to :action=>'m_list'
     rescue 
         session[:notice] = 'Echo Market application error in removing your selected member.'
@@ -67,7 +67,7 @@ class CommunityMemberController < ApplicationController
   # PUT /community_members/1
   # PUT /community_members/1.json :  :       /*  /*    match 'community_member/update_row/(:fi)/(:m)/(:la)/(:al)/(:ci)/(:com_id)/(:is_c)'=> "community_member#update_row", :as=> :community_member_update_row */ */
   def update_row
-    @community_member = CommunityMembers.find(params[:ci])
+    @community_member = CommunityMember.find(params[:ci])
     
     unless @community_member.blank?
       myupdatehash = Hash.new
@@ -104,7 +104,7 @@ class CommunityMemberController < ApplicationController
   # DELETE /community_members/1
   # DELETE /community_members/1.json
   def destroy
-    @community_member = CommunityMembers.find(params[:id])
+    @community_member = CommunityMember.find(params[:id])
     @community_member.destroy
 
     respond_to do |format|

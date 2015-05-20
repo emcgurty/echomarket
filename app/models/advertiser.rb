@@ -5,6 +5,7 @@ class Advertiser < ActiveRecord::Base
  
   self.primary_key = :advertiser_id
   has_many :itemimages
+  has_many :categories
   before_create :get_advertiser_primary_key_value
   before_create :url_valid
       

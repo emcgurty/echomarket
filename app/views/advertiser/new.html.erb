@@ -45,7 +45,7 @@
 
 <div >
 	<label>Advertisement Category:&nbsp;<span style="float:left;color:red;font-size:small;">Choose an Item category that most parallels your advertisement, otherwise choose 'Other'</span></label>
-	<% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
+	<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
 	<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type) %>
 	<%= nf.select( :advertiser_category_id, @cats,{ :style=>"width:auto;" }) %>
 	<span class="error" id="advertiser_category_id_error">Choose a 'Category'.</span>

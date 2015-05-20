@@ -655,7 +655,7 @@
 					<% else %>
 					<% current_selected = '99' %>
 					<% end  %>
-					<% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
+					<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
 					<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, current_selected.to_i) %>
 					<%= nf.select( :item_category_id, @cats,{ :onchange=>"lenders_item_category_id();", :style=>"width:auto;" }) %></label>
 				<span class="error" id="item_category_id_error">Choose a 'Category'.</span>

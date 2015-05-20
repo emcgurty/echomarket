@@ -2,13 +2,13 @@ class UserController < ApplicationController
   def edit
     unless params[:users].blank?
       begin
-        @users = Users.find(:first,  :conditions => ["user_id = ?", session[:user_id]])
+        @users = User.find(:first,  :conditions => ["user_id = ?", session[:user_id]])
         @myupdatehash = Hash.new
         @myupdatehash = [:user_type => params[:users][:user_type].to_s,
         :user_alias => params[:users][:user_alias].to_s,
         :email => params[:users][:email].to_s]
-        @save_result = @users.update_attributes(@myupdatehash[0])
-        @users.save(:validate => false)
+        @save_result = @User.update_attributes(@myupdatehash[0])
+        @User.save(:validate => false)
         @current_user = @users
       rescue ActiveRecord::ActiveRecordError => msg
         session[:notice] = "Error in updating your user record with system generated message: " + msg
@@ -21,7 +21,7 @@ class UserController < ApplicationController
       end
     else
 
-      @users = Users.find(:first, :conditions => ["user_id = ?", session[:user_id]])
+      @users = User.find(:first, :conditions => ["user_id = ?", session[:user_id]])
     end
   end
 
@@ -31,17 +31,17 @@ class UserController < ApplicationController
     @hold_alias = session[:user_alias]
     begin
 
-      @ldelete = Lenders.find(:all, :conditions => ["user_id = ?", session[:user_id]])
-      @bdelete = Borrowers.find(:all, :conditions => ["user_id = ?", session[:user_id]])
-      @udelete = Users.delete(session[:user_id])
+      @ldelete = Lender.find(:all, :conditions => ["user_id = ?", session[:user_id]])
+      @bdelete = Borrower.find(:all, :conditions => ["user_id = ?", session[:user_id]])
+      @udelete = User.delete(session[:user_id])
 
       @ldelete.each do |val|
-        Lenders.delete(val.lender_item_id)
+        Lender.delete(val.lender_item_id)
 
       end
 
       @bdelete.each do |val|
-        Borrowers.delete(val.borrower_item_id)
+        Borrower.delete(val.borrower_item_id)
 
       end
 
@@ -74,7 +74,7 @@ class UserController < ApplicationController
       session[:register_type] = (params[:type].blank? ? 'all': params[:type])
     end
 
-    @users = Users.new
+    @users = User.new
 
   end
 
@@ -105,14 +105,14 @@ class UserController < ApplicationController
     else
       unless params[:id].blank?
         session[:edit_user] = true
-        @users = Users.find(params[:id])
+        @users = User.find(params[:id])
       else
-        @ucount = Users.count
+        @ucount = User.count
         if   @ucount == 0
-          @users = Users.new
+          @users = User.new
           redirect_to :action => "register"
         else
-          @users = Users.new
+          @users = User.new
         end
       end
     end
@@ -122,7 +122,7 @@ class UserController < ApplicationController
     session[:login_notice] = ''
     
     if request.post?
-      @current_user = Users.find(:first, :readonly => true, :conditions=>['username = ?', params[:users][:username]])
+      @current_user = User.find(:first, :readonly => true, :conditions=>['username = ?', params[:users][:username]])
       unless @current_user.blank?
         if @current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:password])
           session[:user_id] = @current_user.user_id
@@ -138,15 +138,15 @@ class UserController < ApplicationController
             redirect_to home_items_listing_url
           else @current_user.authenticated?(params[:users][:password])
             session[:login_notice] = "We have entered an incorrect password."
-            @users = Users.new
+            @users = User.new
           end
         end
       else
         session[:login_notice] = "Sorry about this but your username and/or password were not recognized by www.echomarket.org. Please try again. "
-        @users = Users.new
+        @users = User.new
       end
     else
-      @user = Users.new
+      @user = User.new
     end
   end
 
@@ -203,7 +203,7 @@ class UserController < ApplicationController
                     
                     elsif  @current_user  && (@does_member_exist  == true) 
                           puts '5'
-                          @cm_creator = CommunityMembers.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
+                          @cm_creator = CommunityMember.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
                            
                                 session[:user_id] = @cm_creator.user_id if session[:user_id].blank?
                                 if session[:user_alias].blank?
@@ -264,7 +264,7 @@ class UserController < ApplicationController
     remote_ip_ =   params[:users][:remote_ip]
     user_type_ = (params[:users][:user_type].blank? ? 'guest' : params[:users][:user_type])
     user_alias_ =   params[:users][:user_alias]
-    @users = Users.new(
+    @users = User.new(
       :username =>   username_,
       :password=>    password_,
       :password_confirmation => password_confirmation_,
@@ -273,7 +273,7 @@ class UserController < ApplicationController
       :remote_ip =>   remote_ip_,
       :user_type => user_type_,
       :user_alias => user_alias_)
-    if @users.save(:validate => true) && @users.errors.empty?
+    if @User.save(:validate => true) && @User.errors.empty?
       session[:reset] = true
       session[:notice] = "Thanks for signing up! Please check your email, #{params[:users][:email]}, to activate your account."
       redirect_to home_items_listing_url
@@ -291,7 +291,7 @@ class UserController < ApplicationController
     end
 
     begin
-      @user = Users.find(:first, :conditions=>['user_id = ?', params[:users][:user_id]])
+      @user = User.find(:first, :conditions=>['user_id = ?', params[:users][:user_id]])
       @user.update_attributes(myupdatehash)
 
       @user.delete_reset_code
@@ -314,7 +314,7 @@ class UserController < ApplicationController
   def activate
     reset_session
     session[:notice] = ''
-    @user = params[:activation_code].blank? ? false : Users.find_by_activation_code(params[:activation_code])
+    @user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
     unless @user.blank?
       unless @user.activation_code.blank?
         if @user.activate
@@ -347,7 +347,7 @@ class UserController < ApplicationController
     if request.post?
       forgot('username')
     else
-      @users = Users.new
+      @users = User.new
     end
   end
 
@@ -356,14 +356,14 @@ class UserController < ApplicationController
     if request.post?
       forgot('password')
     else
-      @users = Users.new
+      @users = User.new
     end
   end
 
   def forgot(which)
     session[:notice] = ''
     if request.post?
-      @user = Users.find(:first, :conditions => ['email = ?', params[:users][:email]])
+      @user = User.find(:first, :conditions => ['email = ?', params[:users][:email]])
 
       if !(@user.blank?)
         @user.create_reset_code(which)
@@ -394,18 +394,18 @@ class UserController < ApplicationController
   def get_reset_password
     session[:background] = true
     session[:notice] = ''
-    @users = Users.find(:first, :conditions => ["reset_code =?", params[:id]])
+    @users = User.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
 
   def reset_password
 
-    @users = Users.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
+    @users = User.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
     if @users
       @myupdatehash = Hash.new
       @myupdatehash = [:password => params[:users][:password], :password_confirmation => params[:users][:password_confirmation]]
-      @users.update_attributes(@myupdatehash[0])
-      @users.delete_reset_code
-      session[:notice] = "Password reset successfully for #{@users.email}. Please login"
+      @User.update_attributes(@myupdatehash[0])
+      @User.delete_reset_code
+      session[:notice] = "Password reset successfully for #{@User.email}. Please login"
       redirect_to home_items_listing_url
     else
       session[:notice] = "There was an error in updating your password, please contact the Echo Market. Perhaps you are trying to update your password from an old email notification."
@@ -416,7 +416,7 @@ class UserController < ApplicationController
 
   def get_username
     session[:notice] = ''
-    @user = Users.find_by_reset_code(params[:id]) unless params[:id].blank?
+    @user = User.find_by_reset_code(params[:id]) unless params[:id].blank?
     if @user
       @user.delete_reset_code
       session[:notice] = "Your username is #{@user.username}. Please login."
@@ -459,13 +459,13 @@ end
 
  def find_member_name(c, pm)
        
-       @cm_nom = CommunityMembers.new
-       @cm_m = CommunityMembers.new
+       @cm_nom = CommunityMember.new
+       @cm_m = CommunityMember.new
        if pm[:community_mi].blank?
-              @cm_nom = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and first_name = ? and last_name = ?",
+              @cm_nom = CommunityMember.find(:first, :readonly, :conditions =>["community_id = ? and first_name = ? and last_name = ?",
                 c.community_id, pm[:community_first_name], pm[:community_last_name]])
        else
-              @cm_m = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and first_name = ? and last_name = ? and mi = ?",
+              @cm_m = CommunityMember.find(:first, :readonly, :conditions =>["community_id = ? and first_name = ? and last_name = ? and mi = ?",
                 c.community_id, pm[:community_first_name], pm[:community_last_name], pm[:community_mi]])
         end
         unless @cm_nom.blank? && @cm_m.blank?
@@ -485,10 +485,10 @@ end
     
       def find_member_alias(c, pm)
            
-           @cm_a = CommunityMembers.new
+           @cm_a = CommunityMember.new
            unless pm[:community_alias].blank?
    
-              @cm_a = CommunityMembers.find(:first, :readonly, :conditions =>["community_id = ? and alias = ?",
+              @cm_a = CommunityMember.find(:first, :readonly, :conditions =>["community_id = ? and alias = ?",
                 c.community_id, pm[:community_alias]])
    
    

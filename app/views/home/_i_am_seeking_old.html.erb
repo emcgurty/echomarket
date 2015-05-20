@@ -1,12 +1,12 @@
 <div class="<%= which_class %>">
   <ul  >
-    <% if Lenders.count > 0 %>
+    <% if Lender.count > 0 %>
       <li><label class="radio" for="itemsearch_1" >You are borrower: Search what lenders have offered...:&nbsp;
           <%= radio_button_tag "itemsearch", "1", true %>
         </label>
       </li>
     <% end %>
-    <% if Borrowers.count > 0 %>
+    <% if Borrower.count > 0 %>
       <li><label class="radio" for="itemsearch_2" >You are a lender: Search what borrowers need..:&nbsp;
           <%= radio_button_tag "itemsearch", "2", false %>
         </label>

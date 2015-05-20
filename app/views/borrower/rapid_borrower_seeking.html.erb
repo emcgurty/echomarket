@@ -65,7 +65,7 @@
 	<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
 		<%= nf.select(:state_id, @states) %>
 	</div>
-	<% unless @borrowers.state_id_string.blank? %>
+	<% unless @Borrower.state_id_string.blank? %>
 	<% display_state_id_string = 'inline' %>
 	<% else %>
 	<% display_state_id_string = 'none' %>
@@ -78,7 +78,7 @@
 
 <div style="float:left;width:92%;">
 <% @current_selected = '99' %>
-<% @categories = Categories.find(:all, :readonly => true, :order=> "category_type") %>
+<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
 <% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
 
 <div class="column50_rapid"><label>Item Category:

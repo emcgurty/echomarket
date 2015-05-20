@@ -12,14 +12,14 @@ module ApplicationHelper
       # date_like = "#{current_year}-#{current_month}"
       # for ad in @advert
 # 
-        # @borrower_source= Borrowers.find(:all, :readonly, :conditions => ["advertiser_id = ? AND date_created like '#{date_like}%'", ad.advertiser_id ])
+        # @borrower_source= Borrower.find(:all, :readonly, :conditions => ["advertiser_id = ? AND date_created like '#{date_like}%'", ad.advertiser_id ])
         # unless @borrower_source.blank?
           # for bb in @borrower_source
             # @return_string << bb.advertiser_id + ","
           # end
         # end  ## end unless
 # 
-        # @lender_source= Lenders.find(:all, :readonly, :conditions => ["advertiser_id = ? AND date_created like '#{date_like}%'", ad.advertiser_id ])
+        # @lender_source= Lender.find(:all, :readonly, :conditions => ["advertiser_id = ? AND date_created like '#{date_like}%'", ad.advertiser_id ])
         # unless @lender_source.blank?
           # for ll in @lender_source
             # @return_string << ll.advertiser_id + ","
@@ -43,7 +43,7 @@ module ApplicationHelper
   def get_search_query_string()
     distance_sought =""
     build_search_query_string = ""
-    @current_search = Searches.find(:first, :readonly, :conditions => ["id = ?", session[:rapid_id]])
+    @current_search = Search.find(:first, :readonly, :conditions => ["id = ?", session[:rapid_id]])
     
     unless @current_search.blank?
 
@@ -93,7 +93,7 @@ module ApplicationHelper
   def get_existing_searches(which)
     distance_sought =""
     build_search_query_string = ""
-    @current_search = Searches.find(:all, :readonly, :conditions => ["lender_or_borrower = ? AND created_at > ?", which.to_i, Time.now - 1.days])
+    @current_search = Search.find(:all, :readonly, :conditions => ["lender_or_borrower = ? AND created_at > ?", which.to_i, Time.now - 1.days])
     unless @current_search.blank?
       no_repeat = false
       item_count = 1

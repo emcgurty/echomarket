@@ -3,7 +3,7 @@ class ContactController < ApplicationController
   def contact_us
     session[:notice] = ""
     if (request.post?)
-      @contact = Contacts.new(params[:contacts])
+      @contact = Contact.new(params[:contacts])
       if @contact.save && @contact.errors.empty?
         message = @contact.comments
         recipient = params[:contacts][:email]
@@ -20,7 +20,7 @@ class ContactController < ApplicationController
 
       end
     else
-      @contact = Contacts.new
+      @contact = Contact.new
     end
 
   end

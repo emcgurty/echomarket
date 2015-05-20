@@ -31,7 +31,7 @@
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
     <p>
-      <% @u = Users.find(:first, :readonly, :select => "user_alias", :conditions => ["user_id = ?", @ldr.user_id ] )  %>
+      <% @u = User.find(:first, :readonly, :select => "user_alias", :conditions => ["user_id = ?", @ldr.user_id ] )  %>
       <%= @u.user_alias   %>
       LENDER ITEM DETAIL</p>
     <%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
@@ -158,7 +158,7 @@
     <div class="div_p_detail_sub">
       <p>
         <% if @ldr.borrower_contact_by_email == 3 %>
-          <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", @ldr.user_id]) %>&nbsp;&nbsp;
+          <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @ldr.user_id]) %>&nbsp;&nbsp;
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
         <% end %>
         <% if @ldr.borrower_contact_by_email == 2 %>
@@ -166,7 +166,7 @@
         <% end %>
         <% if @ldr.borrower_contact_by_email.to_i.abs == 1 %>
           <%= mail_to @ldr.email_alternative, "#{@ldr.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
-          <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", @ldr.user_id]) %>
+          <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @ldr.user_id]) %>
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"} %>
         <% end %>
       </p>
@@ -309,9 +309,9 @@
   <div class="div_p_detail_sub">
 
     Category:
-    <% @categories = Categories.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @ldr.item_category_id]) %>
-    <%= @categories.category_type %>
-    <% if @categories.category_type == "Other" %>
+    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @ldr.item_category_id]) %>
+    <%= @Category.category_type %>
+    <% if @Category.category_type == "Other" %>
       &nbsp;Other category:
       <%= @ldr.other_item_category %>
     <% end %>

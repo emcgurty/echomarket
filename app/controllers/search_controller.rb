@@ -4,7 +4,7 @@ class SearchController < ApplicationController
     # session[:notice] = ''
     session[:background] = true
     if params[:id]
-      @search = Searches.find(params[:id].to_i)
+      @search = Search.find(params[:id].to_i)
 
       if session[:community_name].blank?
         unless @search.blank?
@@ -21,13 +21,13 @@ class SearchController < ApplicationController
       @search
       end
     else
-      @search = Searches.new
+      @search = Search.new
     end
     @search
   end
 
   def create
-    @search = Searches.new(params[:searches])
+    @search = Search.new(params[:searches])
     @save_search = @search.save(:validate => false)
     session[:rapid_id] = @search.id
     redirect_to :action => :item_search, :id => @search.id,  :which => @search.lender_or_borrower

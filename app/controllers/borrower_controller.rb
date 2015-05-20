@@ -7,7 +7,7 @@ def rapid_borrower_seeking
 if params[:borrowers]
     create
     else
-@borrowers = Borrowers.new
+@borrowers = Borrower.new
 end
 end
 
@@ -15,7 +15,7 @@ end
    session[:notice] = ''
     unless params[:borrowers].blank?
         @req = params[:borrowers]
-        @borrowers = Borrowers.new(
+        @borrowers = Borrower.new(
           :user_id => 'NA',
           :describe_yourself => -1,
           :first_name => 'NA',
@@ -47,13 +47,13 @@ end
           :remote_ip => @req[:remote_ip],
 		:comment => @req[:comment]          
  )
-         if @borrowers.save(:validate => false) 
-         @un = 'rapid_' + @borrowers.item_description
-         @user = Users.new(:username => @un, :email => @borrowers.email_alternative, :created_at => Time.now, 
-                    :remote_ip => @borrowers.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
+         if @borrower.save(:validate => false) 
+         @un = 'rapid_' + @borrower.item_description
+         @user = User.new(:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
+                    :remote_ip => @borrower.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
          @user.save(:validate => false)
          @myupdatehash = [:user_id => @user.user_id]
-         if @borrowers.update_attributes(@myupdatehash[0])
+         if @borrower.update_attributes(@myupdatehash[0])
           Notifier.notify_rapid(@user).deliver
           session[:notice] = "Your borrower's record has been saved."
           redirect_to  :controller => "search", :action => 'item_search' 
@@ -72,9 +72,9 @@ end
  def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
-        @borrowers = Borrowers.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
+        @borrowers = Borrower.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
     end
-    if @borrowers.blank? || params[:id].blank?
+    if @borrower.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end 
@@ -86,10 +86,10 @@ end
      unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @borrowers = Borrowers.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
+        @borrowers = Borrower.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
      end
      
-     if @borrowers.blank? || params[:id].blank?
+     if @borrower.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end
@@ -116,8 +116,8 @@ end
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
-        @borrowers = Borrowers.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
-        if @borrowers.blank?
+        @borrowers = Borrower.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
+        if @borrower.blank?
           
           redirect_to  :controller => "borrower", :action => @which_view
         end
@@ -128,9 +128,9 @@ end
   def delete_borrower_record
     session[:background] = true
     if params['commit'] == "delete"
-      @l = Borrowers.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
+      @l = Borrower.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
       @l.save
-      @ld  = Borrowers.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
+      @ld  = Borrower.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
       unless  @ld.blank?
         redirect_to :action => "borrower_history", :id=> session[:user_id]  
       else
@@ -143,9 +143,9 @@ end
   def borrower_seeking
     session[:no_border] = true
     if params[:id].blank?
-    @borrowers = Borrowers.new
+    @borrowers = Borrower.new
     else
-      @borrowers = Borrowers.find(params[:id])
+      @borrowers = Borrower.find(params[:id])
     end
   end
   
@@ -153,9 +153,9 @@ end
         session[:no_border] = true
 
      if params[:id].blank?
-        @borrowers = Borrowers.new
+        @borrowers = Borrower.new
     else
-        @borrowers = Borrowers.find(params[:id])
+        @borrowers = Borrower.find(params[:id])
     end
   end
    
@@ -167,7 +167,7 @@ end
         @req = params[:borrowers]
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
-        @borrowers = Borrowers.new(
+        @borrowers = Borrower.new(
           :user_id => session[:user_id],
           :describe_yourself =>  @req[:describe_yourself].to_i,
           :other_describe_yourself => @req[:other_describe_yourself],
@@ -228,10 +228,10 @@ end
           :date_created => Time.now,
           :approved => 0)
         @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
-        if @borrowers.save(:validate => @shouldvalidate) && @borrowers.errors.empty?
+        if @borrower.save(:validate => @shouldvalidate) && @borrower.errors.empty?
 
           unless @hold_picture_file.blank?
-            @img =  Itemimages.new(:borrower_item_id => @borrowers.borrower_item_id,
+            @img =  Itemimages.new(:borrower_item_id => @borrower.borrower_item_id,
               :lender_item_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> @req[:item_image_caption],
@@ -246,7 +246,7 @@ end
 
       elsif (!params[:borrowers][:borrower_item_id].blank?)
         ## do update
-        @ltmp = Borrowers.find(:first, :conditions => ["borrower_item_id = ?",params[:borrowers][:borrower_item_id] ])
+        @ltmp = Borrower.find(:first, :conditions => ["borrower_item_id = ?",params[:borrowers][:borrower_item_id] ])
         @req = params[:borrowers]
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]

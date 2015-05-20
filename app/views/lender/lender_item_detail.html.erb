@@ -34,7 +34,7 @@
       <% if  session[:community_id] %>
       <%= session[:user_alias]   %>
       <% else  %>
-      <% @u = Users.find(:first, :readonly, :select => "user_alias", :conditions => ["user_id = ?", ldr.user_id ] )  %>
+      <% @u = User.find(:first, :readonly, :select => "user_alias", :conditions => ["user_id = ?", ldr.user_id ] )  %>
       <%= @u.user_alias   %>
       <% end  %>
       
@@ -135,7 +135,7 @@
         <% if  session[:community_id] %>
      		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
       	<% else  %>
-          <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
+          <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
       	<% end  %>
         <% end %>
@@ -149,7 +149,7 @@
  <% if  session[:community_id] %>
      		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
       	<% else  %>
-          <%  @uemail = Users.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
+          <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
       	<% end  %>
 
@@ -296,9 +296,9 @@
   <div class="div_p_detail_sub">
 
     Category:
-    <% @categories = Categories.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", ldr.item_category_id]) %>
-    <%= @categories.category_type %>
-    <% if @categories.category_type == "Other" %>
+    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", ldr.item_category_id]) %>
+    <%= @Category.category_type %>
+    <% if @Category.category_type == "Other" %>
       &nbsp;Other category:
       <%= ldr.other_item_category %>
     <% end %>

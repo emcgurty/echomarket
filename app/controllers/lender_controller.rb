@@ -7,7 +7,7 @@ class LenderController < ApplicationController
 		create
     else
 
- @lenders = Lenders.new
+ @lenders = Lender.new
 	end
  
 end
@@ -16,7 +16,7 @@ end
     session[:notice] = ''
     unless params[:lenders].blank?
         @req = params[:lenders]
-        @lenders = Lenders.new(
+        @lenders = Lender.new(
           :user_id => 'NA',
           :describe_yourself => -1,
           :first_name => 'NA',
@@ -48,7 +48,7 @@ end
           :remote_ip => @req[:remote_ip])
          if @lenders.save(:validate => false) 
          @un = 'rapid_' + @lenders.item_description
-         @user = Users.new(:username => @un, :email => @lenders.email_alternative, :created_at => Time.now, 
+         @user = User.new(:username => @un, :email => @lenders.email_alternative, :created_at => Time.now, 
                     :remote_ip => @lenders.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'lender', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
          @user.save(:validate => false)
          @myupdatehash = [:user_id => @user.user_id]
@@ -72,7 +72,7 @@ end
       session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-        @lenders = Lenders.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
+        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
      
       end
       
@@ -89,7 +89,7 @@ end
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
 	      session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @lenders = Lenders.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
+        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
       end
       
       if @lenders.blank? || params[:id].blank?
@@ -117,7 +117,7 @@ end
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
-        @lenders = Lenders.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
+        @lenders = Lender.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
         if @lenders.blank?
           redirect_to  :controller => "lender", :action => @which_view 
         end
@@ -128,9 +128,9 @@ end
  def delete_lender_record
      session[:background] = true
      if params['commit'] == "delete"
-      @l = Lenders.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
+      @l = Lender.update(params[:id], :is_active => 0,  :date_deleted => Time.now)
       @l.save
-      @ld  = Lenders.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
+      @ld  = Lender.find(:all, :readonly => true, :conditions => ["user_id = ? and is_active = 1", session[:user_id]])
      unless  @ld.blank?
         redirect_to :action => "lender_history", :commit => "",  :id=> session[:user_id]  
       else
@@ -144,11 +144,11 @@ end
      session[:no_border] = true
 
     if params[:id].blank?
-    @lenders = Lenders.new
+    @lenders = Lender.new
     else
-      @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
+      @lenders = Lender.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
       if @lenders.blank?
-        @lenders = Lenders.new
+        @lenders = Lender.new
       end
     end
   end
@@ -157,11 +157,11 @@ end
     session[:no_border] = true
 
      if params[:id].blank?
-    @lenders = Lenders.new
+    @lenders = Lender.new
     else
-      @lenders = Lenders.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
+      @lenders = Lender.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
       if @lenders.blank?
-        @lenders = Lenders.new
+        @lenders = Lender.new
       end
     end
   end
@@ -175,7 +175,7 @@ end
 
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
-        @lenders = Lenders.new(
+        @lenders = Lender.new(
           :user_id => session[:user_id],
           :describe_yourself =>  @req[:describe_yourself].to_i,
           :other_describe_yourself => @req[:other_describe_yourself],
@@ -287,7 +287,7 @@ end
       
       elsif (!params[:lenders][:lender_item_id].blank?)
         ## do update
-        @ltmp = Lenders.find(:first, :conditions => ["lender_item_id = ?",params[:lenders][:lender_item_id] ])
+        @ltmp = Lender.find(:first, :conditions => ["lender_item_id = ?",params[:lenders][:lender_item_id] ])
         @req = params[:lenders]
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]

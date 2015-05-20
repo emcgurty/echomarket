@@ -63,11 +63,11 @@
 
 
   <% if session[:community_id].blank? %>
-  	<% @lc = Lenders.count(:conditions =>   ["is_active = 1 AND is_saved = 1 AND is_community = 0"]) %>
-  	<% @bc = Borrowers.count(:conditions => ["is_active = 1 AND is_saved = 1 AND is_community = 0"]) %>
+  	<% @lc = Lender.count(:conditions =>   ["is_active = 1 AND is_saved = 1 AND is_community = 0"]) %>
+  	<% @bc = Borrower.count(:conditions => ["is_active = 1 AND is_saved = 1 AND is_community = 0"]) %>
   <% else %>
- 	<% @lc = Lenders.count(:conditions =>   ["user_id =?", session[:user_id]]) %>
-  	<% @bc = Borrowers.count(:conditions => ["user_id =?", session[:user_id]])  %>
+ 	<% @lc = Lender.count(:conditions =>   ["user_id =?", session[:user_id]]) %>
+  	<% @bc = Borrower.count(:conditions => ["user_id =?", session[:user_id]])  %>
   <% end %>
   <% if @item_search_query.blank? %>
 
@@ -121,7 +121,7 @@
 
         <tr>
           <td>
-            <% @cats = Categories.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
+            <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
             <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
           </td>
           <td>

@@ -25,9 +25,9 @@
 		<h2 class="h2_listing" >What is offered to lend...</h2>
 
 		<% if session[:community_name].blank? %>
-		<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
+		<% @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
 		<% else %>
-		<% @lender = Lenders.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
+		<% @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 		<% end %>
 
 		<% if @lender.blank? %>
@@ -57,7 +57,7 @@
        
        
 		<% @lender.each do |ldr| %>
-		<% @cats = Categories.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
+		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
 		<% if @cats %>
 		<% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
 		<label>Category: &nbsp;<%= @cats.category_type %></label>
@@ -96,9 +96,9 @@
 		<h2 class="h2_listing" >What is sought to borrow...</h2>
 
 		<% if session[:community_name].blank? %>
-		<% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
+		<% @borrower = Borrower.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
 		<% else %>
-		<% @borrower = Borrowers.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
+		<% @borrower = Borrower.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 		<% end %>
 
 		<% if @borrower.blank? %>
@@ -123,7 +123,7 @@
           <% @ih2[kv.fetch("item_conditions_id")]  = kv.fetch("conditions") %>
          <% end %>
 		<% @borrower.each do |ldr| %>
-		<% @cats = Categories.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
+		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
 		<% if @cats %>
 		<% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
 		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>

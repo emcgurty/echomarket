@@ -23,14 +23,14 @@
 
 	<label>Items to borrower or items to lend?:</label>
 	<% if session[:community_id] %>
-	<% @l_c =  Lenders.where("user_id = ?", session[:user_id]) %>
-	<% @b_c =  Borrowers.where("user_id = ?", session[:user_id]) %>
+	<% @l_c =  Lender.where("user_id = ?", session[:user_id]) %>
+	<% @b_c =  Borrower.where("user_id = ?", session[:user_id]) %>
 	<%= nf.hidden_field :is_community, :value=> 1 %>
 	<%= nf.hidden_field :user_id, :value=> session[:user_id] %>
 
 	<% else %>
-	<% @l_c =  Lenders.where("is_community = 0 and is_active = 1") %>
-	<% @b_c =  Borrowers.where("is_community = 0 and is_active = 1") %>
+	<% @l_c =  Lender.where("is_community = 0 and is_active = 1") %>
+	<% @b_c =  Borrower.where("is_community = 0 and is_active = 1") %>
 	<%= nf.hidden_field :is_community, :value=> 0 %>
 	<%= nf.hidden_field :user_id, :value=> '' %>
 
@@ -105,7 +105,7 @@
 
 <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
 	<label>By Item category:</label>
-	<%= nf.collection_select :category_id, Categories.order('category_type ASC'), :category_id, :category_type, {:include_blank => true}, {:style=>"
+	<%= nf.collection_select :category_id, Category.order('category_type ASC'), :category_id, :category_type, {:include_blank => true}, {:style=>"
 	border: solid 1px #E5E5E5;
 	background: #BDAEC6;
 	padding: 1px;
@@ -146,11 +146,11 @@
 </div>
 
 <% unless session[:community_id].blank? %>
-<% @lc = Lenders.count(:conditions =>   ["user_id = ?", session[:user_id]]) %>
-<% @bc = Borrowers.count(:conditions => ["user_id = ?", session[:user_id]]) %>
+<% @lc = Lender.count(:conditions =>   ["user_id = ?", session[:user_id]]) %>
+<% @bc = Borrower.count(:conditions => ["user_id = ?", session[:user_id]]) %>
 <% else %>
-<% @lc = Lenders.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
-<% @bc = Borrowers.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+<% @lc = Lender.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+<% @bc = Borrower.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
 <% end %>
 
 <% if @s_get_items.blank? %>
@@ -184,7 +184,7 @@
 	<% @s_get_items.each do |isq| %>
 
 	<tr>
-		<td> <% @cats = Categories.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
+		<td> <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
 		<%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %> </td>
 		<td> <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
 		<td> <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>

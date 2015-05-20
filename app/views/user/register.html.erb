@@ -21,7 +21,7 @@
 	</p>
 </div>
 
-<% if @users.errors.any? %>
+<% if @User.errors.any? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @users}  %>
 <% end %>
 
@@ -97,7 +97,7 @@
 <% else %>
 <div class="bottom" >
 	<a href="#" onclick="submitRegistration();">>>Submit Registration.</a>
-	<% if Users.count(:conditions => ["activation_code is null"]) > 0 %>
+	<% if User.count(:conditions => ["activation_code is null"]) > 0 %>
 	<a href="#" onclick="showLogin();">=> Remembered that I already registered.</a>
 	<% end %>
 	<a href="#" onclick="window.location.replace('/home/items_listing');">=> I'll register later. Let's see what is being offered to borrow or lend.</a>

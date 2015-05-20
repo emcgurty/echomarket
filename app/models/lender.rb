@@ -1,7 +1,8 @@
-class Lenders < ActiveRecord::Base
+class Lender < ActiveRecord::Base
   self.primary_key = :lender_item_id
   attr_accessor :found_zip_codes
   has_many :itemimages
+  has_many :itemconditions
   before_create :get_lender_primary_key_value
 
   protected

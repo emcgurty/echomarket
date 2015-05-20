@@ -56,7 +56,7 @@
 				<%= link_to "Search Items => Rapid Item Registration", search_item_search_url %>
 			</li>
 	<% else %>
-		<% unless Lenders.count(:conditions => ["user_id  = ?", session[:user_id]]) == 0 && Borrowers.count(:conditions => ["user_id= ?", session[:user_id]]) == 0 %>
+		<% unless Lender.count(:conditions => ["user_id  = ?", session[:user_id]]) == 0 && Borrower.count(:conditions => ["user_id= ?", session[:user_id]]) == 0 %>
 		
 		<li>
 				<%= link_to "Search Items", search_item_search_url %>

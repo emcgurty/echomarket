@@ -26,7 +26,7 @@ class CommunityController < ApplicationController
     respond_to do |format|
       
       if @communities.save(:validate =>false)
-        @cm = CommunityMembers.new(
+        @cm = CommunityMember.new(
         :community_id => @communities.community_id, 
         :first_name => @communities.first_name, 
         :mi => @communities.mi,:last_name => @communities.last_name, :remote_ip => @communities.remote_ip, :date_created => Time.now, :is_active => 1, :is_creator => 1)
@@ -81,7 +81,7 @@ class CommunityController < ApplicationController
      puts myupdatehash[0].to_yaml
      @communities = Communities.find(params[:id])
      if @communities.update_attributes(myupdatehash[0]) && @communities.errors.empty? 
-        @cm = CommunityMembers.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
+        @cm = CommunityMember.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
         @cm.first_name = params[:communities][:first_name]
         @cm.mi = params[:communities][:mi]
         @cm.last_name = params[:communities][:last_name]
@@ -101,9 +101,9 @@ class CommunityController < ApplicationController
         
     begin
     Communities.delete(params[:id])
-    @cm = CommunityMembers.find(:all, :conditions => ["community_id = ?", params[:id]])
+    @cm = CommunityMember.find(:all, :conditions => ["community_id = ?", params[:id]])
       @cm.each do |val|
-       CommunityMembers.delete(val.community_member_id)
+       CommunityMember.delete(val.community_member_id)
       end 
        session[:notice] = "Your Community Record with associated members, if any beyond Community creator member, has been deleted from the Echo Market database."
        redirect_to home_items_listing_url
@@ -132,7 +132,7 @@ class CommunityController < ApplicationController
       unless @cm.activation_code.blank?
         if @cm.activate
           @current_user = @cm
-          @cm_l = CommunityMembers.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
+          @cm_l = CommunityMember.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
           session[:user_id] = @cm_l.user_id 
           session[:community_id] = @current_user.community_id
           session[:user_type] = session[:register_type] = @current_user.user_type
@@ -144,7 +144,7 @@ class CommunityController < ApplicationController
         end
       else
         @current_user = @cm
-         @cm_l = CommunityMembers.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
+         @cm_l = CommunityMember.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
          session[:user_id] = @cm_l.user_id
         session[:community_id] = @current_user.community_id
         session[:user_type] = session[:register_type] = @current_user.user_type

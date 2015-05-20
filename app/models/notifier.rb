@@ -53,9 +53,9 @@ class Notifier < ActionMailer::Base
     setup_email(users)
     @subject    += ' Please activate your new account'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/activate/#{users.activation_code}/#{users.user_id}"
-    @username = users.username
-    @password =  users.password
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/activate/#{User.activation_code}/#{User.user_id}"
+    @username = User.username
+    @password =  User.password
 
   end
 
@@ -80,7 +80,7 @@ class Notifier < ActionMailer::Base
     setup_email(users)
     @subject    += ' Follow this link to reset your password'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_reset_password/#{users.reset_code}"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_reset_password/#{User.reset_code}"
   end
 
   def reset_community_password_notification(communities)
@@ -94,7 +94,7 @@ class Notifier < ActionMailer::Base
     setup_email(users)
     @subject    += ' Follow this link to learn your username'
     @url  = "http://"
-    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_username/#{users.reset_code}"
+    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_username/#{User.reset_code}"
   end
 
 def get_community_notification(communities)
@@ -107,7 +107,7 @@ def get_community_notification(communities)
   private
   
   def setup_email(users)
-    @recipients  = "#{users.email}" + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+    @recipients  = "#{User.email}" + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @subject     = "Message From www.echomarket.org. "
     @sent_on     = Time.now
