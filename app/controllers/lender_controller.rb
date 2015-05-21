@@ -270,7 +270,7 @@ end
         if @lenders.save(:validate => @shouldvalidate) && @lenders.errors.empty?
 
           unless @hold_picture_file.blank?
-            @img =  Itemimages.new(:lender_item_id => @lenders.lender_item_id,
+            @img =  Itemimage.new(:lender_item_id => @lenders.lender_item_id,
               :borrower_item_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> @req[:item_image_caption],
@@ -388,7 +388,7 @@ end
         if @ltmp.save(:validate => @shouldvalidate) && @ltmp.errors.empty?
           puts "asdasdassd"
           unless (@hold_picture_file.blank?)
-            @img = Itemimages.find(:first, :conditions => ["lender_item_id = ?", @ltmp.lender_item_id])
+            @img = Itemimage.find(:first, :conditions => ["lender_item_id = ?", @ltmp.lender_item_id])
             @myupdatehash = Hash.new
             @myupdatehash = [:lender_item_id => @ltmp.lender_item_id,
               :borrower_item_id => '',

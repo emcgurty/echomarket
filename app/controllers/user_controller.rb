@@ -161,7 +161,7 @@ class UserController < ApplicationController
           @does_member_exist = true
             
                     @comm_name = params[:users][:community_name]
-                    @current_user = Communities.find(:first, :readonly => true, :conditions=>['community_name = ?', @comm_name])
+                    @current_user = Community.find(:first, :readonly => true, :conditions=>['community_name = ?', @comm_name])
                   
                    
                     @member_parse = params[:users][:community_alias] unless params[:users][:community_alias].blank?

@@ -16,11 +16,6 @@
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 </div>
 
-<% @current_selected = '99' %>
-<% @st = UsStates.find(:all, :order => "state_name") %>
-<% @ct = Countries.find(:all, :order => "country_name") %>
-<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
-<% @states = options_from_collection_for_select(@st, :state_id, :state_name, @current_selected) %>
 <% display_state_id = 'none' %>
 
 <div class="top" >
@@ -54,8 +49,10 @@
 
 <div style="float:left;;width:92%;">
 	<div class="column50_rapid"> 
-	<label>Your Country:
-	<%= nf.select(:country_id, @countries) %> </label>
+	<label>Your Country:</label>
+	<%= nf.fields_for :country_id do |ct| %>
+	<%= ct.collection_select :country_id, Country.all, :country_id, :country_name %>
+	<% end  %>
 	</div>
 
 	
@@ -77,12 +74,12 @@
 </div>
 
 <div style="float:left;width:92%;">
-<% @current_selected = '99' %>
-<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
-<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
+
 
 <div class="column50_rapid"><label>Item Category:
-<%= nf.select( :item_category_id, @cats,{ :onchange=>"borrowers_item_category_id();"}) %> </label>
+<%= nf.fields_for :category_id do |cat| %>
+<%= cat.collection_select :category_id, Category.all, :category_id, :category_type %></label>
+<% end  %> 
 </div>
 
 <div class="column50_rapid"> 
@@ -112,10 +109,9 @@
 
 <div class="column50_rapid">
 <label>The Condition of Item:
-<% @current_selected = '99' %>
-<% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
-<% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
-<%= nf.select( :item_condition_id, @bl) %>
+<%= nf.fields_for :item_condtions_id do |ic| %>
+<%= ic.collection_select :item_condtion_id, Itemconditions.all, :item_conditions_id, :conditions %>
+<% end  %>
 </div>
 
 <div class="column50_rapid">

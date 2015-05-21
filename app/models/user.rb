@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   alpha_numeric_regex_username = /\A[0-9 a-zA-Z\-\_]+\z/
   
   self.primary_key = :user_id
+  belongs_to :lender
+  belongs_to :borrower
+  
   attr_accessor :password, :password_confirmation
   attr_accessor :community_name, :community_password, :community_first_name, :community_mi, :community_last_name, :community_alias
   attr_accessible :username, :email, :remote_ip, :user_alias, :community_name, :community_password

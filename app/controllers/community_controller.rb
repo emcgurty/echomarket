@@ -2,7 +2,7 @@ class CommunityController < ApplicationController
   
     
   def new
-    @communities = Communities.new
+    @communities = Community.new
      respond_to do |format|
       format.html # new.html.erb
 
@@ -14,7 +14,7 @@ class CommunityController < ApplicationController
     if params[:communities]
       update
     else
-      @communities = Communities.find(session[:community_id])
+      @communities = Community.find(session[:community_id])
     end   
   end
 
@@ -22,7 +22,7 @@ class CommunityController < ApplicationController
   # POST /communities.json
   def create
     session[:notice] = ''
-    @communities = Communities.new(params[:communities])
+    @communities = Community.new(params[:communities])
     respond_to do |format|
       
       if @communities.save(:validate =>false)
@@ -79,7 +79,7 @@ class CommunityController < ApplicationController
                         :cell_phone => @c[:cell_phone] ]
 
      puts myupdatehash[0].to_yaml
-     @communities = Communities.find(params[:id])
+     @communities = Community.find(params[:id])
      if @communities.update_attributes(myupdatehash[0]) && @communities.errors.empty? 
         @cm = CommunityMember.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
         @cm.first_name = params[:communities][:first_name]
@@ -100,7 +100,7 @@ class CommunityController < ApplicationController
     reset_session
         
     begin
-    Communities.delete(params[:id])
+    Community.delete(params[:id])
     @cm = CommunityMember.find(:all, :conditions => ["community_id = ?", params[:id]])
       @cm.each do |val|
        CommunityMember.delete(val.community_member_id)
@@ -127,7 +127,7 @@ class CommunityController < ApplicationController
    def activate
     reset_session
     
-    @cm = params[:activation_code].blank? ? false : Communities.find_by_activation_code(params[:activation_code])
+    @cm = params[:activation_code].blank? ? false : Community.find_by_activation_code(params[:activation_code])
     unless @cm.blank?
       unless @cm.activation_code.blank?
         if @cm.activate
@@ -167,7 +167,7 @@ class CommunityController < ApplicationController
     if request.post?
       forgot('community_name')
     else
-      @communities = Communities.new
+      @communities = Community.new
     end
   end
 
@@ -176,7 +176,7 @@ class CommunityController < ApplicationController
     if request.post?
       forgot('password')
     else
-      @communities = Communities.new
+      @communities = Community.new
     end
   end
 
@@ -184,7 +184,7 @@ class CommunityController < ApplicationController
    
     session[:notice] = ''
     if request.post?
-      @communities = Communities.find(:first, :conditions => ['email = ?', params[:communities][:email]])
+      @communities = Community.find(:first, :conditions => ['email = ?', params[:communities][:email]])
 
       unless @communities.blank?
         @communities.create_reset_code(which)
@@ -217,7 +217,7 @@ class CommunityController < ApplicationController
 
   def get_community_name
     session[:notice] = ''
-    @c = Communities.find_by_reset_code(params[:id]) unless params[:id].blank?
+    @c = Community.find_by_reset_code(params[:id]) unless params[:id].blank?
     if @c
       @c.delete_reset_code
       session[:notice] = "Your Community Name is #{@c.community_name}. Please login."
@@ -231,7 +231,7 @@ class CommunityController < ApplicationController
 
   def reset_community_password
 
-    @communities= Communities.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
+    @communities= Community.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
     unless @communities.blank?
       @myupdatehash = Hash.new
       @myupdatehash = [:password => params[:communities][:password], :password_confirmation => params[:communities][:password_confirmation]]
@@ -248,7 +248,122 @@ class CommunityController < ApplicationController
 
   def get_reset_community_password
     session[:background] = true
-    @communities = Communities.find(:first, :conditions => ["reset_code =?", params[:id]])
+    @communities = Community.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
+  
+  ####  COMMUNITY MEMBERS DEFS
+  
+    def m_list
+      session[:background] = true
+      @community_members = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+  end
+
+  # # POST /community_members
+  # # POST /community_members.json
+  # def create
+# 
+    # @community_members = CommunityMember.new(params[:community_members])
+#     
+    # respond_to do |format|
+#       
+      # if @community_members.save && @community_members.errors.empty? 
+        # if params[:commit] == 'Add'
+          # format.html { redirect_to :action=>'m_list' }
+#        
+        # end
+#       
+      # else
+        # format.html { render :action => "new" }
+# 
+      # end
+    # end
+  # end
+
+ # POST /community_members
+  # POST /community_members.json
+  def add
+  #Parameters: {"utf8"=>"?", "authenticity_token"=>"8b3H95PyT131qgJxSIR9+19VxS9A4MyV579W9KywLvU=", "community_members"=>{"first_name_h"=>"Liz", "mi_h"=>"m", "last_name_h"=>"mcgurty", "alias_h"=>"", "first_name"=>"d", "mi"=
+  #>"m", "last_name"=>"l", "alias"=>"", "is_creator"=>"0"}, "commit"=>"Add", "view"=>"m_list"}
+    myaddhash = Hash.new
+    myaddhash = [:community_id => session[:community_id], :first_name => params[:community_members][:first_name], 
+    :mi=>params[:community_members][:mi], :last_name => params[:community_members][:last_name], 
+    :alias=> params[:community_members][:alias], :is_creator => 0, :remote_ip => params[:community_members][:remote_ip]]
+
+    @community_members = CommunityMember.new(myaddhash[0])
+
+    respond_to do |format|
+      if @community_members.save
+        format.html { redirect_to :action=>'m_list'}
+
+      else
+        session[:notice]  = "Echo Market error in adding new community member."
+        format.html { redirect_to :action=>'m_list'}
+      end
+    end
+  end
+  
+  # # POST /community_members
+  # # POST /community_members.json
+  # def remove
+#     
+    # begin
+      # CommunityMember.delete(params[:id])
+      # redirect_to :action=>'m_list'
+    # rescue 
+        # session[:notice] = 'Echo Market application error in removing your selected member.'
+        # redirect_to :action=>'m_list'
+    # end
+#     
+  # end
+
+  
+  # PUT /community_members/1
+  # PUT /community_members/1.json :  :       /*  /*    match 'community_member/update_row/(:fi)/(:m)/(:la)/(:al)/(:ci)/(:com_id)/(:is_c)'=> "community_member#update_row", :as=> :community_member_update_row */ */
+  def update_row
+    @community_member = CommunityMember.find(params[:ci])
+    
+    unless @community_member.blank?
+      myupdatehash = Hash.new
+       if (params[:is_c] == '1')
+            my_alias_str = params[:fi] + (params[:m].blank? ? "" : params[:m]) + params[:la]
+           myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => my_alias_str, :date_updated=> Time.now]
+       else
+           myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => params[:al], :date_updated=> Time.now]
+       end      
+    end
+
+    
+      if @community_member.update_attributes(myupdatehash[0])
+        if (params[:is_c] == '1')
+          @c = Community.find(params[:com_id])
+          @c.first_name = params[:fi]
+          @c.mi = params[:m]
+          @c.last_name = params[:la]
+          @c.date_updated = Time.now
+          @c.save(:validate => false)
+                 
+        end
+        redirect_to :action=>'m_list' , :id => params[:ci]
+      else
+        session[:notice] = "The Echo Market Application encountered an error in updating your selected Community Member row."        
+        redirect_to :action=>'m_list' , :id => params[:ci]
+      end
+    
+ 
+ 
+  end
+
+
+  # # DELETE /community_members/1
+  # # DELETE /community_members/1.json
+  # def destroy
+    # @community_member = CommunityMember.find(params[:id])
+    # @community_member.destroy
+# 
+    # respond_to do |format|
+      # format.html { redirect_to community_members_url }
+# 
+    # end
+  # end
 
 end

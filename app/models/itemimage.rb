@@ -46,9 +46,9 @@ class Itemimage < ActiveRecord::Base
  
    directory = "#{Rails.root}/public/images/item_images/"
     unless self.lender_item_id.blank?
-      @deleteFile = Itemimages.find(:all, :readonly, :conditions => ["lender_item_id = ? and item_image_id = ?", self.lender_item_id, self.item_image_id ])
+      @deleteFile = Itemimage.find(:all, :readonly, :conditions => ["lender_item_id = ? and item_image_id = ?", self.lender_item_id, self.item_image_id ])
     else
-      @deleteFile = Itemimages.find(:all, :readonly, :conditions => ["borrower_item_id = ? and item_image_id = ?", self.borrower_item_id, self.item_image_id ])
+      @deleteFile = Itemimage.find(:all, :readonly, :conditions => ["borrower_item_id = ? and item_image_id = ?", self.borrower_item_id, self.item_image_id ])
     end
     unless @deleteFile.blank?
       @deleteFile.each do |dlf|

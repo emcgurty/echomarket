@@ -1,7 +1,5 @@
 <%= javascript_include_tag 'login.js', :type => "text/javascript" %>
 
-
-
 <%= form_for @communities,  :url=>  {:controller=>"community", :action => "create", :commit=>"create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 
 <div class="top" >
@@ -22,16 +20,13 @@
 <% unless @communities.errors.empty? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @communities}  %>
 <% end %>
-<div style="display:none;"> 
-<%= nf.hidden_field :user_type, :value=> 'both' %>
-<%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
-<%= nf.hidden_field :approved, :value => 0 %>
-<%= nf.hidden_field :is_active, :value => 1 %>
-<%= nf.hidden_field :is_saved, :value => 1 %>
+<div style="display:none;">
+	<%= nf.hidden_field :user_type, :value=> 'both' %>
+	<%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
+	<%= nf.hidden_field :approved, :value => 0 %>
+	<%= nf.hidden_field :is_active, :value => 1 %>
+	<%= nf.hidden_field :is_saved, :value => 1 %>
 </div>
-
-<% @st = UsStates.find(:all, :order => "state_name") %>
-<% @ct = Countries.find(:all, :order => "country_name") %>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(50)</span></label>
@@ -83,7 +78,6 @@
 				</div></td>
 
 				<td style="width:25%;text-align:left;">
-
 				<div>
 					<label>Middle Initial:</label>
 					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
@@ -91,7 +85,6 @@
 				</div></td>
 
 				<td style="width:25%;text-align:left;">
-
 				<div>
 					<label>Last Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
@@ -104,106 +97,80 @@
 
 			<tr class="odd">
 				<td style="width:25%;text-align:left;">
-
 				<div>
 					<label>Address Line 1: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;text-align:left;">
-
 				<div>
 					<label>Address Line 2:</label>
 					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
 					<span class="error">&nbsp;</span>
 				</div></td>
-				
-<td style="width:25%;text-align:left;">
+
+				<td style="width:25%;text-align:left;">
 				<div>
 					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
 					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
 					<span class="error" id="city_error">&nbsp;</span>
-				</div>
-		     	</td>
-				
-				<td style="width:25%;text-align:left;">
+				</div></td>
 
+				<td style="width:25%;text-align:left;">
 				<div>
-				<label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
-				</div>
-		     	</td>
-				
+					<label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
+				</div></td>
 
 			</tr>
 			<tr class="even">
-<td style="width:25%;text-align:left;">
-				<label>Country: <span class="required_fields">&nbsp;&nbsp;*</span></label> 
-				<% unless @communities.country_id.blank? %>
-				<% current_selected = @communities.country_id %>
-				<% else %>
-				<% current_selected = '99' %>
-				<% end  %>
-				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries) %> 
-				<span class="error" id="country_error">&nbsp;</span>
-				</td>
+				<td style="width:25%;text-align:left;"><label>Country: <span class="required_fields">&nbsp;&nbsp;*</span></label> <% unless @communities.country_id.blank? %>
 				
-<td style="width:25%;text-align:left;">
-				
-				<div id="choose_us_state"  style="display:inline;" >
-				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @communities.state_id.blank? %>
-				<% current_selected = @communities.state_id %>
-				<% else %>
-				<% current_selected = '99' %>
-				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> 
-				</div>
+				<%= nf.fields_for :country_id do |ct| %>
+				<%= ct.collection_select :country_id, Country.all, :country_id, :country_name %>
+				<% end  %> <span class="error" id="country_error">&nbsp;</span></td>
 
+				<td style="width:25%;text-align:left;">
+				<div id="choose_us_state"  style="display:inline;" >
+					<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<%= nf.fields_for :state_id do |st| %>
+					<%= st.collection_select :state_id, UsState.all, :state_id, :state_name %>
+					<% end  %>
+				</div>
 				<div id="provide_country_state" style="display:none;">
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string) %>
-					
-				</div>
-				<span class="error" id="state_error">&nbsp;</span>
-				</td>
-					<td style="width:25%;text-align:left;">
 
-					<div>
+				</div><span class="error" id="state_error">&nbsp;</span></td>
+				<td style="width:25%;text-align:left;">
+				<div>
 					<label>Postal Code: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
 					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>14) %>
 					<span class="error" id="postal_code_error">&nbsp;</span>
-				</div>
-				</td>
+				</div></td>
 				<td > &nbsp;</td>
-				
 
 			</tr>
 			<tr class="odd">
-				<td style="width:25%;text-align:left;">
-
-<label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
-<td style="width:25%;text-align:left;">
-<label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
+				<td style="width:25%;text-align:left;"><label>Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:home_phone, :maxlength=>15, :size=>15) %> </td>
+				<td style="width:25%;text-align:left;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %> </td>
 				<td colspan="2"> &nbsp;</td>
 
 			</tr>
 
 		</table>
 
-
-
 	</div >
 
 	<div class="bottom" >
 
 		<a href="#" onclick="submitCommunityRegistration();">>>Submit Community Registration</a>
-		
-		<% if Communities.count(:conditions => ["activation_code is null"]) > 0 %>
+
+		<% if Community.count(:conditions => ["activation_code is null"]) > 0 %>
 		<%= link_to "=> Jeez.. I already registered my Community. Let's go to Login", user_login_url %>
 		<% end %>
 		<a href="#" onclick="window.location.replace('/home/items_listing');">=> I'll register later. Let's see what is being offered to borrow or lend.</a>
 	</div>
-<div class="div_white" >&nbsp;</div>
+	<div class="div_white" >
+		&nbsp;
+	</div>
 	<% end %>

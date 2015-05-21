@@ -2,14 +2,30 @@ class Borrower < ActiveRecord::Base
 
   self.primary_key = :borrower_item_id
   attr_accessor :found_zip_codes
-  has_many :itemimages
+  has_one :itemimage
+  has_one :itemcondition
+  has_one :category
+  has_one :country
+  has_one :us_state
+  has_one :contactdescribe
+  has_one :user
+  has_many :address
+  accepts_nested_attributes_for :itemcondition
+  accepts_nested_attributes_for :category
+  accepts_nested_attributes_for :country
+  accepts_nested_attributes_for :us_state
+  accepts_nested_attributes_for :itemcondition
+  accepts_nested_attributes_for :user
+  accepts_nested_attributes_for :address
+    
   before_create :get_borrower_primary_key_value
 
   protected
 
   def get_borrower_primary_key_value
-    return if not (self.borrower_item_id.blank?)
+    if self.borrower_item_id.blank?
     self.borrower_item_id = get_random
+    end
   end
 
   def get_random

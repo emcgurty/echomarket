@@ -34,9 +34,9 @@ $(document).ready(function() {
 	});
 	$("#l2bimage").trigger('change');
 	
-	$("select#advertiser_advertiser_category_id").bind('change', function() {
+	$("select#advertiser_category_id").bind('change', function() {
 
-		var cat_cmb = $("select#advertiser_advertiser_category_id option:selected").text();
+		var cat_cmb = $("select#advertiser_category_id option:selected").text();
 
 		if (cat_cmb == "Other") {
 
@@ -48,7 +48,7 @@ $(document).ready(function() {
 
 	});
 
-	$("select#advertiser_advertiser_category_id").trigger('change');
+	$("select#advertiser_category_id").trigger('change');
 
 });
 
@@ -98,10 +98,10 @@ function submitAdvertisement(){
 		foundInvalid = false;
 	} 
 	
-	var cat_cmb = $("select#advertiser_advertiser_category_id option:selected").text();	
+	var cat_cmb = $("select#advertiser_category_id option:selected").text();	
 	if (cat_cmb == 'Please select'){
-		$("#advertiser_category_id_error").text("Advertisement Category is required.");
-		$("#advertiser_category_id_error").css("visibility", "visible");
+		$("#category_id_error").text("Advertisement Category is required.");
+		$("#category_id_error").css("visibility", "visible");
 		foundInvalid = false;
 		
 	} 
@@ -109,8 +109,8 @@ function submitAdvertisement(){
 	var cat_other = $("input#advertiser_category_other");
 	cat_other = cat_other.val();
 	if (cat_cmb == 'Other' && cat_other == ''){
-		$("#advertiser_category_id_error").text("Other Category information is required.");
-		$("#advertiser_category_id_error").css("visibility", "visible");
+		$("#category_id_error").text("Other Category information is required.");
+		$("#category_id_error").css("visibility", "visible");
 		foundInvalid = false;
 		
 	} 

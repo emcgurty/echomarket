@@ -25,7 +25,7 @@
   <% @ct = Countries.find(:all, :order => "country_name") %>
   <% @community_name  = (session[:community_name].blank? ? false : true) %>
 	<% if @community_name  %>
-		<% @cdetails = Communities.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
+		<% @cdetails = Community.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
 	<% end  %>
  
     <% if session[:edit_record]  %>

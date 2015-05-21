@@ -231,7 +231,7 @@ end
         if @borrower.save(:validate => @shouldvalidate) && @borrower.errors.empty?
 
           unless @hold_picture_file.blank?
-            @img =  Itemimages.new(:borrower_item_id => @borrower.borrower_item_id,
+            @img =  Itemimage.new(:borrower_item_id => @borrower.borrower_item_id,
               :lender_item_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> @req[:item_image_caption],
@@ -314,7 +314,7 @@ end
         if @ltmp.update_attributes(@myupdatehash[0])
 
           unless (@hold_picture_file.blank?)
-            @img = Itemimages.find(:first, :conditions => ["borrower_item_id = ?", @ltmp.borrower_item_id])
+            @img = Itemimage.find(:first, :conditions => ["borrower_item_id = ?", @ltmp.borrower_item_id])
             @myupdatehash = Hash.new
             @myupdatehash = [:borrower_item_id => @ltmp.borrower_item_id,
               :lender_item_id => '',

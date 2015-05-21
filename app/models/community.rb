@@ -10,6 +10,8 @@ class Community < ActiveRecord::Base
   alpha_numeric_regex_community_name = /\A[0-9 a-zA-Z\-\_]+\z/
   
   set_primary_key :community_id
+  has_many :community_members, dependent: :destroy
+  accepts_nested_attributes_for :community_members
   attr_accessor :password, :password_confirmation
   attr_accessible :password, :password_confirmation
   attr_accessible :community_name, :remote_ip, :crypted_password, :salt , :reset_code, :approved, :user_type

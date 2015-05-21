@@ -1,0 +1,87 @@
+<%= javascript_include_tag 'login.js', :type => "text/javascript" %>
+	
+<style>
+	input#form_submit1 {
+		background-color: indigo;
+		color: white;
+		font-size: 12px;
+		width: auto;
+		height: auto;
+		border: none;
+		margin-left: 15px;
+		padding: 0;
+		float: left;
+	}
+	th {
+		width: auto;
+		text-align: left;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	p {
+		padding: 5x;
+		margin-left: 5px;
+		color: black;
+		font-size: 14px;
+		/*    border-bottom:1px solid #ddd;*/
+		font-weight: bold;
+		width: 94%;
+	}
+
+</style>
+
+
+
+<div class="top" >
+
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+
+	<p >
+		UPDATE MEMBER
+	</p>
+	
+
+</div>
+<%= form_for @community_members , :url=>  {:controller=>"community_member", :action => "update", :html => {:class=>"register_community", :id=>"register_community"} do |lf| %>
+
+	<div id="add_community_members" style="display:block;float:left;width:96%;height:auto;margin:5px;">
+		
+		
+		<table class="history_members" style="margin-left:25px;">
+
+			<tr >
+				<th >First Name</th>
+				<th >MI</th>
+				<th>Last Name</th>
+				<th>OR</th>
+				<th>Alias</th>
+				<th>Function</th>
+			</tr>
+			
+			
+
+							<tr >
+							
+								<td width= "20%"> <%= lf.text_field :first_name, {:size=>24}  %></td>
+								<td width='5%'><%= lf.text_field :mi,  {:size=>1} %></td>
+								<td width='20%'><%= lf.text_field (:last_name), {:size=>24} %></td>
+								<td width="5%">OR</td>
+								<td width='20%'><%= lf.text_field :alias, {:size=>24} %></td>
+								<td width='20%'>
+							    <%= lf.submit "Update Member" %>
+								</td>
+								 
+							</tr>
+			</table>
+		
+	</div>
+
+
+
+
+

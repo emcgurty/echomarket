@@ -3,726 +3,603 @@
 
 <%= render :partial => 'menus/borrowers_menu' %>
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "update_borrower_seeking"},
- :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
+:html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
+<% unless @borrowers[0].blank? %>
+<% @borrowers = @borrowers[0] %>
+<% end  %>
+<% if session[:reuse] %>
+<div style="display:none;">
+	<%= nf.hidden_field( :borrower_item_id, :value=>'') %>
+</div>
+<% else %>
+<div style="display:none;">
+	<%= nf.hidden_field( :borrower_item_id) %>
+</div>
+<% end %>
 
-  <%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrowers}  %>
-  <% unless @borrowers[0].blank? %>
-    <% @borrowers = @borrowers[0] %>
-  <% end  %>
-   <% if session[:reuse] %>
-          <div style="display:none;">
-          <%= nf.hidden_field( :borrower_item_id, :value=>'') %>
-		</div>
-    <% else %>
-      <div style="display:none;">
-      <%= nf.hidden_field( :borrower_item_id) %>
-	</div>
-    <% end %>
+<div style="display:none;">
 
-    <div style="display:none;">
-
-    <%= nf.hidden_field( :is_active) %>
-    <%= nf.hidden_field( :is_saved) %>
-    <%= nf.hidden_field( :user_id) %>
+	<%= nf.hidden_field( :is_active) %>
+	<%= nf.hidden_field( :is_saved) %>
+	<%= nf.hidden_field( :user_id) %>
 
 </div>
 
-  <% @st = UsStates.find(:all, :order => "state_name") %>
-  <% @ct = Countries.find(:all, :order => "country_name") %>
-  <div class="top" >
+<div class="top" >
 
-    <p><span class="logo_white" >The Echo Market</span></p>
-    <p><%= session[:user_alias].to_s unless session[:user_alias].blank? %> BORROWER ITEM REGISTRATION
-  
-      <a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a></p>
-    <% unless session[:notice].blank? %>
-      <p><%= session[:notice] %></p>
-    <% end  %>
-  </div>
-  <div>
-    <span class="registration_header" style="display:none;color:black;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;">
-      In the following, a black '*' indicates a required field; '(nn)' indicates the maximum number of characters allowed for entry; and, not choosing either 'Yes' or 'No' will be interpreted as 'Indifferent'...</span>
-  </div>
-  <div   class="div_p" id="menu_item_1" >1. Contact Information</div>
-  <a id="top"></a>
-  <div id="form_contact_information" class="contact_information" style="display:none;">
-    <div style="display:block;float:left;width:94%;height:auto;margin:5px;">
-      <div style="width: 50%;float:left;">
-        <label class="personal" >As a borrower, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-        <% unless @Borrower.describe_yourself.blank? %>
-          <% @current_selected = @Borrower.describe_yourself %>
-        <% else %>
-          <% @current_selected = '99' %>
-        <% end  %>
-        <%  @getbl = Contactdescribes.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 2'], :order=>"option_value") %>
-        <%  @bl = options_from_collection_for_select(@getbl, :option_value, :borrower_or_lender_text, @current_selected.to_i) %>
-        <%= nf.select( :describe_yourself, @bl,{ :onchange=>"borrower_describe_yourself();", :style=>"width:auto;" }) %>
-        <span class="error" id="describe_yourself_combo_error">&nbsp;</span>
-      </div>
-      <% display_div = 'none' %>
-      <% unless @Borrower.describe_yourself.blank? %>
-        <% if @Borrower.describe_yourself == 100 %>
-          <% display_div =  'inline'%>
-        <% end %>
-      <% end %>
-      <div id="other_describe_yourself" style="float:left;width:48%;margin-left:15px;display:<%= display_div %>;">
-        <label>How then would you describe yourself?:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-        <%= nf.text_field(:other_describe_yourself, :size=>24, :maxlength=>24, :class=>"hidden_input") %>
-        <span class="error" id="other_describe_yourself_error">&nbsp;</span>
-      </div>
-    </div>
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+	<p>
+		<%= session[:user_alias].to_s unless session[:user_alias].blank? %> BORROWER ITEM REGISTRATION
 
-    <div style="display:block;float:left;width:86%;height:auto;margin:5px;">
-      <table class="personal">
+		<a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a>
+	</p>
+	<% unless session[:notice].blank? %>
+	<p>
+		<%= session[:notice] %>
+	</p>
+	<% end  %>
+</div>
+<div>
+	<span class="registration_header" style="display:none;color:black;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;"> In the following, a black '*' indicates a required field; '(nn)' indicates the maximum number of characters allowed for entry; and, not choosing either 'Yes' or 'No' will be interpreted as 'Indifferent'...</span>
+</div>
+<div   class="div_p" id="menu_item_1" >
+	1. Contact Information
+</div>
+<a id="top"></a>
+<div id="form_contact_information" class="contact_information" style="display:none;">
+	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
+		<div style="width: 50%;float:left;">
+			<label class="personal" >As a borrower, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
+			<%= nf.fields_for :describe_yourself do |dy| %>
+			<%= dy.collection_select :describe_yourself, 
+			Contactdescribe.find(:all, :readonly => true, :conditions => ['option_value = 2'], :order=>"borrower_lender"), :contact_describe_id, :borrower_lender %>
+			<% end  %>
+			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
+		</div>
+		<% display_div = 'none' %>
+		<% unless @Borrower.describe_yourself.blank? %>
+		<% if @Borrower.describe_yourself == 100 %>
+		<% display_div =  'inline'%>
+		<% end %>
+		<% end %>
+		<div id="other_describe_yourself" style="float:left;width:48%;margin-left:15px;display:<%= display_div %>;">
+			<label>How then would you describe yourself?:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+			<%= nf.text_field(:other_describe_yourself, :size=>24, :maxlength=>24, :class=>"hidden_input") %>
+			<span class="error" id="other_describe_yourself_error">&nbsp;</span>
+		</div>
+	</div>
 
-        <tr class="odd">
-          <td style="width:25%;">
-            <div>
-              <label>Organization Name:&nbsp;<span class="max_length">(24)</span></label>
-              <%= nf.text_field( :organization_name,  :maxlength=>24, :size=>24) %>
-              <span class="error" id="organization_name_error">&nbsp;</span>
-            </div>
-          </td>
+	<div style="display:block;float:left;width:86%;height:auto;margin:5px;">
+		<table class="personal">
 
-          <td style="width:25%;" colspan="2">
-            <div style="display:inline-block;vertical-align:top;">
-              <label>Public Display Organization Name?:</label>
-              <%= render :partial => 'layouts/yes_no', :locals =>
-                {:object=> "borrowers", :field=> "displayBorrowerOrganizationName", :radio_id => "public_display_organization", :radio_num => "publicdisplayorganization", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="error" id="public_display_organization_name_error">&nbsp;</span>
-            </div>
-          </td>
+			<tr class="odd">
+				<td style="width:25%;">
+				<div>
+					<label>Organization Name:&nbsp;<span class="max_length">(24)</span></label>
+					<%= nf.text_field( :organization_name,  :maxlength=>24, :size=>24) %>
+					<span class="error" id="organization_name_error">&nbsp;</span>
+				</div></td>
 
-          <td style="width:25%;">
-            <div>
-              &nbsp;
-            </div>
-          </td>
+				<td style="width:25%;" colspan="2">
+				<div style="display:inline-block;vertical-align:top;">
+					<label>Public Display Organization Name?:</label>
+					<%= render :partial => 'layouts/yes_no', :locals =>
+					{:object=> "borrowers", :field=> "displayBorrowerOrganizationName", :radio_id => "public_display_organization", :radio_num => "publicdisplayorganization", :which_class=>"radio", :onchange_call => ""} %>
+					<span class="error" id="public_display_organization_name_error">&nbsp;</span>
+				</div></td>
 
-        </tr>
+				<td style="width:25%;">
+				<div>
+					&nbsp;
+				</div></td>
 
+			</tr>
 
-        <tr class="even">
-          <td style="width:25%;">
-            <div>
-              <label>First Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-              <%= nf.text_field( :first_name,  :maxlength=>24, :size=>24) %>
-              <span class="error" id="first_name_error">&nbsp;</span>
-            </div>
-          </td>
+			<tr class="even">
+				<td style="width:25%;">
+				<div>
+					<label>First Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<%= nf.text_field( :first_name,  :maxlength=>24, :size=>24) %>
+					<span class="error" id="first_name_error">&nbsp;</span>
+				</div></td>
 
-          <td style="width:25%;">
-            <div>
-              <label>Middle Initial:</label>
-              <%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
-              <span class="error">&nbsp;</span>
-            </div>
-          </td>
+				<td style="width:25%;">
+				<div>
+					<label>Middle Initial:</label>
+					<%= nf.text_field( :mi, :size=>"1", :maxlength=>"1") %>
+					<span class="error">&nbsp;</span>
+				</div></td>
 
-          <td style="width:25%;">
-            <div>
-              <label>Last Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-              <%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
-              <span class="error" id="last_name_error">&nbsp;</span>
-            </div>
-          </td>
+				<td style="width:25%;">
+				<div>
+					<label>Last Name:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<%= nf.text_field( :last_name,  :maxlength=>24, :size=>24) %>
+					<span class="error" id="last_name_error">&nbsp;</span>
+				</div></td>
 
-          <td style="width:25%;">
-            <div style="display:inline-block;vertical-align:top;">
-              <label>Public Display Name?:</label>
-              <%= render :partial => 'layouts/yes_no', :locals =>
-                {:object=> "borrowers",:edit => true, :field=> "displayBorrowerName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="error" id="public_display_name_error">&nbsp;</span>
-            </div>
-          </td>
+				<td style="width:25%;">
+				<div style="display:inline-block;vertical-align:top;">
+					<label>Public Display Name?:</label>
+					<%= render :partial => 'layouts/yes_no', :locals =>
+					{:object=> "borrowers",:edit => true, :field=> "displayBorrowerName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
+					<span class="error" id="public_display_name_error">&nbsp;</span>
+				</div></td>
 
-        </tr>
+			</tr>
 
-        <tr class="odd">
-          <td style="width:25%;">
-            <div>
-              <label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-              <%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
-              <span class="error" id="address_line_1_error">&nbsp;</span>
-            </div>
-          </td>
-          <td style="width:25%;">
-            <div>
-              <label>Address Line 2:</label>
-              <%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
-              <span class="error">&nbsp;</span>
-            </div>
-          </td>
-          <td style="width:25%;">
-            <div>
-              <label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-              <%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
-              <span class="error" id="postal_code_error">&nbsp;</span>
-            </div>
-          </td>
-          <td style="width:25%;">
-            <div>
-              <label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-              <%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
-              <span class="error" id="city_error">&nbsp;</span>
-            </div>
-          </td>
+			<tr class="odd">
+				<td style="width:25%;">
+				<div>
+					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
+					<span class="error" id="address_line_1_error">&nbsp;</span>
+				</div></td>
+				<td style="width:25%;">
+				<div>
+					<label>Address Line 2:</label>
+					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
+					<span class="error">&nbsp;</span>
+				</div></td>
+				<td style="width:25%;">
+				<div>
+					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
+					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
+					<span class="error" id="postal_code_error">&nbsp;</span>
+				</div></td>
+				<td style="width:25%;">
+				<div>
+					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
+					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
+					<span class="error" id="city_error">&nbsp;</span>
+				</div></td>
 
-        </tr>
-        <tr class="even">
-          <td style="width:25%;">
-
-            <label>County:&nbsp;<span class="max_length">(20)</span></label>
-            <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %>
-            <span class="error">&nbsp;</span>
-
-          </td>
-             <td style="width:25%;">
-            <label>Country:<span class="required_fields">&nbsp;&nbsp;*</span></label>
-            <% unless @Borrower.country_id.blank? %>
-              <% @current_selected = @Borrower.country_id %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-           
-                      
-           
-            <% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
-            <%= nf.select(:country_id, @countries) %>
-            <span class="error" id="country_error">&nbsp;</span>
-          </td>
-          
-           <td style="width:25%;">
-            
-           <% if @Borrower.state_id_string.blank? %>
-           <% display_state_id = 'inline' %>
-           <% else %>
-           <% display_state_id = 'none' %>
-           <% end %>
-             
-            <div id="choose_us_state"  style="display:<%= display_state_id %>;" >
-				<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @Borrower.state_id.blank? %>
-				<% current_selected = @Borrower.state_id %>
+			</tr>
+			<tr class="even">
+				<td style="width:25%;"><label>County:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
+				<td style="width:25%;"><label>Country:<span class="required_fields">&nbsp;&nbsp;*</span></label> <% unless @Borrower.country_id.blank? %>
+				<% @current_selected = @Borrower.country_id %>
 				<% else %>
-				<% current_selected = '99' %>
+				<% @current_selected = '99' %>
 				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> 
-				</div>
 
-			<% unless @Borrower.state_id_string.blank? %>
-           <% display_state_id_string = 'inline' %>
-           <% else %>
-           <% display_state_id_string = 'none' %>
-           <% end %>
-           	<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
+				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
+				<%= nf.select(:country_id, @countries) %> <span class="error" id="country_error">&nbsp;</span></td>
+
+				<td style="width:25%;"> <% if @Borrower.state_id_string.blank? %>
+				<% display_state_id = 'inline' %>
+				<% else %>
+				<% display_state_id = 'none' %>
+				<% end %>
+				<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
+					<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<% unless @Borrower.state_id.blank? %>
+					<% current_selected = @Borrower.state_id %>
+					<% else %>
+					<% current_selected = '99' %>
+					<% end  %>
+					<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
+					<%= nf.select(:state_id, @states) %>
+				</div> <% unless @Borrower.state_id_string.blank? %>
+				<% display_state_id_string = 'inline' %>
+				<% else %>
+				<% display_state_id_string = 'none' %>
+				<% end %>
+				<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string) %>
-					
-				</div>
-				<span class="error" id="state_error">&nbsp;</span>
-             
-          </td>
-    
 
-          <td style="width:25%;">
-            <div style="display:inline-block;vertical-align:top;">
-              <label >Public Display Address?:</label>
-              <%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "borrowers",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
-              <span class="error" id="display_address_error">&nbsp;</span>
-            </div>
-          </td>
-        </tr>
-      </table>
-      <table class="personal">
-        <tr class="odd">
-          <td style="width:33%;">
-            <label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.text_field( :home_phone, :maxlength=>15, :size=>15) %>
-            <label style="font-size:12px" for="borrowers_public_display_home_phone" >Public display your home phone?&nbsp;
-              <%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %>
-            </label>
-            <span class="error"   id="home_phone_error">&nbsp;</span>
+				</div><span class="error" id="state_error">&nbsp;</span></td>
 
-          </td>
-          <td style="width:33%;">
-            <label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %>
-            <label style="font-size:12px" for="borrowers_public_display_cell_phone" >Public display your cell phone?&nbsp;
-              <%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %>
-            </label>
-            <span class="error" id="cell_phone_error">&nbsp;</span>
-          </td>
-          <td style="width:34%;">
-            <label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.text_field( :alternative_phone, :maxlength=>15, :size=>15) %>
-            <label style="font-size:12px" for="borrowers_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
-              <%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %>
+				<td style="width:25%;">
+				<div style="display:inline-block;vertical-align:top;">
+					<label >Public Display Address?:</label>
+					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "borrowers",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
+					<span class="error" id="display_address_error">&nbsp;</span>
+				</div></td>
+			</tr>
+		</table>
+		<table class="personal">
+			<tr class="odd">
+				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :home_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrowers_public_display_home_phone" >Public display your home phone?&nbsp;
+					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error"   id="home_phone_error">&nbsp;</span></td>
+				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrowers_public_display_cell_phone" >Public display your cell phone?&nbsp;
+					<%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="cell_phone_error">&nbsp;</span></td>
+				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrowers_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
+					<%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="alternative_phone_error">&nbsp;</span></td>
 
-            </label>
-            <span class="error" id="alternative_phone_error">&nbsp;</span>
-          </td>
+			</tr>
+		</table>
+	</div>
 
-        </tr>
-      </table>
-    </div>
+	<div class="bottom">
+		<a href="#item_section1" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
+		<a href="#menu_item_2" onclick="showBorrowersContactPreferences();">Continue to '2. Your Lenders Contact Preferences'</a>
+	</div>
+</div >
 
+<div class="div_p" id="menu_item_2" >
+	2. Your Lenders Contact Preferences
+</div>
 
-    <div class="bottom">
-      <a href="#item_section1" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
-      <a href="#menu_item_2" onclick="showBorrowersContactPreferences();">Continue to '2. Your Lenders Contact Preferences'</a>
-    </div>
-  </div >
+<div id="form_borrower_preference" class="contact_information" style="display:none;">
+	<div style="float:left;width:92%;margin-left:25px;margin-bottom:1px;">
+		<label class="personal" style="margin-left:50px;">How would you like interested lenders to make initial contact with you?</label>
+		<label class="personal" style="margin-left:55px;">...You are required to choose at least one option.</label>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
 
-  <div class="div_p" id="menu_item_2" >2. Your Lenders Contact Preferences</div>
+	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
+		<label class="readonly_label_underline">Contact Option: By Postal Mail?:</label>
+		<% display_div = 'none' %>
+		<% unless @Borrower.useWhichContactAddress.blank? %>
+		<% if @Borrower.useWhichContactAddress != -1 %>
+		<% display_div =  'block'%> <% end %>
+		<% end %>
+		<div id="postalWithContactAddress" style="display: block">
+			<%= render :partial => 'layouts/with_contact_address', :locals =>
+			{:object => "borrowers", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'borrowers');"} %>
+		</div>
 
-  <div id="form_borrower_preference" class="contact_information" style="display:none;">
-    <div style="float:left;width:92%;margin-left:25px;margin-bottom:1px;">
-      <label class="personal" style="margin-left:50px;">How would you like interested lenders to make initial contact with you?</label>
-      <label class="personal" style="margin-left:55px;">...You are required to choose at least one option.</label>
-    </div>
-    <div   class="div_white" >&nbsp;</div>
+	</div>
 
-
-
-    <div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
-      <label class="readonly_label_underline">Contact Option: By Postal Mail?:</label>
-      <% display_div = 'none' %>
-      <% unless @Borrower.useWhichContactAddress.blank? %> 
-      <% if @Borrower.useWhichContactAddress != -1 %>
-          <% display_div =  'block'%> <% end %>
-      <% end %>
-      <div id="postalWithContactAddress" style="display: block">
-        <%= render :partial => 'layouts/with_contact_address', :locals =>
-          {:object => "borrowers", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'borrowers');"} %>
-      </div>
-      
-    </div>
-
-    
-    <div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
-      <label class="personal" >Provide your alternative contact address here:</label>
-      <br />
-      <table class="alternative_address_table" id="table_address_input" >
-        <tr>
-          <td>
-
-            <label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-            <%= nf.text_field( :address_line_1_alternative, :size=>20, :maxlength=>24) %>
-            <span class="error" id="address_line_1_alternative_error">&nbsp;</span>
-
-          </td>
-          <td>
-
-            <label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label>
-            <%= nf.text_field( :address_line_2_alternative, :size=>20, :maxlength=>24) %>
-            <span class="error">&nbsp;</span>
-
-          </td>
-          <td>
-
-            <label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-            <%= nf.text_field( :city_alternative, :size=>20, :maxlength=>20) %>
-            <span class="error" id="city_alternative_error">&nbsp;</span>
-          </td>
-          <td>
-            <label>County:&nbsp;<span class="max_length">(24)</span></label>
-            <%= nf.text_field( :province_alternative,  :size=>20, :maxlength=>24) %>
-            <span class="error">&nbsp;</span>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label>
-            <% unless @Borrower.country_id_alternative.blank? %>
-              <% @current_selected = @Borrower.country_id_alternative %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-            <% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
-            <%= nf.select(:country_id_alternative, @countries) %>
-            <span class="error" id="country_alternative_error">&nbsp;</span>
-          </td>
-         
-         
-          <td>
-         
-         
-        <% if @Borrower.state_id_string_alternative.blank? %>
-           <% display_state_id = 'inline' %>
-           <% else %>
-           <% display_state_id = 'none' %>
-           <% end %>
-             
-            <div id="choose_us_state_alternative"  style="display:<%= display_state_id %>;" >
-				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @Borrower.state_id_alternative.blank? %>
-				<% current_selected = @Borrower.state_id_alternative %>
+	<div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
+		<label class="personal" >Provide your alternative contact address here:</label>
+		<br />
+		<table class="alternative_address_table" id="table_address_input" >
+			<tr>
+				<td><label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :address_line_1_alternative, :size=>20, :maxlength=>24) %> <span class="error" id="address_line_1_alternative_error">&nbsp;</span></td>
+				<td><label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :address_line_2_alternative, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+				<td><label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :city_alternative, :size=>20, :maxlength=>20) %> <span class="error" id="city_alternative_error">&nbsp;</span></td>
+				<td><label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province_alternative,  :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> <% unless @Borrower.country_id_alternative.blank? %>
+				<% @current_selected = @Borrower.country_id_alternative %>
 				<% else %>
-				<% current_selected = '99' %>
+				<% @current_selected = '99' %>
 				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id_alternative, @states) %> 
-				</div>
+				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
+				<%= nf.select(:country_id_alternative, @countries) %> <span class="error" id="country_alternative_error">&nbsp;</span></td>
 
-			<% unless @Borrower.state_id_string_alternative.blank? %>
-           <% display_state_id_string = 'inline' %>
-           <% else %>
-           <% display_state_id_string = 'none' %>
-           <% end %>
-           	<div id="provide_country_state_alternative" style="display:<%= display_state_id_string %>;" >
+				<td> <% if @Borrower.state_id_string_alternative.blank? %>
+				<% display_state_id = 'inline' %>
+				<% else %>
+				<% display_state_id = 'none' %>
+				<% end %>
+				<div id="choose_us_state_alternative"  style="display:<%= display_state_id %>;" >
+					<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<% unless @Borrower.state_id_alternative.blank? %>
+					<% current_selected = @Borrower.state_id_alternative %>
+					<% else %>
+					<% current_selected = '99' %>
+					<% end  %>
+					<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
+					<%= nf.select(:state_id_alternative, @states) %>
+				</div> <% unless @Borrower.state_id_string_alternative.blank? %>
+				<% display_state_id_string = 'inline' %>
+				<% else %>
+				<% display_state_id_string = 'none' %>
+				<% end %>
+				<div id="provide_country_state_alternative" style="display:<%= display_state_id_string %>;" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= nf.text_field(:state_id_string_alternative) %>
-					
+
+				</div><span class="error" id="state_alternative_error">&nbsp;</span></td>
+
+				<td><label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :postal_code_alternative,  :maxlength=>15, :size=>15) %> <span class="error" id="postal_code_alternative_error">&nbsp;</span></td>
+				<td> &nbsp; </td>
+
+			</tr>
+
+			<tr>
+				<td colspan="4"><span class="error" id="whichContactAddressError">Incomplete alternative address information.  Please note required fields.</span></td>
+
+			</tr>
+		</table>
+
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
+		<label class="readonly_label_underline">Contact Option: By your Login E-Mail? Or, an Alternative E-Mail?</label>
+		<table class="personal">
+			<tr>
+				<td >
+				<div>
+					<label>Login E-Mail:</label>
+
+					<label style="font-size:14px;"><%= session[:email] %></label>
+					<span class="error" id="email1_contact_error">&nbsp;</span>
+				</div></td>
+				<td >
+				<div>
+					<label>Alternative:</label>
+					<%= nf.text_field( :email_alternative ) %>
+					<span class="error" id="email2_contact_error">&nbsp;</span>
+				</div></td>
+				<td >
+				<div >
+					<label>Which E-Mail Address?:</label>
+					<%= render :partial => 'layouts/contact_email', :locals =>
+					{:object => "borrowers", :field=>"borrower_contact_by_email", :radio_id => "borrower_contact_email", :which_class=>"radio"} %>
+					<span class="error">&nbsp;</span>
+				</div></td>
+			</tr>
+		</table>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div style="float:left;width:92%;margin-left:25px;background-color:#E0D6CC;" id="byYourPhone">
+		<label class="readonly_label_underline">Contact Option: By your Phone? </label>
+		<table class="personal">
+			<tr>
+				<td>
+				<div id="displayHomePhoneContact">
+					<label>Home Phone:&nbsp;<span id="contact_home_phone">&nbsp;</span></label>
+					<label style="font-size:12px;">Can borrowers call you at your home phone?&nbsp;
+						<%= nf.check_box( :borrower_contact_by_home_phone) %></label>
+					<span class="error">&nbsp;</span>
 				</div>
-				<span class="error" id="state_alternative_error">&nbsp;</span>
-         
-         
-          </td>
-         
-          <td>
-            <label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.text_field( :postal_code_alternative,  :maxlength=>15, :size=>15) %>
-            <span class="error" id="postal_code_alternative_error">&nbsp;</span>
-          </td>
-          <td>
-            &nbsp;
-          </td>
+				<div id="nodisplayHomePhoneContact" style="display:none">
+					&nbsp;
+				</div></td>
+				<td>
+				<div id="displayCellPhoneContact">
+					<label>Cell Phone:&nbsp;<span id="contact_cell_phone">&nbsp;</span></label>
+					<label style="font-size:12px;">... your cell phone?&nbsp;
+						<%= nf.check_box( :borrower_contact_by_cell_phone) %></label>
+					<span class="error">&nbsp;</span>
+				</div>
+				<div id="nodisplayCellPhoneContact" style="display:none">
+					&nbsp;
+				</div></td>
+				<td>
+				<div id="displayAlternativePhoneContact">
+					<label>Alternative Phone:&nbsp;<span id="contact_alternative_phone">&nbsp;</span></label>
+					<label style="font-size:12px;">... your alternative phone?&nbsp;
+						<%= nf.check_box( :borrower_contact_by_alternative_phone) %></label>
+					<span class="error">&nbsp;</span>
+				</div>
+				<div id="nodisplayAlternativeContact" style="display:none">
+					&nbsp;
+				</div></td>
+				<td>
+				<div >
+					&nbsp;
+				</div></td>
+			</tr>
+		</table>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div style="float:left;width:92%;margin-left:25px;background-color:#CCEBD6;">
 
-        </tr>
+		<label class="readonly_label_underline" >Contact Option: By Internet Social Media?</label>
 
-        <tr>
-          <td colspan="4">
-            <span class="error" id="whichContactAddressError">Incomplete alternative address information.  Please note required fields.</span>
-          </td>
+		<table class="personal" style="margin-left:15px;">
+			<tr>
+				<td><label>Your Facebook Account:</label> <%= nf.text_field( :borrower_contact_by_Facebook) %> <span class="error">&nbsp;</span></td>
+				<td><label>Your LinkedIn Account:</label> <%= nf.text_field( :borrower_contact_by_LinkedIn) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Your Twitter Account:</label> <%= nf.text_field( :borrower_contact_by_Twitter) %> <span class="error">&nbsp;</span></td>
+				<td><label>Your Instagram Account:</label> <%= nf.text_field( :borrower_contact_by_Instagram) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Other Social Media:</label> <%= nf.text_field( :borrower_contact_by_Other_Social_Media) %> <span class="error">&nbsp;</span></td>
 
+				<td><label>Other Social Media Access:</label> <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access) %> <span class="error">&nbsp;</span></td>
+			</tr>
+		</table>
 
-        </tr>
-      </table>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div class="bottom">
+		<a href="#item_section2" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
+		<a href="#menu_item_1" onclick="showFormContact();">Return to '1. Contact Information'</a>&nbsp;&nbsp; <a href="#menu_item_3" onclick="showItem();">Continue to '3. Item(s) to Borrow'</a>
+	</div>
+</div>
+<div   class="div_white" id="div_white" >
+	&nbsp;
+</div>
+<div   class="div_p" id="menu_item_3" >
+	3. Item(s) to Borrow
+</div>
 
-    </div>
-    <div   class="div_white" >&nbsp;</div>
-    <div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
-      <label class="readonly_label_underline">Contact Option: By your Login E-Mail? Or, an Alternative E-Mail?</label>
-      <table class="personal">
-        <tr>
-          <td >
-            <div>
-              <label>Login E-Mail:</label>
-              
-              <label style="font-size:14px;"><%= session[:email] %></label>
-              <span class="error" id="email1_contact_error">&nbsp;</span>
-            </div>
-          </td>
-          <td >
-            <div>
-              <label>Alternative:</label>
-              <%= nf.text_field( :email_alternative ) %>
-              <span class="error" id="email2_contact_error">&nbsp;</span>
-            </div>
-          </td>
-          <td >
-            <div >
-              <label>Which E-Mail Address?:</label>
-              <%= render :partial => 'layouts/contact_email', :locals =>
-                {:object => "borrowers", :field=>"borrower_contact_by_email", :radio_id => "borrower_contact_email", :which_class=>"radio"} %>
-              <span class="error">&nbsp;</span>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div   class="div_white" >&nbsp;</div>
-    <div style="float:left;width:92%;margin-left:25px;background-color:#E0D6CC;" id="byYourPhone">
-      <label class="readonly_label_underline">Contact Option: By your Phone? </label>
-      <table class="personal">
-        <tr>
-          <td>
-            <div id="displayHomePhoneContact">
-              <label>Home Phone:&nbsp;<span id="contact_home_phone">&nbsp;</span></label>
-              <label style="font-size:12px;">Can borrowers call you at your home phone?&nbsp;
-                <%= nf.check_box( :borrower_contact_by_home_phone) %></label>
-              <span class="error">&nbsp;</span>
-            </div>
-            <div id="nodisplayHomePhoneContact" style="display:none">&nbsp;</div>
-          </td>
-          <td>
-            <div id="displayCellPhoneContact">
-              <label>Cell Phone:&nbsp;<span id="contact_cell_phone">&nbsp;</span></label>
-              <label style="font-size:12px;">... your cell phone?&nbsp;
-                <%= nf.check_box( :borrower_contact_by_cell_phone) %></label>
-              <span class="error">&nbsp;</span>
-            </div>
-            <div id="nodisplayCellPhoneContact" style="display:none">&nbsp;</div>
-          </td>
-          <td>
-            <div id="displayAlternativePhoneContact">
-              <label>Alternative Phone:&nbsp;<span id="contact_alternative_phone">&nbsp;</span></label>
-              <label style="font-size:12px;">... your alternative phone?&nbsp;
-                <%= nf.check_box( :borrower_contact_by_alternative_phone) %></label>
-              <span class="error">&nbsp;</span>
-            </div>
-            <div id="nodisplayAlternativeContact" style="display:none">&nbsp;</div>
-          </td>
-          <td>
-            <div >
-              &nbsp;
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div   class="div_white" >&nbsp;</div>
-    <div style="float:left;width:92%;margin-left:25px;background-color:#CCEBD6;">
-     
-      <label class="readonly_label_underline" >Contact Option: By Internet Social Media?</label>
-     
-      <table class="personal" style="margin-left:15px;">
-      	<tr>
-        <td>
-          <label>Your Facebook Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Facebook) %>
-          <span class="error">&nbsp;</span>
-        </td>
-        <td>
-          <label>Your LinkedIn Account:</label>
-          <%= nf.text_field( :borrower_contact_by_LinkedIn) %>
-          <span class="error">&nbsp;</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label>Your Twitter Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Twitter) %>
-          <span class="error">&nbsp;</span>
-        </td>
-        <td>
-          <label>Your Instagram Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Instagram) %>
-          <span class="error">&nbsp;</span>
-         </td>
-</tr>
-        <tr>
-       	<td>
-          <label>Other Social Media:</label>
-          <%= nf.text_field( :borrower_contact_by_Other_Social_Media) %>
-          <span class="error">&nbsp;</span>
-        </td>
+<div id="form_item" class="contact_information" style="display:none;">
+	<label class="personal" style="margin-left:25px;margin-top:5px;">Item you would like to lend</label>
+	<table class="personal">
+		<tr class="odd">
+			<td style="width:50%;">
+			<div style="margin-left:25px;margin-top:5px;">
+				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @Borrower.item_category_id.blank? %>
+					<% @current_selected = @Borrower.item_category_id %>
+					<% else %>
+					<% @current_selected = '99' %>
+					<% end  %>
+					<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
+					<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
+					<%= nf.select( :item_category_id, @cats,{ :onchange=>"borrowers_item_category_id();", :style=>"width:auto;" }) %></label>
+				<span class="error" id="item_category_id_error">Choose a 'Category'.</span>
 
-        <td>
-          <label>Other Social Media Access:</label>
-          <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access) %>
-          <span class="error">&nbsp;</span>
-        </td>
-        </tr>
-      </table>
-    
-    </div>
-    <div   class="div_white" >&nbsp;</div>
-    <div class="bottom">
-      <a href="#item_section2" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
-      <a href="#menu_item_1" onclick="showFormContact();">Return to '1. Contact Information'</a>&nbsp;&nbsp;
-      <a href="#menu_item_3" onclick="showItem();">Continue to '3. Item(s) to Borrow'</a>
-    </div>
-  </div>
-  <div   class="div_white" id="div_white" >&nbsp;</div>
-  <div   class="div_p" id="menu_item_3" >3. Item(s) to Borrow</div>
+			</div></td>
+			<td style="width:50%;"> <% display_div = 'none' %>
+			<% unless @Borrower.item_category_id.blank? %>
+			<% if @Borrower.item_category_id == 0 %>
+			<% display_div =  'inline'%>
+			<% end %>
+			<% end %>
+			<div style="display:<%= display_div %>;margin-left:25px;margin-top:5px;" id="other_category">
+				<label>Add another category:<span class="required_fields">&nbsp;&nbsp;*</span></label>
+				<%= nf.text_field( :other_item_category, {:class=>"hidden_input"}) %>
 
-  <div id="form_item" class="contact_information" style="display:none;">
-    <label class="personal" style="margin-left:25px;margin-top:5px;">Item you would like to lend</label>
-    <table class="personal">
-      <tr class="odd">
-        <td style="width:50%;">
+			</div></td>
 
-          <div style="margin-left:25px;margin-top:5px;">
-            <label>Category:<span class="required_fields">&nbsp;&nbsp;*</span>
-              <% unless @Borrower.item_category_id.blank? %>
-                <% @current_selected = @Borrower.item_category_id %>
-              <% else %>
-                <% @current_selected = '99' %>
-              <% end  %>
-              <% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
-              <%  @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
-              <%= nf.select( :item_category_id, @cats,{ :onchange=>"borrowers_item_category_id();", :style=>"width:auto;" }) %></label>
-            <span class="error" id="item_category_id_error">Choose a 'Category'.</span>
+		</tr>
 
-          </div>
-        </td>
-        <td style="width:50%;">
-          <% display_div = 'none' %>
-          <% unless @Borrower.item_category_id.blank? %>
-            <% if @Borrower.item_category_id == 0 %>
-              <% display_div =  'inline'%>
-            <% end %>
-          <% end %>
-          <div style="display:<%= display_div %>;margin-left:25px;margin-top:5px;" id="other_category">
-            <label>Add another category:<span class="required_fields">&nbsp;&nbsp;*</span></label>
-            <%= nf.text_field( :other_item_category, {:class=>"hidden_input"}) %>
+		<tr class="even">
+			<td colspan='2'>
+			<div style="margin-left:25px;margin-top:5px;">
+				<label>Based on this category, would you like to notify lenders offering items in this category?:&nbsp;
+					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "borrowers",
+					:field=>"notify_lenders",:radio_id => "notify_lenders", :radio_num => "notify_lenders1", :which_class=>"radio", :onchange_call => ""} %></label>
 
-          </div>
+			</div></td>
+		</tr>
 
-        </td>
+		<tr class="odd">
+			<td style="width:50%">
+			<div style="margin-left:25px;margin-top:5px;">
+				<label for="item_description">Description:<span class="required_fields">&nbsp;&nbsp;*</span></label>
+				<%= nf.text_field( :item_description) %>
+				<span class="error" id="item_description_error">Please provide a item description.</span>
+			</div></td>
+			<td style="width:50%">
+			<div style="margin-left:25px;margin-top:5px;">
+				<label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
 
-      </tr>
+				<% unless @Borrower.item_condition_id.blank? %>
+				<% @current_selected = @Borrower.item_condition_id %>
+				<% else %>
+				<% @current_selected = '99' %>
+				<% end  %>
+				<% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
+				<% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
+				<%= nf.select( :item_condition_id, @bl) %>
+				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
+			</div></td>
+		</tr>
+		<tr class="even">
+			<td  style="width:50%;">
+			<div style="margin-left:25px;margin-top:5px;">
+				<label for="item_model">Model:</label>
+				<%= nf.text_field( :item_model) %>
 
-      <tr class="even">
-        <td colspan='2'>
+			</div></td>
+			<td  style="width:50%;">
+			<div style="margin-left:25px;margin-top:5px;">
+				<label>Number of Items:<span class="required_fields">&nbsp;&nbsp;*</span><span class="required_fields">&nbsp;&nbsp;Please less than 100 items</span></label>
+				<%= nf.text_field( :item_count, {:size=>5, :maxlength=>2}) %>
+				<span class="error" id="item_count_error">Invalid item count.</span>
+			</div></td>
+		</tr>
 
-          <div style="margin-left:25px;margin-top:5px;">
-            <label>Based on this category, would you like to notify lenders offering items in this category?:&nbsp;
-              <%= render :partial => 'layouts/yes_no', :locals => {:object=> "borrowers",
-                :field=>"notify_lenders",:radio_id => "notify_lenders", :radio_num => "notify_lenders1", :which_class=>"radio", :onchange_call => ""} %></label>
+		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["borrower_item_id =?", @Borrower.borrower_item_id]) %>
 
+		<% if @ig.blank? %>
+		<tr class="odd">
+			<td  style="width:50%;">
+			<div style="margin-left:25px;margin-top:5px;float:left;">
+				<label>Image of Item:</label>
+				<input type="file" id="l2bimage" class="" name="borrowers[item_image_upload]"  accept="image/*" />
+				<span class="file_image_error">&nbsp;</span>
+			</div></td >
+			<td  style="width:50%;">
+			<div style="margin-left:5px;margin-top:5px;float:left;display:none;" id="image_details">
+				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
+				<label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
+				<%= nf.text_field( :item_image_caption) %>
+			</div></td>
+		</tr>
+		<% else %>
 
-          </div>
+		<tr class="odd">
+			<td style="width:50%;">
+			<div style="margin-left:25px;margin-top:5px;float:left;">
+				<label>Image Caption:<% unless @ig[0].item_image_caption.blank? %>
+					<%= @ig[0].item_image_caption   %>
+					<% else %>
+					None provided.
+					<% end %></label>
+				<label>Image of Item:</label>
+				<img src="<%= get_image_path(@ig[0].image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
+				<span class="file_image_error">&nbsp;</span>
+			</div></td>
+			<td style="width:50%;">
+			<div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
+				<input type="file" id="l2bimage" class="" name="borrower[item_image_upload]"  accept="image/*" />
+				<span class="file_image_error">&nbsp;</span>
+				<img id="imagePreview" height="100" width="200" src="" alt="New uploaded image file" />
+				<label>If you'd like, provide an updated caption for your item image<span class="max_length">(50)</span></label>
+				<%= nf.text_field( :item_image_caption) %>
+			</div></td>
+		</tr>
+		<% end %>
 
-        </td>
-      </tr>
+	</table>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div   class="div_white" id="div_white" >
+		&nbsp;
+	</div>
 
-      <tr class="odd">
-        <td style="width:50%">
-          <div style="margin-left:25px;margin-top:5px;">
-            <label for="item_description">Description:<span class="required_fields">&nbsp;&nbsp;*</span></label>
-            <%= nf.text_field( :item_description) %>
-            <span class="error" id="item_description_error">Please provide a item description.</span>
-          </div>
-        </td>
-        <td style="width:50%">
-          <div style="margin-left:25px;margin-top:5px;">
-            <label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
+	<div class="bottom">
+		<a href="#item_section3" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
+		<a href="#menu_item_2" onclick="showBorrowersContactPreferences();">Return to '2. Your Lenders Contact Preferences'</a>
+		<a href="#menu_item_4" onclick="showBLegal();">Continue to '4. Legal/Other '</a>
 
-            <% unless @Borrower.item_condition_id.blank? %>
-              <% @current_selected = @Borrower.item_condition_id %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-            <% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
-            <%  @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
-            <%= nf.select( :item_condition_id, @bl) %>
-            <span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
-          </div>
+	</div>
 
-        </td>
-      </tr>
-      <tr class="even">
-        <td  style="width:50%;">
-          <div style="margin-left:25px;margin-top:5px;">
-            <label for="item_model">Model:</label>
-            <%= nf.text_field( :item_model) %>
+</div>
+<div   class="div_white" id="div_white" >
+	&nbsp;
+</div>
+<div   class="div_p" id="menu_item_4">
+	4. Legal/Other
+</div>
 
-          </div>
-        </td>
-        <td  style="width:50%;">
+<div id="form_legal" class="contact_information" style="display:none;">
 
-          <div style="margin-left:25px;margin-top:5px;">
-            <label>Number of Items:<span class="required_fields">&nbsp;&nbsp;*</span><span class="required_fields">&nbsp;&nbsp;Please less than 100 items</span></label>
-            <%= nf.text_field( :item_count, {:size=>5, :maxlength=>2}) %>
-            <span class="error" id="item_count_error">Invalid item count.</span>
-          </div>
+	<div style="margin-left:25px;margin-top:5px;float:left;">
+		<p class="offering">
+			Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
+		</p>
 
-        </td>
-      </tr>
+		<p class="offering">
+			Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.
+		</p>
 
+		<p class="offering">
+			In the aftermath of that event, Echo Market will offer a 'Satisfaction Survey' to both the borrower and the lender.
+			If satisfaction is found poor, Echo Market will then seek more information to determine the continuance of either the borrower or lender participation.
+		</p>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
+	<div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
+		<ul >
+			<li style="margin:5px;">
+				<label for="borrowers_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
+					<%= nf.check_box( :goodwill) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
+				<span class="error" id="goodwill_error"  >&nbsp;</span>
+			</li>
+			<li style="margin:5px;">
+				<label for="borrowers_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
+					<%= nf.check_box( :age_18_or_more) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
+				<span class="error" id="18_or_more_error">&nbsp;</span>
+			</li>
+		</ul>
 
-      <% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["borrower_item_id =?", @Borrower.borrower_item_id]) %>
+	</div>
 
-      <% if @ig.blank? %>
-        <tr class="odd">
-          <td  style="width:50%;">
-            <div style="margin-left:25px;margin-top:5px;float:left;">
-              <label>Image of Item:</label>
-              <input type="file" id="l2bimage" class="" name="borrowers[item_image_upload]"  accept="image/*" />
-              <span class="file_image_error">&nbsp;</span>
-            </div>
-          </td >
-          <td  style="width:50%;">
-            <div style="margin-left:5px;margin-top:5px;float:left;display:none;" id="image_details">
-              <img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
-              <label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
-              <%= nf.text_field( :item_image_caption) %>
-            </div>
-          </td>
-        </tr>
-      <% else %>
-
-        <tr class="odd">
-          <td style="width:50%;">
-
-            <div style="margin-left:25px;margin-top:5px;float:left;">
-              <label>Image Caption:<% unless @ig[0].item_image_caption.blank? %>
-                  <%= @ig[0].item_image_caption   %>
-                <% else %>
-                  None provided.
-                <% end %></label>
-              <label>Image of Item:</label>
-              <img src="<%= get_image_path(@ig[0].image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
-              <span class="file_image_error">&nbsp;</span>
-            </div>
-
-          </td>
-          <td style="width:50%;">
-
-            <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-              <input type="file" id="l2bimage" class="" name="borrower[item_image_upload]"  accept="image/*" />
-              <span class="file_image_error">&nbsp;</span>
-              <img id="imagePreview" height="100" width="200" src="" alt="New uploaded image file" />
-              <label>If you'd like, provide an updated caption for your item image<span class="max_length">(50)</span></label>
-              <%= nf.text_field( :item_image_caption) %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-
-    </table>
- <div   class="div_white" >&nbsp;</div>
-    <div   class="div_white" id="div_white" >&nbsp;</div>
-
-    <div class="bottom">
-      <a href="#item_section3" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
-      <a href="#menu_item_2" onclick="showBorrowersContactPreferences();">Return to '2. Your Lenders Contact Preferences'</a>
-      <a href="#menu_item_4" onclick="showBLegal();">Continue to '4. Legal/Other '</a>
-
-    </div>
-
-  </div>
-  <div   class="div_white" id="div_white" >&nbsp;</div>
-  <div   class="div_p" id="menu_item_4">4. Legal/Other</div>
-
-  <div id="form_legal" class="contact_information" style="display:none;">
-
-    <div style="margin-left:25px;margin-top:5px;float:left;">
-      <p class="offering">Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.</p>
-
-      <p class="offering">Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.</p>
-
-      <p class="offering">In the aftermath of that event, Echo Market will offer a 'Satisfaction Survey' to both the borrower and the lender.
-        If satisfaction is found poor, Echo Market will then seek more information to determine the continuance of either the borrower or lender participation.</p>
-    </div>
-    <div   class="div_white" >&nbsp;</div>
-    <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
-      <ul >
-        <li style="margin:5px;">
-          <label for="borrowers_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
-            <%= nf.check_box( :goodwill) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
-          <span class="error" id="goodwill_error"  >&nbsp;</span>
-        </li>
-        <li style="margin:5px;">
-          <label for="borrowers_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
-            <%= nf.check_box( :age_18_or_more) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
-          <span class="error" id="18_or_more_error">&nbsp;</span>
-        </li>
-      </ul>
-
-    </div>
-
-    <div class="bottom">
-      <a href="#item_section4" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
-      <a href="#menu_item_3" onclick="showItem();">Return to '3. Item(s) to Borrow'</a>
-    </div>
-  </div>
+	<div class="bottom">
+		<a href="#item_section4" class="registration_header" style="display:none;" onclick="showReview();">Review Borrower Item Registration {BETA}</a>
+		<a href="#menu_item_3" onclick="showItem();">Return to '3. Item(s) to Borrow'</a>
+	</div>
+</div>
 <div id="item_readonly" style="display:none;">
-  <%= render :partial => 'borrower/borrower_seeking_readonly' %>
+	<%= render :partial => 'borrower/borrower_seeking_readonly' %>
 </div>
 <% end %>
