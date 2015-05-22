@@ -681,8 +681,8 @@
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
-				<% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
-				<% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, current_selected.to_i) %>
+				<% @item_conditions = Itemconditions.find(:all, :order=> "item_condition_id") %>
+				<% @bl = options_from_collection_for_select(@item_conditions, :item_condition_id, :conditions, current_selected.to_i) %>
 				<%= nf.select( :item_condition_id, @bl) %>
 				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
 			</div></td>

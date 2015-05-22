@@ -65,8 +65,12 @@ end
  def b_list
       session[:notice] = ''
       session[:background] = true
-      
-   
+      if session[:community_name].blank? 
+        @borrower = Borrower.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0  OR is_community = 3)"]) 
+      else 
+        @borrower = Borrower.find(:all, :readonly, :order =>"item_category_id ASC, date_created ASC", :conditions => 
+             ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]]) 
+  end   
  end
 
  def borrower_item_detail
@@ -74,7 +78,7 @@ end
     unless params[:id].blank?
         @borrowers = Borrower.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
     end
-    if @borrower.blank? || params[:id].blank?
+    if @borrowers.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end 
@@ -89,7 +93,7 @@ end
         @borrowers = Borrower.find(:all, :readonly, :conditions => ["borrower_item_id = ?", params[:id]])
      end
      
-     if @borrower.blank? || params[:id].blank?
+     if @borrowers.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end
@@ -143,7 +147,7 @@ end
   def borrower_seeking
     session[:no_border] = true
     if params[:id].blank?
-    @borrowers = Borrower.new
+     @borrowers = Borrower.new
     else
       @borrowers = Borrower.find(params[:id])
     end

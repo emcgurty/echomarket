@@ -52,7 +52,7 @@
 		<% @ih2 = Hash.new %>
         <% @ih = @icond.to_a.map(&:serializable_hash) %>
         <% for kv in @ih %>
-          <% @ih2[kv.fetch("item_conditions_id")]  = kv.fetch("conditions") %>
+          <% @ih2[kv.fetch("item_condition_id")]  = kv.fetch("conditions") %>
          <% end %>
        
        
@@ -120,7 +120,7 @@
 		<% @ih2 = Hash.new %>
         <% @ih = @icond.to_a.map(&:serializable_hash) %>
         <% for kv in @ih %>
-          <% @ih2[kv.fetch("item_conditions_id")]  = kv.fetch("conditions") %>
+          <% @ih2[kv.fetch("item_condition_id")]  = kv.fetch("conditions") %>
          <% end %>
 		<% @borrower.each do |ldr| %>
 		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>

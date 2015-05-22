@@ -65,7 +65,12 @@ end
   def l_list
       session[:notice] = ''
       session[:background] = true
-      
+       if session[:community_name].blank? 
+        @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"]) 
+      else
+        @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => 
+             ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  
+      end 
   end
 
   def lender_item_detail

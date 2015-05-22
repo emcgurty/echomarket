@@ -7,8 +7,8 @@
     <p>Welcome Back Echo Market borrower!</p>
 
   </div>
-
-  <% unless @Borrower.blank? %>
+  <%  rowCount = 1 %>
+  <% unless @borrowers.blank? %>
 
     <div style="float:left;">
       <table class="history" >
@@ -21,9 +21,6 @@
           <th>Status</th>
           <th>Process</th>
         </tr>
-        <%  rowCount = 1 %>
-
-        <% @Borrower.each do |isq| %>
 
           <% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
           <%  rowCount = rowCount + 1 %>
@@ -37,7 +34,7 @@
             <td>
               <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
             <td>
-              <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_conditions_id = ?", isq.item_condition_id]) %>
+              <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_condition_id = ?", isq.item_condition_id]) %>
               <%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
             </td>
             <td>
@@ -59,7 +56,7 @@
 
             </td>
           </tr>
-        <% end %>
+
       </table>
     </div>
 
@@ -68,7 +65,7 @@
   <% end %>
   <div class="div_white" ></div>
   <div class="bottom" style="text-align:center">
-    <% unless @Borrower.blank? %>
+    <% unless @borrowers.blank? %>
 		<% unless session[:community_id].blank? %>
 			<%= link_to "I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "borrower", :action => "community_borrower_seeking", :id=>"" %>
 		<% else %>

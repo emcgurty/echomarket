@@ -188,7 +188,7 @@
 		<%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %> </td>
 		<td> <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
 		<td> <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
-		<td> <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_conditions_id = ?", isq.item_condition_id]) %>
+		<td> <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_condition_id = ?", isq.item_condition_id]) %>
 		<%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %> </td>
 		<td> <%= (isq.postal_code.blank? ? "NA": isq.postal_code) %></td>
 		<td> <% if @search.lender_or_borrower == 2 %>

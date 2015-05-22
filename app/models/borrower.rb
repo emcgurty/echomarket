@@ -1,6 +1,7 @@
 class Borrower < ActiveRecord::Base
 
   self.primary_key = :borrower_item_id
+  attr_accessible :addresses_attributes, :itemimage_attributes
   attr_accessor :found_zip_codes
   has_one :itemimage
   has_one :itemcondition
@@ -9,14 +10,14 @@ class Borrower < ActiveRecord::Base
   has_one :us_state
   has_one :contactdescribe
   has_one :user
-  has_many :address
+  has_many :addresses, dependent: :destroy
   accepts_nested_attributes_for :itemcondition
   accepts_nested_attributes_for :category
   accepts_nested_attributes_for :country
   accepts_nested_attributes_for :us_state
   accepts_nested_attributes_for :itemcondition
   accepts_nested_attributes_for :user
-  accepts_nested_attributes_for :address
+  accepts_nested_attributes_for :addresses
     
   before_create :get_borrower_primary_key_value
 

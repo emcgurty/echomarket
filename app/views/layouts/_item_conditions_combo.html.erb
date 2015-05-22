@@ -1,7 +1,7 @@
 <% @item_conditions = Itemconditions.find(:all) %>
 
 <% if @item_conditions %>
-  <%= select(object,field, @item_conditions.collect {|p| [ p.conditions, p.item_conditions_id ] }, { :include_blank => false, :selected=>selected, :style=>"width:100%;"}) %>
+  <%= select(object,field, @item_conditions.collect {|p| [ p.conditions, p.item_condition_id ] }, { :include_blank => false, :selected=>selected, :style=>"width:100%;"}) %>
 
 <% end %>
 <br />

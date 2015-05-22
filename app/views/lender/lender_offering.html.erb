@@ -23,9 +23,6 @@
 </div>
 <% end %>
 
-<% @st = UsStates.find(:all, :order => "state_name") %>
-<% @ct = Countries.find(:all, :order => "country_name") %>
-
 <div class="top" >
 
 	<p>
@@ -53,15 +50,10 @@
 	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
 		<div style="width: 50%;float:left;">
 			<label class="personal" >As a lender, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			<% unless @lenders.describe_yourself.blank? %>
-			<% current_selected = @lenders.describe_yourself %>
-			<% else %>
-			<% current_selected = '99' %>
-			<% end  %>
-			<% @getbl = Contactdescribes.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 1'], :order=>"option_value") %>
-			<% @bl = options_from_collection_for_select(@getbl, :option_value, :borrower_or_lender_text, current_selected.to_i) %>
-			<%= nf.select( :describe_yourself, @bl,{:style=>"width:auto;" }) %>
-
+			<%= nf.fields_for :contactdescribe do |cd| %>
+			<%= cd.collection_select :describe_yourself, 
+			Ccontactdescribe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 1'], :order=>"option_value"), :option_value, :borower_or_lender_text  %>
+			<% end %>
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
 		<% display_div = 'none' %>
@@ -135,37 +127,39 @@
 				</div></td>
 
 			</tr>
-
+<%= nf.fields_for :addresses do |primary| %>
 			<tr class="odd">
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= nf.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
+					<%= primary.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 2:</label>
-					<%= nf.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
+					<%= primary.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-					<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
+					<%= primary.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
 					<span class="error" id="postal_code_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
 				<div>
 					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-					<%= nf.text_field( :city, :maxlength=>20, :size=>20) %>
+					<%= primary.text_field( :city, :maxlength=>20, :size=>20) %>
 					<span class="error" id="city_error">&nbsp;</span>
 				</div></td>
 
 			</tr>
 			<tr class="even">
 				<td style="width:25%;">
-					<label>County:&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span>
+					<label>County:&nbsp;<span class="max_length">(20)</span></label> 
+					<%= primary.text_field( :province,  :maxlength=>20, :size=>20) %> 
+					<span class="error">&nbsp;</span>
 					
 				</td>
 				
@@ -173,15 +167,10 @@
 				<td style="width:25%;">
 					
 				<label>Country:</label> 
-				<% unless @lenders.country_id.blank? %>
-				<% current_selected = @lenders.country_id %>
-				<% else %>
-				<% current_selected = '99' %>
-				<% end  %>
-				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, current_selected) %>
-				<%= nf.select(:country_id, @countries, {:onchange=>"select#lenders_country_id();"}) %> <span class="error" id="country_error">&nbsp;</span>
-				
-				
+				<%= primary.fields_for :country do |ct| %>
+				<%= ct.collection_select(:country_id, Countries.all, :country_id, :country_name, {:onchange=>"select#lenders_country_id();"}) %>
+				<% end %>
+				<span class="error" id="country_error">&nbsp;</span>
 				</td>
 				
 				<td style="width:25%;">
@@ -701,8 +690,8 @@
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
-				<% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
-				<% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, current_selected.to_i) %>
+				<% @item_conditions = Itemconditions.find(:all, :order=> "item_condition_id") %>
+				<% @bl = options_from_collection_for_select(@item_conditions, :item_condition_id, :conditions, current_selected.to_i) %>
 				<%= nf.select( :item_condition_id, @bl) %>
 				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
 			</div></td>

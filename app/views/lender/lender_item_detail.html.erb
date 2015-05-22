@@ -310,7 +310,7 @@
     <br />
 
     Condition:&nbsp;
-    <% @cont = Itemconditions.find(:first, :select => "conditions", :readonly=> true, :conditions => ["item_conditions_id = ?", ldr.item_condition_id]) %>
+    <% @cont = Itemconditions.find(:first, :select => "conditions", :readonly=> true, :conditions => ["item_condition_id = ?", ldr.item_condition_id]) %>
     <%= @cont.conditions %>
     <br />
 

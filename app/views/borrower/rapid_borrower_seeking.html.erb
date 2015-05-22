@@ -41,16 +41,20 @@
 	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40 ) %>
 </div>
 
+
+<% nf.fields_for :addresses do |adr| %>
+
 <div style="float:left;;width:92%;">
 	<label>Your Postal Code: </label>
 	<br />
-	<%= nf.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
+	<%= adr.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
 </div>
+
 
 <div style="float:left;;width:92%;">
 	<div class="column50_rapid"> 
 	<label>Your Country:</label>
-	<%= nf.fields_for :country_id do |ct| %>
+	<%= adr.fields_for :country_id do |ct| %>
 	<%= ct.collection_select :country_id, Country.all, :country_id, :country_name %>
 	<% end  %>
 	</div>
@@ -60,19 +64,21 @@
     <div class="column50_rapid">
 	<label>Your State or Region: </label>
 	<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
-		<%= nf.select(:state_id, @states) %>
+		<%= adr.fields_for :state_id do |st| %>
+		<%= st.collection_select :state_id, UsState.all, :state_id, :state_name %>
+		<% end  %>
 	</div>
-	<% unless @Borrower.state_id_string.blank? %>
+	<% unless @borrowers.state_id_string.blank? %>
 	<% display_state_id_string = 'inline' %>
 	<% else %>
 	<% display_state_id_string = 'none' %>
 	<% end %>
 	<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
-		<%= nf.text_field(:state_id_string, :maxlength=>40, :size=>25) %>
+		<%= adr.text_field(:state_id_string, :maxlength=>40, :size=>25) %>
 	</div>
 	</div>
 </div>
-
+<% end %>
 <div style="float:left;width:92%;">
 
 
@@ -109,8 +115,8 @@
 
 <div class="column50_rapid">
 <label>The Condition of Item:
-<%= nf.fields_for :item_condtions_id do |ic| %>
-<%= ic.collection_select :item_condtion_id, Itemconditions.all, :item_conditions_id, :conditions %>
+<%= nf.fields_for :item_condition_id do |ic| %>
+<%= ic.collection_select :item_condtion_id, Itemcondition.all, :item_condition_id, :condition %>
 <% end  %>
 </div>
 

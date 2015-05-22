@@ -12,11 +12,6 @@
 <%= nf.hidden_field( :is_community, :value=> 0) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
-<% @current_selected = '99' %>
-<% @st = UsStates.find(:all, :order => "state_name") %>
-<% @ct = Countries.find(:all, :order => "country_name") %>
-<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
-<% @states = options_from_collection_for_select(@st, :state_id, :state_name, @current_selected) %>
 <% display_state_id = 'none' %>
 
 <div class="top" >
@@ -51,7 +46,9 @@
 <div style="float:left;width:92%;">
 	<label>Your Country: </label>
 	<br />
-	<%= nf.select(:country_id, @countries) %>
+	<%= nf.fields_for :country do |ct| %>
+	<%= ct.collection_select :country_id, Country.all, :country_id, :country_name) %>
+	<% end %>
 </div>
 
 <div id="country_selected" style="display:none;;float:left;width:92%;">
@@ -59,7 +56,9 @@
 	<label>Your State or Region: </label>
 	<br />
 	<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
-		<%= nf.select(:state_id, @states) %>
+	<%= nf.fields_for :usState do |ct| %>
+	<%= ct.collection_select :state_id, UsState.all, :state_id, :state_name) %>
+	<% end %>
 	</div>
 	<% unless @lenders.state_id_string.blank? %>
 	<% display_state_id_string = 'inline' %>
@@ -74,10 +73,9 @@
 <div style="float:left;width:92%;">
 <label>Item Category: </label>
 <br />
-<% @current_selected = '99' %>
-<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
-<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
-<%= nf.select( :item_category_id, @cats,{ :onchange=>"lenders_item_category_id();"}) %>
+<%= nf.fields_for :category do |cat|  %>
+<%= cat.collection_select :item_category_id, Category.all, :category_id, :category_type,{ :onchange=>"lenders_item_category_id();"}) %>
+<% end %>
 
 <div style="display:none;" id="other_category">
 	<label>Add another category:</label>
@@ -97,10 +95,9 @@
 <label>The Condition of the Item:</label>
 <br />
 
-<% @current_selected = '99' %>
-<% @item_conditions = Itemconditions.find(:all, :order=> "item_conditions_id") %>
-<% @bl = options_from_collection_for_select(@item_conditions, :item_conditions_id, :conditions, @current_selected) %>
-<%= nf.select( :item_condition_id, @bl) %>
+<%= nf.fields_for :itemconditions do |ic|  %>
+<%= ic.collection_select :item_condition_id, Itemcondtion.all, :item_condition_id, :condition %>
+<% end %>
 </div>
 
 <div style="float:left;width:92%;">

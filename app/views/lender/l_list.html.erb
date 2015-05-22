@@ -1,5 +1,5 @@
 <%= javascript_include_tag 'echo_market.js' %>
-<%= form_for :lender, :url=> {:controller=>"lender", :action => "l_list"}, :html=> {:class=>"l_list",  :id=>"l_list"} do |nf| %>
+<%= form_for @lender, :url=> {:controller=>"lender", :action => "l_list"}, :html=> {:class=>"l_list",  :id=>"l_list"} do |nf| %>
 <div class="top" >
 	<p>
 		<span class="logo_white" >The Echo Market</span>
@@ -10,12 +10,6 @@
 
 <div class="column">
 	<h2 class="h2_listing" >What is offered to lend...</h2>
-<% if session[:community_name].blank? %>
-	<% @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"])  %>
-	<% else %>
-	<% @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => 
-	           ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
-	<% end %>
 
 	<% if @lender.blank? %>
 	<p>
@@ -27,41 +21,34 @@
 	<%= link_to "Please login or register as a 'lender' to offer an item.", user_login_url(:id => '', :type => 'lender'), {:class=> "search1"}   %>
 	<% end %>
 	<% else %>
-	<% hold_cat  = "" %>
+	
 
-	<% @lender.each do |ldr| %>
-	<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
-	<% if @cats %>
-	<% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
-	<label><%= @cats.category_type %></label>
-	<br />
-	<% hold_cat  = @cats.category_id %>
+	<%= nf.fields_for :category do |cat| %>
+	<%= cat.label :category_type %>
 	<% end %>
-	<% end %>
-	<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_item_id = ?', ldr.lender_item_id])  %>
-	<% if @imgs %>
-	<% @imgs.each do |oimg| %>
-
-	<% file_path_str = oimg.image_file_name %>
-	<% icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption)  %>
+	
+	
+	<% file_path_str = @lender.image_file_name %>
+	<% icaption = (@lender.item_image_caption.blank? ? '' : @lender.item_image_caption)  %>
 	<img src='<%= get_image_path(file_path_str.to_s) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
+	<%= nf.fields_for :itemimages do |ii| %>
 	<% unless icaption.blank? %>
-	<label class="item_listing"><%= icaption %></label>
+	<%= ii.label :item_image_caption %>
 	<% end %>
 	<% end %>
+	<label class="item_listing" >Item Description: &nbsp;<%= @lender.item_description %></label>
+	<label class="item_listing">Model: &nbsp;<%= @lender.item_model %></label>
+	
+	<%= nf.fields_for :itemcondition do |ic| %>
+	<%= ic.label :condition, {class="item_listing"} %>
 	<% end %>
-	<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
-	<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
-	<% @icond = Itemconditions.find(:first, :readonly=> true, :conditions => ['item_conditions_id = ?', ldr.item_condition_id]) %>
-	<label class="item_listing">Condition:&nbsp;<%= @icond.conditions %></label>
-
-	<%= link_to "Details..." , lender_item_detail_url(:id=> ldr.lender_item_id), {:style=>"color:#ff4500;"} %>
+	<%= link_to "Details..." , lender_item_detail_url(:id=> @lender.lender_item_id), {:style=>"color:#ff4500;"} %>
 
 	<hr style="color:indigo;" />
 
 	<% end %>
 
-	<% end %>
+	
 </div>
 
 <div class="bottom">
