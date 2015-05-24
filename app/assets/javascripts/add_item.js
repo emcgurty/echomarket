@@ -27,8 +27,8 @@
 	});
 	$("select#borrowers_country_id").trigger('change');
 	
-		$("#borrowers_item_category_id").bind('change', function() {
-		var cat_cmb = $("select#borrowers_item_category_id option:selected").text();
+		$("#borrowers_category_id").bind('change', function() {
+		var cat_cmb = $("select#borrowers_category_id option:selected").text();
 
 		if (cat_cmb == "Other") {
 
@@ -40,7 +40,7 @@
 
 	});
 
-	$("#borrowers_item_category_id").trigger('change');
+	$("#borrowers_category_id").trigger('change');
 	
 
 		$("select#lenders_country_id").bind('change', function() {
@@ -63,8 +63,8 @@
 	});
 	$("select#lenders_country_id").trigger('change');
 	
-		$("#lenders_item_category_id").bind('change', function() {
-		var cat_cmb = $("select#lenders_item_category_id option:selected").text();
+		$("#lenders_category_id").bind('change', function() {
+		var cat_cmb = $("select#lenders_category_id option:selected").text();
 
 		if (cat_cmb == "Other") {
 
@@ -76,7 +76,7 @@
 
 	});
 
-	$("#lenders_item_category_id").trigger('change');
+	$("#lenders_category_id").trigger('change');
 	
 });
 
@@ -202,8 +202,8 @@ function validLenderCountryState() {
 	
 	var foundIncomplete = false;
 	var cid = $("select#lenders_country_id option:selected").val();
-	var sid = $("select#lenders_state_id option:selected").val(); 
-	var sis = $("input#lenders_state_id_string").val();
+	var sid = $("select#lenders_us_state_id option:selected").val(); 
+	var sis = $("input#lenders_us_state_id").val();
 	
 		
 	if (cid == '99') { 
@@ -223,8 +223,8 @@ function validBorrowerCountryState() {
 	
 	var foundIncomplete = false;
 	var cid = $("select#borrowers_country_id option:selected").val();
-	var sid = $("select#borrowers_state_id option:selected").val(); 
-	var sis = $("input#borrowers_state_id_string").val();
+	var sid = $("select#borrowers_us_state_id option:selected").val(); 
+	var sis = $("input#borrowers_us_state_id").val();
 	
 	if (cid == '99') { 
 		foundIncomplete = true;
@@ -278,7 +278,7 @@ function checkLenderLegal() {
 function checkBorrowerCategory() {
 
 	var notChecked = false;
-	var cat_id = $("select#borrowers_item_category_id option:selected").text();
+	var cat_id = $("select#borrowers_category_id option:selected").text();
 	var o_i_c =  $("input#borrowers_other_item_category").val();
 	if (cat_id == 'Other' && o_i_c == ''){
 		notChecked = true;
@@ -293,7 +293,7 @@ function checkBorrowerCategory() {
 function checkLenderCategory() {
 
 	var notChecked = false;
-	var cat_id = $("select#lenders_item_category_id option:selected").text();
+	var cat_id = $("select#lenders_category_id option:selected").text();
 	var o_i_c =  $("input#lenders_other_item_category").val();
 	if (cat_id == 'Other' && o_i_c == ''){
 		notChecked = true;

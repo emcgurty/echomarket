@@ -12,14 +12,13 @@
 <% end  %>
 <% if not @lenders.blank?  %>
 <div style="display:none;">
- <% if session[:reuse] %>
-      <%= nf.hidden_field( :lender_item_id, :value=>'') %>
-    <% else %>
-      <%= nf.hidden_field( :lender_item_id) %>
-    <% end %>
-<%= nf.hidden_field( :is_active) %>
-<%= nf.hidden_field( :is_saved) %>
-<%= nf.hidden_field( :user_id) %>
+	<% if session[:reuse] %>
+	<%= nf.hidden_field( :lender_id, :value=>'') %>
+	<% else %>
+	<%= nf.hidden_field( :lender_id) %>
+	<% end %>
+	<%= nf.hidden_field( :is_active) %>
+	<%= nf.hidden_field( :user_id) %>
 </div>
 <% end %>
 
@@ -50,9 +49,9 @@
 	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
 		<div style="width: 50%;float:left;">
 			<label class="personal" >As a lender, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			<%= nf.fields_for :contactdescribe do |cd| %>
-			<%= cd.collection_select :describe_yourself, 
-			Ccontactdescribe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 1'], :order=>"option_value"), :option_value, :borower_or_lender_text  %>
+			<%= nf.fields_for :contact_describe do |cd| %>
+			<%= cd.collection_select :describe_yourself,
+        Ccontact_describe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 1'], :order=>"option_value"), :option_value, :borrower_or_lender_text  %>
 			<% end %>
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
@@ -127,7 +126,7 @@
 				</div></td>
 
 			</tr>
-<%= nf.fields_for :addresses do |primary| %>
+			<%= nf.fields_for :addresses do |primary| %>
 			<tr class="odd">
 				<td style="width:25%;">
 				<div>
@@ -156,57 +155,36 @@
 
 			</tr>
 			<tr class="even">
-				<td style="width:25%;">
-					<label>County:&nbsp;<span class="max_length">(20)</span></label> 
-					<%= primary.text_field( :province,  :maxlength=>20, :size=>20) %> 
-					<span class="error">&nbsp;</span>
-					
-				</td>
-				
-				
-				<td style="width:25%;">
-					
-				<label>Country:</label> 
-				<%= primary.fields_for :country do |ct| %>
-				<%= ct.collection_select(:country_id, Countries.all, :country_id, :country_name, {:onchange=>"select#lenders_country_id();"}) %>
-				<% end %>
-				<span class="error" id="country_error">&nbsp;</span>
-				</td>
-				
-				<td style="width:25%;">
-				<% if @lenders.state_id_string.blank? %>
-           			<% display_state_id = 'inline' %>
-           		<% else %>
-           			<% display_state_id = 'none' %>
-           		<% end %>
-             
-            <div id="choose_us_state"  style="display:<%= display_state_id %>;" >
-				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @lenders.state_id.blank? %>
-				<% current_selected = @lenders.state_id %>
-				<% else %>
-				<% current_selected = '99' %>
-				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> 
-			</div>
+				<td style="width:25%;"><label>County:&nbsp;<span class="max_length">(20)</span></label> <%= primary.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
 
-			<% unless @lenders.state_id_string.blank? %>
-           <% display_state_id_string = 'inline' %>
-           <% else %>
-           <% display_state_id_string = 'none' %>
-           <% end %>
-           
-           	<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
+				<td style="width:25%;"><label>Country:</label> <%= primary.fields_for :country do |ct| %>
+				<%= ct.collection_select country_id, Countries.all, :country_id, :country_name, {:onchange=>"select#lenders_country_id();"} %>
+				<% end %> <span class="error" id="country_error">&nbsp;</span></td>
+
+				<td style="width:25%;"> <% if @lenders.us_state_id.blank? %>
+				<% display_us_state_id = 'inline' %>
+				<% else %>
+				<% display_us_state_id = 'none' %>
+				<% end %>
+				<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
+					<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<% unless @lenders.us_state_id.blank? %>
+					<% current_selected = @lenders.us_state_id %>
+					<% else %>
+					<% current_selected = '99' %>
+					<% end  %>
+					<% @states = options_from_collection_for_select(@st, :us_state_id, :state_name, current_selected) %>
+					<%= nf.select(:us_state_id, @states) %>
+				</div> <% unless @lenders.us_state_id.blank? %>
+				<% display_us_state_id = 'inline' %>
+				<% else %>
+				<% display_us_state_id = 'none' %>
+				<% end %>
+				<div id="provide_country_state" style="display:<%= display_us_state_id %>;" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string) %>
-					
-				</div>
-				<span class="error" id="state_error">&nbsp;</span>
-				
-				
-				
-				</td>
+					<%= nf.text_field(:us_state_id) %>
+
+				</div><span class="error" id="state_error">&nbsp;</span></td>
 
 				<td style="width:25%;">
 				<div style="display:inline-block;vertical-align:top;">
@@ -218,20 +196,11 @@
 		</table>
 		<table class="personal">
 			<tr class="odd">
-				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label>
-					 <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %> 
-					 <label style="font-size:12px" for="lenders_public_display_home_phone" >Public display your home phone?&nbsp;
-					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> 
-					</label><span class="error"   id="home_phone_error">&nbsp;</span></td>
-				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span>
-					
-				</label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> 
-				<label style="font-size:12px" for="lenders_public_display_cell_phone" >Public display your cell phone?&nbsp;
-					<%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %> 
-					</label><span class="error" id="cell_phone_error">&nbsp;</span></td>
-				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label>
-					 <%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %> 
-					 <label style="font-size:12px" for="lenders_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
+				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field( :home_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="lenders_public_display_home_phone" >Public display your home phone?&nbsp;
+					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error"   id="home_phone_error">&nbsp;</span></td>
+				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span> </label> <%= nf.telephone_field(:cell_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="lenders_public_display_cell_phone" >Public display your cell phone?&nbsp;
+					<%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="cell_phone_error">&nbsp;</span></td>
+				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.telephone_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="lenders_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
 					<%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="alternative_phone_error">&nbsp;</span></td>
 
 			</tr>
@@ -268,112 +237,67 @@
 			{:object => "lenders", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'lenders');"} %>
 		</div>
 
-	
 	</div>
 
-
-	   <div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
-      <label class="personal" >Provide your alternative contact address here:</label>
-      <br />
-      <table class="alternative_address_table" id="table_address_input" >
-        <tr>
-          <td>
-
-            <label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-            <%= nf.text_field( :address_line_1_alternative, :size=>20, :maxlength=>24) %>
-            <span class="error" id="address_line_1_alternative_error">&nbsp;</span>
-
-          </td>
-          <td>
-
-            <label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label>
-            <%= nf.text_field( :address_line_2_alternative, :size=>20, :maxlength=>24) %>
-            <span class="error">&nbsp;</span>
-
-          </td>
-          <td>
-
-            <label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-            <%= nf.text_field( :city_alternative, :size=>20, :maxlength=>20) %>
-            <span class="error" id="city_alternative_error">&nbsp;</span>
-          </td>
-          <td>
-            <label>County:&nbsp;<span class="max_length">(24)</span></label>
-            <%= nf.text_field( :province_alternative,  :size=>20, :maxlength=>24) %>
-            <span class="error">&nbsp;</span>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label>
-            <% unless @lenders.country_id_alternative.blank? %>
-              <% @current_selected = @lenders.country_id_alternative %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-            <% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
-            <%= nf.select(:country_id_alternative, @countries) %>
-            <span class="error" id="country_alternative_error">&nbsp;</span>
-          </td>
-         
-         
-          <td>
-         
-         
-        <% if @lenders.state_id_string_alternative.blank? %>
-           <% display_state_id = 'inline' %>
-           <% else %>
-           <% display_state_id = 'none' %>
-           <% end %>
-             
-            <div id="choose_us_state_alternative"  style="display:<%= display_state_id %>;" >
-				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @lenders.state_id_alternative.blank? %>
-				<% current_selected = @lenders.state_id_alternative %>
+	<div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
+		<label class="personal" >Provide your alternative contact address here:</label>
+		<br />
+		<table class="alternative_address_table" id="table_address_input" >
+			<tr>
+				<td><label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :address_line_1_alternative, :size=>20, :maxlength=>24) %> <span class="error" id="address_line_1_alternative_error">&nbsp;</span></td>
+				<td><label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :address_line_2_alternative, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+				<td><label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label> <%= nf.text_field( :city_alternative, :size=>20, :maxlength=>20) %> <span class="error" id="city_alternative_error">&nbsp;</span></td>
+				<td><label>County:&nbsp;<span class="max_length">(24)</span></label> <%= nf.text_field( :province_alternative,  :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> <% unless @lenders.country_id_alternative.blank? %>
+				<% @current_selected = @lenders.country_id_alternative %>
 				<% else %>
-				<% current_selected = '99' %>
+				<% @current_selected = '99' %>
 				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id_alternative, @states) %> 
-				</div>
+				<% @countries = options_from_collection_for_select(@ct, :country_id, :country_name, @current_selected) %>
+				<%= nf.select(:country_id_alternative, @countries) %> <span class="error" id="country_alternative_error">&nbsp;</span></td>
 
-			<% unless @lenders.state_id_string_alternative.blank? %>
-           <% display_state_id_string = 'inline' %>
-           <% else %>
-           <% display_state_id_string = 'none' %>
-           <% end %>
-           	<div id="provide_country_state_alternative" style="display:<%= display_state_id_string %>;" >
+				<td> <% if @lenders.us_state_id_alternative.blank? %>
+				<% display_us_state_id = 'inline' %>
+				<% else %>
+				<% display_us_state_id = 'none' %>
+				<% end %>
+				<div id="choose_us_state_alternative"  style="display:<%= display_us_state_id %>;" >
+					<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<% unless @lenders.us_state_id_alternative.blank? %>
+					<% current_selected = @lenders.us_state_id_alternative %>
+					<% else %>
+					<% current_selected = '99' %>
+					<% end  %>
+					<% @states = options_from_collection_for_select(@st, :us_state_id, :state_name, current_selected) %>
+					<%= nf.select(:us_state_id_alternative, @states) %>
+				</div> <% unless @lenders.us_state_id_alternative.blank? %>
+				<% display_us_state_id = 'inline' %>
+				<% else %>
+				<% display_us_state_id = 'none' %>
+				<% end %>
+				<div id="provide_country_state_alternative" style="display:<%= display_us_state_id %>;" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string_alternative) %>
-					
-				</div>
-				<span class="error" id="state_alternative_error">&nbsp;</span>
-         
-         
-          </td>
-         
-          <td>
-            <label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-            <%= nf.text_field( :postal_code_alternative,  :maxlength=>15, :size=>15) %>
-            <span class="error" id="postal_code_alternative_error">&nbsp;</span>
-          </td>
-          <td>
-            &nbsp;
-          </td>
+					<%= nf.text_field(:us_state_id_alternative) %>
 
-        </tr>
+				</div><span class="error" id="state_alternative_error">&nbsp;</span></td>
 
-        <tr>
-          <td colspan="4">
-            <span class="error" id="whichContactAddressError">Incomplete alternative address information.  Please note required fields.</span>
-          </td>
+				<td><label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :postal_code_alternative,  :maxlength=>15, :size=>15) %> <span class="error" id="postal_code_alternative_error">&nbsp;</span></td>
+				<td> &nbsp; </td>
 
+			</tr>
 
-        </tr>
-      </table>
+			<tr>
+				<td colspan="4"><span class="error" id="whichContactAddressError">Incomplete alternative address information.  Please note required fields.</span></td>
 
-    </div>
-	<div   class="div_white" >&nbsp;</div>
+			</tr>
+		</table>
+
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
 	<div style="float:left;width:92%;margin-left:25px;background-color:#E0E0FF;">
 		<label class="readonly_label_underline">Contact Option: By your Login E-Mail? Or, an Alternative E-Mail?</label>
 		<table class="personal">
@@ -450,46 +374,24 @@
 	<div style="float:left;width:92%;margin-left:25px;background-color:#CCEBD6;">
 		<label class="readonly_label_underline" >Contact Option: By Internet Social Media?</label>
 		<table class="personal" style="margin-left:15px;">
-      	<tr>
-        <td>
-          <label>Your Facebook Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Facebook) %>
-          <span class="error">&nbsp;</span>
-        </td>
-        <td>
-          <label>Your LinkedIn Account:</label>
-          <%= nf.text_field( :borrower_contact_by_LinkedIn) %>
-          <span class="error">&nbsp;</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label>Your Twitter Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Twitter) %>
-          <span class="error">&nbsp;</span>
-        </td>
-        <td>
-          <label>Your Instagram Account:</label>
-          <%= nf.text_field( :borrower_contact_by_Instagram) %>
-          <span class="error">&nbsp;</span>
-         </td>
-</tr>
-        <tr>
-       	<td>
-          <label>Other Social Media:</label>
-          <%= nf.text_field( :borrower_contact_by_Other_Social_Media) %>
-          <span class="error">&nbsp;</span>
-        </td>
+			<tr>
+				<td><label>Your Facebook Account:</label> <%= nf.text_field( :borrower_contact_by_Facebook) %> <span class="error">&nbsp;</span></td>
+				<td><label>Your LinkedIn Account:</label> <%= nf.text_field( :borrower_contact_by_LinkedIn) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Your Twitter Account:</label> <%= nf.text_field( :borrower_contact_by_Twitter) %> <span class="error">&nbsp;</span></td>
+				<td><label>Your Instagram Account:</label> <%= nf.text_field( :borrower_contact_by_Instagram) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Other Social Media:</label> <%= nf.text_field( :borrower_contact_by_Other_Social_Media) %> <span class="error">&nbsp;</span></td>
 
-        <td>
-          <label>Other Social Media Access:</label>
-          <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access) %>
-          <span class="error">&nbsp;</span>
-        </td>
-        </tr>
-      </table>
-      </div>
-	<div   class="div_white" >&nbsp;</div>
+				<td><label>Other Social Media Access:</label> <%= nf.text_field( :borrower_contact_by_Other_Social_Media_Access) %> <span class="error">&nbsp;</span></td>
+			</tr>
+		</table>
+	</div>
+	<div   class="div_white" >
+		&nbsp;
+	</div>
 	<div class="bottom">
 		<a href="#item_section2" class="registration_header" style="display:none;" onclick="showReview();">Review Lender Item Registration {BETA}</a>
 		<a href="#menu_item_1" onclick="showFormContact();">Return to '1. Contact Information'</a>&nbsp;&nbsp; <a href="#menu_item_3" onclick="showLenderToBorrower();">Continue to '3. Item Transfer: Lender to Borrower</a>
@@ -639,27 +541,24 @@
 		<tr class="odd">
 			<td style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;">
-				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @lenders.item_category_id.blank? %>
-					<% current_selected = @lenders.item_category_id %>
-					<% else %>
-					<% current_selected = '99' %>
-					<% end  %>
-					<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
-					<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, current_selected.to_i) %>
-					<%= nf.select( :item_category_id, @cats,{ :onchange=>"lenders_item_category_id();", :style=>"width:auto;" }) %></label>
-				<span class="error" id="item_category_id_error">Choose a 'Category'.</span>
+				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> 
+					<%= nf.fields_for :category do |cat| %>
+					<%= cat.collection_select(:category_id, Category.all, :category_id, :category_type %>
+					<% end %>
+					</label>
+				     <span class="error" id="category_id_error">Choose a 'Category'.</span>
 
 			</div></td>
-			<td  style="width:50%;"> <% display_div = 'none' %>
-			<% unless @lenders.item_category_id.blank? %>
-			<% if @lenders.item_category_id == 0 %>
+			<td  style="width:50%;"> 
+			<% display_div = 'none' %>
+			<% unless @lenders.category_id.blank? %>
+			<% if @lenders.category_id == 0 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
 			<div style="display:<%= display_div %>;margin-left:25px;margin-top:5px;" id="other_category">
 				<label>Add another category:<span class="required_fields">&nbsp;&nbsp;*</span></label>
 				<%= nf.text_field( :other_item_category, {:class=>"hidden_input"}) %>
-
 			</div></td>
 
 		</tr>
@@ -670,7 +569,6 @@
 				<label>Based on this category, would you like to notify borrowers seeking items in this category?:&nbsp;
 					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",
 					:field=>"notify_borrowers",:radio_id => "notify_borrowers", :radio_num => "notify_borrowers1", :which_class=>"radio", :onchange_call => ""} %></label>
-
 			</div></td>
 		</tr>
 
@@ -686,13 +584,9 @@
 				<label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
 
 				<% unless @lenders.item_condition_id.blank? %>
-				<% current_selected = @lenders.item_condition_id %>
-				<% else %>
-				<% current_selected = '99' %>
-				<% end  %>
-				<% @item_conditions = Itemconditions.find(:all, :order=> "item_condition_id") %>
-				<% @bl = options_from_collection_for_select(@item_conditions, :item_condition_id, :conditions, current_selected.to_i) %>
-				<%= nf.select( :item_condition_id, @bl) %>
+				<%= nf.fields_for :item_condition do |ic|  %>
+				<%  ic.collection_select(:item_condition_id, Itemcondition.all, :iten_condition_id, :condition) %>
+				<%= end %>
 				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
 			</div></td>
 		</tr>
@@ -711,8 +605,8 @@
 			</div></td>
 		</tr>
 
-		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_item_id =?", @lenders.lender_item_id]) %>
-		<% if @ig.blank? %>
+		<%= nf.fields_for :itemimage do |ii| %>
+		
 		<tr class="odd">
 			<td  style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;float:left;">
@@ -727,16 +621,19 @@
 				<%= nf.text_field( :item_image_caption) %>
 			</div></td>
 		</tr>
-		<% else %>
+		
 
 		<tr class="odd">
 			<td style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;float:left;">
-				<label>Image Caption:<% unless @ig[0].item_image_caption.blank? %>
-					<%= @ig[0].item_image_caption   %>
+				<label>Image Caption:</label>
+					<% l = Lender.itemimage.first %>
+					<% image_caption = l.item_image_caption %>
+					<% unless image_caption.blank? %>
+					<%= image_caption   %>
 					<% else %>
 					None provided.
-					<% end %></label>
+					<% end %>
 				<label>Image of Item:</label>
 				<% file_path_str = @ig[0].image_file_name %>
 				<img  height="100" width="200" src="<%= get_image_path(file_path_str) %>" alt="Uploaded image file" />

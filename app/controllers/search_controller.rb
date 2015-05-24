@@ -27,7 +27,7 @@ class SearchController < ApplicationController
   end
 
   def create
-    @search = Search.new(params[:searches])
+    @search = Search.new(params[:search])
     @save_search = @search.save(:validate => false)
     session[:rapid_id] = @search.id
     redirect_to :action => :item_search, :id => @search.id,  :which => @search.lender_or_borrower

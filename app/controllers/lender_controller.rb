@@ -23,8 +23,8 @@ end
           :last_name => 'NA',
           :displayLenderName => 0,
           :address_line_1 => 'NA',
-          :state_id=> @req[:state_id].to_s,
-          :state_id_string=> @req[:state_id_string],
+          :us_state_id=> @req[:us_state_id].to_s,
+          :us_state_id=> @req[:us_state_id],
           :country_id=> @req[:country_id].to_s,
           :city => "NA",
           :postal_code => @req[:postal_code].to_s,
@@ -32,7 +32,7 @@ end
           :useWhichContactAddress => 0,
           :email_alternative=> @req[:email_alternative],
           :borrower_contact_by_email=> 2,
-          :item_category_id => @req[:item_category_id].to_i,
+          :category_id => @req[:category_id].to_i,
           :item_description=> @req[:item_description],
           :item_condition_id=> @req[:item_condition_id].to_i,
           :other_item_category=> @req[:other_item_category],
@@ -41,7 +41,6 @@ end
           :goodwill=> @req[:goodwill].to_i,
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
-          :is_saved => @req[:is_saved].to_i,
           :is_community => @req[:is_community].to_i,
           :date_created => Time.now,
           :approved => 1,
@@ -66,18 +65,23 @@ end
       session[:notice] = ''
       session[:background] = true
        if session[:community_name].blank? 
-        @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"]) 
+        @lender = Lender.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"]) 
       else
-        @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => 
+        @lender = Lender.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => 
              ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  
       end 
+        if @lender.blank?
+          session[:notice] = "Sorry, no Lenders records yet."
+          redirect_to  :controller => "search", :action => 'item_search'
+      end
+      
   end
 
   def lender_item_detail
       session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
+        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
      
       end
       
@@ -94,7 +98,7 @@ end
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
 	      session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_item_id = ?", params[:id]])
+        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
       end
       
       if @lenders.blank? || params[:id].blank?
@@ -114,18 +118,22 @@ end
     if !(params['commit'].blank?) && params[:id]
          if params['commit'] == "edit"
           session[:reuse] = false
-		session[:edit_record] = true
+		      session[:edit_record] = true
           redirect_to :action => @which_view, :commit => "edit", :id => params[:id]
          elsif params['commit'] == "reuse"
           session[:reuse] = true  
-		session[:edit_record] = true 
+		      session[:edit_record] = true 
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
-        @lenders = Lender.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]]) 
-        if @lenders.blank?
+        lend = Lender.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]])
+ 
+        if lend.blank?
           redirect_to  :controller => "lender", :action => @which_view 
-        end
+        else
+          cat = lend.category.first
+          @lenders = cat.item_condition.first 
+       end
    end     
         
   end
@@ -151,9 +159,10 @@ end
     if params[:id].blank?
     @lenders = Lender.new
     else
-      @lenders = Lender.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
+      @lenders = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
       if @lenders.blank?
-        @lenders = Lender.new
+        lend = Lender.new
+        
       end
     end
   end
@@ -164,7 +173,7 @@ end
      if params[:id].blank?
     @lenders = Lender.new
     else
-      @lenders = Lender.find(:all, :conditions => ["lender_item_id = ?", params[:id]])
+      @lenders = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
       if @lenders.blank?
         @lenders = Lender.new
       end
@@ -174,7 +183,7 @@ end
   def update_lender_offering
     session[:notice] = ''
     unless params[:lenders].blank?
-      if (params[:lenders][:lender_item_id].blank?)  ## then it is a new record
+      if (params[:lenders][:lender_id].blank?)  ## then it is a new record
 
         @req = params[:lenders]
 
@@ -196,8 +205,8 @@ end
           :postal_code=> @req[:postal_code],
           :city=> @req[:city],
           :province=> @req[:province],
-          :state_id=> (@req[:state_id_string].blank? ? @req[:state_id] : '99'),
-          :state_id_string=> @req[:state_id_string],
+          :us_state_id=> (@req[:us_state_id].blank? ? @req[:us_state_id] : '99'),
+          :us_state_id=> @req[:us_state_id],
           :country_id=> @req[:country_id],
           :useWhichContactAddress => @useWhichContactAddress,
           :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
@@ -205,8 +214,8 @@ end
           :postal_code_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:postal_code_alternative]:''),
           :city_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:city_alternative]: ''),
           :province_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:province_alternative]: ''),
-          :state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:state_id_alternative]: '99'),
-          :state_id_string_alternative => @req[:state_id_string_alternative],
+          :us_state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:us_state_id_alternative]: '99'),
+          :us_state_id_alternative => @req[:us_state_id_alternative],
           :country_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:country_id_alternative]:'99'),
           :home_phone => @req[:home_phone],
           :public_display_home_phone=> (@req[:public_display_home_phone].blank? ? -1:@req[:public_display_home_phone].to_i) ,
@@ -237,7 +246,7 @@ end
           :borrower_contact_by_Twitter=> @req[:borrower_contact_by_Twitter],
           :borrower_contact_by_Instagram=> @req[:borrower_contact_by_Instagram],
           :borrower_contact_by_Other_Social_Media_Access=> @req[:borrower_contact_by_Other_Social_Media_Access],
-          :item_category_id => @req[:item_category_id].to_i,
+          :category_id => @req[:category_id].to_i,
           :item_description=> @req[:item_description],
           :item_condition_id=> @req[:item_condition_id].to_i,
           :other_item_category=> @req[:other_item_category],
@@ -267,16 +276,15 @@ end
           :goodwill=> @req[:goodwill].to_i,
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
-          :is_saved => @req[:is_saved].to_i,
           :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_created => Time.now,
           :approved => 0)
-        @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
-        if @lenders.save(:validate => @shouldvalidate) && @lenders.errors.empty?
+       
+        if @lenders.save(:validate => true) && @lenders.errors.empty?
 
           unless @hold_picture_file.blank?
-            @img =  Itemimage.new(:lender_item_id => @lenders.lender_item_id,
-              :borrower_item_id => '',
+            @img =  Itemimage.new(:lender_id => @lenders.lender_id,
+              :borrower_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> @req[:item_image_caption],
               :date_created =>Time.now,
@@ -290,9 +298,9 @@ end
           return false
         end
       
-      elsif (!params[:lenders][:lender_item_id].blank?)
+      elsif (!params[:lenders][:lender_id].blank?)
         ## do update
-        @ltmp = Lender.find(:first, :conditions => ["lender_item_id = ?",params[:lenders][:lender_item_id] ])
+        @ltmp = Lender.find(:first, :conditions => ["lender_id = ?",params[:lenders][:lender_id] ])
         @req = params[:lenders]
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
@@ -311,8 +319,8 @@ end
           :postal_code=> @req[:postal_code],
           :city=> @req[:city],
           :province=> @req[:province],
-          :state_id=> (@req[:state_id_string].blank? ? @req[:state_id] : '99'),
-          :state_id_string=> @req[:state_id_string],
+          :us_state_id=> (@req[:us_state_id].blank? ? @req[:us_state_id] : '99'),
+          :us_state_id=> @req[:us_state_id],
           :country_id=> @req[:country_id],
           :useWhichContactAddress => @useWhichContactAddress,
           :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
@@ -320,8 +328,8 @@ end
           :postal_code_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:postal_code_alternative]:''),
           :city_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:city_alternative]: ''),
           :province_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:province_alternative]: ''),
-          :state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:state_id_alternative]: '99'),
-          :state_id_string_alternative=> @req[:state_id_string_alternative],
+          :us_state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:us_state_id_alternative]: '99'),
+          :us_state_id_alternative=> @req[:us_state_id_alternative],
           :country_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:country_id_alternative]:'99'),
           :home_phone => @req[:home_phone],
           :public_display_home_phone=> (@req[:public_display_home_phone].blank? ? -1:@req[:public_display_home_phone].to_i) ,
@@ -353,7 +361,7 @@ end
           :borrower_contact_by_Instagram=> @req[:borrower_contact_by_Instagram],
           :borrower_contact_by_Other_Social_Media_Access=> @req[:borrower_contact_by_Other_Social_Media_Access],
           :notify_borrowers=> (@req[:notify_borrowers].blank? ? -1:@req[:notify_borrowers].to_i) ,
-          :item_category_id => @req[:item_category_id].to_i,
+          :category_id => @req[:category_id].to_i,
           :item_description=> @req[:item_description],
           :item_condition_id=> @req[:item_condition_id].to_i,
           :other_item_category=> @req[:other_item_category],
@@ -382,21 +390,19 @@ end
           :goodwill=> @req[:goodwill].to_i,
           :age_18_or_more=>@req[:age_18_or_more].to_i,
           :is_active => @req[:is_active].to_i,
-          :is_saved => @req[:is_saved].to_i,
           :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_updated => Time.now,
           :approved => 0]
 
     
         @ltmp.update_attributes(@myupdatehash[0])
-        @shouldvalidate = (@req[:is_saved].to_i == 1 ? true : false)
-        if @ltmp.save(:validate => @shouldvalidate) && @ltmp.errors.empty?
-          puts "asdasdassd"
+        if @ltmp.save(:validate => true) && @ltmp.errors.empty?
+          
           unless (@hold_picture_file.blank?)
-            @img = Itemimage.find(:first, :conditions => ["lender_item_id = ?", @ltmp.lender_item_id])
+            @img = Itemimage.find(:first, :conditions => ["lender_id = ?", @ltmp.lender_id])
             @myupdatehash = Hash.new
-            @myupdatehash = [:lender_item_id => @ltmp.lender_item_id,
-              :borrower_item_id => '',
+            @myupdatehash = [:lender_id => @ltmp.lender_id,
+              :borrower_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> @req[:item_image_caption],
               :date_created => Time.now,

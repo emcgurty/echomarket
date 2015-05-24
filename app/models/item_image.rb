@@ -1,8 +1,8 @@
-class Itemimage < ActiveRecord::Base
+class ItemImage < ActiveRecord::Base
 
-  belongs_to :lenders
-  belongs_to :borrowers
-  belongs_to :advertisers
+  belongs_to :lender
+  belongs_to :borrower
+  belongs_to :advertiser
 
   require 'fastimage'
   set_primary_key :item_image_id
@@ -15,8 +15,9 @@ class Itemimage < ActiveRecord::Base
   protected
 
   def get_primary_key_value
-    return self.item_image_id if not (self.item_image_id.blank?)
+    if self.item_image_id.blank?
     self.item_image_id = get_random
+    end
     return self.item_image_id
 
   end
@@ -45,10 +46,10 @@ class Itemimage < ActiveRecord::Base
   def delete_old_image_file(new_file)
  
    directory = "#{Rails.root}/public/images/item_images/"
-    unless self.lender_item_id.blank?
-      @deleteFile = Itemimage.find(:all, :readonly, :conditions => ["lender_item_id = ? and item_image_id = ?", self.lender_item_id, self.item_image_id ])
+    unless self.lender_id.blank?
+      @deleteFile = Itemimage.find(:all, :readonly, :conditions => ["lender_id = ? and item_image_id = ?", self.lender_id, self.item_image_id ])
     else
-      @deleteFile = Itemimage.find(:all, :readonly, :conditions => ["borrower_item_id = ? and item_image_id = ?", self.borrower_item_id, self.item_image_id ])
+      @deleteFile = Itemimage.find(:all, :readonly, :conditions => ["borrower_id = ? and item_image_id = ?", self.borrower_id, self.item_image_id ])
     end
     unless @deleteFile.blank?
       @deleteFile.each do |dlf|

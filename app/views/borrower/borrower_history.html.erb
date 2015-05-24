@@ -1,4 +1,5 @@
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
+<%  rowCount = 1 %>
 <%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_history"}, :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"} do |nf| %>
 
 
@@ -7,8 +8,6 @@
     <p>Welcome Back Echo Market borrower!</p>
 
   </div>
-  <%  rowCount = 1 %>
-  <% unless @borrowers.blank? %>
 
     <div style="float:left;">
       <table class="history" >
@@ -26,30 +25,31 @@
           <%  rowCount = rowCount + 1 %>
           <tr class="<%= rowClass %>" >
             <td>
-              <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
-              <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
+              <%= nf.fields_for :category do |cat| %>
+              <%= cat.label (:category_id.blank? ? "No Item Category provided" : :category_type) %>
+              <% end %>
             </td>
             <td>
-              <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
+              <%= nf.label (:item_description.blank? ? "NA": :item_description) %></td>
             <td>
-              <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
+              <%= nf.label (:item_model.blank? ? "NA": :item_model) %></td>
             <td>
-              <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_condition_id = ?", isq.item_condition_id]) %>
-              <%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
+              <%= nf.fields_for :item_condition do |ic| %>
+              <%= ic.label (:item_condition_id.blank? ? "No Item Condition provided" : :conditions) %>
+              <% end %>
             </td>
             <td>
-              <%= (isq.date_created.blank? ? "NA": isq.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>
-              <%= (isq.date_updated.blank? ? "NA": isq.date_updated.strftime("%m/%d/%Y %I:%M%p")) %>
+              <%= (@borrowers.date_created.blank? ? "NA": @borrowers.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>
+              <%= (@borrowers.date_updated.blank? ? "NA": @borrowers.date_updated.strftime("%m/%d/%Y %I:%M%p")) %>
             </td>
             <td>
-              <%= (isq.is_saved == 0 ? "Not complete": "Complete") %><br style="margin:0;"/>
-              <%= (isq.approved == 0 ? "Not approved": "Approved") %>
+               <%= (@borrowers.approved == 0 ? "Not approved": "Approved") %>
             </td>
             <td >
 
-              <%= link_to "EDIT", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>isq.borrower_item_id  %><br style="margin:0;"/><br style="margin:0;"/>
-              <%= link_to "REUSE", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> isq.borrower_item_id %><br style="margin:0;"/><br style="margin:0;"/>
-              <%= link_to "DELETE", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>isq.borrower_item_id} ,
+              <%= link_to "EDIT", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>@borrowers.borrower_id  %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "REUSE", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> @borrowers.borrower_id %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "DELETE", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>@borrowers.borrower_id} ,
                 
                  {:confirm => "Are you sure you wish to delete this record?"}  %>
 

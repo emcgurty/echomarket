@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
   alpha_numeric_regex_username = /\A[0-9 a-zA-Z\-\_]+\z/
   
-  self.primary_key = :user_id
+  self.primary_key = 'user_id'
   belongs_to :lender
   belongs_to :borrower
   

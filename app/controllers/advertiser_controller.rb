@@ -21,7 +21,7 @@ class AdvertiserController < ApplicationController
           :description=> @req[:description].to_s,
           :advertiser_email=> @req[:advertiser_email].to_s,
           :advertiser_url=> @req[:advertiser_url].to_s,
-          :category_id => @req[:category_id].to_i,
+          :category_id => @req[:category_id],
           :category_other=> @req[:category_other],
           :is_active => 1,
           :is_activated => 0,
@@ -34,8 +34,8 @@ class AdvertiserController < ApplicationController
        
         if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
           unless @hold_picture_file.blank?
-            @img =  Itemimage.new(:company_logo => @advertiser.advertiser_id,
-              :borrower_item_id => '',  :lender_item_id => '',
+            @img =  Itemimage.new(:advertiser_id => @advertiser.advertiser_id,
+              :borrower_id => '',  :lender_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> '',
               :date_created =>Time.now,

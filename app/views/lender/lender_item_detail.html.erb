@@ -63,11 +63,11 @@
            <%= ldr.address_line_1 %><%= (ldr.address_line_2.blank? ? " ": ldr.address_line_2) %><br />
         <%= ldr.city + ","%><%= (ldr.province.blank? ? "": ldr.province) + " " %>
 
-        <% if ldr.state_id_string.blank? %>
-          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["state_id = ?", ldr.state_id ]) %>
-          <%= (@s_c.state_id == '99' ? "" : @s_c.state_name) %>
+        <% if ldr.us_state_id.blank? %>
+          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", ldr.us_state_id ]) %>
+          <%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
         <% else %>
-         <%= ldr.state_id_string %>
+         <%= ldr.us_state_id %>
         <% end %>
         <br />
         <% unless ldr.country_id.blank? %>
@@ -87,11 +87,11 @@
       <p><%= ldr.address_line_1_alternative %><%= (ldr.address_line_2_alternative.blank? ? " ": ldr.address_line_2_alternative) %><br />
         <%= ldr.city_alternative + ","%><%= (ldr.province_alternative.blank? ? "": ldr.province_alternative) + " " %>
 
-        <% if ldr.state_id_string_alternative.blank? %>
-          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["state_id = ?", ldr.state_id_alternative ]) %>
-          <%= (@s_c.state_id == '99' ? "" : @s_c.state_name + " ") %>
+        <% if ldr.us_state_id_alternative.blank? %>
+          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", ldr.us_state_id_alternative ]) %>
+          <%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name + " ") %>
         <% else %>  
-        <%= ldr.state_id_string_alternative + " " %>
+        <%= ldr.us_state_id_alternative + " " %>
         <% end %>
         <br />
         <% unless ldr.country_id_alternative.blank? %>
@@ -296,7 +296,7 @@
   <div class="div_p_detail_sub">
 
     Category:
-    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", ldr.item_category_id]) %>
+    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", ldr.category_id]) %>
     <%= @Category.category_type %>
     <% if @Category.category_type == "Other" %>
       &nbsp;Other category:
@@ -325,7 +325,7 @@
 
 
 
-    <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_item_id = ?', ldr.lender_item_id])  %>
+    <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_id = ?', ldr.lender_id])  %>
     <% unless @imgs.blank? %>
       <% @icaption = (@imgs[0].item_image_caption.blank? ? "No caption provided"  :  @imgs[0].item_image_caption)  %>
 

@@ -1,6 +1,8 @@
 <%= javascript_include_tag 'echo_market.js' , :type => "text/javascript" %>
 
 <%= form_for @borrower, :url=>{:controller=>"borrower", :action => "b_list"},  :html=>  {:class=>"b_list",  :id=>"b_list"} do |nf| %>
+
+
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
     <p><%= session[:community_name].to_s unless session[:community_name].blank? %> Borrower Items</p>
@@ -26,14 +28,14 @@
     <% else %>
       <% hold_cat  = "" %>
       
-        <% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', @borrower.item_category_id])  %>
+        <% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', @borrower.category_id])  %>
         <% if @cats %>
           <% if ((@cats.category_id == @borrower.category_id) && (hold_cat != @cats.category_id))  %>
             <label class="item_listing" ><%= @cats.category_type %></label><br />
             <% hold_cat  = @cats.category_id %>
           <% end %>
         <% end %>
-        <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_item_id = ?', @borrower.borrower_item_id])  %>
+        <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_id = ?', @borrower.borrower_id])  %>
         <% if @imgs %>
           <% @imgs.each do |oimg| %>
             <%  icaption = (oimg.item_image_caption.blank? ? 'None provided' : oimg.item_image_caption)  %>
@@ -51,7 +53,7 @@
 	   <label class="item_listing">Borrower Comments:&nbsp;<%= @borrower.comment %></label>
 	  
 	  
-        <%= link_to "Details..." , borrower_item_detail_url(:id=> @borrower.borrower_item_id ), {:style=>"color:#ff4500;"} %>
+        <%= link_to "Details..." , borrower_item_detail_url(:id=> @borrower.borrower_id ), {:style=>"color:#ff4500;"} %>
 	
         <hr style="color:indigo;" />
 

@@ -10,18 +10,17 @@
 <% end  %>
 <% if session[:reuse] %>
 <div style="display:none;">
-	<%= nf.hidden_field( :borrower_item_id, :value=>'') %>
+	<%= nf.hidden_field( :borrower_id, :value=>'') %>
 </div>
 <% else %>
 <div style="display:none;">
-	<%= nf.hidden_field( :borrower_item_id) %>
+	<%= nf.hidden_field( :borrower_id) %>
 </div>
 <% end %>
 
 <div style="display:none;">
 
 	<%= nf.hidden_field( :is_active) %>
-	<%= nf.hidden_field( :is_saved) %>
 	<%= nf.hidden_field( :user_id) %>
 
 </div>
@@ -166,26 +165,26 @@
 				<span class="error" id="country_error">&nbsp;</span></td>
 
 				<td style="width:25%;"> 
-				<% if @borrowers.state_id_string.blank? %>
-				<% display_state_id = 'inline' %>
+				<% if @borrowers.us_state_id.blank? %>
+				<% display_us_state_id = 'inline' %>
 				<% else %>
-				<% display_state_id = 'none' %>
+				<% display_us_state_id = 'none' %>
 				<% end %>
-				<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
+				<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
 				<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
-			     <%= primary.fields_for :state_id do |si_p| %>
-		         <%= si_p.collection_select :state_id, UsState.all, :state_id, :state_name %>
+			     <%= primary.fields_for :us_state_id do |si_p| %>
+		         <%= si_p.collection_select :us_state_id, UsState.all, :us_state_id, :state_name %>
 			    <% end  %>			
 
 				</div> 
-				<% unless @borrowers.state_id_string.blank? %>
-				<% display_state_id_string = 'inline' %>
+				<% unless @borrowers.us_state_id.blank? %>
+				<% display_us_state_id = 'inline' %>
 				<% else %>
-				<% display_state_id_string = 'none' %>
+				<% display_us_state_id = 'none' %>
 				<% end %>
-				<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
+				<div id="provide_country_state" style="display:<%= display_us_state_id %>;" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= primary.text_field(:state_id_string) %>
+					<%= primary.text_field(:us_state_id) %>
 
 				</div>
 				<span class="error" id="state_error">&nbsp;</span></td>
@@ -270,25 +269,25 @@
 				<span class="error" id="country_alternative_error">&nbsp;</span></td>
 
 				<td> 
-				<% if @borrowers.state_id_string_alternative.blank? %>
-				<% display_state_id = 'inline' %>
+				<% if @borrowers.us_state_id_alternative.blank? %>
+				<% display_us_state_id = 'inline' %>
 				<% else %>
-				<% display_state_id = 'none' %>
+				<% display_us_state_id = 'none' %>
 				<% end %>
-				<div id="choose_us_state_alternative"  style="display:<%= display_state_id %>;" >
+				<div id="choose_us_state_alternative"  style="display:<%= display_us_state_id %>;" >
 					<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
-					<%= alternative.fields_for :state_id do |si_a| %>
-		            <%= si_a.collection_select :state_id, UsState.all, :state_id, :state_name %>
+					<%= alternative.fields_for :us_state_id do |si_a| %>
+		            <%= si_a.collection_select :us_state_id, UsState.all, :us_state_id, :state_name %>
 			        <% end  %>	
 				</div> 
-				<% unless @borrowers.state_id_string_alternative.blank? %>
-				<% display_state_id_string = 'inline' %>
+				<% unless @borrowers.us_state_id_alternative.blank? %>
+				<% display_us_state_id = 'inline' %>
 				<% else %>
-				<% display_state_id_string = 'none' %>
+				<% display_us_state_id = 'none' %>
 				<% end %>
-				<div id="provide_country_state_alternative" style="display:<%= display_state_id_string %>;" >
+				<div id="provide_country_state_alternative" style="display:<%= display_us_state_id %>;" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= alternative.text_field(:state_id_string_alternative) %>
+					<%= alternative.text_field(:us_state_id_alternative) %>
 
 				</div><span class="error" id="state_alternative_error">&nbsp;</span></td>
 
@@ -431,12 +430,12 @@
 					<%= cat.collection_select :category_id, Category.all, :category_id, :category_type %>
 					<%  end %>
 					</label>
-				<span class="error" id="item_category_id_error">Choose a 'Category'.</span>
+				<span class="error" id="category_id_error">Choose a 'Category'.</span>
 
 			</div></td>
 			<td style="width:50%;"> <% display_div = 'none' %>
-			<% unless @borrowers.item_category_id.blank? %>
-			<% if @borrowers.item_category_id == 0 %>
+			<% unless @borrowers.category_id.blank? %>
+			<% if @borrowers.category_id == 0 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
@@ -471,7 +470,7 @@
 		
 				<% @item_conditions = Itemconditions.find(:all, :order=> "item_condition_id") %>
 				<% @bl = options_from_collection_for_select(@item_conditions, :item_condition_id, :conditions, @current_selected) %>
-				<% nf.fields_for :itemcondition do |ic|>
+				<% nf.fields_for :item_condition do |ic|>
 				<%= ic.collection_select :item_condition_id, :item_condition_id, :condition) %>
 				<% end %<
 				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>

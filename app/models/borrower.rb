@@ -1,21 +1,20 @@
 class Borrower < ActiveRecord::Base
 
-  self.primary_key = :borrower_item_id
-  attr_accessible :addresses_attributes, :itemimage_attributes
+  self.primary_key = 'borrower_id'
+  attr_accessible :addresses_attributes, :item_image_attributes
   attr_accessor :found_zip_codes
-  has_one :itemimage
-  has_one :itemcondition
+  has_one :item_image
+  has_one :item_condition
   has_one :category
   has_one :country
   has_one :us_state
-  has_one :contactdescribe
+  has_one :contact_describe
   has_one :user
   has_many :addresses, dependent: :destroy
-  accepts_nested_attributes_for :itemcondition
+  accepts_nested_attributes_for :item_condition
   accepts_nested_attributes_for :category
   accepts_nested_attributes_for :country
   accepts_nested_attributes_for :us_state
-  accepts_nested_attributes_for :itemcondition
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :addresses
     
@@ -24,8 +23,8 @@ class Borrower < ActiveRecord::Base
   protected
 
   def get_borrower_primary_key_value
-    if self.borrower_item_id.blank?
-    self.borrower_item_id = get_random
+    if self.borrower_id.blank?
+    self.borrower_id = get_random
     end
   end
 

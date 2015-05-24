@@ -78,7 +78,7 @@ module ApplicationHelper
       end
 
       unless @current_search.category_id.blank?
-        @cat = Categories.find(:first, :readonly,  :conditions => ["category_id = ?", @current_search.category_id])
+        @cat = Category.find(:first, :readonly,  :conditions => ["category_id = ?", @current_search.category_id])
         if @cat
           build_search_query_string << "<li>Category '" + @cat.category_type + "</li> "
         end

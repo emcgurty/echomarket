@@ -63,8 +63,8 @@
       <p><%= @ldr.address_line_1 %><%= (@ldr.address_line_2.blank? ? " ": @ldr.address_line_2) %><br />
         <%= @ldr.city + ","%><%= (@ldr.province.blank? ? "": @ldr.province) + " " %>
 
-        <% unless @ldr.state_id.blank? %>
-          <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", @ldr.state_id ]) %>
+        <% unless @ldr.us_state_id.blank? %>
+          <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["us_state_id = ?", @ldr.us_state_id ]) %>
           <%= @s_c.state_name %>
         <% end %>
         <br />
@@ -81,8 +81,8 @@
       <p><%= @ldr.address_line_1_alternative %><%= (@ldr.address_line_2_alternative.blank? ? " ": @ldr.address_line_2_alternative) %><br />
         <%= @ldr.city_alternative + ","%><%= (@ldr.province_alternative.blank? ? "": @ldr.province_alternative) + " " %>
 
-        <% unless @ldr.state_id_alternative.blank? %>
-          <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", @ldr.state_id_alternative ]) %>
+        <% unless @ldr.us_state_id_alternative.blank? %>
+          <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["us_state_id = ?", @ldr.us_state_id_alternative ]) %>
           <%= @s_c.state_name + " " %>
         <% end %>
         <br />
@@ -100,8 +100,8 @@
         <p>Contact Address:<%= @ldr.address_line_1 %><%= (@ldr.address_line_2.blank? ? " ": @ldr.address_line_2) %><br />
           <%= @ldr.city + ","%><%= (@ldr.province.blank? ? "": @ldr.province) + " " %>
 
-          <% unless @ldr.state_id.blank? %>
-            <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", @ldr.state_id ]) %>
+          <% unless @ldr.us_state_id.blank? %>
+            <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["us_state_id = ?", @ldr.us_state_id ]) %>
             <%= @s_c.state_name + " " %>
           <% end %>
           <br />
@@ -115,8 +115,8 @@
         <p>Alternative Address:<%= @ldr.address_line_1_alternative %><%= (@ldr.address_line_2_alternative.blank? ? " ": @ldr.address_line_2_alternative) %><br />
           <%= @ldr.city_alternative + ","%><%= (@ldr.province_alternative.blank? ? "": @ldr.province_alternative) + " " %>
 
-          <% unless @ldr.state_id_alternative.blank? %>
-            <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["state_id = ?", @ldr.state_id_alternative ]) %>
+          <% unless @ldr.us_state_id_alternative.blank? %>
+            <% @s_c = UsStates.find(:first, :select => "state_name", :readonly => true,  :conditions => ["us_state_id = ?", @ldr.us_state_id_alternative ]) %>
             <%= @s_c.state_name + " " %>
           <% end %>
           <br />
@@ -309,7 +309,7 @@
   <div class="div_p_detail_sub">
 
     Category:
-    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @ldr.item_category_id]) %>
+    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @ldr.category_id]) %>
     <%= @Category.category_type %>
     <% if @Category.category_type == "Other" %>
       &nbsp;Other category:
@@ -338,7 +338,7 @@
 
 
 
-    <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_item_id = ?', @ldr.lender_item_id])  %>
+    <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_id = ?', @ldr.lender_id])  %>
     <% unless @imgs.blank? %>
       <% @icaption = (@imgs[0].item_image_caption.blank? ? "No caption provided"  :  @imgs[0].item_image_caption)  %>
 

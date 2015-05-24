@@ -54,7 +54,7 @@ end
 
 
 def category_conditions
-  ["item_category_id = #{category_id.to_i}"] if category_id.present?
+  ["category_id = #{category_id.to_i}"] if category_id.present?
 end
 
 def date_conditions

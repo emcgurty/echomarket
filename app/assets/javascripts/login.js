@@ -76,7 +76,6 @@ function addMember(){
 	
 	var foundIncomplete = false;
 	$("span#incomplete_information_error").css("visibility", "hidden");
-	/*  f l a : all blank*/
 	if ($("input#community_members_alias").val() == "") {
 		if (($("input#community_members_first_name").val() == "") || ($("input#community_members_last_name").val() == "")) {
 			foundIncomplete = true;
@@ -111,38 +110,6 @@ function addMember(){
 	
 }
 
-
-
-
-function submitUpdateMember(rdt, c_id, com_id, is_c)  {
-	 	
-	    $("[id*='_h']").trigger('change');
-	    var queryString = '';
-	    /*    match 'community_member/update_row/(:fi)/(:m)/(:la)/(:al)/(:ci)/(:com_id)/(:is_c)'=> "community_member#update_row", :as=> :community_member_update_row */
-		if (is_c == 1)  {
-		var my_alias_str = 	$("span#thisFirstName" + rdt).text() + $("span#thisMI" + rdt).text() + $("span#thisLastName" + rdt).text();
-		queryString = "/community_member/update_row/" + $("span#thisFirstName" + rdt).text() +"/" + 
-		$("span#thisMI" + rdt).text() + "/" + $("span#thisLastName" + rdt).text() + "/" + my_alias_str + "/" + c_id + "/" + com_id + "/" + is_c;
-		} else {
-			queryString = "/community_member/update_row/" + $("span#thisFirstName" + rdt).text() +"/" + 
-		$("span#thisMI" + rdt).text() + "/" + $("span#thisLastName" + rdt).text() +"/" + $("span#thisAlias" + rdt).text() +"/" + c_id + "/" + com_id + "/" + is_c;
-		}
-		window.location.replace(queryString);
-}
-
-function update_row(myThis,rct) {
-	
-
-	if (myThis.id == "community_members_first_name_h") {
-		$("span#thisFirstName"+rct).text(myThis.value);	
-	}  else	if (myThis.id == "community_members_mi_h") {
-		$("span#thisMI"+rct).text(myThis.value);	
-	}  else	if (myThis.id == "community_members_last_name_h") {
-		$("span#thisLastName"+rct).text(myThis.value);	
-	}  else	if (myThis.id == "community_members_alias_h") {
-		$("span#thisAlias"+rct).text(myThis.value);	
-	}  else {}
-	}
 
 function submitPasswordReset() {
 
@@ -217,7 +184,7 @@ function submitCommunityRegistration(){
 	var foundInvalid = true;
 	var foundInvalidNameCI = true;
 	 
-	 if (($("select#communities_country_id option:selected").text() == 'United States') && ($("select#communities_state_id option:selected").text() == 'Please select')) {
+	 if (($("select#communities_country_id option:selected").text() == 'United States') && ($("select#communities_us_state_id option:selected").text() == 'Please select')) {
 		$("span#state_error").text("A State selection is required.");
 		$("span#state_error").css("visibility", "visible");
 		$("span#country_error").text("");
@@ -230,7 +197,7 @@ function submitCommunityRegistration(){
 	}
 	
 	if (foundInvalidNameCI) {
-	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() == '')) {
+	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_us_state_id").val() == '')) {
 		$("span#country_error").text("A Country with Region information is required.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -242,7 +209,7 @@ function submitCommunityRegistration(){
 	}
 	
 	if (foundInvalidNameCI) {
-		if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_state_id_string").val() != '')) {
+		if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_us_state_id").val() != '')) {
 		$("span#country_error").text("Please select a Country.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -253,7 +220,7 @@ function submitCommunityRegistration(){
 	}
 	}
 	if (foundInvalidNameCI) {
-	if (($("select#communities_country_id option:selected").text() != 'Please select') && ($("select#communities_country_id option:selected").text() != 'United States') && ($("input#communities_state_id_string").val() == '')) {
+	if (($("select#communities_country_id option:selected").text() != 'Please select') && ($("select#communities_country_id option:selected").text() != 'United States') && ($("input#communities_us_state_id").val() == '')) {
 		$("span#country_error").text("Please provide the required Region.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;

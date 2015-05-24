@@ -19,8 +19,8 @@ class Community < ActiveRecord::Base
   attr_accessor :password, :password_confirmation
   attr_accessible :password, :password_confirmation
   attr_accessible :community_name, :remote_ip, :crypted_password, :salt , :reset_code, :approved, :user_type
-  attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :state_id, :country_id, :state_id_string
-  attr_accessible :home_phone,:cell_phone, :email, :is_active ,:is_saved, :date_deleted, :date_updated  
+  attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :us_state_id, :country_id, :us_state_id
+  attr_accessible :home_phone,:cell_phone, :email, :is_active ,:date_deleted, :date_updated  
   before_save :encrypt_password 
   before_create :make_activation_code
   validates  :community_name, :password, :password_confirmation, :email, :presence => true

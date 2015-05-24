@@ -7,32 +7,32 @@
 		var container = $("div.location");
 		var errorDiv = container.find("span#postal_code_error");
 
-		$("input#searches_start_date").datepicker({
+		$("input#search_start_date").datepicker({
 			dateFormat : "yy-mm-dd"
 		});
 
-		$("input#searches_end_date").datepicker({
+		$("input#search_end_date").datepicker({
 			dateFormat : "yy-mm-dd"
 		});
 		
 	
 
-		$("input[name='searches[zip_code_radius]']").bind('change', function() {
-			var test_is_checked = $("input[name='searches[zip_code_radius]']:checked").val();
+		$("input[name='search[zip_code_radius]']").bind('change', function() {
+			var test_is_checked = $("input[name='search[zip_code_radius]']:checked").val();
 			if (test_is_checked) {
-				$("input[name='searches[postal_code]']").trigger('change');
+				$("input[name='search[postal_code]']").trigger('change');
 			}
 
 		});
 
-		$("input#searches_end_date.hasDatepicker").bind('change', function() {
+		$("input#search_end_date.hasDatepicker").bind('change', function() {
 
 			$("#start_date_error").css("visibility", "hidden");
 			$("#end_date_error").css("visibility", "hidden");
 			$("#start_date_error").text("");
 			$("#end_date_error").text("");
 
-			var start_date_value = $("input#searches_start_date.hasDatepicker").val();
+			var start_date_value = $("input#search_start_date.hasDatepicker").val();
 			var end_date_value = $(this).val();
 
 			if ((start_date_value == '') && (end_date_value != '')) {
@@ -47,7 +47,7 @@
 
 		});
 
-		$("input#searches_start_date.hasDatepicker").bind('change', function() {
+		$("input#search_start_date.hasDatepicker").bind('change', function() {
 
 			$("#end_date_error").css("visibility", "hidden");
 			$("#start_date_error").css("visibility", "hidden");
@@ -55,7 +55,7 @@
 			$("#end_date_error").text("");
 
 			var start_date_value = $(this).val();
-			var end_date_value = $("input#searches_end_date.hasDatepicker").val();
+			var end_date_value = $("input#search_end_date.hasDatepicker").val();
 
 			if ((end_date_value == '') && (start_date_value != '')) {
 				$("#end_date_error").text("Now please provide an End Date.");
@@ -69,15 +69,15 @@
 
 		});
 
-		$("input[name='searches[postal_code]']").bind('change', function() {
+		$("input[name='search[postal_code]']").bind('change', function() {
 			///alert("postal code change");
-			var distance = $("input[name='searches[zip_code_radius]']:checked").val();
+			var distance = $("input[name='search[zip_code_radius]']:checked").val();
 
 			///alert(distance);
 
 			if (distance) {
 				// Get zip code
-				var zipcode = $("input[name='searches[postal_code]']").val().substring(0, 5);
+				var zipcode = $("input[name='search[postal_code]']").val().substring(0, 5);
 				///		alert(zipcode);
 				if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
 
@@ -120,10 +120,10 @@
 
 		});
 
-		$("input#searches_start_date.hasDatepicker").trigger('change');
-		$("input#searches_end_date.hasDatepicker").trigger('change');
-		$("input[name='searches[postal_code]']").trigger('change');
-		$("input[name='searches[zip_code_radius]']").trigger('change');
+		$("input#search_start_date.hasDatepicker").trigger('change');
+		$("input#search_end_date.hasDatepicker").trigger('change');
+		$("input[name='search[postal_code]']").trigger('change');
+		$("input[name='search[zip_code_radius]']").trigger('change');
 
 		function handleResp(data) {
 			///		alert("function within function?");
@@ -141,7 +141,7 @@
 						mystr = mystr + "'" + zip.zip_code + "',";
 					});
 					/// alert(mystr);
-					var set_hidden_field = $("input#searches_found_zip_codes");
+					var set_hidden_field = $("input#search_found_zip_codes");
 					if (set_hidden_field) {
 						set_hidden_field.val() = mystr.chomp(",");
 					} else {
@@ -157,20 +157,20 @@
 
 	function submitSearch() {
 
-		var choose_l_or_b = $("input[name='searches[lender_or_borrower]']:checked");
-
+		var choose_l_or_b = $("input[name='search[lender_or_borrower]']:checked");
+        alert(choose_l_or_b);
 		$("span#echo_market_search_error").css("visibility", "hidden");
 		if (!(choose_l_or_b.val())) {
 			$("span#echo_market_search_error").text("From the above option 'Items to Borrow or items to Lend?', you need to choose to either search for what is being offered or what is needed.");
 			$("span#echo_market_search_error").css("color", "red");
 			$("span#echo_market_search_error").css("visibility", "visible");
 
-		} else if (($("input#searches_keyword").val() == "") && ($("input#searches_postal_code").val() == "") && ($("input#searches_start_date").val() == "") && ($("input#searches_end_date").val() == "") && ($("select#searches_category_id").val() == "")) {
+		} else if (($("input#search_keyword").val() == "") && ($("input#search_postal_code").val() == "") && ($("input#search_start_date").val() == "") && ($("input#search_end_date").val() == "") && ($("select#search_category_id").val() == "")) {
 			$("span#echo_market_search_error").text("You have to provide at least one search criteria.");
 			$("span#echo_market_search_error").css("color", "red");
 			$("span#echo_market_search_error").css("visibility", "visible");
 
-		} else if ((($("input#searches_start_date").val() != "") && ($("input#searches_end_date").val() == "")) || (($("input#searches_start_date").val() == "") && ($("input#searches_end_date").val() != ""))) {
+		} else if ((($("input#search_start_date").val() != "") && ($("input#search_end_date").val() == "")) || (($("input#search_start_date").val() == "") && ($("input#search_end_date").val() != ""))) {
 			$("span#echo_market_search_error").text("If you want to do a Date Create search, you have to provide both a Start Date and an End Date.");
 			$("span#echo_market_search_error").css("color", "red");
 			$("span#echo_market_search_error").css("visibility", "visible");

@@ -42,11 +42,11 @@
 	<ul >
 
 		<li>
-			<label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+			<label class="radio" for="search_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
 				<%= nf.radio_button :lender_or_borrower, "1" %> </label>
 		</li>
 		<li>
-			<label class="radio" for="searches_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+			<label class="radio" for="search_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
 				<%= nf.radio_button :lender_or_borrower, "2" %> </label>
 		</li>
 	</ul>
@@ -57,13 +57,13 @@
 
 		<% if @l_c.count > 0 %>
 		<li>
-			<label class="radio" for="searches_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
+			<label class="radio" for="search_lender_or_borrower_1" >Search what lenders have offered...:&nbsp;
 				<%= nf.radio_button :lender_or_borrower, "1" %> </label>
 		</li>
 		<% end %>
 		<% if @b_c.count > 0 %>
 		<li>
-			<label class="radio" for="searches_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
+			<label class="radio" for="search_lender_or_borrower_2" >Search what borrowers need..:&nbsp;
 				<%= nf.radio_button :lender_or_borrower, "2" %> </label>
 		</li>
 		<% end %>
@@ -129,10 +129,10 @@
 
 		<label>Within Radius: Select number of miles from your entered postal code.</label>
 
-		<label for="searches_zip_code_radius_1" class="radius">One Mile:&nbsp;<%= nf.radio_button( 'zip_code_radius', 1) %></label>
-		<label for="searches_zip_code_radius_5" class="radius">Five Miles:&nbsp;<%= nf.radio_button(  'zip_code_radius', 5) %></label>
-		<label for="searches_zip_code_radius_10" class="radius">Ten Miles:&nbsp;<%= nf.radio_button( 'zip_code_radius', 10) %></label>
-		<label for="searches_zip_code_radius_25" class="radius">25 Miles:&nbsp;<%= nf.radio_button('zip_code_radius', 25)%></label>
+		<label for="search_zip_code_radius_1" class="radius">One Mile:&nbsp;<%= nf.radio_button( 'zip_code_radius', 1) %></label>
+		<label for="search_zip_code_radius_5" class="radius">Five Miles:&nbsp;<%= nf.radio_button(  'zip_code_radius', 5) %></label>
+		<label for="search_zip_code_radius_10" class="radius">Ten Miles:&nbsp;<%= nf.radio_button( 'zip_code_radius', 10) %></label>
+		<label for="search_zip_code_radius_25" class="radius">25 Miles:&nbsp;<%= nf.radio_button('zip_code_radius', 25)%></label>
 
 		<span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit Postal Code Location.</span>
 		<span class="error" id="postal_code_error"></span>
@@ -149,8 +149,8 @@
 <% @lc = Lender.count(:conditions =>   ["user_id = ?", session[:user_id]]) %>
 <% @bc = Borrower.count(:conditions => ["user_id = ?", session[:user_id]]) %>
 <% else %>
-<% @lc = Lender.count(:conditions =>   ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
-<% @bc = Borrower.count(:conditions => ["is_active = 1 AND is_saved = 1 and is_community = 0"]) %>
+<% @lc = Lender.count(:conditions =>   ["is_active = 1 and is_community = 0"]) %>
+<% @bc = Borrower.count(:conditions => ["is_active = 1 and is_community = 0"]) %>
 <% end %>
 
 <% if @s_get_items.blank? %>
@@ -184,17 +184,17 @@
 	<% @s_get_items.each do |isq| %>
 
 	<tr>
-		<td> <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
-		<%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %> </td>
+		<td> <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.category_id]) %>
+		<%= (isq.category_id.blank? ? "No Item Category provided" : @cats.category_type) %> </td>
 		<td> <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
 		<td> <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
 		<td> <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_condition_id = ?", isq.item_condition_id]) %>
-		<%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %> </td>
+		<%= (isq.category_id.blank? ? "No Item Condition provided" : @cond.conditions) %> </td>
 		<td> <%= (isq.postal_code.blank? ? "NA": isq.postal_code) %></td>
 		<td> <% if @search.lender_or_borrower == 2 %>
-		<%= link_to "More..."  , borrower_item_detail_url(:id => isq.borrower_item_id), {:style=>"color:#ff4500;"} %>
+		<%= link_to "More..."  , borrower_item_detail_url(:id => isq.borrower_id), {:style=>"color:#ff4500;"} %>
 		<% else %>
-		<%= link_to "More..."  , lender_item_detail_url(:id => isq.lender_item_id), {:style=>"color:#ff4500;"} %>
+		<%= link_to "More..."  , lender_item_detail_url(:id => isq.lender_id), {:style=>"color:#ff4500;"} %>
 
 		<% end %> </td>
 

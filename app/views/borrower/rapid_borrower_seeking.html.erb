@@ -8,15 +8,18 @@
 <% @borrowers = @borrowers[0] %>
 <% end  %>
 
+<%= "LI B "  %>
+	<%= @borrowers.includes(:addresses).to_yaml %>
+
+
 <div style="display:none;">
 <%= nf.hidden_field( :is_active, :value => 1) %>
-<%= nf.hidden_field( :is_saved, :value => 1) %>
 <%= nf.hidden_field( :is_community, :value=> 0) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 </div>
 
-<% display_state_id = 'none' %>
+<% display_us_state_id = 'none' %>
 
 <div class="top" >
 	<p>
@@ -63,18 +66,22 @@
 	<div id="country_selected" style="display:none;">
     <div class="column50_rapid">
 	<label>Your State or Region: </label>
-	<div id="choose_us_state"  style="display:<%= display_state_id %>;" >
-		<%= adr.fields_for :state_id do |st| %>
-		<%= st.collection_select :state_id, UsState.all, :state_id, :state_name %>
+	<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
+		<%= adr.fields_for :us_state_id do |st| %>
+		<%= st.collection_select :us_state_id, UsState.all, :us_state_id, :state_name %>
 		<% end  %>
 	</div>
-	<% unless @borrowers.state_id_string.blank? %>
-	<% display_state_id_string = 'inline' %>
+	
+
+	
+	
+	<% unless @borrowers.us_state_id.blank? %>
+	<% display_us_state_id = 'inline' %>
 	<% else %>
-	<% display_state_id_string = 'none' %>
+	<% display_us_state_id = 'none' %>
 	<% end %>
-	<div id="provide_country_state" style="display:<%= display_state_id_string %>;" >
-		<%= adr.text_field(:state_id_string, :maxlength=>40, :size=>25) %>
+	<div id="provide_country_state" style="display:<%= display_us_state_id %>;" >
+		<%= adr.text_field(:us_state_id, :maxlength=>40, :size=>25) %>
 	</div>
 	</div>
 </div>

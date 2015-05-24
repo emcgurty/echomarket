@@ -59,7 +59,6 @@ class CommunityController < ApplicationController
         myupdatehash = [:remote_ip=> @c[:remote_ip],
                         :approved=> 1,
                         :is_active=>1,
-                        :is_saved=>1,
                         :community_name=> @c[:community_name], 
                         :email=> @c[:email],
                         :password=> @c[:password], 
@@ -73,8 +72,8 @@ class CommunityController < ApplicationController
                         :city=>@c[:city],  
                         :province=>@c[:province], 
                         :country_id=>@c[:country_id].to_s, 
-                        :state_id=>@c[:state_id].to_s,  
-                        :state_id_string=>@c[:state_id_string], 
+                        :us_state_id=>@c[:us_state_id].to_s,  
+                        :us_state_id=>@c[:us_state_id], 
                         :home_phone=>@c[:home_phone], 
                         :cell_phone => @c[:cell_phone] ]
 

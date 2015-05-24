@@ -331,8 +331,8 @@ $("span#alternative_phone_error").text("");
 
 	$("#borrowers_alternative_phone").trigger('change');
 
-	$("#borrowers_item_category_id").bind('change', function() {
-		var cat_cmb = $("select#borrowers_item_category_id option:selected").text();
+	$("#borrowers_category_id").bind('change', function() {
+		var cat_cmb = $("select#borrowers_category_id option:selected").text();
 
 		if (cat_cmb == "Other") {
 
@@ -344,7 +344,7 @@ $("span#alternative_phone_error").text("");
 
 	});
 
-	$("#borrowers_item_category_id").trigger('change');
+	$("#borrowers_category_id").trigger('change');
 
 	$("#l2bimage").bind('change', function() {
 		$("span#file_image_error").css("visibility", "hidden");
@@ -504,11 +504,11 @@ $("span#alternative_phone_error").text("");
 	});
 	$("#borrowers_email_alternative").trigger('change');
 
-	$("#borrowers_item_category_id").bind('change', function() {
-		var item_cat = $("#borrowers_item_category_id option:selected").text();
+	$("#borrowers_category_id").bind('change', function() {
+		var item_cat = $("#borrowers_category_id option:selected").text();
 		$("span#category_selection").html(item_cat);
 	});
-	$("#borrowers_item_category_id").trigger('change');
+	$("#borrowers_category_id").trigger('change');
 
 	$("#borrowers_other_item_category").bind('change', function() {
 		$("span#other_item_category_selection").html($(this).val());
@@ -579,17 +579,17 @@ $("span#alternative_phone_error").text("");
 	
 
 
-	$("select#borrowers_state_id").bind('change', function() {
+	$("select#borrowers_us_state_id").bind('change', function() {
 
-		state_cmb = $("select#borrowers_state_id option:selected").text();
+		state_cmb = $("select#borrowers_us_state_id option:selected").text();
 		
 		if (state_cmb != 'Please select') {
 		$("span#us_state_selection").html(state_cmb);
-		$("span#state_id_string_selection").html("Region Placeholder");
+		$("span#us_state_id_selection").html("Region Placeholder");
 		}
 
 	});
-	$("select#borrowers_state_id").trigger('change');
+	$("select#borrowers_us_state_id").trigger('change');
 
 
 	$("select#borrowers_country_id").bind('change', function() {
@@ -597,7 +597,7 @@ $("span#alternative_phone_error").text("");
 		var country_text = $("select#borrowers_country_id option:selected").text();
 		$("span#country_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-$("select#borrowers_state_id option[value='99']" ).attr( "selected", "selected" );
+$("select#borrowers_us_state_id option[value='99']" ).attr( "selected", "selected" );
 			$("span#us_state_selection").html('');
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
@@ -612,10 +612,10 @@ $("select#borrowers_state_id option[value='99']" ).attr( "selected", "selected" 
 	});
 	$("select#borrowers_country_id").trigger('change');
 
-	$("input#borrowers_state_id_string").bind('change', function() {
-		$("span#state_id_string_selection").html($(this).val());
+	$("input#borrowers_us_state_id").bind('change', function() {
+		$("span#us_state_id_selection").html($(this).val());
 	});
-	$("input#borrowers_state_id_string").trigger('change');
+	$("input#borrowers_us_state_id").trigger('change');
 	
 	
 	
@@ -627,7 +627,7 @@ $("select#borrowers_state_id option[value='99']" ).attr( "selected", "selected" 
 		var country_text = $("select#borrowers_country_id_alternative option:selected").text();
 		$("span#country_alternative_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-$("select#borrowers_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
+$("select#borrowers_us_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
 			$("span#state_alternative_selection").html('');
 			$("div#choose_us_state_alternative").css("display", "none");
 			$("div#provide_country_state_alternative").css("display", "inline");
@@ -643,16 +643,16 @@ $("select#borrowers_state_id_alternative option[value='99']" ).attr( "selected",
 	$("select#borrowers_country_id_alternative").trigger('change');
 	
 	
-	$("input#borrowers_state_id_string_alternative").bind('change', function() {
-		$("span#state_id_string_alternativeselection").html($(this).val());
+	$("input#borrowers_us_state_id_alternative").bind('change', function() {
+		$("span#us_state_id_alternativeselection").html($(this).val());
 	});
-	$("input#borrowers_state_id_string_alternative").trigger('change');
+	$("input#borrowers_us_state_id_alternative").trigger('change');
 	
-	$("select#borrowers_state_id_alternative").bind('change', function() {
-		var tmpID = $("select#borrowers_state_id_alternative option:selected").text();
+	$("select#borrowers_us_state_id_alternative").bind('change', function() {
+		var tmpID = $("select#borrowers_us_state_id_alternative option:selected").text();
 		$("span#state_alternative_selection").html(tmpID);
 		});
-	$("select#borrowers_state_id_alternative").trigger('change');
+	$("select#borrowers_us_state_id_alternative").trigger('change');
 
 
 
@@ -749,7 +749,6 @@ function saveBAll() {
 	} else {
 
 		$("#borrowers_is_active").val('1');
-		$("#borrowers_is_saved").val('1');
 		$("form.borrower_seeking").submit();
 	}
 	return;
@@ -775,7 +774,7 @@ function validateBItem() {
 	$("span#item_description_error").css("visibility", "hidden");
 	$("span#item_count_error").css("visibility", "hidden");
 	$("span#item_condition_id_error").css("visibility", "hidden");
-	$("span#item_category_id_error").css("visibility", "hidden");
+	$("span#category_id_error").css("visibility", "hidden");
 
 	if (bad_count) {
 		$("span#item_count_error").css("visibility", "visible");
@@ -794,8 +793,8 @@ function validateBItem() {
 		$("span#item_condition_id_error").css("visibility", "visible");
 		return_value = false;
 	}
-	if ($("#" + whichType + "_item_category_id option:selected").text() == 'Please select') {
-		$("span#item_category_id_error").css("visibility", "visible");
+	if ($("#" + whichType + "_category_id option:selected").text() == 'Please select') {
+		$("span#category_id_error").css("visibility", "visible");
 		return_value = false;
 	}
 
@@ -1016,13 +1015,13 @@ function validateContactPreferences() {
 
 
 
-	if ( ($("#borrowers_country_id option:selected").text() == "Please select")   &&  ($("input#borrowers_state_id_string").val() == "")) {
+	if ( ($("#borrowers_country_id option:selected").text() == "Please select")   &&  ($("input#borrowers_us_state_id").val() == "")) {
 		$("#state_error").text("Please provide a Region.");
 		$("#state_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 	
-	if ((($("#borrowers_state_id option:selected").text() == "Please select") || ($("#borrowers_state_id option:selected").val() == '')) && ($("#borrowers_country_id option:selected").text() == "United States")) {
+	if ((($("#borrowers_us_state_id option:selected").text() == "Please select") || ($("#borrowers_us_state_id option:selected").val() == '')) && ($("#borrowers_country_id option:selected").text() == "United States")) {
 
 		$("#state_error").text("Please select a State.");
 		$("#state_error").css("visibility", "visible");

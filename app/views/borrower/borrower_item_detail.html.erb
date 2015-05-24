@@ -67,13 +67,13 @@
 		<br />
 		<%= @borrowers.city + ","%><%= (@borrowers.province.blank? ? "": @borrowers.province) + " " %>
 
-		<% if @borrowers.state_id_string.blank? %>
+		<% if @borrowers.us_state_id.blank? %>
 		<% >
 
-		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["state_id = ?", @borrowers.state_id ]) %>
-		<%= (@s_c.state_id == '99' ? "" : @s_c.state_name) %>
+		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrowers.us_state_id ]) %>
+		<%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
 		<% else %>
-		<%= @borrowers.state_id_string %>
+		<%= @borrowers.us_state_id %>
 		<% end %>
 		<br />
 		<% unless @borrowers.country_id.blank? %>
@@ -97,11 +97,11 @@
 		<br />
 		<%= @borrowers.city_alternative + ","%><%= (@borrowers.province_alternative.blank? ? "": @borrowers.province_alternative) + " " %>
 
-		<% if @borrowers.state_id_string_alternative.blank? %>
-		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["state_id = ?", @borrowers.state_id_alternative ]) %>
-		<%= (@s_c.state_id == '99' ? "" : @s_c.state_name) %>
+		<% if @borrowers.us_state_id_alternative.blank? %>
+		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrowers.us_state_id_alternative ]) %>
+		<%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
 		<% else %>
-		<%= @borrowers.state_id_string_alternative + " " %>
+		<%= @borrowers.us_state_id_alternative + " " %>
 		<% end %>
 		<br />
 		<% unless @borrowers.country_id_alternative.blank? %>
@@ -212,7 +212,7 @@
 <div class="div_p_detail_sub">
 
 	Category:
-	<% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @borrowers.item_category_id]) %>
+	<% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @borrowers.category_id]) %>
 	<%= @Category.category_type %>
 	<% if @Category.category_type == "Other" %>
 	&nbsp;Other category:

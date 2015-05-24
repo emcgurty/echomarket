@@ -12,12 +12,11 @@
 <% end %>
  
     <% if session[:reuse] %>
-      <%= nf.hidden_field( :lender_item_id, :value=>'') %>
+      <%= nf.hidden_field( :lender_id, :value=>'') %>
     <% else %>
-      <%= nf.hidden_field( :lender_item_id) %>
+      <%= nf.hidden_field( :lender_id) %>
     <% end %>
     <%= nf.hidden_field( :is_active) %>
-    <%= nf.hidden_field( :is_saved) %>
     <%= nf.hidden_field( :user_id) %>
  
 
@@ -195,32 +194,32 @@
 				
 								
 				<td style="width:25%;"> 
-		 		<% if @getValue.state_id_string.blank? %>
-           			<% @display_state_id = 'inline' %>
+		 		<% if @getValue.us_state_id.blank? %>
+           			<% @display_us_state_id = 'inline' %>
            		<% else %>
-           			<% @display_state_id = 'none' %>
+           			<% @display_us_state_id = 'none' %>
            		<% end %>
              
-            <div id="choose_us_state"  style="display:<%= @display_state_id %>" >
+            <div id="choose_us_state"  style="display:<%= @display_us_state_id %>" >
 				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @getValue.state_id.blank? %>
-				<% current_selected = @getValue.state_id %>
+				<% unless @getValue.us_state_id.blank? %>
+				<% current_selected = @getValue.us_state_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %>
+				<% @states = options_from_collection_for_select(@st, :us_state_id, :state_name, current_selected) %>
+				<%= nf.select(:us_state_id, @states) %>
 			</div>
 
-		   <% if @getValue.state_id_string.blank? %>
-           		<% @display_state_id_string = 'none' %>
+		   <% if @getValue.us_state_id.blank? %>
+           		<% @display_us_state_id = 'none' %>
            <% else %>
-           		<% @display_state_id_string = 'inline' %>
+           		<% @display_us_state_id = 'inline' %>
            <% end %>
            
-           	<div id="provide_country_state"  style="display:<%= @display_state_id_string %>" >
+           	<div id="provide_country_state"  style="display:<%= @display_us_state_id %>" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string) %>
+					<%= nf.text_field(:us_state_id) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>
@@ -313,31 +312,31 @@
 				
 			<td>
 						
-			<% if @lenders.state_id_string_alternative.blank? %>
-           			<% @display_state_id = 'inline' %>
+			<% if @lenders.us_state_id_alternative.blank? %>
+           			<% @display_us_state_id = 'inline' %>
            	<% else %>
-           			<% @display_state_id = 'none' %>
+           			<% @display_us_state_id = 'none' %>
            	<% end %>
              
-            <div id="choose_us_state_alternative"  style="display:<%= @display_state_id %>" >
+            <div id="choose_us_state_alternative"  style="display:<%= @display_us_state_id %>" >
 				<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @lenders.state_id_alternative.blank? %>
-				<% current_selected = @lenders.state_id_alternative %>
+				<% unless @lenders.us_state_id_alternative.blank? %>
+				<% current_selected = @lenders.us_state_id_alternative %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id_alternative, @states) %> 
+				<% @states = options_from_collection_for_select(@st, :us_state_id, :state_name, current_selected) %>
+				<%= nf.select(:us_state_id_alternative, @states) %> 
 		  </div>
 
-		   <% if @lenders.state_id_string_alternative.blank? %>
-           <% @display_state_id_string = 'none' %>
+		   <% if @lenders.us_state_id_alternative.blank? %>
+           <% @display_us_state_id = 'none' %>
            <% else %>
-           <% @display_state_id_string = 'inline' %>
+           <% @display_us_state_id = 'inline' %>
            <% end %>
-           	<div id="provide_country_state_alternative" style="display:<%= @display_state_id_string %>" >
+           	<div id="provide_country_state_alternative" style="display:<%= @display_us_state_id %>" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string_alternative) %>
+					<%= nf.text_field(:us_state_id_alternative) %>
 			</div>
 			<span class="error" id="state_alternative_error">&nbsp;</span>
 				
@@ -630,20 +629,20 @@
 		<tr class="odd">
 			<td width="50%">
 			<div style="margin-left:25px;margin-top:5px;">
-				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @lenders.item_category_id.blank? %>
-					<% current_selected = @lenders.item_category_id %>
+				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <% unless @lenders.category_id.blank? %>
+					<% current_selected = @lenders.category_id %>
 					<% else %>
 					<% current_selected = '99' %>
 					<% end  %>
 					<% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
 					<% @cats = options_from_collection_for_select(@categories, :category_id, :category_type, current_selected.to_i) %>
-					<%= nf.select( :item_category_id, @cats,{ :onchange=>"lenders_item_category_id();", :style=>"width:auto;" }) %></label>
-				<span class="error" id="item_category_id_error">Choose a 'Category'.</span>
+					<%= nf.select( :category_id, @cats,{ :onchange=>"lenders_category_id();", :style=>"width:auto;" }) %></label>
+				<span class="error" id="category_id_error">Choose a 'Category'.</span>
 
 			</div></td>
 			<td  style="width:50%;"> <% display_div = 'none' %>
-			<% unless @lenders.item_category_id.blank? %>
-			<% if @lenders.item_category_id == 0 %>
+			<% unless @lenders.category_id.blank? %>
+			<% if @lenders.category_id == 0 %>
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
@@ -702,7 +701,7 @@
 			</div></td>
 		</tr>
 
-		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_item_id =?", @lenders.lender_item_id]) %>
+		<% @ig = Itemimages.find(:all, :readonly => true, :conditions => ["lender_id =?", @lenders.lender_id]) %>
 		<% if @ig.blank? %>
 		<tr class="odd">
 			<td  style="width:50%;">

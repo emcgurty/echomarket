@@ -25,9 +25,9 @@
 		<h2 class="h2_listing" >What is offered to lend...</h2>
 
 		<% if session[:community_name].blank? %>
-		<% @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
+		<% @lender = Lender.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
 		<% else %>
-		<% @lender = Lender.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
+		<% @lender = Lender.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 		<% end %>
 
 		<% if @lender.blank? %>
@@ -57,15 +57,15 @@
        
        
 		<% @lender.each do |ldr| %>
-		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
+		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.category_id])  %>
 		<% if @cats %>
-		<% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
+		<% if ((@cats.category_id == ldr.category_id) && (hold_cat != @cats.category_id))  %>
 		<label>Category: &nbsp;<%= @cats.category_type %></label>
 		<br />
 		<% hold_cat  = @cats.category_id %>
 		<% end %>
 		<% end %>
-		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_item_id = ?', ldr.lender_item_id])  %>
+		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_id = ?', ldr.lender_id])  %>
 		<% if @imgs %>
 		<% @imgs.each do |oimg| %>
 		<% file_path_str = oimg.image_file_name %>
@@ -81,7 +81,7 @@
 		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
 		
 			
-	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.lender_item_id), {:class=>"item_details"}  %>
+	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.lender_id), {:class=>"item_details"}  %>
 			
 			
 		
@@ -96,9 +96,9 @@
 		<h2 class="h2_listing" >What is sought to borrow...</h2>
 
 		<% if session[:community_name].blank? %>
-		<% @borrower = Borrower.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
+		<% @borrower = Borrower.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => ["is_active = 1 and (is_community = 0 OR is_community = 3)" ])  %>
 		<% else %>
-		<% @borrower = Borrower.find(:all, :order =>"item_category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
+		<% @borrower = Borrower.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => ["is_active = 1 and is_community = 1 and user_id = ?", session[:user_id]])  %>
 		<% end %>
 
 		<% if @borrower.blank? %>
@@ -123,15 +123,15 @@
           <% @ih2[kv.fetch("item_condition_id")]  = kv.fetch("conditions") %>
          <% end %>
 		<% @borrower.each do |ldr| %>
-		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.item_category_id])  %>
+		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.category_id])  %>
 		<% if @cats %>
-		<% if ((@cats.category_id == ldr.item_category_id) && (hold_cat != @cats.category_id))  %>
+		<% if ((@cats.category_id == ldr.category_id) && (hold_cat != @cats.category_id))  %>
 		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
 		<br />
 		<% hold_cat  = @cats.category_id %>
 		<% end %>
 		<% end %>
-		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_item_id = ?', ldr.borrower_item_id])  %>
+		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_id = ?', ldr.borrower_id])  %>
 		<% if @imgs %>
 		<% @imgs.each do |oimg| %>
 
@@ -148,7 +148,7 @@
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
         		
-			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.borrower_item_id), {:class=>"item_details"} %>
+			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.borrower_id), {:class=>"item_details"} %>
 		
 		<hr style="color:indigo;" />
 

@@ -26,9 +26,6 @@
 <%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
 <%= nf.hidden_field :approved, :value => 0 %>
 <%= nf.hidden_field :is_active, :value => 1 %>
-<%= nf.hidden_field :is_saved, :value => 1 %>
-
-
 
 
 <% @st = UsStates.find(:all, :order => "state_name") %>
@@ -148,18 +145,18 @@
 				
 				<div id="choose_us_state"  style="display:inline;" >
 				<label>Select State: <span class="required_fields">&nbsp;&nbsp;*</span> </label> 
-				<% unless @communities.state_id.blank? %>
-				<% current_selected = @communities.state_id %>
+				<% unless @communities.us_state_id.blank? %>
+				<% current_selected = @communities.us_state_id %>
 				<% else %>
 				<% current_selected = '99' %>
 				<% end  %>
-				<% @states = options_from_collection_for_select(@st, :state_id, :state_name, current_selected) %>
-				<%= nf.select(:state_id, @states) %> 
+				<% @states = options_from_collection_for_select(@st, :us_state_id, :state_name, current_selected) %>
+				<%= nf.select(:us_state_id, @states) %> 
 				</div>
 
 				<div id="provide_country_state" style="display:none;">
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string) %>
+					<%= nf.text_field(:us_state_id) %>
 					
 				</div>
 				<span class="error" id="state_error">&nbsp;</span>

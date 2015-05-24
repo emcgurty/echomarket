@@ -25,8 +25,7 @@
 	<%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
 	<%= nf.hidden_field :approved, :value => 0 %>
 	<%= nf.hidden_field :is_active, :value => 1 %>
-	<%= nf.hidden_field :is_saved, :value => 1 %>
-</div>
+	</div>
 
 <div style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;" >
 	<label>Echo Market Community Name: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(50)</span></label>
@@ -134,13 +133,13 @@
 				<div id="choose_us_state"  style="display:inline;" >
 					<label>Select State: 
 					<span class="required_fields">&nbsp;&nbsp;*</span> </label>
-					<%= nf.fields_for :state_id do |st| %>
-					<%= st.collection_select :state_id, UsState.all, :state_id, :state_name %>
+					<%= nf.fields_for :us_state_id do |st| %>
+					<%= st.collection_select :us_state_id, UsState.all, :us_state_id, :state_name %>
 					<% end  %>
 				</div>
 				<div id="provide_country_state" style="display:none;">
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= nf.text_field(:state_id_string) %>
+					<%= nf.text_field(:us_state_id) %>
 
 				</div><span class="error" id="state_error">&nbsp;</span></td>
 				<td style="width:25%;text-align:left;">

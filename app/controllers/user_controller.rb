@@ -36,12 +36,12 @@ class UserController < ApplicationController
       @udelete = User.delete(session[:user_id])
 
       @ldelete.each do |val|
-        Lender.delete(val.lender_item_id)
+        Lender.delete(val.lender_id)
 
       end
 
       @bdelete.each do |val|
-        Borrower.delete(val.borrower_item_id)
+        Borrower.delete(val.borrower_id)
 
       end
 
@@ -95,7 +95,7 @@ class UserController < ApplicationController
       unless session[:user_id].blank?
         user_record
       else
-        if params[:users][:community_name].blank?  && params[:users][:community_password].blank?
+        if params[:user][:community_name].blank?  && params[:user][:community_password].blank?
           show
         else
           show_community
@@ -122,9 +122,9 @@ class UserController < ApplicationController
     session[:login_notice] = ''
     
     if request.post?
-      @current_user = User.find(:first, :readonly => true, :conditions=>['username = ?', params[:users][:username]])
+      @current_user = User.find(:first, :readonly => true, :conditions=>['username = ?', params[:user][:username]])
       unless @current_user.blank?
-        if @current_user.activation_code.blank? && @current_user.authenticated?(params[:users][:password])
+        if @current_user.activation_code.blank? && @current_user.authenticated?(params[:user][:password])
           session[:user_id] = @current_user.user_id
           session[:user_type] = @current_user.user_type
           session[:user_alias] = @current_user.user_alias
@@ -136,7 +136,7 @@ class UserController < ApplicationController
           unless @current_user.activation_code.blank?
             session[:notice] = "#{@current_user.username}, please check your email to activate your login."
             redirect_to home_items_listing_url
-          else @current_user.authenticated?(params[:users][:password])
+          else @current_user.authenticated?(params[:user][:password])
             session[:login_notice] = "We have entered an incorrect password."
             @users = User.new
           end

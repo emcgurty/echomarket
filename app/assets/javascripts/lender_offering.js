@@ -357,8 +357,8 @@ $("#lenders_age_18_or_more").bind('change', function() {
     $("#lenders_alternative_phone").trigger('change');
 
 
-    $("#lenders_item_category_id").bind('change', function() {
-        var cat_cmb = $( "select#lenders_item_category_id option:selected" ).text();
+    $("#lenders_category_id").bind('change', function() {
+        var cat_cmb = $( "select#lenders_category_id option:selected" ).text();
 
         if (cat_cmb == "Other") {
 
@@ -370,7 +370,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
     });
 
-    $("#lenders_item_category_id").trigger('change');
+    $("#lenders_category_id").trigger('change');
 
     
     $("#l2bimage").bind('change', function() {
@@ -518,11 +518,11 @@ $("#lenders_age_18_or_more").bind('change', function() {
     $("#lenders_email_alternative").trigger('change');
 
    
-    $("#lenders_item_category_id").bind('change', function() {
-        var item_cat = $( "#lenders_item_category_id option:selected" ).text();
+    $("#lenders_category_id").bind('change', function() {
+        var item_cat = $( "#lenders_category_id option:selected" ).text();
         $("span#category_selection").html(item_cat);
     });
-    $("#lenders_item_category_id").trigger('change');
+    $("#lenders_category_id").trigger('change');
 
     $("#lenders_other_item_category").bind('change', function() {
         $("span#other_item_category_selection").html($(this).val());
@@ -880,16 +880,16 @@ $("input#lenders_address_line_1").bind('change', function() {
 	
 
 
-	$("select#lenders_state_id").bind('change', function() {
+	$("select#lenders_us_state_id").bind('change', function() {
 
-		var statecmb = $("select#lenders_state_id option:selected").text();
+		var statecmb = $("select#lenders_us_state_id option:selected").text();
 		
 		$("span#us_state_selection").html(statecmb);
-		$("span#state_id_string_selection").html("Region Placeholder");
+		$("span#us_state_id_selection").html("Region Placeholder");
 		
 
 	});
-	$("select#lenders_state_id").trigger('change'); 
+	$("select#lenders_us_state_id").trigger('change'); 
 
 
 	$("select#lenders_country_id").bind('change', function() {
@@ -897,7 +897,7 @@ $("input#lenders_address_line_1").bind('change', function() {
 		var country_text = $("select#lenders_country_id option:selected").text();
 		$("span#country_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-                $("select#lenders_state_id option[value='99']" ).attr( "selected", "selected" );
+                $("select#lenders_us_state_id option[value='99']" ).attr( "selected", "selected" );
 			$("span#us_state_selection").html('');
 
 			$("div#choose_us_state").css("display", "none");
@@ -913,10 +913,10 @@ $("input#lenders_address_line_1").bind('change', function() {
 	});
 	$("select#lenders_country_id").trigger('change');
 
-	$("input#lenders_state_id_string").bind('change', function() {
-		$("span#state_id_string_selection").html($(this).val());
+	$("input#lenders_us_state_id").bind('change', function() {
+		$("span#us_state_id_selection").html($(this).val());
 	});
-	$("input#lenders_state_id_string").trigger('change');
+	$("input#lenders_us_state_id").trigger('change');
 
 
   /*Beginning of Alternative Address*/
@@ -926,7 +926,7 @@ $("input#lenders_address_line_1").bind('change', function() {
 		var country_text = $("select#lenders_country_id_alternative option:selected").text();
 		$("span#country_alternative_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-$("select#lenders_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
+$("select#lenders_us_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
 			$("span#state_alternative_selection").html('');
 			$("div#choose_us_state_alternative").css("display", "none");
 			$("div#provide_country_state_alternative").css("display", "inline");
@@ -942,16 +942,16 @@ $("select#lenders_state_id_alternative option[value='99']" ).attr( "selected", "
 	$("select#lenders_country_id_alternative").trigger('change');
 	
 	
-	$("input#lenders_state_id_string_alternative").bind('change', function() {
-		$("span#state_id_string_alternative_selection").html($(this).val());
+	$("input#lenders_us_state_id_alternative").bind('change', function() {
+		$("span#us_state_id_alternative_selection").html($(this).val());
 	});
-	$("input#lenders_state_id_string_alternative").trigger('change');
+	$("input#lenders_us_state_id_alternative").trigger('change');
 	
-	$("select#lenders_state_id_alternative").bind('change', function() {
-		var tmpID = $("select#lenders_state_id_alternative option:selected").text();
+	$("select#lenders_us_state_id_alternative").bind('change', function() {
+		var tmpID = $("select#lenders_us_state_id_alternative option:selected").text();
 		$("span#state_alternative_selection").html(tmpID);
 		});
-	$("select#lenders_state_id_alternative").trigger('change');
+	$("select#lenders_us_state_id_alternative").trigger('change');
 
 
 
@@ -1046,7 +1046,7 @@ function validateLItem() {
     $("span#item_description_error").css("visibility", "hidden");
     $("span#item_count_error").css("visibility", "hidden");
     $("span#item_condition_id_error").css("visibility", "hidden");
-    $("span#item_category_id_error").css("visibility", "hidden");
+    $("span#category_id_error").css("visibility", "hidden");
 
     if (bad_count){
         $("span#item_count_error").css("visibility", "visible");
@@ -1065,8 +1065,8 @@ function validateLItem() {
         $("span#item_condition_id_error").css("visibility", "visible");
         return_value = false;
     }
-    if  ($("#" + whichType + "_item_category_id option:selected").text() == 'Please select') {
-        $("span#item_category_id_error").css("visibility", "visible");
+    if  ($("#" + whichType + "_category_id option:selected").text() == 'Please select') {
+        $("span#category_id_error").css("visibility", "visible");
         return_value = false;
     }
 
@@ -1114,7 +1114,6 @@ function saveAll() {
     } else {
         
         $("#lenders_is_active").val('1');
-        $("#lenders_is_saved").val('1');
         $("form.lender_offering").submit();
     }
     return;
@@ -1312,13 +1311,13 @@ function validateContactPreferences() {
 
 
 
-	if ( ($("#lenders_country_id option:selected").text() == "Please select")   &&  ($("input#lenders_state_id_string").val() == "")) {
+	if ( ($("#lenders_country_id option:selected").text() == "Please select")   &&  ($("input#lenders_us_state_id").val() == "")) {
 		$("#state_error").text("Please provide a Region.");
 		$("#state_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 	
-	if ((($("#lenders_state_id option:selected").text() == "Please select") || ($("#lenders_state_id option:selected").val() == '')) && ($("#lenders_country_id option:selected").text() == "United States")) {
+	if ((($("#lenders_us_state_id option:selected").text() == "Please select") || ($("#lenders_us_state_id option:selected").val() == '')) && ($("#lenders_country_id option:selected").text() == "United States")) {
 
 		$("#state_error").text("Please select a State.");
 		$("#state_error").css("visibility", "visible");

@@ -1,5 +1,5 @@
 <%= javascript_include_tag 'lender_offering.js' %>
-
+<%  rowCount = 1 %>
 <%= form_for @lenders, :url=> {:controller=>"lender", :action => "lender_history"}, :html=> {:class=>"lender_history", :id=>"lenders_item_form"} do |nf| %>
 
  <div class="top" >
@@ -8,9 +8,7 @@
 
   </div>
 
-  <% unless @lenders.blank? %>
-
-    <div style="float:left;">
+      <div style="float:left;">
       <table class="history" >
         <tr >
           <th>Category</th>
@@ -21,7 +19,7 @@
           <th>Status</th>
           <th>Process</th>
         </tr>
-        <%  rowCount = 1 %>
+        
 
         <% @lenders.each do |isq| %>
 
@@ -29,30 +27,28 @@
           <%  rowCount = rowCount + 1 %>
           <tr class="<%= rowClass %>" >
             <td>
-              <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["category_id = ?", isq.item_category_id]) %>
-              <%= (isq.item_category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
+               <%= (isq.category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
             </td>
             <td>
               <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
             <td>
               <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
             <td>
-              <% @cond = Itemconditions.find(:first, :select=> "conditions", :readonly=>true, :conditions => ["item_condition_id = ?", isq.item_condition_id]) %>
-              <%= (isq.item_category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
+            
+              <%= (isq.category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
             </td>
             <td>
               <%= (isq.date_created.blank? ? "NA": isq.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>
               <%= (isq.date_updated.blank? ? "NA": isq.date_updated.strftime("%m/%d/%Y %I:%M%p")) %>
             </td>
             <td>
-              <%= (isq.is_saved == 0 ? "Not complete": "Complete") %><br style="margin:0;"/>
-              <%= (isq.approved == 0 ? "Not approved": "Approved") %>
+               <%= (isq.approved == 0 ? "Not approved": "Approved") %>
             </td>
             <td >
 
-              <%= link_to "EDIT", :controller => "lender", :action=> "lender_history", :commit => "edit", :id=>isq.lender_item_id  %><br style="margin:0;"/><br style="margin:0;"/>
-              <%= link_to "REUSE", :controller => "lender", :action=> "lender_history", :commit => "reuse", :id=> isq.lender_item_id %><br style="margin:0;"/><br style="margin:0;"/>
-              <%= link_to "DELETE", {:controller => "lender", :action => "delete_lender_record", :commit => "delete", :id=>isq.lender_item_id} ,
+              <%= link_to "EDIT", :controller => "lender", :action=> "lender_history", :commit => "edit", :id=>isq.lender_id  %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "REUSE", :controller => "lender", :action=> "lender_history", :commit => "reuse", :id=> isq.lender_id %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "DELETE", {:controller => "lender", :action => "delete_lender_record", :commit => "delete", :id=>isq.lender_id} ,
                 
                 {:confirm => "Are you sure you wish to delete this record?"}  %>
 
@@ -63,33 +59,24 @@
       </table>
     </div>
 
-  <% else %>
-    <p>Echo Market could not find your lender history, prehaps it has items not yet approved.</p>
-  <% end %>
   <div class="div_white" ></div>
   <div class="bottom" style="text-align:center">
-    <% unless @lenders.blank? %>
+   
  		<% unless session[:community_id].blank? %>
 	      <%= link_to "=> I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "lender", :action => "community_lender_offering", :id=>"" %>
-       <% else %>
+        <% else %>
          <%= link_to "=> I am not interested in either editting, reusing or deleting any of my existing item records. I'd like to create a new item record.", :controller => "lender", :action => "lender_offering", :id=>"" %>
  		<% end %>
 
-
-    <% else %>
+   
 
       <% unless session[:community_id].blank? %>
 	       <%= link_to "=> I'd like to offer a new item for lending.", :controller => "lender", :action => "community_lender_offering", :id=>"" %>
        <% else %>
  			<%= link_to "=> I'd like to offer a new item for lending.", :controller => "lender", :action => "lender_offering", :id=>"" %>
  		<% end %>
-      
-      
-      
-      
-     
-
-    <% end %>
+     <% end %>
 
   </div>
+  
 <% end %>

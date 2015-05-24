@@ -3,11 +3,10 @@ class Advertiser < ActiveRecord::Base
   
   require 'uri'
  
-  self.primary_key = :advertiser_id
-  has_one :itemimage
+  self.primary_key = 'advertiser_id'
+  has_one :item_image
   has_one :category
-  accepts_nested_attributes_for :itemimage
-  accepts_nested_attributes_for :category  
+  accepts_nested_attributes_for :item_image
   before_create :get_advertiser_primary_key_value
   before_create :url_valid
       

@@ -39,10 +39,10 @@
 	<label class="item_listing" >Item Description: &nbsp;<%= @lender.item_description %></label>
 	<label class="item_listing">Model: &nbsp;<%= @lender.item_model %></label>
 	
-	<%= nf.fields_for :itemcondition do |ic| %>
+	<%= nf.fields_for :item_condition do |ic| %>
 	<%= ic.label :condition, {class="item_listing"} %>
 	<% end %>
-	<%= link_to "Details..." , lender_item_detail_url(:id=> @lender.lender_item_id), {:style=>"color:#ff4500;"} %>
+	<%= link_to "Details..." , lender_item_detail_url(:id=> @lender.lender_id), {:style=>"color:#ff4500;"} %>
 
 	<hr style="color:indigo;" />
 

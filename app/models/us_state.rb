@@ -1,6 +1,6 @@
 class UsState < ActiveRecord::Base
   
-  self.primary_key = :state_id
-  belongs_to :communities
-  belongs_to :addresses
+  self.primary_key = :us_state_id
+  belongs_to :community
+  belongs_to :address
 end
