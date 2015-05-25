@@ -7,7 +7,7 @@
   <% @lender_type_string = session[:register_type].upcase + " " %>
 <% end %>
 
-    <%= form_for @communities, :url=> {:controller=>"community", :action => "forgot_community_name"}, :html=> {:class=>"forgot_community_name", :id=>"user_login_form"} do |nf| %>
+    <%= form_for @community, :url=> {:controller=>"community", :action => "forgot_community_name"}, :html=> {:class=>"forgot_community_name", :id=>"user_login_form"} do |nf| %>
       <div class="top" >
         <p><span class="logo_white" >The Echo Market</span></p>
         <p><%= @lender_type_string %> FORGOT COMMUNITY NAME</p>

@@ -2,7 +2,7 @@ class CommunityController < ApplicationController
   
     
   def new
-    @communities = Community.new
+    @community = Community.new
      respond_to do |format|
       format.html # new.html.erb
 
@@ -14,7 +14,7 @@ class CommunityController < ApplicationController
     if params[:communities]
       update
     else
-      @communities = Community.find(session[:community_id])
+      @community = Community.find(session[:community_id])
     end   
   end
 
@@ -22,14 +22,14 @@ class CommunityController < ApplicationController
   # POST /communities.json
   def create
     session[:notice] = ''
-    @communities = Community.new(params[:communities])
+    @community = Community.new(params[:communities])
     respond_to do |format|
       
-      if @communities.save(:validate =>false)
+      if @community.save(:validate =>false)
         @cm = CommunityMember.new(
-        :community_id => @communities.community_id, 
-        :first_name => @communities.first_name, 
-        :mi => @communities.mi,:last_name => @communities.last_name, :remote_ip => @communities.remote_ip, :date_created => Time.now, :is_active => 1, :is_creator => 1)
+        :community_id => @community.community_id, 
+        :first_name => @community.first_name, 
+        :mi => @community.mi,:last_name => @community.last_name, :remote_ip => @community.remote_ip, :date_created => Time.now, :is_active => 1, :is_creator => 1)
         if @cm.save(:validate => false) 
           session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
           format.html { redirect_to :controller => "home", :action => "items_listing" }
@@ -78,8 +78,8 @@ class CommunityController < ApplicationController
                         :cell_phone => @c[:cell_phone] ]
 
      puts myupdatehash[0].to_yaml
-     @communities = Community.find(params[:id])
-     if @communities.update_attributes(myupdatehash[0]) && @communities.errors.empty? 
+     @community = Community.find(params[:id])
+     if @community.update_attributes(myupdatehash[0]) && @community.errors.empty? 
         @cm = CommunityMember.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
         @cm.first_name = params[:communities][:first_name]
         @cm.mi = params[:communities][:mi]
@@ -166,7 +166,7 @@ class CommunityController < ApplicationController
     if request.post?
       forgot('community_name')
     else
-      @communities = Community.new
+      @community = Community.new
     end
   end
 
@@ -175,7 +175,7 @@ class CommunityController < ApplicationController
     if request.post?
       forgot('password')
     else
-      @communities = Community.new
+      @community = Community.new
     end
   end
 
@@ -183,19 +183,19 @@ class CommunityController < ApplicationController
    
     session[:notice] = ''
     if request.post?
-      @communities = Community.find(:first, :conditions => ['email = ?', params[:communities][:email]])
+      @community = Community.find(:first, :conditions => ['email = ?', params[:communities][:email]])
 
-      unless @communities.blank?
-        @communities.create_reset_code(which)
+      unless @community.blank?
+        @community.create_reset_code(which)
         if which == 'community_name'
           # respond_to do |format|
-          Notifier.get_community_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_community_name_get?
+          Notifier.get_community_notification(@community).deliver if @community.recently_reset? && @community.recently_community_name_get?
           #format.html
-          session[:notice] = "Path to retrieve Community name sent to #{@communities.email}"
+          session[:notice] = "Path to retrieve Community name sent to #{@community.email}"
         #end
         else
-          Notifier.reset_community_password_notification(@communities).deliver if @communities.recently_reset? && @communities.recently_password_reset?
-          session[:notice] = "Path to reset password code sent to #{@communities.email}"
+          Notifier.reset_community_password_notification(@community).deliver if @community.recently_reset? && @community.recently_password_reset?
+          session[:notice] = "Path to reset password code sent to #{@community.email}"
         end
         redirect_to home_items_listing_url
 
@@ -230,13 +230,13 @@ class CommunityController < ApplicationController
 
   def reset_community_password
 
-    @communities= Community.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
-    unless @communities.blank?
+    @community= Community.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
+    unless @community.blank?
       @myupdatehash = Hash.new
       @myupdatehash = [:password => params[:communities][:password], :password_confirmation => params[:communities][:password_confirmation]]
-      @communities.update_attributes(@myupdatehash[0])
-      @communities.delete_reset_code
-      session[:notice] = "Password reset successfully for #{@communities.email}. Please login"
+      @community.update_attributes(@myupdatehash[0])
+      @community.delete_reset_code
+      session[:notice] = "Password reset successfully for #{@community.email}. Please login"
       redirect_to home_items_listing_url
     else
       session[:notice] = "There was an error in updating your password, please contact the Echo Market. Perhaps you are trying to update your password from an old email notification."
@@ -247,7 +247,7 @@ class CommunityController < ApplicationController
 
   def get_reset_community_password
     session[:background] = true
-    @communities = Community.find(:first, :conditions => ["reset_code =?", params[:id]])
+    @community = Community.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
   
   ####  COMMUNITY MEMBERS DEFS

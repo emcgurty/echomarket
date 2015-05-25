@@ -3,9 +3,9 @@ $(document).ready(function() {
 
     $("span.error").css("visibility", "hidden");
 			
-	$("#users_password_confirmation").change(function() {
+	$("#user_password_confirmation").change(function() {
 
-		if ($("#users_password_confirmation").val() != $("#users_password").val()) {
+		if ($("#user_password_confirmation").val() != $("#user_password").val()) {
 			$("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
 			$("#registration_password_confirmation_error").css("visibility", "visible");
 		} else {
@@ -14,9 +14,9 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#communities_password_confirmation").bind('change', function() {
+	$("#community_password_confirmation").bind('change', function() {
 
-		if ($("#communities_password_confirmation").val() != $("#communities_password").val()) {
+		if ($("#community_password_confirmation").val() != $("#community_password").val()) {
 			$("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
 			$("#registration_password_confirmation_error").css("visibility", "visible");
 		} else {
@@ -24,11 +24,11 @@ $(document).ready(function() {
 			$("#registration_password_confirmation_error").css("visibility", "hidden");
 		}
 	});
-	$("#communities_password_confirmation").trigger('change');
+	$("#community_password_confirmation").trigger('change');
 	
-	$("select#communities_country_id").bind('change', function() {
+	$("select#community_country_id").bind('change', function() {
 
-		var country_text    = $( "select#communities_country_id option:selected" ).text();
+		var country_text    = $( "select#community_country_id option:selected" ).text();
         if ((country_text != 'United States') || (country_text == 'Please select')) {
                	
 			$("div#choose_us_state").css("display", "none");
@@ -44,7 +44,7 @@ $(document).ready(function() {
         	
         
 	});
-	$("select#communities_country_id").trigger('change');
+	$("select#community_country_id").trigger('change');
 	
 });
 
@@ -52,13 +52,13 @@ function submitCommunityPasswordReset() {
 
 	   var foundInvalid= true;
 
-        if ($("#communities_password_confirmation").val() != $("#communities_password").val()) {
+        if ($("#community_password_confirmation").val() != $("#community_password").val()) {
             $("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
             $("#registration_password_confirmation_error").css("visibility", "visible");
 		 foundInvalid= false;
         } 
 
-        if ($("#communities_password_confirmation").val() == "" && $("#communities_password").val() == "") {
+        if ($("#community_password_confirmation").val() == "" && $("#community_password").val() == "") {
             $("#registration_password_confirmation_error").text("Please provide a password and confirmation password.");
             $("#registration_password_confirmation_error").css("visibility", "visible");
 		 foundInvalid= false;
@@ -116,13 +116,13 @@ function submitPasswordReset() {
 	
 	var foundInvalid = true;
 
-	if ($("#users_password_confirmation").val() != $("#users_password").val()) {
+	if ($("#user_password_confirmation").val() != $("#user_password").val()) {
 		$("#registration_password_confirmation_error").text("Password and Confirm Password don't match.");
 		$("#registration_password_confirmation_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#users_password_confirmation").val() == "" && $("#users_password").val() == "") {
+	if ($("#user_password_confirmation").val() == "" && $("#user_password").val() == "") {
 		$("#registration_password_confirmation_error").text("Please provide a password and confirmation password.");
 		$("#registration_password_confirmation_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -168,7 +168,7 @@ function showCommunityRegistration() {
 
 function submitForgotUsername() {
 
-	if ($("#users_email").val() == "") {
+	if ($("#user_email").val() == "") {
 		$("#forgot_username_email_error").text("Email is required.");
 		$("#forgot_username_email_error").css("visibility", "visible");
 
@@ -184,7 +184,7 @@ function submitCommunityRegistration(){
 	var foundInvalid = true;
 	var foundInvalidNameCI = true;
 	 
-	 if (($("select#communities_country_id option:selected").text() == 'United States') && ($("select#communities_us_state_id option:selected").text() == 'Please select')) {
+	 if (($("select#community_country_id option:selected").text() == 'United States') && ($("select#community_us_state_id option:selected").text() == 'Please select')) {
 		$("span#state_error").text("A State selection is required.");
 		$("span#state_error").css("visibility", "visible");
 		$("span#country_error").text("");
@@ -197,7 +197,7 @@ function submitCommunityRegistration(){
 	}
 	
 	if (foundInvalidNameCI) {
-	if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_us_state_id").val() == '')) {
+	if (($("select#community_country_id option:selected").text() == 'Please select') && ($("input#community_us_state_id").val() == '')) {
 		$("span#country_error").text("A Country with Region information is required.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -209,7 +209,7 @@ function submitCommunityRegistration(){
 	}
 	
 	if (foundInvalidNameCI) {
-		if (($("select#communities_country_id option:selected").text() == 'Please select') && ($("input#communities_us_state_id").val() != '')) {
+		if (($("select#community_country_id option:selected").text() == 'Please select') && ($("input#community_us_state_id").val() != '')) {
 		$("span#country_error").text("Please select a Country.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -220,7 +220,7 @@ function submitCommunityRegistration(){
 	}
 	}
 	if (foundInvalidNameCI) {
-	if (($("select#communities_country_id option:selected").text() != 'Please select') && ($("select#communities_country_id option:selected").text() != 'United States') && ($("input#communities_us_state_id").val() == '')) {
+	if (($("select#community_country_id option:selected").text() != 'Please select') && ($("select#community_country_id option:selected").text() != 'United States') && ($("input#community_us_state_id").val() == '')) {
 		$("span#country_error").text("Please provide the required Region.");
 		$("span#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -230,7 +230,7 @@ function submitCommunityRegistration(){
 	}
 	}
 	
-	if ($("#communities_community_name").val() == "") {
+	if ($("#community_community_name").val() == "") {
 		$("#registration_community_name_error").text("Community Name is required.");
 		$("#registration_community_name_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -239,7 +239,7 @@ function submitCommunityRegistration(){
 		$("#registration_community_name_error").css("visibility", "hidden");
 	}
 	
-	if ($("#communities_email").val() == "") {
+	if ($("#community_email").val() == "") {
 		$("#registration_community_email_error").text("Community email is required.");
 		$("#registration_community_email_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -248,7 +248,7 @@ function submitCommunityRegistration(){
 		$("#registration_community_email_error").css("visibility", "hidden");
 	}
 	
-	if ($("#communities_password_confirmation").val() == "") {
+	if ($("#community_password_confirmation").val() == "") {
 		$("#registration_password_confirmation_error").text("Community password re-entry is required.");
 		$("#registration_password_confirmation_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -256,7 +256,7 @@ function submitCommunityRegistration(){
 		$("#registration_password_confirmation_error").text("");
 		$("#registration_password_confirmation_error").css("visibility", "hidden");
 	}
-	if ($("#communities_password").val() == "") {
+	if ($("#community_password").val() == "") {
 		$("#registration_password_error").text("Community password is required.");
 		$("#registration_password_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -265,7 +265,7 @@ function submitCommunityRegistration(){
 		$("#registration_password_error").css("visibility", "hidden");
 	}
 	
-	if ($("#communities_password_confirmation").val() != $("#communities_password").val()) {
+	if ($("#community_password_confirmation").val() != $("#community_password").val()) {
 		
 		$("#registration_password_confirmation_error").text("Community password and password re-entry must match.");
 		$("#registration_password_confirmation_error").css("visibility", "visible");
@@ -276,7 +276,7 @@ function submitCommunityRegistration(){
 	}
 	
 	
-	if ($("#communities_first_name").val() == "") {
+	if ($("#community_first_name").val() == "") {
 		
 		$("#first_name_error").text("First name is required.");
 		$("#first_name_error").css("visibility", "visible");
@@ -286,7 +286,7 @@ function submitCommunityRegistration(){
 		$("#first_name_error").css("visibility", "hidden");
 	}
 	
-	if ($("#communities_last_name").val() == "") {
+	if ($("#community_last_name").val() == "") {
 		$("#last_name_error").text("Last name is required.");
 		$("#last_name_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -296,7 +296,7 @@ function submitCommunityRegistration(){
 	}
 	
 	
-	if ($("#communities_address_line_1").val() == "") {
+	if ($("#community_address_line_1").val() == "") {
 		$("#address_line_1_error").text("First address line is required.");
 		$("#address_line_1_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -304,7 +304,7 @@ function submitCommunityRegistration(){
 		$("#address_line_1_error").text("");
 		$("#address_line_1_error").css("visibility", "hidden");
 	}
-	if ($("#communities_city").val() == "") {
+	if ($("#community_city").val() == "") {
 		$("#city_error").text("City is required.");
 		$("#city_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -312,7 +312,7 @@ function submitCommunityRegistration(){
 		$("#city_error").text("");
 		$("#city_error").css("visibility", "hidden");
 	}
-	if ($("#communities_postal_code").val() == "") {
+	if ($("#community_postal_code").val() == "") {
 		$("#postal_code_error").text("Postal Code is required.");
 		$("#postal_code_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -321,9 +321,9 @@ function submitCommunityRegistration(){
 		$("#postal_code_error").css("visibility", "hidden");
 	}
 	
-	if ($("#communities_postal_code").val() != "") {
+	if ($("#community_postal_code").val() != "") {
 		var re = /^[A-Za-z]+$/;
-		if (re.test(document.getElementById("communities_postal_code").value)) {
+		if (re.test(document.getElementById("community_postal_code").value)) {
 			$("#postal_code_error").text("Please verify your postal code, it should contain at least one number.");
 			$("#postal_code_error").css("visibility", "visible");
 			foundInvalid = false;
@@ -344,7 +344,7 @@ function submitCommunityRegistration(){
 
 function submitForgotCommunityName() {
 
-	if ($("#communities_email").val() == "") {
+	if ($("#community_email").val() == "") {
 		$("#forgot_community_email_error").text("Email is required.");
 		$("#forgot_community_email_error").css("visibility", "visible");
 
@@ -358,7 +358,7 @@ function submitForgotCommunityName() {
 
 function submitForgotPassword() {
 
-	if ($("#users_email").val() == "") {
+	if ($("#user_email").val() == "") {
 		$("#reset_password_email_error").text("Email is required.");
 		$("#reset_password_email_error").css("visibility", "visible");
 
@@ -371,7 +371,7 @@ function submitForgotPassword() {
 function submitForgotCommunityPassword() {
 	
 
-	if ($("#communities_email").val() == "") {
+	if ($("#community_email").val() == "") {
 		$("#forgot_community_password_email_error").text("Email is required.");
 		$("#forgot_community_password_email_error").css("visibility", "visible");
 
@@ -386,7 +386,7 @@ function submitForgotCommunityPassword() {
 
 function submitLogin() {
 	var foundInvalid = true;
-	if ($("#users_username").val() == "") {
+	if ($("#user_username").val() == "") {
 		$("#login_username_error").text("Username is required.");
 		$("#login_username_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -395,7 +395,7 @@ function submitLogin() {
 		$("#login_username_error").css("visibility", "hidden");
 	}
 
-	if ($("#users_password").val() == "") {
+	if ($("#user_password").val() == "") {
 		$("#login_password_error").text("Password is required.");
 		$("#login_password_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -412,7 +412,7 @@ function submitLogin() {
 function submitCommunityLogin() {
 	var foundInvalid = true;
 	var foundInvalidNameAlias = true;
-	if ($("#users_community_name").val() == "") {
+	if ($("#user_community_name").val() == "") {
 		$("#login_community_name_error").text("Community name is required.");
 		$("#login_community_name_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -421,7 +421,7 @@ function submitCommunityLogin() {
 		$("#login_community_name_error").css("visibility", "hidden");
 	}
 
-	if ($("#users_community_password").val() == "") {
+	if ($("#user_community_password").val() == "") {
 		$("#login_community_password_error").text("Password is required.");
 		$("#login_community_password_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -431,7 +431,7 @@ function submitCommunityLogin() {
 	}
 	
 	
-	if ($("#users_community_alias").val() != "" && ($("#users_community_first_name").val() != "" || $("#users_community_mi").val() != "" || $("#users_community_last_name").val() != "")   ) {
+	if ($("#user_community_alias").val() != "" && ($("#user_community_first_name").val() != "" || $("#user_community_mi").val() != "" || $("#user_community_last_name").val() != "")   ) {
 		$("#login_community_alias_error").text("Provide only a fullname or alias.");
 		$("#login_community_alias_error").css("visibility", "visible");
 		$("#login_community_first_name_error").text("");
@@ -444,7 +444,7 @@ function submitCommunityLogin() {
 	}
 	
 	if (foundInvalidNameAlias) {	
-	if (($("#users_community_first_name").val() != "") &&  ($("#users_community_last_name").val() == "")   ) {
+	if (($("#user_community_first_name").val() != "") &&  ($("#user_community_last_name").val() == "")   ) {
 		$("#login_community_first_name_error").text("Provide a last name");
 		$("#login_community_first_name_error").css("visibility", "visible");
 		$("#login_community_alias_error").text("");
@@ -458,7 +458,7 @@ function submitCommunityLogin() {
 	}	
 	
 	if (foundInvalidNameAlias) {	
-	if (($("#users_community_first_name").val() == "") &&  ($("#users_community_last_name").val() != "")   ) {
+	if (($("#user_community_first_name").val() == "") &&  ($("#user_community_last_name").val() != "")   ) {
 		$("#login_community_first_name_error").text("Provide a first name");
 		$("#login_community_first_name_error").css("visibility", "visible");
 		$("#login_community_alias_error").text("");
@@ -473,7 +473,7 @@ function submitCommunityLogin() {
 	
 	
 	if (foundInvalidNameAlias) {	
-	if (($("#users_community_first_name").val() == "") &&  ($("#users_community_mi").val() != "") && ($("#users_community_last_name").val() != "")   ) {
+	if (($("#user_community_first_name").val() == "") &&  ($("#user_community_mi").val() != "") && ($("#user_community_last_name").val() != "")   ) {
 		$("#login_community_first_name_error").text("Provide a first name");
 		$("#login_community_first_name_error").css("visibility", "visible");
 		$("#login_community_alias_error").text("");
@@ -487,7 +487,7 @@ function submitCommunityLogin() {
 	}
 	
 	if (foundInvalidNameAlias) {	
-		if (($("#users_community_first_name").val() != "") &&  ($("#users_community_mi").val() != "") && ($("#users_community_last_name").val() == "")   ) {
+		if (($("#user_community_first_name").val() != "") &&  ($("#user_community_mi").val() != "") && ($("#user_community_last_name").val() == "")   ) {
 		$("#login_community_first_name_error").text("Provide a last name");
 		$("#login_community_first_name_error").css("visibility", "visible");
 		$("#login_community_alias_error").text("");
@@ -507,7 +507,7 @@ function submitCommunityLogin() {
 function submitRegistration() {
 	var foundInvalid = false;
 
-	if ($("input[name='users[user_type]']:checked").val() == '') {
+	if ($("input[name='user[user_type]']:checked").val() == '') {
 		$("#no_type_choice_error").text("Please choose a User Type.");
 		$("#no_type_choice_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -516,7 +516,7 @@ function submitRegistration() {
 		$("#no_type_choice_error").css("visibility", "hidden");
 	}
 
-	if ($("#users_user_alias").val() == "") {
+	if ($("#user_user_alias").val() == "") {
 		$("#registration_alias_error").text("User alias is required.");
 		$("#registration_alias_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -525,7 +525,7 @@ function submitRegistration() {
 		$("#registration_alias_error").css("visibility", "hidden");
 	}
 
-	if ($("#users_username").val() == "") {
+	if ($("#user_username").val() == "") {
 		$("#registration_username_error").text("Username is required.");
 		$("#registration_username_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -534,7 +534,7 @@ function submitRegistration() {
 		$("#registration_username_error").css("visibility", "hidden");
 	}
 
-	if (($("#users_username").val()).length < 8) {
+	if (($("#user_username").val()).length < 8) {
 		$("#registration_username_error").text("Username is too short, 8 - 40 characters required.");
 		$("#registration_username_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -543,7 +543,7 @@ function submitRegistration() {
 		$("#registration_username_error").css("visibility", "hidden");
 	}
 	
-		if (($("#users_user_alias").val()).length < 8) {
+		if (($("#user_user_alias").val()).length < 8) {
 		$("#registration_alias_error").text("User alias is too short, 8 - 40 characters required.");
 		$("#registration_alias_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -552,7 +552,7 @@ function submitRegistration() {
 		$("#registration_alias_error").css("visibility", "hidden");
 	}
 
-	if ($("#users_password").val() == "") {
+	if ($("#user_password").val() == "") {
 		$("#registration_password_error").text("Password is required.");
 		$("#registration_password_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -561,7 +561,7 @@ function submitRegistration() {
 		$("#registration_password_error").css("visibility", "hidden");
 	}
 
-	if (($("#users_password").val()).length < 8) {
+	if (($("#user_password").val()).length < 8) {
 		$("#registration_password_error").text("Password is too short, 8 - 16 characters required.");
 		$("#registration_password_error").css("visibility", "visible");
 		foundInvalid = true;
@@ -570,7 +570,7 @@ function submitRegistration() {
 		$("#registration_password_error").css("visibility", "hidden");
 	}
 
-	if ($("#users_email").val() == "") {
+	if ($("#user_email").val() == "") {
 		$("#registration_email_error").text("Email is required.");
 		$("#registration_email_error").css("visibility", "visible");
 		foundInvalid = true;

@@ -9,8 +9,7 @@ class Community < ActiveRecord::Base
   alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
   alpha_numeric_regex_community_name = /\A[0-9 a-zA-Z\-\_]+\z/
   
-  set_primary_key :community_id
-  
+  has_one :user
   has_many :community_members, dependent: :destroy
   attr_accessible :community_members_attributes, allow_destroy: true
   accepts_nested_attributes_for :community_members

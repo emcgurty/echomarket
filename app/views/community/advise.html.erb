@@ -34,7 +34,7 @@
 </style>
 
 
-<%= form_for @communities , :url=>  {:controller=>"community", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+<%= form_for @community , :url=>  {:controller=>"community", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 <div class="top" >
 
 	<p>
@@ -100,7 +100,7 @@
 				<td width='20%'>
 			    <%= nf.hidden_field :community_id %>
 				
-				<% if  @communities.is_creator == 1 %>
+				<% if  @community.is_creator == 1 %>
 					<%= nf.submit "Update Member" %>
 				    <%= cm.hidden_field :is_creator, :value => 1 %>
 				<% else %>

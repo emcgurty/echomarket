@@ -38,7 +38,7 @@ end
           :date_created => Time.now,
           :approved => 1,
           :remote_ip => @req[:remote_ip],
-		:comment => @req[:comment]          
+		      :comment => @req[:comment]          
  )
          if @borrower.save(:validate => false) 
          @un = 'rapid_' + @borrower.item_description
@@ -66,8 +66,14 @@ end
       end 
       
       if @borrower.blank?
-          session[:notice] = "Sorry, no Borrowers records yet."
-          redirect_to  :controller => "search", :action => 'item_search'
+          
+          if session[:user_id].blank?
+            session[:notice] = "Sorry, no borrowers records have been created."
+            redirect_to  home_items_listing_url
+          else
+            session[:notice] = "Sorry, no borrowers records have been created. Perhaps you would like to create one now."
+            redirect_to  borrower_seeking_url
+          end    
       end
         
  end
@@ -149,9 +155,9 @@ end
   def borrower_seeking
     session[:no_border] = true
     if params[:id].blank?
-     @borrowers = Borrower.new
+     @borrower = Borrower.new
     else
-      @borrowers = Borrower.find(params[:id])
+      @borrower = Borrower.find(params[:id])
     end
   end
   
@@ -159,9 +165,9 @@ end
         session[:no_border] = true
 
      if params[:id].blank?
-        @borrowers = Borrower.new
+        @borrower = Borrower.new
     else
-        @borrowers = Borrower.find(params[:id])
+        @borrower = Borrower.find(params[:id])
     end
   end
    

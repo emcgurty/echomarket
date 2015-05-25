@@ -20,14 +20,14 @@
 			else if ("city" in data)
 			{
 				// Set city and state
-				container.find("input[name='communities[city]']").val(data.city);
+				container.find("input[name='community[city]']").val(data.city);
 				/* container.find("input[name='state']").val(data.state); */
 			}
 		}
 		
 		// Set up event handlers
 		// $("#users_password_confirmation").change(function() {
-		container.find("input[name='communities[postal_code]']").change(function() {
+		container.find("input[name='community[postal_code]']").change(function() {
 			alert("hit change1");
 			// Get zip code
 			var zipcode = $(this).val().substring(0, 5);
@@ -74,7 +74,7 @@
 				} 
 			}
 		});
-	$("input[name='communities[postal_code]']").trigger('change');	
+	$("input[name='community[postal_code]']").trigger('change');	
 	});
 	
 	

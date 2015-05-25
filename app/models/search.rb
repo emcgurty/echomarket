@@ -22,14 +22,14 @@ private
 
 def find_borrowers
 
-  borrowers = Borrower.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') )
+  borrowers = Borrower.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') ).addresses.all
   
 
 end
 
 def find_lenders
 
-  lenders = Lender.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') )
+  lenders = Lender.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') ).addresses.all
 
 end
 

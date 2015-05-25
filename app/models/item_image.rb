@@ -1,24 +1,21 @@
 class ItemImage < ActiveRecord::Base
 
+  attr_accessor :item_image_upload
   belongs_to :lender
   belongs_to :borrower
   belongs_to :advertiser
 
   require 'fastimage'
-  set_primary_key :item_image_id
-
   #  set up table associations.
-  attr_accessor :item_image_upload
+ 
   before_create :get_primary_key_value, :item_image_upload
-  before_update :item_image_upload
-
   protected
 
   def get_primary_key_value
-    if self.item_image_id.blank?
-    self.item_image_id = get_random
+    if self.id.blank?
+    self.id = get_random
     end
-    return self.item_image_id
+    return self.id
 
   end
 

@@ -15,7 +15,6 @@ class AdvertiserController < ApplicationController
 
       unless params[:advertiser].blank?
         @req = params[:advertiser]
-        @hold_picture_file = params[:item_image_upload]
         @advertiser = Advertiser.new(
           :title => @req[:title].to_s,
           :description=> @req[:description].to_s,
@@ -28,29 +27,14 @@ class AdvertiserController < ApplicationController
           :date_created => Time.now,
           :approved => 0,
           :remote_ip => @req[:remote_ip],
-          :advertiser_logo => "NA"
+          :item_image_upload => params[:item_image_upload] 
 )
        
        
         if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
-          unless @hold_picture_file.blank?
-            @img =  Itemimage.new(:advertiser_id => @advertiser.advertiser_id,
-              :borrower_id => '',  :lender_id => '',
-              :item_image_upload=> @hold_picture_file,
-              :item_image_caption=> '',
-              :date_created =>Time.now,
-              :is_active => 1)
-            @img.save
-
-            @mynewhash =  Hash.new
-            @mynewhash = [:advertiser_logo => @img.item_image_id.to_s]
-          @advertiser.update_attributes(@mynewhash[0])
-          end
-
           Notifier.notify_advertiser(@advertiser).deliver
           session[:notice] = "Your Advertisement record has been saved, and validation email has been sent to you at #{@advertiser.advertiser_email}."
           f.html {redirect_to  home_items_listing_url}
-
         else
           f.html { render :action => 'new'}
         end

@@ -3,7 +3,7 @@ class CommunityObserver < ActiveRecord::Observer
   observe :community
 
   def before_create(communities)
-    communities.community_id = get_random
+    communities.id = get_random
   end
 
   def after_create(communities)
@@ -24,7 +24,7 @@ class CommunityObserver < ActiveRecord::Observer
     Notifier.get_community_notification(communities).deliver if communities.recently_reset? && communities.recently_community_name_get?
    rescue  Exception => e
     puts e.message
-    puts "after_save"   
+       
   end
 end
 

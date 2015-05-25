@@ -23,7 +23,7 @@ class Notifier < ActionMailer::Base
     @title = ad.title
     @description = ad.description
     @url = ad.advertiser_url
-    @advertiser_id = ad.advertiser_id
+    @advertiser_id = ad.id
    end
   
   
@@ -36,86 +36,85 @@ class Notifier < ActionMailer::Base
     @created_at =   sent_at
   end
 
- def signup_notification_community(communities)
-    setup_email_community(communities)
+ def signup_notification_community(community)
+    setup_email_community(community)
     @subject    += ' Please activate your new account'
     
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{communities.community_id}"
-    @community_name = communities.community_name
-    @password =  communities.password
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{community.id}"
+    @community_name = community.community_name
+    @password =  community.password
 
   end
   
-  def signup_notification(users)
+  def signup_notification(user)
 
-
-    setup_email(users)
+    setup_email(user)
     @subject    += ' Please activate your new account'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/activate/#{User.activation_code}/#{User.user_id}"
-    @username = User.username
-    @password =  User.password
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/activate/#{user.activation_code}/#{user.id}"
+    @username = user.username
+    @password =  user.password
 
   end
 
-  def activation(users)
-    setup_email(users)
+  def activation(user)
+    setup_email(user)
     @subject    += ' Your account has been activated!'
     @url  = "http://"
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}"
 
   end
   
-    def community_activation(communities)
-    setup_email_community(communities)
+    def community_activation(community)
+    setup_email_community(community)
     @subject    += ' Your account has been activated!'
     @url  = "http://"
     @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}"
-    @community_name = communities.community_name
+    @community_name = community.community_name
 
   end
 
-  def reset_password_notification(users)
-    setup_email(users)
+  def reset_password_notification(user)
+    setup_email(user)
     @subject    += ' Follow this link to reset your password'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_reset_password/#{User.reset_code}"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_reset_password/#{user.reset_code}"
   end
 
-  def reset_community_password_notification(communities)
-    setup_email_community(communities)
+  def reset_community_password_notification(community)
+    setup_email_community(community)
     @subject    += ' Follow this link to reset your password'
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/get_reset_community_password/#{communities.reset_code}"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/get_reset_community_password/#{community.reset_code}"
   end
 
-  def get_username_notification(users)
-    setup_email(users)
+  def get_username_notification(user)
+    setup_email(user)
     @subject    += ' Follow this link to learn your username'
     @url  = "http://"
-    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_username/#{User.reset_code}"
+    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/user/get_username/#{user.reset_code}"
   end
 
-def get_community_notification(communities)
-    setup_email_community(communities)
+def get_community_notification(community)
+    setup_email_community(community)
     @subject    += ' Follow this link to learn your Community Name'
     @url  = "http://"
-    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/get_community_name/#{communities.reset_code}"
+    @url = @url  + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/get_community_name/#{community.reset_code}"
   end
   
   private
   
-  def setup_email(users)
-    @recipients  = "#{User.email}" + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+  def setup_email(user)
+    @recipients  = "#{user.email}" + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @subject     = "Message From www.echomarket.org. "
     @sent_on     = Time.now
     
 
   end
-  def setup_email_community(communities)
-    @recipients  = communities.email + ","  + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+  def setup_email_community(community)
+    @recipients  = community.email + ","  + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @from        = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
     @subject     = "Message From www.echomarket.org. "
     @sent_on     = Time.now

@@ -26,15 +26,15 @@
              	 mystr = mystr + ":" + zip.zip_code;
         
       });	// Set city and state
-				 container.find("input[name='communities[city]']").val(mystr);
+				 container.find("input[name='community[city]']").val(mystr);
 				/* container.find("input[name='state']").val(data.state); */
 			}
 		}
 		
 		// Set up event handlers
-		container.find("input[name='communities[postal_code]']").change(function() {
+		container.find("input[name='community[postal_code]']").change(function() {
 		
-		/* 	var distance = container.find("input[name='communities[distance]']").val(); */
+		/* 	var distance = container.find("input[name='community[distance]']").val(); */
 		var distance = 10;
 			// Get zip code
 			var zipcode = $(this).val().substring(0, 5);
@@ -78,7 +78,7 @@
 				} 
 			}
 		});
-	$("input[name='communities[postal_code]']").trigger('change');	
+	$("input[name='community[postal_code]']").trigger('change');	
 	});
 	
 

@@ -22,11 +22,11 @@ end
           :first_name => 'NA',
           :last_name => 'NA',
           :displayLenderName => 0,
-          :address_line_1 => 'NA',
+          :address_line_1 => "NA",
           :us_state_id=> @req[:us_state_id].to_s,
-          :us_state_id=> @req[:us_state_id],
+          :region=> @req[:region],
           :country_id=> @req[:country_id].to_s,
-          :city => "NA",
+          :city => @req[:city].to_s,
           :postal_code => @req[:postal_code].to_s,
           :displayLenderAddress  => 0,
           :useWhichContactAddress => 0,
@@ -157,11 +157,11 @@ end
      session[:no_border] = true
 
     if params[:id].blank?
-    @lenders = Lender.new
+      @lender = Lender.new
     else
-      @lenders = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
-      if @lenders.blank?
-        lend = Lender.new
+      @lender = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
+      if @lender.blank?
+        @lender = Lender.new
         
       end
     end
@@ -171,11 +171,11 @@ end
     session[:no_border] = true
 
      if params[:id].blank?
-    @lenders = Lender.new
+    @lender = Lender.new
     else
-      @lenders = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
-      if @lenders.blank?
-        @lenders = Lender.new
+      @lender = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
+      if @lender.blank?
+        @lender = Lender.new
       end
     end
   end

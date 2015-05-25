@@ -26,8 +26,8 @@ showFormContact();
     $("input#lenders_organization_name").trigger('change');
 
 
-    $("input[name='lenders[displayLenderOrganizationName]']").bind('change', function() {
-        var y_n = $("input[name='lenders[displayLenderOrganizationName]']:checked").val();
+    $("input[name='lender[displayLenderOrganizationName]']").bind('change', function() {
+        var y_n = $("input[name='lender[displayLenderOrganizationName]']:checked").val();
         if (y_n == 1) {
             $("span#displayLenderOrganizationName_selection").html("Yes");
         } else {
@@ -44,10 +44,10 @@ showFormContact();
                
 
     });
-    $("input[name='lenders[displayLenderOrganizationName]']").trigger('change');
+    $("input[name='lender[displayLenderOrganizationName]']").trigger('change');
 
-   	$("input[name='lenders[displayLenderAddress]']").bind('change', function() {
-	var	y_n = $("input[name='lenders[displayLenderAddress]']:checked").val();
+   	$("input[name='lender[displayLenderAddress]']").bind('change', function() {
+	var	y_n = $("input[name='lender[displayLenderAddress]']:checked").val();
 	if (y_n == 1) {
 		       $("#postalWithContactAddress").css("display", "block");
                $("span#display_address_selection").html("Yes");
@@ -70,11 +70,11 @@ showFormContact();
             $("span#display_address_selection").html("No");
 	}	
 	});
-	$("input[name='lenders[displayLenderAddress]']").trigger('change');
+	$("input[name='lender[displayLenderAddress]']").trigger('change');
 	
-	$("input[name='lenders[displayLenderName]']").bind('change', function() {
+	$("input[name='lender[displayLenderName]']").bind('change', function() {
 		
-    var y_n = $("input[name='lenders[displayLenderName]']:checked").val();
+    var y_n = $("input[name='lender[displayLenderName]']:checked").val();
 	if (y_n == 1) {
 		 $("span#display_name_selection").html("Yes");
 			if (
@@ -94,7 +94,7 @@ showFormContact();
 	}
 	
 	});
-$("input[name='lenders[displayLenderName]']").trigger('change');
+$("input[name='lender[displayLenderName]']").trigger('change');
 
 $("#lenders_age_18_or_more").bind('change', function() {
         if ($("#lenders_age_18_or_more").is (':checked')) {
@@ -184,9 +184,9 @@ $("#lenders_age_18_or_more").bind('change', function() {
     
     $("#lenders_borrower_contact_by_Other_Social_Media_Access").trigger('change');
 
-    $("input[name='lenders[b_comes_to_which_address]']").bind('change', function() {
+    $("input[name='lender[b_comes_to_which_address]']").bind('change', function() {
 
-        var y_n = $("input[name='lenders[b_comes_to_which_address]']:checked").val();
+        var y_n = $("input[name='lender[b_comes_to_which_address]']:checked").val();
         if (y_n == 0) {
             $("span#borrower_comes_to_which_address_selection").html("Neither Address");
         } else if (y_n == 1){
@@ -197,11 +197,11 @@ $("#lenders_age_18_or_more").bind('change', function() {
             $("span#borrower_comes_to_which_address_selection").html("Use Contact Address");
         } else {}
     });
-    $("input[name='lenders[b_comes_to_which_address]']").trigger('change');
+    $("input[name='lender[b_comes_to_which_address]']").trigger('change');
 
-    $("input[name='lenders[b_returns_to_which_address]']").bind('change', function() {
+    $("input[name='lender[b_returns_to_which_address]']").bind('change', function() {
 
-        var y_n = $("input[name='lenders[b_returns_to_which_address]']:checked").val();
+        var y_n = $("input[name='lender[b_returns_to_which_address]']:checked").val();
         if (y_n == 0) {
 
             $("span#borrower_returns_to_which_address_selection").html("Neither Address");
@@ -214,7 +214,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
         } else {}
     });
 
-    $("input[name='lenders[b_returns_to_which_address]']").trigger('change');
+    $("input[name='lender[b_returns_to_which_address]']").trigger('change');
 
     $("#lenders_public_display_home_phone").bind('change', function() {
 
@@ -441,8 +441,8 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("input#lenders_last_name").trigger('change');
 
-    $("input[name='lenders[notify_borrowers]']").bind('change', function() {
-        var y_n = $("input[name='lenders[notify_borrowers]']:checked").val();
+    $("input[name='lender[notify_borrowers]']").bind('change', function() {
+        var y_n = $("input[name='lender[notify_borrowers]']:checked").val();
         if (y_n == 1) {
             $("span#category_notification_selection").html("Yes");
         } else {
@@ -450,7 +450,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
         }
 
     });
-    $("input[name='lenders[notify_lenders]']").trigger('change');
+    $("input[name='lender[notify_lenders]']").trigger('change');
 
   
 
@@ -459,11 +459,11 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
 
 
-    $("input[name='lenders[useWhichContactAddress]']").bind('change', function() {
+    $("input[name='lender[useWhichContactAddress]']").bind('change', function() {
       /*  $("div#contactAddressWhich").css("display", "none");
         $("div#contactAddressOnly").css("display", "none");
         $("div#contactAddressWithAlternative").css("display", "none"); */
-        var y_n = $("input[name='lenders[useWhichContactAddress]']:checked").val();
+        var y_n = $("input[name='lender[useWhichContactAddress]']:checked").val();
         if (y_n == 0) {
             $("span#useWhichContactAddress_selection").html("Neither Address");
         } else if (y_n == 1){
@@ -474,12 +474,12 @@ $("#lenders_age_18_or_more").bind('change', function() {
             $("span#useWhichContactAddress_selection").html("Use Contact Address");
         } else {}
     });
-    $("input[name='lenders[useWhichContactAddress]']").trigger('change');
+    $("input[name='lender[useWhichContactAddress]']").trigger('change');
 
-    $("input[name='lenders[borrower_contact_by_email]']").bind('change', function() {
+    $("input[name='lender[borrower_contact_by_email]']").bind('change', function() {
         $("span#email2_contact_error").css("visibility", "hidden");
         $("span#email2_contact_error").text("");
-        var y_n = $("input[name='lenders[borrower_contact_by_email]']:checked").val();
+        var y_n = $("input[name='lender[borrower_contact_by_email]']:checked").val();
         if (y_n == 0) {
             $("span#borrower_contact_by_email_selection").html("Neither Email");
         } else if (y_n == 1){
@@ -509,7 +509,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
 
     });
-    $("input[name='lenders[borrower_contact_by_email]']").trigger('change');
+    $("input[name='lender[borrower_contact_by_email]']").trigger('change');
 
 
     $("#lenders_email_alternative").bind('change', function() {
@@ -556,25 +556,25 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("#lenders_item_count").trigger('change');
 
-    $("input[name='lenders[for_free]']").bind('change', function() {
-        var y_n = $("input[name='lenders[for_free]']:checked").val();
+    $("input[name='lender[for_free]']").bind('change', function() {
+        var y_n = $("input[name='lender[for_free]']:checked").val();
         if (y_n == 1) {
             $("span#for_free_selection").html("Yes");
         } else if (y_n == 0){
             $("span#for_free_selection").html("No");
         }
     });
-    $("input[name='lenders[for_free]']").trigger('change');
+    $("input[name='lender[for_free]']").trigger('change');
 
-    $("input[name='lenders[available_for_purchase]']").bind('change', function() {
-        var y_n = $("input[name='lenders[available_for_purchase]']:checked").val();
+    $("input[name='lender[available_for_purchase]']").bind('change', function() {
+        var y_n = $("input[name='lender[available_for_purchase]']:checked").val();
         if (y_n == 1) {
             $("span#purchase_selection").html("Yes");
         } else if (y_n == 0){
             $("span#purchase_selection").html("No");
         }
     });
-    $("input[name='lenders[available_for_purchase]']").trigger('change');
+    $("input[name='lender[available_for_purchase]']").trigger('change');
 
     $("#lenders_available_for_purchase_amount").bind('change', function() {
         $("span#purchase_amount_selection").html($(this).val());
@@ -588,8 +588,8 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("#lenders_security_deposit_amount").trigger('change');
 
-  $("input[name='lenders[security_deposit]']").bind('change', function() {
-        var y_n = $("input[name='lenders[security_deposit]']:checked").val();
+  $("input[name='lender[security_deposit]']").bind('change', function() {
+        var y_n = $("input[name='lender[security_deposit]']:checked").val();
         if (y_n == 1) {
             $("span#security_deposit_selection").html("Yes");
         } else if (y_n == 0){
@@ -599,50 +599,50 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
 
 
-    $("input[name='lenders[small_fee]']").bind('change', function() {
-        var y_n = $("input[name='lenders[small_fee]']:checked").val();
+    $("input[name='lender[small_fee]']").bind('change', function() {
+        var y_n = $("input[name='lender[small_fee]']:checked").val();
         if (y_n == 1) {
             $("span#small_borrowing_fee_selection").html("Yes");
         } else if (y_n == 0){
             $("span#small_borrowing_fee_selection").html("No");
         }
     });
-    $("input[name='lenders[small_fee]']").trigger('change');
+    $("input[name='lender[small_fee]']").trigger('change');
 
     $("#lenders_small_fee_amount").bind('change', function() {
         $("span#small_fee_amount_selection").html($(this).val());
     });
     $("#lenders_small_fee_amount").trigger('change');
 
-    $("input[name='lenders[available_for_donation]']").bind('change', function() {
-        var y_n = $("input[name='lenders[available_for_donation]']:checked").val();
+    $("input[name='lender[available_for_donation]']").bind('change', function() {
+        var y_n = $("input[name='lender[available_for_donation]']:checked").val();
         if (y_n == 1) {
             $("span#donation_selection").html("Yes");
         } else if (y_n == 0){
             $("span#donation_selection").html("No");
         }
     });
-    $("input[name='lenders[available_for_donation]']").trigger('change');
+    $("input[name='lender[available_for_donation]']").trigger('change');
 
-    $("input[name='lenders[donate_anonymous]']").bind('change', function() {
-        var y_n = $("input[name='lenders[donate_anonymous]']:checked").val();
+    $("input[name='lender[donate_anonymous]']").bind('change', function() {
+        var y_n = $("input[name='lender[donate_anonymous]']:checked").val();
         if (y_n == 1) {
             $("span#anon_donations_selection").html("Yes");
         } else if (y_n == 0){
             $("span#anon_donations_selection").html("No");
         }
     });
-    $("input[name='lenders[donate_anonymous]']").trigger('change');
+    $("input[name='lender[donate_anonymous]']").trigger('change');
     
-    $("input[name='lenders[trade]']").bind('change', function() {
-        var y_n = $("input[name='lenders[trade]']:checked").val();
+    $("input[name='lender[trade]']").bind('change', function() {
+        var y_n = $("input[name='lender[trade]']:checked").val();
         if (y_n == 1) {
             $("span#trade_selection").html("Yes");
         } else if (y_n == 0){
             $("span#trade_selection").html("No");
         }
     });
-    $("input[name='lenders[trade]']").trigger('change');
+    $("input[name='lender[trade]']").trigger('change');
 
     $("#lenders_trade_item").bind('change', function() {
         $("span#trade_item_selection").html($(this).val());
@@ -650,55 +650,55 @@ $("#lenders_age_18_or_more").bind('change', function() {
     $("#lenders_trade_item").trigger('change');
 
 
-   $("input[name='lenders[thirdPartyPresenceL2B]']").bind('change', function() {
-        var y_n = $("input[name='lenders[thirdPartyPresenceL2B]']:checked").val();
+   $("input[name='lender[thirdPartyPresenceL2B]']").bind('change', function() {
+        var y_n = $("input[name='lender[thirdPartyPresenceL2B]']:checked").val();
         if (y_n == 1) {
             $("span#l2b_third_party_selection").html("Yes");
         } else if (y_n == 0){
             $("span#l2b_third_party_selection").html("No");
         }
     });
-    $("input[name='lenders[thirdPartyPresenceL2B]']").trigger('change');  
+    $("input[name='lender[thirdPartyPresenceL2B]']").trigger('change');  
 
-   $("input[name='lenders[lenderThirdPartyChoiceL2B]']").bind('change', function() {
-        var y_n = $("input[name='lenders[lenderThirdPartyChoiceL2B]']:checked").val();
+   $("input[name='lender[lenderThirdPartyChoiceL2B]']").bind('change', function() {
+        var y_n = $("input[name='lender[lenderThirdPartyChoiceL2B]']:checked").val();
         if (y_n == 1) {
             $("span#l2b_your_choice_delivery_selection").html("Yes");
         } else if (y_n == 0){
             $("span#l2b_your_choice_delivery_selection").html("No");
         }
     });
-    $("input[name='lenders[lenderThirdPartyChoiceL2B]']").trigger('change');
+    $("input[name='lender[lenderThirdPartyChoiceL2B]']").trigger('change');
 
- $("input[name='lenders[thirdPartyPresenceB2L]']").bind('change', function() {
-        var y_n = $("input[name='lenders[thirdPartyPresenceB2L]']:checked").val();
+ $("input[name='lender[thirdPartyPresenceB2L]']").bind('change', function() {
+        var y_n = $("input[name='lender[thirdPartyPresenceB2L]']:checked").val();
         if (y_n == 1) {
             $("span#b2l_third_party_present_selection").html("Yes");
         } else if (y_n == 0){
             $("span#b2l_third_party_present_selection").html("No");
         }
     });
-    $("input[name='lenders[thirdPartyPresenceB2L]']").trigger('change');
+    $("input[name='lender[thirdPartyPresenceB2L]']").trigger('change');
 
- $("input[name='lenders[lenderThirdPartyChoiceB2L]']").bind('change', function() {
-        var y_n = $("input[name='lenders[lenderThirdPartyChoiceB2L]']:checked").val();
+ $("input[name='lender[lenderThirdPartyChoiceB2L]']").bind('change', function() {
+        var y_n = $("input[name='lender[lenderThirdPartyChoiceB2L]']:checked").val();
         if (y_n == 1) {
             $("span#b2l_third_your_choice_selection").html("Yes");
         } else if (y_n == 0){
             $("span#b2l_third_your_choice_selection").html("No");
         }
     });
-    $("input[name='lenders[lenderThirdPartyChoiceB2L]']").trigger('change');
+    $("input[name='lender[lenderThirdPartyChoiceB2L]']").trigger('change');
 
- $("input[name='lenders[agreedThirdPartyChoiceB2L]']").bind('change', function() {
-        var y_n = $("input[name='lenders[agreedThirdPartyChoiceB2L]']:checked").val();
+ $("input[name='lender[agreedThirdPartyChoiceB2L]']").bind('change', function() {
+        var y_n = $("input[name='lender[agreedThirdPartyChoiceB2L]']:checked").val();
         if (y_n == 1) {
             $("span#b2l_third_mutual_selection").html("Yes");
         } else if (y_n == 0){
             $("span#b2l_third_mutual_selection").html("No");
         }
     });
-    $("input[name='lenders[agreedThirdPartyChoiceB2L]']").trigger('change');
+    $("input[name='lender[agreedThirdPartyChoiceB2L]']").trigger('change');
 
 
 
@@ -706,25 +706,25 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
 
 
-   $("input[name='lenders[willPickUpPreferredLocationB2L]']").bind('change', function() {
-        var y_n = $("input[name='lenders[willPickUpPreferredLocationB2L]']:checked").val();
+   $("input[name='lender[willPickUpPreferredLocationB2L]']").bind('change', function() {
+        var y_n = $("input[name='lender[willPickUpPreferredLocationB2L]']:checked").val();
         if (y_n == 1) {
             $("span#borrower_pick_up_selection").html("Yes");
         } else if (y_n == 0){
             $("span#borrower_pick_up_selection").html("No");
         }
     });
-    $("input[name='lenders[willPickUpPreferredLocationB2L]']").trigger('change');
+    $("input[name='lender[willPickUpPreferredLocationB2L]']").trigger('change');
 
-   $("input[name='lenders[agreedThirdPartyChoiceL2B]']").bind('change', function() {
-        var y_n = $("input[name='lenders[agreedThirdPartyChoiceL2B]']:checked").val();
+   $("input[name='lender[agreedThirdPartyChoiceL2B]']").bind('change', function() {
+        var y_n = $("input[name='lender[agreedThirdPartyChoiceL2B]']:checked").val();
         if (y_n == 1) {
             $("span#l2b_agreed_delivery_selection").html("Yes");
         } else if (y_n == 0){
             $("span#l2b_agreed_delivery_selection").html("No");
         }
     });
-    $("input[name='lenders[agreedThirdPartyChoiceL2B]']").trigger('change');
+    $("input[name='lender[agreedThirdPartyChoiceL2B]']").trigger('change');
 
 
 
@@ -735,105 +735,105 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
 
 
- $("input[name='lenders[meetBorrowerAtAgreedB2L]']").bind('change', function() {
-        var y_n = $("input[name='lenders[meetBorrowerAtAgreedB2L]']:checked").val();
+ $("input[name='lender[meetBorrowerAtAgreedB2L]']").bind('change', function() {
+        var y_n = $("input[name='lender[meetBorrowerAtAgreedB2L]']:checked").val();
         if (y_n == 1) {
             $("span#b2lborrower_returns_to_agreed_selection").html("Yes");
         } else if (y_n == 0){
             $("span#b2lborrower_returns_to_agreed_selection").html("No");
         }
     });
-    $("input[name='lenders[meetBorrowerAtAgreedB2L]']").trigger('change');
+    $("input[name='lender[meetBorrowerAtAgreedB2L]']").trigger('change');
 
-  $("input[name='lenders[willDeliverToBorrowerPreferredL2B]']").bind('change', function() {
-        var y_n = $("input[name='lenders[willDeliverToBorrowerPreferredL2B]']:checked").val();
+  $("input[name='lender[willDeliverToBorrowerPreferredL2B]']").bind('change', function() {
+        var y_n = $("input[name='lender[willDeliverToBorrowerPreferredL2B]']:checked").val();
         if (y_n == 1) {
             $("span#l2b_preferred_selection").html("Yes");
         } else if (y_n == 0){
             $("span#l2b_preferred_selection").html("No");
         }
     });
-    $("input[name='lenders[willDeliverToBorrowerPreferredL2B]']").trigger('change');
+    $("input[name='lender[willDeliverToBorrowerPreferredL2B]']").trigger('change');
 
- $("input[name='lenders[meetBorrowerAtAgreedL2B]']").bind('change', function() {
-        var y_n = $("input[name='lenders[meetBorrowerAtAgreedL2B]']:checked").val();
+ $("input[name='lender[meetBorrowerAtAgreedL2B]']").bind('change', function() {
+        var y_n = $("input[name='lender[meetBorrowerAtAgreedL2B]']:checked").val();
         if (y_n == 1) {
             $("span#l2b_agreed_selection").html("Yes");
         } else if (y_n == 0){
             $("span#l2b_agreed_selection").html("No");
         }
     });
-    $("input[name='lenders[meetBorrowerAtAgreedL2B]']").trigger('change');
+    $("input[name='lender[meetBorrowerAtAgreedL2B]']").trigger('change');
 
-    $("input[name='lenders[agreed_number_of_days]']").bind('change', function() {
-        var y_n = $("input[name='lenders[agreed_number_of_days]']:checked").val();
+    $("input[name='lender[agreed_number_of_days]']").bind('change', function() {
+        var y_n = $("input[name='lender[agreed_number_of_days]']:checked").val();
         if (y_n == 1) {
             $("span#number_of_days_selection").html("Yes");
         } else if (y_n == 0){
             $("span#number_of_days_selection").html("No");
         }
     });
-    $("input[name='lenders[agreed_number_of_days]']").trigger('change');
+    $("input[name='lender[agreed_number_of_days]']").trigger('change');
 
-    $("input[name='lenders[agreed_number_of_hours]']").bind('change', function() {
-        var y_n = $("input[name='lenders[agreed_number_of_hours]']:checked").val();
+    $("input[name='lender[agreed_number_of_hours]']").bind('change', function() {
+        var y_n = $("input[name='lender[agreed_number_of_hours]']:checked").val();
         if (y_n == 1) {
             $("span#number_of_hours_selection").html("Yes");
         } else if (y_n == 0){
             $("span#number_of_hours_selection").html("No");
         }
     });
-    $("input[name='lenders[agreed_number_of_hours]']").trigger('change');
+    $("input[name='lender[agreed_number_of_hours]']").trigger('change');
 
-    $("input[name='lenders[indefinite_duration]']").bind('change', function() {
-        var y_n = $("input[name='lenders[indefinite_duration]']:checked").val();
+    $("input[name='lender[indefinite_duration]']").bind('change', function() {
+        var y_n = $("input[name='lender[indefinite_duration]']:checked").val();
         if (y_n == 1) {
             $("span#indefinite_selection").html("Yes");
         } else if (y_n == 0){
             $("span#indefinite_selection").html("No");
         }
     });
-    $("input[name='lenders[indefinite_duration]']").trigger('change');
+    $("input[name='lender[indefinite_duration]']").trigger('change');
 
-    $("input[name='lenders[present_during_borrowing_period]']").bind('change', function() {
-        var y_n = $("input[name='lenders[present_during_borrowing_period]']:checked").val();
+    $("input[name='lender[present_during_borrowing_period]']").bind('change', function() {
+        var y_n = $("input[name='lender[present_during_borrowing_period]']:checked").val();
         if (y_n == 1) {
             $("span#present_during_borrowing_period_selection").html("Yes");
         } else if (y_n == 0){
             $("span#present_during_borrowing_period_selection").html("No");
         }
     });
-    $("input[name='lenders[present_during_borrowing_period]']").trigger('change');
+    $("input[name='lender[present_during_borrowing_period]']").trigger('change');
 
-    $("input[name='lenders[entire_period]']").bind('change', function() {
-        var y_n = $("input[name='lenders[entire_period]']:checked").val();
+    $("input[name='lender[entire_period]']").bind('change', function() {
+        var y_n = $("input[name='lender[entire_period]']:checked").val();
         if (y_n == 1) {
             $("span#entire_period_selection").html("Yes");
         } else if (y_n == 0){
             $("span#entire_period_selection").html("No");
         }
     });
-    $("input[name='lenders[entire_period]']").trigger('change');
+    $("input[name='lender[entire_period]']").trigger('change');
 
-    $("input[name='lenders[partial_period]']").bind('change', function() {
-        var y_n = $("input[name='lenders[partial_period]']:checked").val();
+    $("input[name='lender[partial_period]']").bind('change', function() {
+        var y_n = $("input[name='lender[partial_period]']:checked").val();
         if (y_n == 1) {
             $("span#partial_period_selection").html("Yes");
         } else if (y_n == 0){
             $("span#partial_period_selection").html("No");
         }
     });
-    $("input[name='lenders[partial_period]']").trigger('change');
+    $("input[name='lender[partial_period]']").trigger('change');
 
-    $("input[name='lenders[provide_proper_use_training]']").bind('change', function() {
-        var y_n = $("input[name='lenders[provide_proper_use_training]']:checked").val();
+    $("input[name='lender[provide_proper_use_training]']").bind('change', function() {
+        var y_n = $("input[name='lender[provide_proper_use_training]']:checked").val();
         if (y_n == 1) {
             $("span#proper_use_selection").html("Yes");
         } else if (y_n == 0){
             $("span#proper_use_selection").html("No");
         }
     });
-    $("input[name='lenders[provide_proper_use_training]']").trigger('change');
+    $("input[name='lender[provide_proper_use_training]']").trigger('change');
 
     $("#lenders_specific_conditions").bind('change', function() {
         $("span#specific_conditions_selection").html($(this).val());
@@ -998,7 +998,7 @@ notChecked = true;
 
 function validateUseWhichLenderContactAddress() {
     var return_value = true;
-    var use_which_ca = $("input[name='lenders[useWhichContactAddress]']:checked").val();
+    var use_which_ca = $("input[name='lender[useWhichContactAddress]']:checked").val();
 	if ((use_which_ca == 1) || (use_which_ca == 2)) {
 
 	if	( ($("#lenders_address_line_1_alternative").val() == "") || 
@@ -1210,14 +1210,14 @@ function validateContactPreferences() {
     var y_n = "";
 	$("span.error").css("visibility", "hidden");
 	
-	y_n = $("input[name='lenders[displayLenderOrganizationName]']:checked").val();
+	y_n = $("input[name='lender[displayLenderOrganizationName]']:checked").val();
 	if ((y_n == 1) && ($("#lenders_organization_name").val() == "")) {
 		$("span#organization_name_error").text("Please provide an organization name.");
 		$("span#organization_name_error").css("visibility", "visible");
 		foundInvalid = false;
 	} 
 
-	y_n = $("input[name='lenders[displayLenderAddress]']:checked").val();
+	y_n = $("input[name='lender[displayLenderAddress]']:checked").val();
 	if (y_n == 1) {
 	if (
 		($("#lenders_address_line_1").val() == "") || 
@@ -1233,7 +1233,7 @@ function validateContactPreferences() {
 	}
 	
 	
-	y_n = $("input[name='lenders[displayLenderName]']:checked").val();
+	y_n = $("input[name='lender[displayLenderName]']:checked").val();
 	if (y_n == 1) {
 	if (
 		($("#lenders_first_name").val() == "") || 

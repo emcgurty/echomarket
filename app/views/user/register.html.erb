@@ -8,7 +8,8 @@
 
 <% end %>
 
-<%= form_for @users,  :url=>  {:controller=>"user", :action => "create", :commit=>"register"}, :html=> {:class=>"register", :id=>"user_login_form"} do |nf| %>
+<%= form_for @user,  :url=>  {:controller=>"user", :action => "create", :commit=>"register"}, :html=> {:class=>"register", :id=>"user_login_form"} do |nf| %>
+
 
 <div class="top" >
 
@@ -21,9 +22,10 @@
 	</p>
 </div>
 
-<% if @users.errors.any? %>
-<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @users}  %>
+<% if @user.errors.any? %>
+<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @user}  %>
 <% end %>
+
 
 <% if session[:register_type].blank? || session[:register_type] == 'all'%>
 <div style="float:left;width:100%;margin-top:15px;" >
@@ -108,9 +110,7 @@
 <div style="display:none;">
 <%= nf.hidden_field :remote_ip, :value => request.remote_ip %>
 <%= nf.hidden_field :approved, :value => 0 %>
-<% begin %>
-<%= nf.hidden_field :user_id %>
-<% rescue %>
-<% end %>
+<%= nf.hidden_field :is_rapid, :value => 0 %>
+
 </div>
 <% end %>

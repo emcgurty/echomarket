@@ -1,16 +1,24 @@
 class Borrower < ActiveRecord::Base
 
-  self.primary_key = 'borrower_id'
+  attr_accessor :item_image_upload
+  attr_accessor :primary_address
+  attr_accessor :alternative_address
+  
   attr_accessible :addresses_attributes, :item_image_attributes
   attr_accessor :found_zip_codes
-  has_one :item_image
+  has_many :addresses, dependent: :destroy
+  has_one :primary_address, :class_name => 'Address'
+  has_one :alternative_address, :class_name => 'Address'
+    
+  has_one :item_image, dependent: :destroy
   has_one :item_condition
   has_one :category
   has_one :country
   has_one :us_state
   has_one :contact_describe
   has_one :user
-  has_many :addresses, dependent: :destroy
+  
+  accepts_nested_attributes_for :item_image
   accepts_nested_attributes_for :item_condition
   accepts_nested_attributes_for :category
   accepts_nested_attributes_for :country
@@ -18,13 +26,17 @@ class Borrower < ActiveRecord::Base
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :addresses
     
-  before_create :get_borrower_primary_key_value
+  before_create :get_borrower_primary_key_value, :save_image
 
   protected
+  
+   def save_image
+   ItemImage.create(:item_image_upload => self.item_image_upload, :borrower_id => self.id)
+  end 
 
   def get_borrower_primary_key_value
-    if self.borrower_id.blank?
-    self.borrower_id = get_random
+    if self.id.blank?
+    self.id = get_random
     end
   end
 
@@ -37,3 +49,8 @@ class Borrower < ActiveRecord::Base
     @id
   end
 end
+
+# Property.all.each do |f|
+  # c = Contract.find_or_initialize_by(property_id: f.id)
+  # c.update(some_attributes)
+# end
