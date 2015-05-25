@@ -1,6 +1,5 @@
 class Borrower < ActiveRecord::Base
 
-  attr_accessor :item_image_upload
   attr_accessor :primary_address
   attr_accessor :alternative_address
   
@@ -26,13 +25,10 @@ class Borrower < ActiveRecord::Base
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :addresses
     
-  before_create :get_borrower_primary_key_value, :save_image
+  before_create :get_borrower_primary_key_value
 
   protected
   
-   def save_image
-   ItemImage.create(:item_image_upload => self.item_image_upload, :borrower_id => self.id)
-  end 
 
   def get_borrower_primary_key_value
     if self.id.blank?

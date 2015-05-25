@@ -18,8 +18,8 @@
 
 <div style="display:none;">
 
-	<%= nf.hidden_field( :is_active) %>
-	<%= nf.hidden_field( :user_id) %>
+	<%= nf.hidden_field( :is_active, :value =>'1') %>
+	<%= nf.hidden_field( :user_id, :value => session[:user_id]) %>
 
 </div>
 
@@ -194,11 +194,14 @@
 		</table>
 		<table class="personal">
 			<tr class="odd">
-				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :home_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrowers_public_display_home_phone" >Public display your home phone?&nbsp;
-					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error"   id="home_phone_error">&nbsp;</span></td>
-				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrowers_public_display_cell_phone" >Public display your cell phone?&nbsp;
+				<td style="width:33%;"><label  >Home Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :home_phone, :maxlength=>15, :size=>15) %> 
+					<label style="font-size:12px" for="borrower_public_display_home_phone" >Public display your home phone?&nbsp;
+					<%= nf.check_box(:public_display_home_phone, {:style=>"vertical-align: middle;width:15px;"}) %> 
+					</label><span class="error"   id="home_phone_error">&nbsp;</span></td>
+				<td style="width:33%;"><label>Cell Phone:&nbsp;<span class="max_length">(15)</span></label>
+					 <%= nf.text_field(:cell_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrower_public_display_cell_phone" >Public display your cell phone?&nbsp;
 					<%= nf.check_box(:public_display_cell_phone, {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="cell_phone_error">&nbsp;</span></td>
-				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrowers_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
+				<td style="width:34%;"><label>Alternative Phone:&nbsp;<span class="max_length">(15)</span></label> <%= nf.text_field( :alternative_phone, :maxlength=>15, :size=>15) %> <label style="font-size:12px" for="borrower_public_display_alternative_phone" >Public display your alternative phone?&nbsp;
 					<%= nf.check_box(:public_display_alternative_phone,  {:style=>"vertical-align: middle;width:15px;"}) %> </label><span class="error" id="alternative_phone_error">&nbsp;</span></td>
 
 			</tr>
@@ -234,7 +237,7 @@
 		<% end %>
 		<div id="postalWithContactAddress" style="display: block">
 			<%= render :partial => 'layouts/with_contact_address', :locals =>
-			{:object => "borrower", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'borrowers');"} %>
+			{:object => "borrower", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'borrower');"} %>
 		</div>
 
 	</div>
@@ -479,7 +482,7 @@
 			</div></td>
 		</tr>
 
-		<%= nf.fields_for :itemimage do |ii| %>
+		<%= nf.fields_for :item_image do |ii| %>
 
 		<tr class="odd">
 			<td  style="width:50%;">
@@ -572,12 +575,12 @@
 	<div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
 		<ul >
 			<li style="margin:5px;">
-				<label for="borrowers_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
+				<label for="borrower_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
 					<%= nf.check_box( :goodwill) %><span class="required_fields" >&nbsp;&nbsp;*</span></label>
 				<span class="error" id="goodwill_error"  >&nbsp;</span>
 			</li>
 			<li style="margin:5px;">
-				<label for="borrowers_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
+				<label for="borrower_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
 					<%= nf.check_box( :age_18_or_more) %><span class="required_fields">&nbsp;&nbsp;*</span></label>
 				<span class="error" id="18_or_more_error">&nbsp;</span>
 			</li>

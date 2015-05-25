@@ -547,7 +547,6 @@ $("span#alternative_phone_error").text("");
 
 	$("input#borrower_primary_address_address_line_1").bind('change', function() {
 		address1 = $(this).val();
-		a
 		$("span#address_1_selection").html($(this).val());
 	});
 	$("input#borrower_primary_address_address_line_1").trigger('change');
@@ -646,7 +645,7 @@ $("span#alternative_phone_error").text("");
 	$("input#borrower_alternative_address_region").bind('change', function() {
 		$("span#us_state_id_alternativeselection").html($(this).val());
 	});
-	$("input#borrower_alternative_address_region).trigger('change');
+	$("input#borrower_alternative_address_region").trigger('change');
 	
 	$("select#borrower_alternative_address_us_state_id").bind('change', function() {
 		var tmpID = $("select#borrower_alternative_address_us_state_id option:selected").text();
@@ -924,10 +923,10 @@ function validateContactPreferences() {
 	y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
 	if (y_n == 1) {
 	if (
-		($("#borrower_address_line_1").val() == "") || 
-		($("#borrower_postal_code").val() == "") || 
-		($("#borrower_city").val() == "") || 
-		($("#borrower_country_id option:selected").text() == "Please select")
+		($("#borrower_primary_address_address_line_1").val() == "") || 
+		($("#borrower_primary_address_postal_code").val() == "") || 
+		($("#borrower_primary_address_city").val() == "") || 
+		($("#borrower_primary_address_country_id option:selected").text() == "Please select")
 	) {
 		
 		$("span#display_address_error").text("Please provide a complete address.");
@@ -980,34 +979,34 @@ function validateContactPreferences() {
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_city").val() == "") {
+	if ($("#borrower_primary_address_city").val() == "") {
 		$("#city_error").text("City name is required.");
 		$("#city_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_address_line_1").val() == "") {
+	if ($("#borrower_primary_address_address_line_1").val() == "") {
 		$("#address_line_1_error").text("Address Line 1 is required.");
 		$("#address_line_1_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_postal_code").val() != "") {
+	if ($("#borrower_primary_address_postal_code").val() != "") {
 		var re = /^[A-Za-z]+$/;
-		if (re.test(document.getElementById("borrower_postal_code").value)) {
+		if (re.test(document.getElementById("borrower_primary_address_postal_code").value)) {
 			$("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
 			$("#postal_code_error").css("visibility", "visible");
 			foundInvalid = false;
 		}
 	}
 
-	if ($("#borrower_postal_code").val() == "") {
+	if ($("#borrower_primary_address_postal_code").val() == "") {
 		$("#postal_code_error").text("Postal code is required.");
 		$("#postal_code_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_country_id option:selected").text() == "Please select") {
+	if ($("#borrower_primary_address_country_id option:selected").text() == "Please select") {
 		$("#country_error").text("Please select a Country.");
 		$("#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -1015,13 +1014,13 @@ function validateContactPreferences() {
 
 
 
-	if ( ($("#borrower_country_id option:selected").text() == "Please select")   &&  ($("input#borrower_us_state_id").val() == "")) {
+	if ( ($("#borrower_primary_address_country_id option:selected").text() == "Please select")   &&  ($("input#borrower_us_state_id").val() == "")) {
 		$("#state_error").text("Please provide a Region.");
 		$("#state_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 	
-	if ((($("#borrower_us_state_id option:selected").text() == "Please select") || ($("#borrower_us_state_id option:selected").val() == '')) && ($("#borrower_country_id option:selected").text() == "United States")) {
+	if ((($("#borrower_primary_address_us_state_id option:selected").text() == "Please select") || ($("#borrower_primary_address_us_state_id option:selected").val() == '')) && ($("#borrower_primary_address_country_id option:selected").text() == "United States")) {
 
 		$("#state_error").text("Please select a State.");
 		$("#state_error").css("visibility", "visible");

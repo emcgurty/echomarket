@@ -14,7 +14,7 @@ end
  def create
    session[:notice] = ''
     unless params[:borrowers].blank?
-        @req = params[:borrowers]
+        params[:borrower] = params[:borrowers]
         @borrowers = Borrower.new(
           :user_id => 'NA',
           :describe_yourself => -1,
@@ -23,22 +23,22 @@ end
           :displayBorrowerName => 0,
           :displayBorrowerAddress  => 0,
           :useWhichContactAddress => 0,
-          :email_alternative=> @req[:email_alternative],
+          :email_alternative=> params[:borrower][:email_alternative],
           :borrower_contact_by_email=> 2,
-          :category_id => @req[:category_id],
-          :item_description=> @req[:item_description],
-          :item_condition_id=> @req[:item_condition_id],
-          :other_item_category=> @req[:other_item_category],
-          :item_model=> @req[:item_model],
-          :item_count=> @req[:item_count].to_i,
-          :goodwill=> @req[:goodwill].to_i,
-          :age_18_or_more=>@req[:age_18_or_more].to_i,
-          :is_active => @req[:is_active].to_i,
-          :is_community => @req[:is_community].to_i,
+          :category_id => params[:borrower][:category_id],
+          :item_description=> params[:borrower][:item_description],
+          :item_condition_id=> params[:borrower][:item_condition_id],
+          :other_item_category=> params[:borrower][:other_item_category],
+          :item_model=> params[:borrower][:item_model],
+          :item_count=> params[:borrower][:item_count].to_i,
+          :goodwill=> params[:borrower][:goodwill].to_i,
+          :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
+          :is_active => params[:borrower][:is_active].to_i,
+          :is_community => params[:borrower][:is_community].to_i,
           :date_created => Time.now,
           :approved => 1,
-          :remote_ip => @req[:remote_ip],
-		      :comment => @req[:comment]          
+          :remote_ip => params[:borrower][:remote_ip],
+		      :comment => params[:borrower][:comment]          
  )
          if @borrower.save(:validate => false) 
          @un = 'rapid_' + @borrower.item_description
@@ -173,169 +173,119 @@ end
    
   def update_borrower_seeking
     session[:notice] = ''
-    unless params[:borrowers].blank?
-      if (params[:borrowers][:borrower_id].blank?)  ## then it is a new record
-
-        @req = params[:borrowers]
-        @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
-        @hold_picture_file = @req[:item_image_upload]
-        @borrowers = Borrower.new(
+    unless params[:borrower].blank?
+      if (params[:borrower][:id].blank?)  ## then it is a new record
+        params[:borrower].delete("id")
+        
+       
+       
+        @useWhichContactAddress = (params[:borrower][:useWhichContactAddress].blank? ? 0: params[:borrower][:useWhichContactAddress].to_i)
+        
+        @borrower = Borrower.new(
           :user_id => session[:user_id],
-          :describe_yourself =>  @req[:describe_yourself].to_i,
-          :other_describe_yourself => @req[:other_describe_yourself],
-          :organization_name => @req[:organization_name],
-          :displayBorrowerOrganizationName => (@req[:displayBorrowerOrganizationName].blank? ? -1  : @req[:displayBorrowerOrganizationName].to_i),
-          :first_name=> @req[:first_name],
-          :mi=> @req[:mi],
-          :displayBorrowerName => (@req[:displayBorrowerName].blank? ? -1 :@req[:displayBorrowerName].to_i) ,
-          :displayBorrowerAddress => (@req[:displayBorrowerAddress].blank? ? -1 :@req[:displayBorrowerAddress].to_i) ,
-          :last_name=>@req[:last_name],
-          :address_line_1=> @req[:address_line_1],
-          :address_line_2=> @req[:address_line_2],
-          :postal_code=> @req[:postal_code],
-          :city=> @req[:city],
-          :province=> @req[:province],
-          :us_state_id=> @req[:us_state_id].to_s,
-          :us_state_id=> @req[:us_state_id],
-          :country_id=> @req[:country_id].to_s,
+          :describe_yourself =>  params[:borrower].describe_yourself.to_i,
+          :other_describe_yourself => params[:borrower][:other_describe_yourself],
+          :organization_name => params[:borrower][:organization_name],
+          :displayBorrowerOrganizationName => (params[:borrower][:displayBorrowerOrganizationName].blank? ? -1  : params[:borrower][:displayBorrowerOrganizationName].to_i),
+          :first_name=> params[:borrower][:first_name],
+          :mi=> params[:borrower][:mi],
+          :displayBorrowerName => (params[:borrower][:displayBorrowerName].blank? ? -1 :params[:borrower][:displayBorrowerName].to_i) ,
+          :displayBorrowerAddress => (params[:borrower][:displayBorrowerAddress].blank? ? -1 :params[:borrower][:displayBorrowerAddress].to_i) ,
+          :last_name=>params[:borrower][:last_name],
+          :primary_address => params[:borrower][:primary_address],
+          :alternative_address => params[:borrower][:alternative_address],
           :useWhichContactAddress => @useWhichContactAddress,
-          :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
-          :address_line_2_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_2_alternative]: ''),
-          :postal_code_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:postal_code_alternative]:''),
-          :city_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:city_alternative]: ''),
-          :province_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:province_alternative]: ''),
-          :us_state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:us_state_id_alternative]: '99'),
-          :us_state_id_alternative=> @req[:us_state_id_alternative],
-          :country_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:country_id_alternative]:'99'),
-          :home_phone => @req[:home_phone],
-          :public_display_home_phone=> (@req[:public_display_home_phone].blank? ? -1:@req[:public_display_home_phone].to_i) ,
-          :cell_phone=> @req[:cell_phone],
-          :public_display_cell_phone=>  (@req[:public_display_cell_phone].blank? ? -1: @req[:public_display_cell_phone].to_i) ,
-          :alternative_phone=>@req[:alternative_phone],
-          :public_display_alternative_phone=>(@req[:public_display_alternative_phone].blank? ? -1: @req[:public_alternative_cell_phone].to_i) ,
-          :email_alternative=> @req[:email_alternative],
-          :borrower_contact_by_email=> (@req[:borrower_contact_by_email].blank? ? -1:@req[:borrower_contact_by_email].to_i) ,
-          :borrower_contact_by_home_phone=> @req[:borrower_contact_by_home_phone],
-          :borrower_contact_by_cell_phone=> @req[:borrower_contact_by_cell_phone],
-          :borrower_contact_by_alternative_phone=> @req[:borrower_contact_by_alternative_phone],
-          :borrower_contact_by_Facebook=> @req[:borrower_contact_by_Facebook],
-          :borrower_contact_by_LinkedIn=> @req[:borrower_contact_by_LinkedIn],
-          :borrower_contact_by_Other_Social_Media=> @req[:borrower_contact_by_Other_Social_Media],
-          :borrower_contact_by_Twitter=> @req[:borrower_contact_by_Twitter],
-          :borrower_contact_by_Instagram=> @req[:borrower_contact_by_Instagram],
-          :borrower_contact_by_Other_Social_Media_Access=> @req[:borrower_contact_by_Other_Social_Media_Access],
-          :category_id => @req[:category_id].to_i,
-          :item_description=> @req[:item_description],
-          :item_condition_id=> @req[:item_condition_id].to_i,
-          :other_item_category=> @req[:other_item_category],
-          :notify_lenders=> (@req[:notify_lenders].blank? ? -1:@req[:notify_lenders].to_i) ,
-          :item_model=> @req[:item_model],
-          :item_count=> @req[:item_count].to_i,
-          :item_image_caption=> @req[:item_image_caption],
-          :goodwill=> @req[:goodwill].to_i,
-          :age_18_or_more=>@req[:age_18_or_more].to_i,
-          :is_active => @req[:is_active].to_i,
+          :home_phone => params[:borrower][:home_phone],
+          :public_display_home_phone=> (params[:borrower][:public_display_home_phone].blank? ? -1:params[:borrower][:public_display_home_phone].to_i) ,
+          :cell_phone=> params[:borrower][:cell_phone],
+          :public_display_cell_phone=>  (params[:borrower][:public_display_cell_phone].blank? ? -1: params[:borrower][:public_display_cell_phone].to_i) ,
+          :alternative_phone=>params[:borrower][:alternative_phone],
+          :public_display_alternative_phone=>(params[:borrower][:public_display_alternative_phone].blank? ? -1: params[:borrower][:public_alternative_cell_phone].to_i) ,
+          :email_alternative=> params[:borrower][:email_alternative],
+          :borrower_contact_by_email=> (params[:borrower][:borrower_contact_by_email].blank? ? -1:params[:borrower][:borrower_contact_by_email].to_i) ,
+          :borrower_contact_by_home_phone=> params[:borrower][:borrower_contact_by_home_phone],
+          :borrower_contact_by_cell_phone=> params[:borrower][:borrower_contact_by_cell_phone],
+          :borrower_contact_by_alternative_phone=> params[:borrower][:borrower_contact_by_alternative_phone],
+          :borrower_contact_by_Facebook=> params[:borrower][:borrower_contact_by_Facebook],
+          :borrower_contact_by_LinkedIn=> params[:borrower][:borrower_contact_by_LinkedIn],
+          :borrower_contact_by_Other_Social_Media=> params[:borrower][:borrower_contact_by_Other_Social_Media],
+          :borrower_contact_by_Twitter=> params[:borrower][:borrower_contact_by_Twitter],
+          :borrower_contact_by_Instagram=> params[:borrower][:borrower_contact_by_Instagram],
+          :borrower_contact_by_Other_Social_Media_Access=> params[:borrower][:borrower_contact_by_Other_Social_Media_Access],
+          :category_id => params[:borrower][:category_id].to_i,
+          :item_description=> params[:borrower][:item_description],
+          :item_condition_id=> params[:borrower][:item_condition_id].to_i,
+          :other_item_category=> params[:borrower][:other_item_category],
+          :notify_lenders=> (params[:borrower][:notify_lenders].blank? ? -1:params[:borrower][:notify_lenders].to_i) ,
+          :item_model=> params[:borrower][:item_model],
+          :item_count=> params[:borrower][:item_count].to_i,
+          :item_image => params[:borrower][:item_image],
+          :goodwill=> params[:borrower][:goodwill].to_i,
+          :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
+          :is_active => params[:borrower][:is_active].to_i,
           :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_created => Time.now,
           :approved => 0)
         
         if @borrower.save(:validate => true) && @borrower.errors.empty?
-
-          unless @hold_picture_file.blank?
-            @img =  Itemimage.new(:borrower_id => @borrower.borrower_id,
-              :lender_id => '',
-              :item_image_upload=> @hold_picture_file,
-              :item_image_caption=> @req[:item_image_caption],
-              :date_created =>Time.now,
-              :is_active => 1)
-            @img.save
-          end
-          redirect_to :action => 'borrower_history', :id=> session[:user_id]
+           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
         end
 
-      elsif (!params[:borrowers][:borrower_id].blank?)
+      elsif (!params[:borrower][:id].blank?)
         ## do update
-        @ltmp = Borrower.find(:first, :conditions => ["borrower_id = ?",params[:borrowers][:borrower_id] ])
-        @req = params[:borrowers]
-        @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
-        @hold_picture_file = @req[:item_image_upload]
+        @ltmp = Borrower.find(:first, :conditions => ["id = ?",params[:borrower][:id] ])
+        params[:borrower] = params[:borrower]
+        @useWhichContactAddress = (params[:borrower][:useWhichContactAddress].blank? ? 0: params[:borrower][:useWhichContactAddress].to_i)
+                
         @myupdatehash = Hash.new
-        @myupdatehash = [:describe_yourself =>  @req[:describe_yourself].to_i,
-          :other_describe_yourself => @req[:other_describe_yourself],
-          :organization_name => @req[:organization_name],
-          :displayBorrowerOrganizationName => (@req[:displayBorrowerOrganizationName].blank? ? -1  : @req[:displayBorrowerOrganizationName].to_i),
-          :first_name=> @req[:first_name],
-          :mi=> @req[:mi],
-          :displayBorrowerName => (@req[:displayBorrowerName].blank? ? -1 :@req[:displayBorrowerName].to_i) ,
-          :displayBorrowerAddress => (@req[:displayBorrowerAddress].blank? ? -1 :@req[:displayBorrowerAddress].to_i) ,
-          :last_name=>@req[:last_name],
-          :address_line_1=> @req[:address_line_1],
-          :address_line_2=> @req[:address_line_2],
-          :postal_code=> @req[:postal_code],
-          :city=> @req[:city],
-          :province=> @req[:province],
-          :us_state_id=> @req[:us_state_id].to_s,
-          :us_state_id=> @req[:us_state_id],
-          :country_id=> @req[:country_id].to_s,
+        @myupdatehash = [:describe_yourself =>  params[:borrower][:describe_yourself].to_i,
+          :other_describe_yourself => params[:borrower][:other_describe_yourself],
+          :organization_name => params[:borrower][:organization_name],
+          :displayBorrowerOrganizationName => (params[:borrower][:displayBorrowerOrganizationName].blank? ? -1  : params[:borrower][:displayBorrowerOrganizationName].to_i),
+          :first_name=> params[:borrower][:first_name],
+          :mi=> params[:borrower][:mi],
+          :displayBorrowerName => (params[:borrower][:displayBorrowerName].blank? ? -1 :params[:borrower][:displayBorrowerName].to_i) ,
+          :displayBorrowerAddress => (params[:borrower][:displayBorrowerAddress].blank? ? -1 :params[:borrower][:displayBorrowerAddress].to_i) ,
+          :last_name=> params[:borrower][:last_name],
+          :primary_address => params[:borrower][:primary_address],
+          :alternative_address => params[:borrower][:alternative_address],
           :useWhichContactAddress => @useWhichContactAddress,
-          :address_line_1_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_1_alternative]: '') ,
-          :address_line_2_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:address_line_2_alternative]: ''),
-          :postal_code_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:postal_code_alternative]:''),
-          :city_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:city_alternative]: ''),
-          :province_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:province_alternative]: ''),
-          :us_state_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:us_state_id_alternative]: '99'),
-          :us_state_id_alternative=> @req[:us_state_id_alternative],
-          :country_id_alternative => ((@useWhichContactAddress == 2 || @useWhichContactAddress == 1) ? @req[:country_id_alternative]:'99'),
-          :home_phone => @req[:home_phone],
-          :public_display_home_phone=> (@req[:public_display_home_phone].blank? ? -1:@req[:public_display_home_phone].to_i) ,
-          :cell_phone=> @req[:cell_phone],
-          :public_display_cell_phone=>  (@req[:public_display_cell_phone].blank? ? -1: @req[:public_display_cell_phone].to_i) ,
-          :alternative_phone=>@req[:alternative_phone],
-          :public_display_alternative_phone=>(@req[:public_display_alternative_phone].blank? ? -1: @req[:public_alternative_cell_phone].to_i) ,
-          :email_alternative=> @req[:email_alternative],
-          :borrower_contact_by_email=> (@req[:borrower_contact_by_email].blank? ? -1:@req[:borrower_contact_by_email].to_i) ,
-          :borrower_contact_by_home_phone=> @req[:borrower_contact_by_home_phone],
-          :borrower_contact_by_cell_phone=> @req[:borrower_contact_by_cell_phone],
-          :borrower_contact_by_alternative_phone=> @req[:borrower_contact_by_alternative_phone],
-          :borrower_contact_by_Facebook=> @req[:borrower_contact_by_Facebook],
-          :borrower_contact_by_LinkedIn=> @req[:borrower_contact_by_LinkedIn],
-          :borrower_contact_by_Other_Social_Media=> @req[:borrower_contact_by_Other_Social_Media],
-          :borrower_contact_by_Twitter=> @req[:borrower_contact_by_Twitter],
-          :borrower_contact_by_Instagram=> @req[:borrower_contact_by_Instagram],
-          :borrower_contact_by_Other_Social_Media_Access=> @req[:borrower_contact_by_Other_Social_Media_Access],
-          :notify_lenders=> (@req[:notify_lenders].blank? ? -1:@req[:notify_lenders].to_i) ,
-          :category_id => @req[:category_id].to_i,
-          :item_description=> @req[:item_description],
-          :item_condition_id=> @req[:item_condition_id].to_i,
-          :other_item_category=> @req[:other_item_category],
-          :item_model=> @req[:item_model],
-          :item_count=> @req[:item_count].to_i,
-          :item_image_caption=> @req[:item_image_caption],
-          :goodwill=> @req[:goodwill].to_i,
-          :age_18_or_more=>@req[:age_18_or_more].to_i,
-          :is_active => @req[:is_active].to_i,
+          :home_phone => params[:borrower][:home_phone],
+          :public_display_home_phone=> (params[:borrower][:public_display_home_phone].blank? ? -1:params[:borrower][:public_display_home_phone].to_i) ,
+          :cell_phone=> params[:borrower][:cell_phone],
+          :public_display_cell_phone=>  (params[:borrower][:public_display_cell_phone].blank? ? -1: params[:borrower][:public_display_cell_phone].to_i) ,
+          :alternative_phone=>params[:borrower][:alternative_phone],
+          :public_display_alternative_phone=>(params[:borrower][:public_display_alternative_phone].blank? ? -1: params[:borrower][:public_alternative_cell_phone].to_i) ,
+          :email_alternative=> params[:borrower][:email_alternative],
+          :borrower_contact_by_email=> (params[:borrower][:borrower_contact_by_email].blank? ? -1:params[:borrower][:borrower_contact_by_email].to_i) ,
+          :borrower_contact_by_home_phone=> params[:borrower][:borrower_contact_by_home_phone],
+          :borrower_contact_by_cell_phone=> params[:borrower][:borrower_contact_by_cell_phone],
+          :borrower_contact_by_alternative_phone=> params[:borrower][:borrower_contact_by_alternative_phone],
+          :borrower_contact_by_Facebook=> params[:borrower][:borrower_contact_by_Facebook],
+          :borrower_contact_by_LinkedIn=> params[:borrower][:borrower_contact_by_LinkedIn],
+          :borrower_contact_by_Other_Social_Media=> params[:borrower][:borrower_contact_by_Other_Social_Media],
+          :borrower_contact_by_Twitter=> params[:borrower][:borrower_contact_by_Twitter],
+          :borrower_contact_by_Instagram=> params[:borrower][:borrower_contact_by_Instagram],
+          :borrower_contact_by_Other_Social_Media_Access=> params[:borrower][:borrower_contact_by_Other_Social_Media_Access],
+          :notify_lenders=> (params[:borrower][:notify_lenders].blank? ? -1:params[:borrower][:notify_lenders].to_i) ,
+          :category_id => params[:borrower][:category_id].to_i,
+          :item_description=> params[:borrower][:item_description],
+          :item_condition_id=> params[:borrower][:item_condition_id].to_i,
+          :other_item_category=> params[:borrower][:other_item_category],
+          :item_model=> params[:borrower][:item_model],
+          :item_count=> params[:borrower][:item_count].to_i,
+          :item_image => params[:borrower][:item_image],
+          :goodwill=> params[:borrower][:goodwill].to_i,
+          :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
+          :is_active => params[:borrower][:is_active].to_i,
           :is_community => (session[:community_name].blank? ? 0 : 1),
           :date_updated => Time.now,
           :approved => 0]
 
 
         if @ltmp.update_attributes(@myupdatehash[0])
-
-          unless (@hold_picture_file.blank?)
-            @img = Itemimage.find(:first, :conditions => ["borrower_id = ?", @ltmp.borrower_id])
-            @myupdatehash = Hash.new
-            @myupdatehash = [:borrower_id => @ltmp.borrower_id,
-              :lender_id => '',
-              :item_image_upload=> @hold_picture_file,
-              :item_image_caption=> @req[:item_image_caption],
-              :date_created => Time.now,
-              :date_updated => Time.now,
-              :is_active => 1]
-            @img.update_attributes(@myupdatehash[0])
-            @img.save
-          end
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false

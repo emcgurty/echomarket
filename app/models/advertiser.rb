@@ -2,7 +2,6 @@ class Advertiser < ActiveRecord::Base
 
   require 'uri'
 
-  attr_accessor :item_image_upload
   has_one :item_image, dependent: :destroy
   has_one :category
 
