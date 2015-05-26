@@ -2,7 +2,6 @@
 
 <%= form_for @advertiser, :url=> {:controller=>"advertiser", :action => "create"},:html=>   {:class=>"advertiser", :multipart=>true} do |nf| %>
 
-
 <div class="top" >
 
 	<p><span class="logo_smallw" >The Echo Market: Your Advertisement Information</span></p>
@@ -18,6 +17,7 @@
 	<% end  %>
 </div>
 
+
 <% unless  @advertiser.errors.empty? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @advertiser}  %>
 <% end %>
@@ -27,9 +27,19 @@
 	<span class="registration_header" style="display:none;color:black;font-size:14px;font-weight:bold;text-decoration:none;float:left;margin:10px;width:94%;">All fields are required.</span>
 </div>
 
+<div style="display:none" >
+	<%= nf.hidden_field( :approved, :value => 0 ) %>  
+	<%= nf.hidden_field( :remote_ip, :value => request.remote_ip) %>
+	<%= nf.hidden_field( :is_active, :value => 1) %>
+	<%= nf.hidden_field( :is_activated, :value => 0) %>
+	<%= nf.hidden_field( :date_created, :value => Time.now) %>
+	<%= nf.hidden_field( :item_image_id, :value => 'NA') %>
+	
+</div>
+
 <div class="column50_rapid" style="padding:15px;">
 	<div >
-	<%= nf.hidden_field( :remote_ip, :value => request.remote_ip) %>
+	
 	<label>Advertisement Title:&nbsp;<span style="float:left;color:red;font-size:small;">Your company or service name... An annoucement of an event, a new resource...</span></label>
 	<%= nf.text_field( :title,  :maxlength=>50, :size=>24) %>
 	
@@ -75,7 +85,16 @@
 
 <div >
 	<label>Advertisement Icon/Logo:</label>
-	<input type="file" id="l2bimage" class="" name="item_image_upload" accept="image/*" />
+	<%=  fields_for :item_image do |builder| %>
+	<%  builder.label :item_image_caption , "Item Caption" %>
+	<%= builder.text_field :item_image_caption %>
+	<%= builder.file_field :item_image_upload, {:id=>"l2bimage", :accept=>"image/*"} %>
+    <%= builder.hidden_field :lender_id, :value => '' %>
+    <%= builder.hidden_field :borrower_id, :value => '' %>
+    <%= builder.hidden_field :date_created, :value => Time.now %>
+    <%= builder.hidden_field :is_active, :value => 1 %>
+	<% end %>
+	
 	
 </div>
 

@@ -1,18 +1,21 @@
 class Advertiser < ActiveRecord::Base
 
   require 'uri'
-
+ 
+  # can't mass assign, so list them
+  attr_accessible :title, :description, :advertiser_email, :advertiser_url, :category_id, :category_other, :is_active, :is_activated, :date_created, :approved, :remote_ip,  :item_image_id
+                  
   has_one :item_image, dependent: :destroy
   has_one :category
-
   accepts_nested_attributes_for :item_image
+  attr_accessible :item_image_attributes
   before_create :get_advertiser_primary_key_value
-  before_create :save_image
   before_create :url_valid
 
-  validates_uniqueness_of :title,:if => :title, :case_sensitive => true, :message =>  " already exists."
-  validates_uniqueness_of :advertiser_email,:if => :advertiser_email, :case_sensitive => false, :message =>  " already exists"
-  validates_uniqueness_of :advertiser_url,:if => :advertiser_url, :case_sensitive => false, :message =>  " already exists"
+
+  #validates_uniqueness_of :title,:if => :title, :case_sensitive => true, :message =>  " already exists."
+  #validates_uniqueness_of :advertiser_email,:if => :advertiser_email, :case_sensitive => false, :message =>  " already exists"
+  #validates_uniqueness_of :advertiser_url,:if => :advertiser_url, :case_sensitive => false, :message =>  " already exists"
 
   protected
 
@@ -26,11 +29,7 @@ class Advertiser < ActiveRecord::Base
     end
 
   end
-
-  def save_image
-    ItemImage.create(:item_image_upload => self.item_image_upload, :advertiser_id => self.id)
-  end
-
+  
   def get_advertiser_primary_key_value
     self.id = get_random
   end

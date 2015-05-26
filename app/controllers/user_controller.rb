@@ -79,7 +79,8 @@ class UserController < ApplicationController
   end
 
   def login
-    
+    puts 'session[:user_id]'
+    puts session[:user_id]
     if session[:notice]
       @hold_s = session[:notice]
     end
@@ -127,6 +128,8 @@ class UserController < ApplicationController
     
     if request.post?
       @current_user = User.find(:first, :readonly => true, :conditions=>['username = ?', params[:user][:username]])
+      puts "Lshould be hehrhehrehh"
+      puts @current_user.to_yaml
       unless @current_user.blank?
         if @current_user.activation_code.blank? && @current_user.authenticated?(params[:user][:password])
           session[:user_id] = @current_user.id

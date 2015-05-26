@@ -1,14 +1,13 @@
 class ItemImage < ActiveRecord::Base
-
-  attr_accessor :item_image_upload
-  belongs_to :lender
-  belongs_to :borrower
-  belongs_to :advertiser
-
+  
   require 'fastimage'
-  #  set up table associations.
- 
+  attr_accessor :item_image_upload
+  attr_accessible :lender_id, :borrower_id, :advertiser_id, :item_image_caption, :is_active, :date_created, :date_deleted, :item_image_upload
+   
+  belongs_to :advertiser
   before_create :get_primary_key_value, :item_image_upload
+  before_update :item_image_upload
+
   protected
 
   def get_primary_key_value
@@ -20,12 +19,13 @@ class ItemImage < ActiveRecord::Base
   end
 
   def item_image_upload=(picture_field)
-
+    puts "adasdasdasd in item image upload"
+    puts "asdsadasdas picture"
+    puts picture_field
     if picture_field.blank?
       return
     end
-  
-    
+
     stored_file_name = get_primary_key_value + "_" + picture_field.original_filename  
     directory = "#{Rails.root}/public/images/item_images/"
     path = File.join(directory, stored_file_name)

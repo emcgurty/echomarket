@@ -81,9 +81,9 @@ end
  def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
-        @borrowers = Borrower.find(:all, :readonly, :conditions => ["borrower_id = ?", params[:id]])
+        @borrower = Borrower.find(:all, :readonly, :conditions => ["borrower_id = ?", params[:id]])
     end
-    if @borrowers.blank? || params[:id].blank?
+    if @borrower.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end 
@@ -125,16 +125,17 @@ end
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
-        borrow = Borrower.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]])
-         
-        if borrow.blank?
+        
+        @return_id = Borrower.find(:all, :conditions => ["user_id = ? and is_active = 1", params[:id]])
+        if @return_id.blank?
            redirect_to  :controller => "borrower", :action => @which_view
         else
-           cat = borrow.category.first
-           @borrowers = cat.item_condition.first     
+          
+          @borrower = Borrower.find_by_sql (:all, :conditions => ["user_id = ? and is_active = 1", params[:id]]).category.item_condition
+    
         end
    end     
-        
+         @borrower
   end
 
   def delete_borrower_record
@@ -154,11 +155,19 @@ end
 
   def borrower_seeking
     session[:no_border] = true
-    if params[:id].blank?
-     @borrower = Borrower.new
+    if params[:borrower]
+      unless update_borrower_seeking
+        @borrower
+      end
+      
     else
-      @borrower = Borrower.find(params[:id])
+      if params[:id].blank?
+       @borrower = Borrower.new
+      else
+        @borrower = Borrower.find(params[:id])
+      end
     end
+    
   end
   
   def community_borrower_seeking
@@ -175,58 +184,13 @@ end
     session[:notice] = ''
     unless params[:borrower].blank?
       if (params[:borrower][:id].blank?)  ## then it is a new record
-        params[:borrower].delete("id")
-        
-       
-       
+          params["borrower"].delete('id')
+   
         @useWhichContactAddress = (params[:borrower][:useWhichContactAddress].blank? ? 0: params[:borrower][:useWhichContactAddress].to_i)
         
-        @borrower = Borrower.new(
-          :user_id => session[:user_id],
-          :describe_yourself =>  params[:borrower].describe_yourself.to_i,
-          :other_describe_yourself => params[:borrower][:other_describe_yourself],
-          :organization_name => params[:borrower][:organization_name],
-          :displayBorrowerOrganizationName => (params[:borrower][:displayBorrowerOrganizationName].blank? ? -1  : params[:borrower][:displayBorrowerOrganizationName].to_i),
-          :first_name=> params[:borrower][:first_name],
-          :mi=> params[:borrower][:mi],
-          :displayBorrowerName => (params[:borrower][:displayBorrowerName].blank? ? -1 :params[:borrower][:displayBorrowerName].to_i) ,
-          :displayBorrowerAddress => (params[:borrower][:displayBorrowerAddress].blank? ? -1 :params[:borrower][:displayBorrowerAddress].to_i) ,
-          :last_name=>params[:borrower][:last_name],
-          :primary_address => params[:borrower][:primary_address],
-          :alternative_address => params[:borrower][:alternative_address],
-          :useWhichContactAddress => @useWhichContactAddress,
-          :home_phone => params[:borrower][:home_phone],
-          :public_display_home_phone=> (params[:borrower][:public_display_home_phone].blank? ? -1:params[:borrower][:public_display_home_phone].to_i) ,
-          :cell_phone=> params[:borrower][:cell_phone],
-          :public_display_cell_phone=>  (params[:borrower][:public_display_cell_phone].blank? ? -1: params[:borrower][:public_display_cell_phone].to_i) ,
-          :alternative_phone=>params[:borrower][:alternative_phone],
-          :public_display_alternative_phone=>(params[:borrower][:public_display_alternative_phone].blank? ? -1: params[:borrower][:public_alternative_cell_phone].to_i) ,
-          :email_alternative=> params[:borrower][:email_alternative],
-          :borrower_contact_by_email=> (params[:borrower][:borrower_contact_by_email].blank? ? -1:params[:borrower][:borrower_contact_by_email].to_i) ,
-          :borrower_contact_by_home_phone=> params[:borrower][:borrower_contact_by_home_phone],
-          :borrower_contact_by_cell_phone=> params[:borrower][:borrower_contact_by_cell_phone],
-          :borrower_contact_by_alternative_phone=> params[:borrower][:borrower_contact_by_alternative_phone],
-          :borrower_contact_by_Facebook=> params[:borrower][:borrower_contact_by_Facebook],
-          :borrower_contact_by_LinkedIn=> params[:borrower][:borrower_contact_by_LinkedIn],
-          :borrower_contact_by_Other_Social_Media=> params[:borrower][:borrower_contact_by_Other_Social_Media],
-          :borrower_contact_by_Twitter=> params[:borrower][:borrower_contact_by_Twitter],
-          :borrower_contact_by_Instagram=> params[:borrower][:borrower_contact_by_Instagram],
-          :borrower_contact_by_Other_Social_Media_Access=> params[:borrower][:borrower_contact_by_Other_Social_Media_Access],
-          :category_id => params[:borrower][:category_id].to_i,
-          :item_description=> params[:borrower][:item_description],
-          :item_condition_id=> params[:borrower][:item_condition_id].to_i,
-          :other_item_category=> params[:borrower][:other_item_category],
-          :notify_lenders=> (params[:borrower][:notify_lenders].blank? ? -1:params[:borrower][:notify_lenders].to_i) ,
-          :item_model=> params[:borrower][:item_model],
-          :item_count=> params[:borrower][:item_count].to_i,
-          :item_image => params[:borrower][:item_image],
-          :goodwill=> params[:borrower][:goodwill].to_i,
-          :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
-          :is_active => params[:borrower][:is_active].to_i,
-          :is_community => (session[:community_name].blank? ? 0 : 1),
-          :date_created => Time.now,
-          :approved => 0)
-        
+        @borrower = Borrower.new(params[:borrower])
+        puts '@borrower.errors.to_yaml'
+        puts @borrower.errors.to_yaml
         if @borrower.save(:validate => true) && @borrower.errors.empty?
            redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
@@ -236,9 +200,8 @@ end
       elsif (!params[:borrower][:id].blank?)
         ## do update
         @ltmp = Borrower.find(:first, :conditions => ["id = ?",params[:borrower][:id] ])
-        params[:borrower] = params[:borrower]
         @useWhichContactAddress = (params[:borrower][:useWhichContactAddress].blank? ? 0: params[:borrower][:useWhichContactAddress].to_i)
-                
+               
         @myupdatehash = Hash.new
         @myupdatehash = [:describe_yourself =>  params[:borrower][:describe_yourself].to_i,
           :other_describe_yourself => params[:borrower][:other_describe_yourself],

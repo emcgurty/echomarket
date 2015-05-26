@@ -1,4 +1,8 @@
+
 class AdvertiserController < ApplicationController
+  
+ # require 'active_support/core_ext/hash' 
+  
   def new
     @advertiser = Advertiser.new
 
@@ -14,24 +18,10 @@ class AdvertiserController < ApplicationController
     respond_to do |f|
 
       unless params[:advertiser].blank?
-        @req = params[:advertiser]
-        @advertiser = Advertiser.new(
-          :title => @req[:title].to_s,
-          :description=> @req[:description].to_s,
-          :advertiser_email=> @req[:advertiser_email].to_s,
-          :advertiser_url=> @req[:advertiser_url].to_s,
-          :category_id => @req[:category_id],
-          :category_other=> @req[:category_other],
-          :is_active => 1,
-          :is_activated => 0,
-          :date_created => Time.now,
-          :approved => 0,
-          :remote_ip => @req[:remote_ip],
-          :item_image_upload => params[:item_image_upload] 
-)
-       
-       
-        if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
+     
+        @advertiser = Advertiser.new(params["advertiser"])
+         if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
+          @result = @advertiser.update_attributes(:item_image_attributes => params["item_image"])
           Notifier.notify_advertiser(@advertiser).deliver
           session[:notice] = "Your Advertisement record has been saved, and validation email has been sent to you at #{@advertiser.advertiser_email}."
           f.html {redirect_to  home_items_listing_url}

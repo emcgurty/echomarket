@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 <%  rowCount = 1 %>
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_history"}, :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"} do |nf| %>
-
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_history"}, :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"} do |nf| %>
+<%= @borrower.to_yaml %>
 
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
@@ -21,48 +21,46 @@
           <th>Process</th>
         </tr>
 
+         <% @borrower.each do |ba| %>
           <% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
           <%  rowCount = rowCount + 1 %>
           <tr class="<%= rowClass %>" >
             <td>
-              <%= nf.fields_for :category do |cat| %>
-              <%= cat.label (:category_id.blank? ? "No Item Category provided" : :category_type) %>
-              <% end %>
+              <%= nf.label (ba.category_id.blank? ? "No Item Category provided" : ba.category_type) %>
+              
             </td>
             <td>
-              <%= nf.label (:item_description.blank? ? "NA": :item_description) %></td>
+              <%= nf.label (ba.item_description.blank? ? "NA": ba.item_description) %></td>
             <td>
-              <%= nf.label (:item_model.blank? ? "NA": :item_model) %></td>
+              <%= nf.label (ba.item_model.blank? ? "NA": ba.item_model) %></td>
             <td>
-              <%= nf.fields_for :item_condition do |ic| %>
-              <%= ic.label (:item_condition_id.blank? ? "No Item Condition provided" : :conditions) %>
-              <% end %>
+              <%= nf.label (ba.item_condition_id.blank? ? "No Item Condition provided" : ba.condition) %>
+             
             </td>
             <td>
-              <%= (@borrowers.date_created.blank? ? "NA": @borrowers.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>
-              <%= (@borrowers.date_updated.blank? ? "NA": @borrowers.date_updated.strftime("%m/%d/%Y %I:%M%p")) %>
+              <%= (ba.date_created.blank? ? "NA": ba.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>
+              <%= (ba.date_updated.blank? ? "NA": ba.date_updated.strftime("%m/%d/%Y %I:%M%p")) %>
             </td>
             <td>
-               <%= (@borrowers.approved == 0 ? "Not approved": "Approved") %>
+               <%= (ba.approved == 0 ? "Not approved": "Approved") %>
             </td>
             <td >
 
-              <%= link_to "EDIT", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>@borrowers.borrower_id  %><br style="margin:0;"/><br style="margin:0;"/>
-              <%= link_to "REUSE", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> @borrowers.borrower_id %><br style="margin:0;"/><br style="margin:0;"/>
-              <%= link_to "DELETE", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>@borrowers.borrower_id} ,
+              <%= link_to "EDIT", :controller => "borrower", :action=> "borrower_history", :commit => "edit", :id=>ba.id  %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "REUSE", :controller => "borrower", :action=> "borrower_history", :commit => "reuse", :id=> ba.id %><br style="margin:0;"/><br style="margin:0;"/>
+              <%= link_to "DELETE", {:controller => "borrower", :action => "delete_borrower_record", :commit => "delete", :id=>ba.id} ,
                 
                  {:confirm => "Are you sure you wish to delete this record?"}  %>
 
 
             </td>
           </tr>
-
+          <% end %>
+	
       </table>
     </div>
 
-  <% else %>
-    <p>Echo Market could not find your borrower history, prehaps it has items not yet approved.</p>
-  <% end %>
+
   <div class="div_white" ></div>
   <div class="bottom" style="text-align:center">
     <% unless @borrowers.blank? %>
