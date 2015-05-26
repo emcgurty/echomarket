@@ -37,31 +37,25 @@
 <%= form_for @community , :url=>  {:controller=>"community", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 <div class="top" >
 
-	<p>
-		<span class="logo_white" >The Echo Market</span>
+	<p>		<span class="logo_white" >The Echo Market</span>
 	</p>
 
-	<p >
-		COMMUNITY REGISTRATION, continued...
+	<p >	COMMUNITY REGISTRATION, continued...
 	</p>
 
 	<% if session[:notice] %>
-	<p>
-		<%= session[:notice] %>
+	<p>		<%= session[:notice] %>
 	</p>
 	<% end %>
 
 </div>
 <div class="top_notice_5" id="commmunity_info">
 	
-	<p>
-		Would you like to add members to your Community?
+	<p>Would you like to add members to your Community?
 	</p>
-	<p>
-		Adding members is optional, but recommended as it adds a layer of security to your Community. You may choose later to add members, and of course update or delete members.
+	<p>Adding members is optional, but recommended as it adds a layer of security to your Community. You may choose later to add members, and of course update or delete members.
 	</p>
-	<p>
-		Frankly, adding members seems to be a great opportunity to <span class="logo_smaller">Throw A Echo Market Commmunity Member Party!</span>
+	<p>Frankly, adding members seems to be a great opportunity to <span class="logo_smaller">Throw A Echo Market Commmunity Member Party!</span>
 	</p>
 </div>
 
@@ -84,60 +78,52 @@
 				<th>Alias</th>
 				<th>Function</th>
 			</tr>
-			<% nf.fields_for :community_member do |cm| %>
+			<% for com_row in @community %>
 			
 			
 			<% rowCount = 0 %>
 			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
+			<%= com_row.fields_for :community_member do |builder| %
 			
 			<tr class="<%= rowClass %>" >
 
-				<td width= "20%"> <%= cm.text_field :first_name, {:size=>24}  %></td>
-				<td width='5%'><%= cm.text_field :mi,  {:size=>1} %></td>
-				<td width='20%'><%= cm.text_field (:last_name), {:size=>24} %></td>
+				<td width= "20%"> <%= builder.text_field :first_name, {:size=>24}  %></td>
+				<td width='5%'><%= builder.text_field :mi,  {:size=>1} %></td>
+				<td width='20%'><%= builder.text_field (:last_name), {:size=>24} %></td>
 				<td width="5%">OR</td>
-				<td width='20%'><%= cm.text_field :alias, {:size=>24} %></td>
+				<td width='20%'><%= builder.text_field :alias, {:size=>24} %></td>
 				<td width='20%'>
-			    <%= nf.hidden_field :community_id %>
+			    
 				
 				<% if  @community.is_creator == 1 %>
 					<%= nf.submit "Update Member" %>
-				    <%= cm.hidden_field :is_creator, :value => 1 %>
+				    <%= builder.hidden_field :is_creator, :value => 1 %>
 				<% else %>
-					<%= cm.check_box :_destroy %>
-					<%= cm.label "Remove Member" %>
+					<%= builder.check_box :_destroy %>
+					<%= builder.label "Remove Member" %>
 					<br />
-					<%= cm.hidden_field :is_creator, :value => 0 %>
+					<%= builder.hidden_field :is_creator, :value => 0 %>
 					<%= nf.submit "Update Member" %> 
 				<% end%>
 				
 				 </td>
 			</tr>
 			<% rowCount = rowCount + 1 %>
-			
-
+			<% end %>
+						
 			<% if rowCount == numRows %>
-			<tr>
-				<td width= '20%'> <%= cm.text_field :first_name, {:value=> '', :size=>24} %></td>
-				<td width='5%'><%= cm.text_field :mi, {:value=> '', :size=>1} %></td>
-				<td width= '20%'><%= cm.text_field :last_name, {:value=> '', :size=>24} %></td>
+			<%= com_row.fields_for :community_member_new do |builder| %
+				<tr>
+				<td width= '20%'> <%= builder.text_field :first_name, {:value=> '', :size=>24} %></td>
+				<td width='5%'><%= builder.text_field :mi, {:value=> '', :size=>1} %></td>
+				<td width= '20%'><%= builder.text_field :last_name, {:value=> '', :size=>24} %></td>
 				<td width='5%'>OR</td>
-				<td width='20%'><%= cm.text_field :alias, {:value=> '',:size=>24} %></td>
+				<td width='20%'><%= builder.text_field :alias, {:value=> '',:size=>24} %></td>
 				<td width='20%'>&nbsp;&nbsp;<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
 			</tr>
+			<% end%>
 			<% end %>
-			
-			<% else %>
-			<%= nf.hidden_field :community_id, {:value=>session[:community_id]} %>
-			<tr>
-				<td width= '20%'><%= cm.text_field :first_name, {:size=>24} %></td>
-				<td width='5%'><%= cm.text_field :mi , {:size=>1} %></td>
-				<td width= '20%'><%= cm.text_field :last_name, {:size=>24} %></td>
-				<td width= '5%'>OR</td>
-				<td width= '20%'><%= cm.text_field :alias,  {:size=>24} %></td>
-				<td width= '20%'>&nbsp;&nbsp;<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
-			</tr>
-	<% end %>		
+				
 		</table>
 		<% end %>
 		

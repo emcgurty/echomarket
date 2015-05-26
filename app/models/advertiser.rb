@@ -2,8 +2,7 @@ class Advertiser < ActiveRecord::Base
 
   require 'uri'
  
-  # can't mass assign, so list them
-  attr_accessible :title, :description, :advertiser_email, :advertiser_url, :category_id, :category_other, :is_active, :is_activated, :date_created, :approved, :remote_ip,  :item_image_id
+  attr_accessible :title, :description, :advertiser_email, :advertiser_url, :category_id, :category_other, :is_active, :is_activated, :date_created, :approved, :remote_ip
                   
   has_one :item_image, dependent: :destroy
   has_one :category
@@ -13,9 +12,9 @@ class Advertiser < ActiveRecord::Base
   before_create :url_valid
 
 
-  #validates_uniqueness_of :title,:if => :title, :case_sensitive => true, :message =>  " already exists."
-  #validates_uniqueness_of :advertiser_email,:if => :advertiser_email, :case_sensitive => false, :message =>  " already exists"
-  #validates_uniqueness_of :advertiser_url,:if => :advertiser_url, :case_sensitive => false, :message =>  " already exists"
+  validates_uniqueness_of :title,:if => :title, :case_sensitive => true, :message =>  " already exists."
+  validates_uniqueness_of :advertiser_email,:if => :advertiser_email, :case_sensitive => false, :message =>  " already exists"
+  validates_uniqueness_of :advertiser_url,:if => :advertiser_url, :case_sensitive => false, :message =>  " already exists"
 
   protected
 
@@ -35,7 +34,7 @@ class Advertiser < ActiveRecord::Base
   end
 
   def get_random
-    length = 36
+    length = 40
     characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
     @id = SecureRandom.random_bytes(length).each_char.map do |char|
       characters[(char.ord % characters.length)]

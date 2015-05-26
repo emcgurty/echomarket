@@ -34,7 +34,7 @@ class Lender < ActiveRecord::Base
   end
 
   def get_random
-    length = 36
+    length = 40
     characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
     @id = SecureRandom.random_bytes(length).each_char.map do |char|
       characters[(char.ord % characters.length)]

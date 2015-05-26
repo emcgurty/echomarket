@@ -19,9 +19,6 @@ class ItemImage < ActiveRecord::Base
   end
 
   def item_image_upload=(picture_field)
-    puts "adasdasdasd in item image upload"
-    puts "asdsadasdas picture"
-    puts picture_field
     if picture_field.blank?
       return
     end
@@ -59,7 +56,7 @@ class ItemImage < ActiveRecord::Base
   end
 
   def get_random
-    length = 36
+    length = 40
     characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
     @id = SecureRandom.random_bytes(length).each_char.map do |char|
       characters[(char.ord % characters.length)]

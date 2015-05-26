@@ -9,19 +9,19 @@ class Community < ActiveRecord::Base
   alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
   alpha_numeric_regex_community_name = /\A[0-9 a-zA-Z\-\_]+\z/
   
-  has_one :user
   has_many :community_members, dependent: :destroy
   attr_accessible :community_members_attributes, allow_destroy: true
   accepts_nested_attributes_for :community_members
   
   
+  
   attr_accessor :password, :password_confirmation
   attr_accessible :password, :password_confirmation
   attr_accessible :community_name, :remote_ip, :crypted_password, :salt , :reset_code, :approved, :user_type
-  attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :us_state_id, :country_id, :us_state_id
+  attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :us_state_id, :country_id, :region
   attr_accessible :home_phone,:cell_phone, :email, :is_active ,:date_deleted, :date_updated  
   before_save :encrypt_password 
-  before_create :make_activation_code
+  before_create :get_user_id, :make_activation_code
   validates  :community_name, :password, :password_confirmation, :email, :presence => true
   
   validates_uniqueness_of :community_name,:if => :community_name, :case_sensitive => true, :message =>  " already exists."
@@ -30,6 +30,22 @@ class Community < ActiveRecord::Base
   validates_confirmation_of :password ,:if => :password, :message => "and re-entered password must match."
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
    
+    def get_user_id
+     if self.id.blank?
+       self.id =  get_random
+     end  
+    
+  end
+  
+  def get_random
+    length = 40
+    characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
+    @id = SecureRandom.random_bytes(length).each_char.map do |char|
+      characters[(char.ord % characters.length)]
+    end.join
+    @id
+  end
+  
   def activate
     @activated = true
     self.activated_at = Time.now.utc

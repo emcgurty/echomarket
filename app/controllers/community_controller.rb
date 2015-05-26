@@ -11,7 +11,7 @@ class CommunityController < ApplicationController
 
   # GET /communities/1/edit
   def edit
-    if params[:communities]
+    if params[:community]
       update
     else
       @community = Community.find(session[:community_id])
@@ -22,25 +22,29 @@ class CommunityController < ApplicationController
   # POST /communities.json
   def create
     session[:notice] = ''
-    @community = Community.new(params[:communities])
+    @community = Community.new(params[:community])
     respond_to do |format|
       
-      if @community.save(:validate =>false)
-        @cm = CommunityMember.new(
-        :community_id => @community.community_id, 
-        :first_name => @community.first_name, 
-        :mi => @community.mi,:last_name => @community.last_name, :remote_ip => @community.remote_ip, :date_created => Time.now, :is_active => 1, :is_creator => 1)
-        if @cm.save(:validate => false) 
-          session[:notice] = "Your Echo Market Community record, #{params[:communities][:community_name]}, has been successfully created!  Please check your email, #{params[:communities][:email]}, to activate your account."
+      if @community.save(:validate =>true) && @community.errors.empty?
+        myhashformembers = Hash.new
+        myhashformembers = [:first_name => @community.first_name, 
+                           :mi => @community.mi,
+                           :last_name => @community.last_name, 
+                           :remote_ip => @community.remote_ip, 
+                           :date_created => Time.now, 
+                           :is_active => 1, 
+                           :is_creator => 1,
+                           :user_type => 'both',
+                           :user_id => '']
+                           
+        @result = @community.update_attributes(:community_members_attributes => myhashformembers)
+          session[:notice] = "Your Echo Market Community record, #{params[:community][:community_name]}, has been successfully created!  Please check your email, #{params[:community][:email]}, to activate your account."
           format.html { redirect_to :controller => "home", :action => "items_listing" }
         else
           session[:notice]= "Error in creating Community record"
           format.html { render :action => "new" }  
-          
-        end
-      else
-        format.html { render :action => "new" }
-      end  #ends if saved
+              
+      end  #ends if saved 
     end # ends do
   end  # ends def
  
@@ -54,8 +58,8 @@ class CommunityController < ApplicationController
     session[:notice] = ''
     if params[:id]
       myupdatehash = Hash.new
-      if params[:communities]
-        @c = params[:communities]
+      if params[:community]
+        @c = params[:community]
         myupdatehash = [:remote_ip=> @c[:remote_ip],
                         :approved=> 1,
                         :is_active=>1,
@@ -73,17 +77,17 @@ class CommunityController < ApplicationController
                         :province=>@c[:province], 
                         :country_id=>@c[:country_id].to_s, 
                         :us_state_id=>@c[:us_state_id].to_s,  
-                        :us_state_id=>@c[:us_state_id], 
+                        :region=>@c[:region], 
                         :home_phone=>@c[:home_phone], 
                         :cell_phone => @c[:cell_phone] ]
 
-     puts myupdatehash[0].to_yaml
+     
      @community = Community.find(params[:id])
      if @community.update_attributes(myupdatehash[0]) && @community.errors.empty? 
         @cm = CommunityMember.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
-        @cm.first_name = params[:communities][:first_name]
-        @cm.mi = params[:communities][:mi]
-        @cm.last_name = params[:communities][:last_name]
+        @cm.first_name = params[:community][:first_name]
+        @cm.mi = params[:community][:mi]
+        @cm.last_name = params[:community][:last_name]
         @cm.save(:validate => false)
         session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
         redirect_to home_items_listing_url 
@@ -183,7 +187,7 @@ class CommunityController < ApplicationController
    
     session[:notice] = ''
     if request.post?
-      @community = Community.find(:first, :conditions => ['email = ?', params[:communities][:email]])
+      @community = Community.find(:first, :conditions => ['email = ?', params[:community][:email]])
 
       unless @community.blank?
         @community.create_reset_code(which)
@@ -200,7 +204,7 @@ class CommunityController < ApplicationController
         redirect_to home_items_listing_url
 
       else
-        session[:notice] = "Email: '#{params[:communities][:email]}' does not exist in the Echo Market database."
+        session[:notice] = "Email: '#{params[:community][:email]}' does not exist in the Echo Market database."
         redirect_to home_items_listing_url
 
       end
@@ -233,7 +237,7 @@ class CommunityController < ApplicationController
     @community= Community.find(:first, :conditions => ["reset_code =?", params[:reset_code]])
     unless @community.blank?
       @myupdatehash = Hash.new
-      @myupdatehash = [:password => params[:communities][:password], :password_confirmation => params[:communities][:password_confirmation]]
+      @myupdatehash = [:password => params[:community][:password], :password_confirmation => params[:community][:password_confirmation]]
       @community.update_attributes(@myupdatehash[0])
       @community.delete_reset_code
       session[:notice] = "Password reset successfully for #{@community.email}. Please login"
@@ -252,9 +256,10 @@ class CommunityController < ApplicationController
   
   ####  COMMUNITY MEMBERS DEFS
   
-    def m_list
+    def list
       session[:background] = true
-      @community_members = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+      @community = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+      @community_member = @community.community_member.all
   end
 
   # # POST /community_members
