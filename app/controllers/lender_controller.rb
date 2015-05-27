@@ -71,7 +71,7 @@ end
               INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
               INNER JOIN item_images ON item_images.lender_id = lenders.id
               WHERE (lenders.is_active=1 and (lenders.is_community = 0  OR lenders.is_community = 3))
-              ORDER BY lenders.category_type ASC, lenders.date_created ASC"
+              ORDER BY categories.category_type ASC, lenders.date_created ASC"
               
         @lender = Lender.find_by_sql my_sql_string       
                 
@@ -84,7 +84,7 @@ end
               INNER JOIN item_images ON item_images.lender_id = lenders.id
               WHERE (lenders.is_active=1 AND  lenders.is_community = 1 AND lenders.user_id =  "
           my_sql_string =  my_sql_string + session[:user_id]
-          my_sql_string =  my_sql_string + " ) ORDER BY lenders.category_type ASC, lenders.date_created ASC" 
+          my_sql_string =  my_sql_string + " ) ORDER BY categories.category_type ASC, lenders.date_created ASC" 
           @lender = Lender.find_by_sql my_sql_string
       
       end 
@@ -150,7 +150,7 @@ end
               INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
               WHERE (lenders.is_active=1 and lenders.user_id = "
         my_sql_string = my_sql_string +    params[:id]
-        my_sql_string = my_sql_string + " ) ORDER BY lenders.category_type ASC, lenders.date_created ASC "    
+        my_sql_string = my_sql_string + " ) ORDER BY categories.category_type ASC, lenders.date_created ASC "    
           
         @lender = Lender.find_by_sql my_sql_string
  

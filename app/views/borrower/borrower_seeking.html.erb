@@ -125,10 +125,14 @@
 
 			</tr>
 			<%= fields_for :primary_address do |primary| %>
+			<div style="display:none;">
+					<%= primary.hidden_field(:address_type, :value => 'primary') %>
+					<%= primary.hidden_field(:lender_id, :value => '') %>
+					<%= primary.hidden_field(:borrower_id, :value => @borrower.id) %>
+				</div>	
 			<tr class="odd">
 				<td style="width:25%;">
-				<div>
-					<%= primary.hidden_field(:address_type, :value => 'primary') %>
+				
 					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 					<%= primary.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
@@ -247,9 +251,11 @@
 		<br />
 		<%= fields_for :alternative_address do |alternative| %>
 		<% state_id_test = (@borrower.id.blank? ? '' : Borrower.find(@borrower.id).addresses.select('us_state_id').where(:address_type => 'alternative')) %>
-		<div style="display:none">
-			<%= alternative.hidden_field(:address_type, :value => 'alternative') %>
-		</div>	
+		<div style="display:none;">
+					<%= primary.hidden_field(:address_type, :value => 'alternative') %>
+					<%= primary.hidden_field(:lender_id, :value => '') %>
+					<%= primary.hidden_field(:borrower_id, :value => @borrower.id) %>
+				</div>	
 		<table class="alternative_address_table" id="table_address_input" >
 			<tr>
 				<td><label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>

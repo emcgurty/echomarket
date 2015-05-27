@@ -68,7 +68,7 @@ end
               INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
               INNER JOIN item_images ON item_images.borrower_id = borrowers.id
               WHERE (borrowers.is_active=1 and (borrowers.is_community = 0  OR borrowers.is_community = 3))
-              ORDER BY borrowers.category_type ASC, borrowers.date_created ASC"
+              ORDER BY categories.category_type ASC, borrowers.date_created ASC"
               
         @borrower = Borrower.find_by_sql my_sql_string       
                 
@@ -81,7 +81,7 @@ end
               INNER JOIN item_images ON item_images.borrower_id = borrowers.id
               WHERE (borrowers.is_active=1 AND  borrowers.is_community = 1 AND borrowers.user_id =  "
           my_sql_string =  my_sql_string + session[:user_id]
-          my_sql_string =  my_sql_string + " ) ORDER BY borrowers.category_type ASC, borrowers.date_created ASC" 
+          my_sql_string =  my_sql_string + " ) ORDER BY categories.category_type ASC, borrowers.date_created ASC" 
           @borrower = Borrower.find_by_sql my_sql_string
       
       end 
@@ -110,7 +110,7 @@ end
               INNER JOIN addresses ON addresses.borrower_id = borrowers.id
               WHERE borrowers.id = "
            my_sql_string = my_sql_string + params[:id]  
-           my_sql_string = my_sql_string + " ORDER BY borrowers.category_type ASC, borrowers.date_created ASC"
+           my_sql_string = my_sql_string + " ORDER BY categories.category_type ASC, borrowers.date_created ASC"
       
            @borrower = Borrower.find_by_sql my_sql_string
     end
@@ -134,7 +134,7 @@ end
               WHERE borrowers.id = "
            my_sql_string = my_sql_string + params[:id]  
            my_sql_string = my_sql_string + " AND borrowers.user_id = " + params[:user_id]
-           my_sql_string = my_sql_string + " ORDER BY borrowers.category_type ASC, borrowers.date_created ASC"
+           my_sql_string = my_sql_string + " ORDER BY categories.category_type ASC, borrowers.date_created ASC"
       
            @borrower = Borrower.find_by_sql my_sql_string
                
@@ -174,7 +174,7 @@ end
               INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
               WHERE (borrowers.is_active=1 and borrowers.user_id = "
               my_sql_string  = my_sql_string + params[:id]
-              my_sql_string  = my_sql_string + " ) ORDER BY borrowers.category_id ASC, borrowers.date_created ASC "    
+              my_sql_string  = my_sql_string + " ) ORDER BY categories.category_type ASC, borrowers.date_created ASC "    
           
         @borrower = Borrower.find_by_sql my_sql_string
         if @borrower.blank?
