@@ -68,7 +68,7 @@ end
               INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
               INNER JOIN item_images ON item_images.borrower_id = borrowers.id
               WHERE (borrowers.is_active=1 and (borrowers.is_community = 0  OR borrowers.is_community = 3))
-              ORDER BY borrowers.category_id ASC, borrowers.date_created ASC"
+              ORDER BY borrowers.category_type ASC, borrowers.date_created ASC"
               
         @borrower = Borrower.find_by_sql my_sql_string       
                 
@@ -81,7 +81,7 @@ end
               INNER JOIN item_images ON item_images.borrower_id = borrowers.id
               WHERE (borrowers.is_active=1 AND  borrowers.is_community = 1 AND borrowers.user_id =  "
           my_sql_string =  my_sql_string + session[:user_id]
-          my_sql_string =  my_sql_string + " ) ORDER BY borrowers.category_id ASC, borrowers.date_created ASC" 
+          my_sql_string =  my_sql_string + " ) ORDER BY borrowers.category_type ASC, borrowers.date_created ASC" 
           @borrower = Borrower.find_by_sql my_sql_string
       
       end 
@@ -102,9 +102,19 @@ end
  def borrower_item_detail
     session[:background] = true
     unless params[:id].blank?
-        @borrower = Borrower.find(:all, :readonly, :conditions => ["borrower_id = ?", params[:id]])
+      
+            my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
+              FROM borrowers
+              INNER JOIN categories ON categories.id = borrowers.category_id
+              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
+              INNER JOIN addresses ON addresses.borrower_id = borrowers.id
+              WHERE borrowers.id = "
+           my_sql_string = my_sql_string + params[:id]  
+           my_sql_string = my_sql_string + " ORDER BY borrowers.category_type ASC, borrowers.date_created ASC"
+      
+           @borrower = Borrower.find_by_sql my_sql_string
     end
-    if @borrower.blank? || params[:id].blank?
+      if @borrower.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end 
@@ -116,7 +126,19 @@ end
      unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @borrower = Borrower.find(:all, :readonly, :conditions => ["borrower_id = ?", params[:id]])
+        my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
+              FROM borrowers
+              INNER JOIN categories ON categories.id = borrowers.category_id
+              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
+              INNER JOIN addresses ON addresses.borrower_id = borrowers.id
+              WHERE borrowers.id = "
+           my_sql_string = my_sql_string + params[:id]  
+           my_sql_string = my_sql_string + " AND borrowers.user_id = " + params[:user_id]
+           my_sql_string = my_sql_string + " ORDER BY borrowers.category_type ASC, borrowers.date_created ASC"
+      
+           @borrower = Borrower.find_by_sql my_sql_string
+               
+        
      end
      
      if @borrower.blank? || params[:id].blank?

@@ -59,56 +59,71 @@
 		<br />
 		<% end %>
 	</p>
-	<% if (@borrower.displayBorrowerAddress == 1) %>
+	<% if (@borrower.displayBorrowerAddress == 1 ) %>
+	<% borrower_primary_address = Borrower.find(@borrower.id).addresses.where("address_type = 'primary'") %>
 	<p>
 		Borrower Address:
 		<br />
-		<%= @borrower.address_line_1 %><%= (@borrower.address_line_2.blank? ? " ": @borrower.address_line_2) %>
+		<%= borrower_primary_address.address_line_1 %>
+		<%= (borrower_primary_address.address_line_2.blank? ? " ": borrower_primary_address.address_line_2) %>
 		<br />
-		<%= @borrower.city + ","%><%= (@borrower.province.blank? ? "": @borrower.province) + " " %>
+		<%= borrower_primary_address.city + ","%>
+		<%= (borrower_primary_address.province.blank? ? "": borrower_primary_address.province) + " " %>
 
-		<% if @borrower.us_state_id.blank? %>
-		<% >
-
-		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrower.us_state_id ]) %>
-		<%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
-		<% else %>
-		<%= @borrower.us_state_id %>
+		<% unless borrower_primary_address.us_state_id.blank? || borrower_primary_address.us_state_id == '99'  %>
+		<%= borrower_primary_address.state_name) %>
 		<% end %>
 		<br />
-		<% unless @borrower.country_id.blank? %>
-		<% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", @borrower.country_id ]) %>
-		<%= @s_c.country_name + " " %>
+		
+		<% unless borrower_primary_address.region.blank?  %>
+		<%= borrower_primary_address.region) %>
 		<% end %>
-		<%= @borrower.postal_code %>
+		<br />
+		
+		
+		<% unless borrower_primary_address.country_name.blank? %>
+		<%= borrower_primary_address.country_name + " " %>
+		<% end %>
+		
+		<%= borrower_primary_address.postal_code %>
 	</p>
 	<% end %>
+	
+	
+	
 
 </div>
 
 <% if ((@borrower.useWhichContactAddress == 2)  || (@borrower.useWhichContactAddress == 1)) %>
+<% borrower_alternative_address = Borrower.find(@borrower.id).addresses.where("address_type = 'alternative'") %>
 <div class="div_p_detail" >
 	Borrower Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
 
 	<p>
-		<%= @borrower.address_line_1_alternative %><%= (@borrower.address_line_2_alternative.blank? ? " ": @borrower.address_line_2_alternative) %>
+		<%= borrower_alternative_address.address_line_1 %>
+		<%= (borrower_alternative_address.address_line_2.blank? ? " ": borrower_alternative_address.address_line_2) %>
 		<br />
-		<%= @borrower.city_alternative + ","%><%= (@borrower.province_alternative.blank? ? "": @borrower.province_alternative) + " " %>
+		<%= borrower_alternative_address.city + ","%>
+		<%= (borrower_alternative_address.province.blank? ? "": borrower_alternative_address.province) + " " %>
 
-		<% if @borrower.us_state_id_alternative.blank? %>
-		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrower.us_state_id_alternative ]) %>
-		<%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
-		<% else %>
-		<%= @borrower.us_state_id_alternative + " " %>
+		<% unless borrower_alternative_address.us_state_id.blank? || borrower_alternative_address.us_state_id == '99'  %>
+		<%= borrower_alternative_address.state_name) %>
 		<% end %>
 		<br />
-		<% unless @borrower.country_id_alternative.blank? %>
-		<% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", @borrower.country_id_alternative ]) %>
-		<%= @s_c.country_name + " " %>
+		
+		<% unless borrower_alternative_address.region.blank?  %>
+		<%= borrower_alternative_address.region) %>
 		<% end %>
-		<%= @borrower.postal_code_alternative %>
+		<br />
+		
+		
+		<% unless borrower_alternative_address.country_name.blank? %>
+		<%= borrower_alternative_address.country_name + " " %>
+		<% end %>
+		
+		<%= borrower_alternative_address.postal_code %>
 	</p>
 </div>
 <% else %>
@@ -212,9 +227,9 @@
 <div class="div_p_detail_sub">
 
 	Category:
-	<% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @borrower.category_id]) %>
-	<%= @Category.category_type %>
-	<% if @Category.category_type == "Other" %>
+	
+	<%= @borrower.category_type %>
+	<% if @borrower.category_type == "Other" %>
 	&nbsp;Other category:
 	<%= @borrower.other_item_category %>
 	<% end %>
@@ -225,8 +240,7 @@
 	<br />
 
 	Condition:&nbsp;
-	<% @cont = Itemconditions.find(:first, :select => "conditions", :readonly=> true, :conditions => ["item_condition_id = ?", @borrower.item_condition_id]) %>
-	<%= @cont.conditions %>
+	<%= @borrower.condition %>
 	<br />
 
 	<% unless @borrower.item_model.blank?  %>
