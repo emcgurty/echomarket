@@ -1,6 +1,5 @@
 class BorrowerController < ApplicationController
 
-
 def rapid_borrower_seeking
     session[:notice] = ''
     session[:background] = true 
@@ -9,13 +8,17 @@ def rapid_borrower_seeking
     else
       @borrower = Borrower.new
     end
+    
+    respond_to do |f|
+      f.html
+    end
 end
 
  def create
    session[:notice] = ''
     unless params[:borrower].blank?
-        
         @borrower = Borrower.new(
+ 
           :user_id => 'NA',
           :describe_yourself => -1,
           :first_name => 'NA',
@@ -41,9 +44,9 @@ end
 		      :comment => params[:borrower][:comment]          
  )
          if @borrower.save(:validate => false)
-          @borrower.update_attributes(:addresses_attributes => params['addresses'])  
+          @borrower.update_attributes(:primary_address_attributes => params['addresses'])  
           @un = 'rapid_' + @borrower.item_description
-         @user = User.new(:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
+          @user = User.new(:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
                     :remote_ip => @borrower.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
          @user.save(:validate => false)
          @myupdatehash = [:user_id => @user.user_id]
@@ -96,6 +99,8 @@ end
             redirect_to  borrower_seeking_url
           end    
       end
+      
+      
         
  end
 
@@ -340,6 +345,8 @@ end
 
 
         if @ltmp.update_attributes(@myupdatehash[0])
+          @borrower.update_attributes(:addresses_attributes => params[:primary_address])          
+          @borrower.update_attributes(:addresses_attributes => params[:alternative_address])
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false

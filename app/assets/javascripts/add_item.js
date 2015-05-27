@@ -43,10 +43,10 @@
 	$("#borrower_category_id").trigger('change');
 	
 
-		$("select#lenders_country_id").bind('change', function() {
+		$("select#lender_country_id").bind('change', function() {
 
 		
-		var country_text = $("select#lenders_country_id option:selected").text();
+		var country_text = $("select#lender_country_id option:selected").text();
 		$("div#country_selected").css("display", "block");
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
 
@@ -61,10 +61,10 @@
 		}
 
 	});
-	$("select#lenders_country_id").trigger('change');
+	$("select#lender_country_id").trigger('change');
 	
-		$("#lenders_category_id").bind('change', function() {
-		var cat_cmb = $("select#lenders_category_id option:selected").text();
+		$("#lender_category_id").bind('change', function() {
+		var cat_cmb = $("select#lender_category_id option:selected").text();
 
 		if (cat_cmb == "Other") {
 
@@ -76,7 +76,7 @@
 
 	});
 
-	$("#lenders_category_id").trigger('change');
+	$("#lender_category_id").trigger('change');
 	
 });
 
@@ -89,12 +89,12 @@ function addBorrowerItem(){
 	 $("span#incomplete_rapid_information").text("");	
 	 $("span#incomplete_rapid_information").css("visibility", "hidden");
     
-    var current_email = $("input#lenders_email_alternative").val(); 
+    var current_email = $("input#lender_email_alternative").val(); 
 	
 	if (validEmail(current_email)) {
 		incomplete_information = incomplete_information + "- Your email address is improperly formatted<br />";
 	}
-	  if ($("input#lenders_postal_code").val() == '' ) {
+	  if ($("input#lender_postal_code").val() == '' ) {
 		incomplete_information = incomplete_information + "- A postal code is required<br />";
 	}
 	
@@ -106,11 +106,11 @@ function addBorrowerItem(){
 		incomplete_information = incomplete_information + "- If you choose an 'Other' category, you must provide your suggested 'Other' category option. Otherwise a Category selection is required.<br />";
 	}
 	
-	if ($("input#lenders_item_description").val() == '' ) {
+	if ($("input#lender_item_description").val() == '' ) {
 		incomplete_information = incomplete_information + "- An Item Desription is required<br />";
     }
     
-	if ($("select#lenders_item_condition_id option:selected").text() == 'Please select' ) {
+	if ($("select#lender_item_condition_id option:selected").text() == 'Please select' ) {
 		incomplete_information = incomplete_information + "- Please select an Item Condition<br />";
 		
 	}
@@ -201,9 +201,9 @@ function validEmail(em) {
 function validLenderCountryState() {
 	
 	var foundIncomplete = false;
-	var cid = $("select#lenders_country_id option:selected").val();
-	var sid = $("select#lenders_us_state_id option:selected").val(); 
-	var sis = $("input#lenders_us_state_id").val();
+	var cid = $("select#lender_country_id option:selected").val();
+	var sid = $("select#lender_us_state_id option:selected").val(); 
+	var sis = $("input#lender_us_state_id").val();
 	
 		
 	if (cid == '99') { 
@@ -259,8 +259,8 @@ function checkBorrowerLegal() {
 function checkLenderLegal() {
 
 	var notChecked = false;
-	var legal_18 = $("#lenders_age_18_or_more");
-	var legal_goodwill = $("#lenders_goodwill");
+	var legal_18 = $("#lender_age_18_or_more");
+	var legal_goodwill = $("#lender_goodwill");
 
 	
 	
@@ -293,8 +293,8 @@ function checkBorrowerCategory() {
 function checkLenderCategory() {
 
 	var notChecked = false;
-	var cat_id = $("select#lenders_category_id option:selected").text();
-	var o_i_c =  $("input#lenders_other_item_category").val();
+	var cat_id = $("select#lender_category_id option:selected").text();
+	var o_i_c =  $("input#lender_other_item_category").val();
 	if (cat_id == 'Other' && o_i_c == ''){
 		notChecked = true;
 	} else if (cat_id == 'Please select') {

@@ -20,10 +20,10 @@ $(document).ready(function() {
 showFormContact();
     
     
-    $( "input#lenders_organization_name" ).bind( 'change', function() {
+    $( "input#lender_organization_name" ).bind( 'change', function() {
         $("span#organization_name_selection").html($(this).val());
     });
-    $("input#lenders_organization_name").trigger('change');
+    $("input#lender_organization_name").trigger('change');
 
 
     $("input[name='lender[displayLenderOrganizationName]']").bind('change', function() {
@@ -34,7 +34,7 @@ showFormContact();
             $("span#displayLenderOrganizationName_selection").html("No");
         }
 
-        if ((y_n == 1) && ($("#lenders_organization_name").val() == "")) {
+        if ((y_n == 1) && ($("#lender_organization_name").val() == "")) {
             $("span#organization_name_error").text("Please provide an organization name.");
             $("span#organization_name_error").css("visibility", "visible");
         } else {
@@ -52,10 +52,10 @@ showFormContact();
 		       $("#postalWithContactAddress").css("display", "block");
                $("span#display_address_selection").html("Yes");
 				if (
-					($("#lenders_address_line_1").val() == "") || 
-					($("#lenders_postal_code").val() == "") || 
-					($("#lenders_city").val() == "") || 
-					($("#lenders_country_id option:selected").text() == "Please select")
+					($("#lender_address_line_1").val() == "") || 
+					($("#lender_postal_code").val() == "") || 
+					($("#lender_city").val() == "") || 
+					($("#lender_country_id option:selected").text() == "Please select")
 				) {
 					
 					$("span#display_address_error").text("Please provide a complete address.");
@@ -78,7 +78,7 @@ showFormContact();
 	if (y_n == 1) {
 		 $("span#display_name_selection").html("Yes");
 			if (
-				($("input#lenders_first_name").val() == "") || 
+				($("input#lender_first_name").val() == "") || 
 				($("input#lender_last_name").val() == "") 
 			) {
 				
@@ -96,93 +96,93 @@ showFormContact();
 	});
 $("input[name='lender[displayLenderName]']").trigger('change');
 
-$("#lenders_age_18_or_more").bind('change', function() {
-        if ($("#lenders_age_18_or_more").is (':checked')) {
+$("#lender_age_18_or_more").bind('change', function() {
+        if ($("#lender_age_18_or_more").is (':checked')) {
             $("span#18_selection").html("Yes");
         } else {
             $("span#18_selection").html("No");
         }
 
     });
-    $("#lenders_age_18_or_more").trigger('change');
+    $("#lender_age_18_or_more").trigger('change');
 
-    $("#lenders_goodwill").bind('change', function() {
-        if ($("#lenders_goodwill").is (':checked')) {
+    $("#lender_goodwill").bind('change', function() {
+        if ($("#lender_goodwill").is (':checked')) {
             $("span#goodwill_selection").html("Yes");
         } else {
             $("span#goodwill_selection").html("No");
         }
 
     });
-    $("#lenders_goodwill").trigger('change');
+    $("#lender_goodwill").trigger('change');
 
-    $("#lenders_borrower_contact_by_home_phone").bind('change', function() {
-        if ($("#lenders_borrower_contact_by_home_phone").is (':checked')) {
+    $("#lender_borrower_contact_by_home_phone").bind('change', function() {
+        if ($("#lender_borrower_contact_by_home_phone").is (':checked')) {
             $("span#home_phone_contact_permission_selection").html("Yes");
         } else {
             $("span#home_phone_contact_permission_selection").html("No");
         }
     });
-    $("#lenders_borrower_contact_by_home_phone").trigger('change');
+    $("#lender_borrower_contact_by_home_phone").trigger('change');
 
 
-    $("#lenders_borrower_contact_by_cell_phone").bind('change', function() {
-        if ($("#lenders_borrower_contact_by_cell_phone").is (':checked')) {
+    $("#lender_borrower_contact_by_cell_phone").bind('change', function() {
+        if ($("#lender_borrower_contact_by_cell_phone").is (':checked')) {
             $("span#cell_phone_contact_permission_selection").html("Yes");
         } else {
             $("span#cell_phone_contact_permission_selection").html("No");
         }
     });
-    $("#lenders_borrower_contact_by_cell_phone").trigger('change');
+    $("#lender_borrower_contact_by_cell_phone").trigger('change');
 
-    $("#lenders_borrower_contact_by_alternative_phone").bind('change', function() {
-        if ($("#lenders_borrower_contact_by_alternative_phone").is (':checked')) {
+    $("#lender_borrower_contact_by_alternative_phone").bind('change', function() {
+        if ($("#lender_borrower_contact_by_alternative_phone").is (':checked')) {
             $("span#alternative_phone_contact_permission_selection").html("Yes");
         } else {
             $("span#alternative_phone_contact_permission_selection").html("No");
         }
     });
-    $("#lenders_borrower_contact_by_alternative_phone").trigger('change');
+    $("#lender_borrower_contact_by_alternative_phone").trigger('change');
 
 
-    $("#lenders_borrower_contact_by_Facebook").bind('change', function() {
+    $("#lender_borrower_contact_by_Facebook").bind('change', function() {
 
         $("span#facebook_selection").html($(this).val());
     });
-    $("#lenders_borrower_contact_by_Facebook").trigger('change');
+    $("#lender_borrower_contact_by_Facebook").trigger('change');
 
-    $("#lenders_borrower_contact_by_Twitter").bind('change', function() {
+    $("#lender_borrower_contact_by_Twitter").bind('change', function() {
 
         $("span#twitter_selection").html($(this).val());
     });
-    $("#lenders_borrower_contact_by_Twitter").trigger('change');
+    $("#lender_borrower_contact_by_Twitter").trigger('change');
 
-    $("#lenders_borrower_contact_by_Instagram").bind('change', function() {
+    $("#lender_borrower_contact_by_Instagram").bind('change', function() {
 
         $("span#instagram_selection").html($(this).val());
     });
-    $("#lenders_borrower_contact_by_Instagram").trigger('change');
+    $("#lender_borrower_contact_by_Instagram").trigger('change');
 
-    $("#lenders_borrower_contact_by_LinkedIn").bind('change', function() {
+    $("#lender_borrower_contact_by_LinkedIn").bind('change', function() {
 
         $("span#linkedin_selection").html($(this).val());
     });
 
-    $("#lenders_borrower_contact_by_LinkedIn").trigger('change');
+    $("#lender_borrower_contact_by_LinkedIn").trigger('change');
 
-    $("#lenders_borrower_contact_by_Other_Social_Media").bind('change', function() {
+    $("#lender_borrower_contact_by_Other_Social_Media").bind('change', function() {
 
         $("span#other_media_selection").html($(this).val());
     });
 
-    $("#lenders_borrower_contact_by_Other_Social_Media").trigger('change');
+    $("#lender_borrower_contact_by_Other_Social_Media").trigger('change');
 
-    $("#lenders_borrower_contact_by_Other_Social_Media_Access").bind('change', function() {
+    $("#lender_borrower_contact_by_Other_Social_Media_Access").bind('change', function() {
 
         $("span#other_media_access_selection").html($(this).val());
     });
     
-    $("#lenders_borrower_contact_by_Other_Social_Media_Access").trigger('change');
+    $("#lender_borrower_contact_by_Other_Social_Media_Access").trigger('change');
 
     $("input[name='lender[b_comes_to_which_address]']").bind('change', function() {
 
@@ -216,9 +216,9 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
     $("input[name='lender[b_returns_to_which_address]']").trigger('change');
 
-    $("#lenders_public_display_home_phone").bind('change', function() {
+    $("#lender_public_display_home_phone").bind('change', function() {
 
-        if (((($("#lenders_public_display_home_phone").prop ('checked'))) ) && ((($("#lenders_home_phone").val() == ''))) ){
+        if (((($("#lender_public_display_home_phone").prop ('checked'))) ) && ((($("#lender_home_phone").val() == ''))) ){
 
             $("span#home_phone_error").text("Whoops! Don't forget your home phone.");
             $("span#home_phone_error").css("visibility", "visible");
@@ -227,7 +227,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
             $("span#home_phone_error").text("");
             $("span#home_phone_error").css("visibility", "hidden");
         }
-        if ($("#lenders_public_display_home_phone").prop ('checked')) {
+        if ($("#lender_public_display_home_phone").prop ('checked')) {
             $("span#display_home_phone_selection").html("Yes");
         } else {
             $("span#display_home_phone_selection").html("No");
@@ -235,11 +235,11 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
     });
 
-    $("#lenders_public_display_home_phone").trigger('change');
+    $("#lender_public_display_home_phone").trigger('change');
 
-    $("#lenders_public_display_cell_phone").bind('change', function() {
+    $("#lender_public_display_cell_phone").bind('change', function() {
 
-        if (((($("#lenders_public_display_cell_phone").prop('checked'))) ) && ((($("#lenders_cell_phone").val() == ''))) ){
+        if (((($("#lender_public_display_cell_phone").prop('checked'))) ) && ((($("#lender_cell_phone").val() == ''))) ){
 
             $("span#cell_phone_error").text("Whoops! Don't forget your cell phone.");
             $("span#cell_phone_error").css("visibility", "visible");
@@ -249,7 +249,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
             $("span#cell_phone_error").css("visibility", "hidden");
         }
 
-        if ($("#lenders_public_display_cell_phone").prop ('checked')) {
+        if ($("#lender_public_display_cell_phone").prop ('checked')) {
             $("span#display_cell_phone_selection").html("Yes");
         } else {
             $("span#display_cell_phone_selection").html("No");
@@ -257,11 +257,11 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
     });
 
-    $("#lenders_public_display_cell_phone").trigger('change');
+    $("#lender_public_display_cell_phone").trigger('change');
 
-    $("#lenders_public_display_alternative_phone").bind('change', function() {
+    $("#lender_public_display_alternative_phone").bind('change', function() {
 
-        if (((($("#lenders_public_display_alternative_phone").prop ('checked'))) ) && ((($("#lenders_alternative_phone").val() == ''))) ){
+        if (((($("#lender_public_display_alternative_phone").prop ('checked'))) ) && ((($("#lender_alternative_phone").val() == ''))) ){
 
             $("span#alternative_phone_error").text("Whoops! Don't forget your alternative phone.");
             $("span#alternative_phone_error").css("visibility", "visible");
@@ -270,32 +270,32 @@ $("#lenders_age_18_or_more").bind('change', function() {
             $("span#alternative_phone_error").text("");
             $("span#alternative_phone_error").css("visibility", "hidden");
         }
-        if ($("#lenders_public_display_alternative_phone").prop ('checked')) {
+        if ($("#lender_public_display_alternative_phone").prop ('checked')) {
             $("span#display_alternative_phone_selection").html("Yes");
         } else {
             $("span#display_alternative_phone_selection").html("No");
         }
     });
 
-    $("#lenders_public_display_alternative_phone").trigger('change');
+    $("#lender_public_display_alternative_phone").trigger('change');
 
 
 
-    $("#lenders_home_phone").bind('change', function() {
+    $("#lender_home_phone").bind('change', function() {
 
                $("span#home_phone_error").text("");
                 $("span#home_phone_error").css("visibility", "hidden");
         
-        if ($("#lenders_home_phone").val() !=  '')  {
-            if (($("#lenders_home_phone").val() == $("#lenders_cell_phone").val())  ||
-                ($("#lenders_home_phone").val() == $("#lenders_alternative_phone").val()))   {
+        if ($("#lender_home_phone").val() !=  '')  {
+            if (($("#lender_home_phone").val() == $("#lender_cell_phone").val())  ||
+                ($("#lender_home_phone").val() == $("#lender_alternative_phone").val()))   {
 
                 $("span#home_phone_error").text("Home phone should be distinct from others.");
                 $("span#home_phone_error").css("visibility", "visible");
             } 
         }
 
-        if (($("#lenders_home_phone").val() ==  '') && ($("#lenders_public_display_home_phone").prop ('checked') > -1)) {
+        if (($("#lender_home_phone").val() ==  '') && ($("#lender_public_display_home_phone").prop ('checked') > -1)) {
             $("span#home_phone_error").text("Empty Home phone will not be displayed.");
             $("span#home_phone_error").css("visibility", "visible");
         }         
@@ -306,23 +306,23 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
     });
 
-    $("#lenders_home_phone").trigger('change');
+    $("#lender_home_phone").trigger('change');
 
 
-    $("#lenders_cell_phone").bind('change', function() {
+    $("#lender_cell_phone").bind('change', function() {
 
         $("span#cell_phone_error").text("");
         $("span#cell_phone_error").css("visibility", "hidden");
-        if ($("#lenders_cell_phone").val() !=  '')  {
-            if (($("#lenders_cell_phone").val() == $("#lenders_home_phone").val())  ||
-                ($("#lenders_cell_phone").val() == $("#lenders_alternative_phone").val()))   {
+        if ($("#lender_cell_phone").val() !=  '')  {
+            if (($("#lender_cell_phone").val() == $("#lender_home_phone").val())  ||
+                ($("#lender_cell_phone").val() == $("#lender_alternative_phone").val()))   {
 
                 $("span#cell_phone_error").text("Cell phone should be distinct from others.");
                 $("span#cell_phone_error").css("visibility", "visible");
             } 
         }
 
-        if (($("#lenders_cell_phone").val() ==  '') && ($("#lenders_public_display_cell_phone").prop ('checked') > -1)) {
+        if (($("#lender_cell_phone").val() ==  '') && ($("#lender_public_display_cell_phone").prop ('checked') > -1)) {
             $("span#cell_phone_error").text("Empty Cell phone will not be displayed.");
             $("span#cell_phone_error").css("visibility", "visible");
         } 
@@ -331,21 +331,21 @@ $("#lenders_age_18_or_more").bind('change', function() {
         $("span#cell_phone_selection").html($(this).val());
     });
 
-    $("#lenders_cell_phone").trigger('change');
+    $("#lender_cell_phone").trigger('change');
 
-    $("#lenders_alternative_phone").bind('change', function() {
+    $("#lender_alternative_phone").bind('change', function() {
 
           $("span#alternative_phone_error").text("");
           $("span#alternative_phone_error").css("visibility", "hidden");
-          if ($("#lenders_alternative_phone").val() !=  '')  {
-            if (($("#lenders_alternative_phone").val() == $("#lenders_home_phone").val())  ||
-                ($("#lenders_alternative_phone").val() == $("#lenders_cell_phone").val()))   {
+          if ($("#lender_alternative_phone").val() !=  '')  {
+            if (($("#lender_alternative_phone").val() == $("#lender_home_phone").val())  ||
+                ($("#lender_alternative_phone").val() == $("#lender_cell_phone").val()))   {
 
                 $("span#alternative_phone_error").text("Alternative phone should be distinct from others.");
                 $("span#alternative_phone_error").css("visibility", "visible");
             } 
         }
-        if (($("#lenders_alternative_phone").val() ==  '') && ($("#lenders_public_display_alternative_phone").prop ('checked') > -1)) {
+        if (($("#lender_alternative_phone").val() ==  '') && ($("#lender_public_display_alternative_phone").prop ('checked') > -1)) {
             $("span#alternative_phone_error").text("Empty Alternative phone will not be displayed.");
             $("span#alternative_phone_error").css("visibility", "visible");
         } 
@@ -354,11 +354,11 @@ $("#lenders_age_18_or_more").bind('change', function() {
         $("span#alternative_phone_selection").html($(this).val());
     });
 
-    $("#lenders_alternative_phone").trigger('change');
+    $("#lender_alternative_phone").trigger('change');
 
 
-    $("#lenders_category_id").bind('change', function() {
-        var cat_cmb = $( "select#lenders_category_id option:selected" ).text();
+    $("#lender_category_id").bind('change', function() {
+        var cat_cmb = $( "select#lender_category_id option:selected" ).text();
 
         if (cat_cmb == "Other") {
 
@@ -370,7 +370,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
 
     });
 
-    $("#lenders_category_id").trigger('change');
+    $("#lender_category_id").trigger('change');
 
     
     $("#l2bimage").bind('change', function() {
@@ -403,43 +403,43 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("#l2bimage").trigger('change');
 
-    $("#lenders_other_describe_yourself").bind('change', function() {
+    $("#lender_other_describe_yourself").bind('change', function() {
         $("span#describe_yourself").html($(this).val());
     });
-    $("#lenders_other_describe_yourself").trigger('change');
+    $("#lender_other_describe_yourself").trigger('change');
     
 
-    $("#lenders_describe_yourself").bind('change', function() {
-        var describe_yourself_str = $( "#lenders_describe_yourself option:selected" ).text();
+    $("#lender_describe_yourself").bind('change', function() {
+        var describe_yourself_str = $( "#lender_describe_yourself option:selected" ).text();
         if (describe_yourself_str == "Other") {
             $("div#other_describe_yourself").css("display", "inline");
             $("span#describe_yourself").html(describe_yourself_str);
         } else {
             $("div#other_describe_yourself").css("display", "none");
-            $("#lenders_other_describe_yourself").val("");
+            $("#lender_other_describe_yourself").val("");
 
         }
         $("span#describe_yourself").html(describe_yourself_str);
     });
-    $("#lenders_describe_yourself").trigger('change');
+    $("#lender_describe_yourself").trigger('change');
  
 
-    $("input#lenders_first_name").bind('change', function() {
+    $("input#lender_first_name").bind('change', function() {
         $("span#first_name_selection").html($(this).val());
     });
-    $("input#lenders_first_name").trigger('change');
+    $("input#lender_first_name").trigger('change');
   
     
-    $("input#lenders_mi").bind('change', function() {
+    $("input#lender_mi").bind('change', function() {
         $("span#mi_selection").html($(this).val());
     });
-    $("input#lenders_mi").trigger('change');
+    $("input#lender_mi").trigger('change');
 
 
-    $("input#lenders_last_name").bind('change', function() {
+    $("input#lender_last_name").bind('change', function() {
         $("span#last_name_selection").html($(this).val());
     });
-    $("input#lenders_last_name").trigger('change');
+    $("input#lender_last_name").trigger('change');
 
     $("input[name='lender[notify_borrowers]']").bind('change', function() {
         var y_n = $("input[name='lender[notify_borrowers]']:checked").val();
@@ -484,7 +484,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
             $("span#borrower_contact_by_email_selection").html("Neither Email");
         } else if (y_n == 1){
             $("span#borrower_contact_by_email_selection").html("Either Email");
-            if ($("#lenders_email_alternative").val() == '') {
+            if ($("#lender_email_alternative").val() == '') {
                 $("span#email2_contact_error").css("visibility", "visible");
                 $("span#email2_contact_error").text("Please provide an alternative email");
             } else {
@@ -493,7 +493,7 @@ $("#lenders_age_18_or_more").bind('change', function() {
             }
         } else if (y_n == 2){
             $("span#borrower_contact_by_email_selection").html("Use Alternative Email");
-            if ($("#lenders_email_alternative").val() == '') {
+            if ($("#lender_email_alternative").val() == '') {
                 $("span#email2_contact_error").css("visibility", "visible");
                 $("span#email2_contact_error").text("Please provide an alternative email");
             } else {
@@ -512,49 +512,49 @@ $("#lenders_age_18_or_more").bind('change', function() {
     $("input[name='lender[borrower_contact_by_email]']").trigger('change');
 
 
-    $("#lenders_email_alternative").bind('change', function() {
+    $("#lender_email_alternative").bind('change', function() {
         $("span#email_alternative_selection").html($(this).val());
     });
-    $("#lenders_email_alternative").trigger('change');
+    $("#lender_email_alternative").trigger('change');
 
    
-    $("#lenders_category_id").bind('change', function() {
-        var item_cat = $( "#lenders_category_id option:selected" ).text();
+    $("#lender_category_id").bind('change', function() {
+        var item_cat = $( "#lender_category_id option:selected" ).text();
         $("span#category_selection").html(item_cat);
     });
-    $("#lenders_category_id").trigger('change');
+    $("#lender_category_id").trigger('change');
 
-    $("#lenders_other_item_category").bind('change', function() {
+    $("#lender_other_item_category").bind('change', function() {
         $("span#other_item_category_selection").html($(this).val());
     });
-    $("#lenders_other_item_category").trigger('change');
+    $("#lender_other_item_category").trigger('change');
 
-    $("#lenders_item_model").bind('change', function() {
+    $("#lender_item_model").bind('change', function() {
         $("span#item_model_selection").html($(this).val());
     });
-    $("#lenders_item_model").trigger('change');
+    $("#lender_item_model").trigger('change');
 
-    $("#lenders_item_description").bind('change', function() {
+    $("#lender_item_description").bind('change', function() {
         $("span#item_description_selection").html($(this).val());
     });
-    $("#lenders_item_description").trigger('change');
+    $("#lender_item_description").trigger('change');
 
-    $("#lenders_item_condition_id").bind('change', function() {
-        var item_cat = $( "#lenders_item_condition_id option:selected" ).text();
+    $("#lender_item_condition_id").bind('change', function() {
+        var item_cat = $( "#lender_item_condition_id option:selected" ).text();
         $("span#item_condition_selection").html(item_cat);
     });
-    $("#lenders_item_condition_id").trigger('change');
+    $("#lender_item_condition_id").trigger('change');
 
-    $("#lenders_item_image_caption").bind('change', function() {
+    $("#lender_item_image_caption").bind('change', function() {
         $("span#image_caption_selection").html($(this).val());
     });
-    $("#lenders_item_image_caption").trigger('change');
+    $("#lender_item_image_caption").trigger('change');
 
 
-    $("#lenders_item_count").bind('change', function() {
+    $("#lender_item_count").bind('change', function() {
         $("span#item_count_selection").html($(this).val());
     });
-    $("#lenders_item_count").trigger('change');
+    $("#lender_item_count").trigger('change');
 
     $("input[name='lender[for_free]']").bind('change', function() {
         var y_n = $("input[name='lender[for_free]']:checked").val();
@@ -576,17 +576,17 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("input[name='lender[available_for_purchase]']").trigger('change');
 
-    $("#lenders_available_for_purchase_amount").bind('change', function() {
+    $("#lender_available_for_purchase_amount").bind('change', function() {
         $("span#purchase_amount_selection").html($(this).val());
     });
-    $("#lenders_available_for_purchase_amount").trigger('change');
+    $("#lender_available_for_purchase_amount").trigger('change');
 
 
 
-  $("#lenders_security_deposit_amount").bind('change', function() {
+  $("#lender_security_deposit_amount").bind('change', function() {
         $("span#security_deposit_amount_selection").html($(this).val());
     });
-    $("#lenders_security_deposit_amount").trigger('change');
+    $("#lender_security_deposit_amount").trigger('change');
 
   $("input[name='lender[security_deposit]']").bind('change', function() {
         var y_n = $("input[name='lender[security_deposit]']:checked").val();
@@ -609,10 +609,10 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("input[name='lender[small_fee]']").trigger('change');
 
-    $("#lenders_small_fee_amount").bind('change', function() {
+    $("#lender_small_fee_amount").bind('change', function() {
         $("span#small_fee_amount_selection").html($(this).val());
     });
-    $("#lenders_small_fee_amount").trigger('change');
+    $("#lender_small_fee_amount").trigger('change');
 
     $("input[name='lender[available_for_donation]']").bind('change', function() {
         var y_n = $("input[name='lender[available_for_donation]']:checked").val();
@@ -644,10 +644,10 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("input[name='lender[trade]']").trigger('change');
 
-    $("#lenders_trade_item").bind('change', function() {
+    $("#lender_trade_item").bind('change', function() {
         $("span#trade_item_selection").html($(this).val());
     });
-    $("#lenders_trade_item").trigger('change');
+    $("#lender_trade_item").trigger('change');
 
 
    $("input[name='lender[thirdPartyPresenceL2B]']").bind('change', function() {
@@ -835,69 +835,69 @@ $("#lenders_age_18_or_more").bind('change', function() {
     });
     $("input[name='lender[provide_proper_use_training]']").trigger('change');
 
-    $("#lenders_specific_conditions").bind('change', function() {
+    $("#lender_specific_conditions").bind('change', function() {
         $("span#specific_conditions_selection").html($(this).val());
     });
-    $("#lenders_specific_conditions").trigger('change');
+    $("#lender_specific_conditions").trigger('change');
 
   
 
 /* Beginning of Contact Address */
 
-$("input#lenders_address_line_1").bind('change', function() {
+$("input#lender_address_line_1").bind('change', function() {
 		address1 = $(this).val();
 		$("span#address_1_selection").html($(this).val());
 	});
-	$("input#lenders_address_line_1").trigger('change');
+	$("input#lender_address_line_1").trigger('change');
 
-	$("#lenders_address_line_2").bind('change', function() {
+	$("#lender_address_line_2").bind('change', function() {
 		address2 = $(this).val();
 		$("span#address_2_selection").html($(this).val());
 	});
-	$("#lenders_address_line_2").trigger('change');
+	$("#lender_address_line_2").trigger('change');
 
-	$("#lenders_province").bind('change', function() {
+	$("#lender_province").bind('change', function() {
 		province = $(this).val();
 		$("span#province_selection").html($(this).val());
 
 	});
-	$("#lenders_province").trigger('change');
+	$("#lender_province").trigger('change');
 
-	$("#lenders_city").bind('change', function() {
+	$("#lender_city").bind('change', function() {
 		city = $(this).val();
 		$("span#city_selection").html($(this).val());
 
 	});
-	$("#lenders_city").trigger('change');
+	$("#lender_city").trigger('change');
 
-	$("#lenders_postal_code").bind('change', function() {
+	$("#lender_postal_code").bind('change', function() {
 		postal_code = $(this).val();
 		$("span#postal_code_selection").html($(this).val());
 
 	});
-	$("#lenders_postal_code").trigger('change');
+	$("#lender_postal_code").trigger('change');
 
 	
 
 
-	$("select#lenders_us_state_id").bind('change', function() {
+	$("select#lender_us_state_id").bind('change', function() {
 
-		var statecmb = $("select#lenders_us_state_id option:selected").text();
+		var statecmb = $("select#lender_us_state_id option:selected").text();
 		
 		$("span#us_state_selection").html(statecmb);
 		$("span#us_state_id_selection").html("Region Placeholder");
 		
 
 	});
-	$("select#lenders_us_state_id").trigger('change'); 
+	$("select#lender_us_state_id").trigger('change'); 
 
 
-	$("select#lenders_country_id").bind('change', function() {
+	$("select#lender_country_id").bind('change', function() {
 
-		var country_text = $("select#lenders_country_id option:selected").text();
+		var country_text = $("select#lender_country_id option:selected").text();
 		$("span#country_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-                $("select#lenders_us_state_id option[value='99']" ).attr( "selected", "selected" );
+                $("select#lender_us_state_id option[value='99']" ).attr( "selected", "selected" );
 			$("span#us_state_selection").html('');
 
 			$("div#choose_us_state").css("display", "none");
@@ -911,22 +911,22 @@ $("input#lenders_address_line_1").bind('change', function() {
 		}
 
 	});
-	$("select#lenders_country_id").trigger('change');
+	$("select#lender_country_id").trigger('change');
 
-	$("input#lenders_us_state_id").bind('change', function() {
+	$("input#lender_us_state_id").bind('change', function() {
 		$("span#us_state_id_selection").html($(this).val());
 	});
-	$("input#lenders_us_state_id").trigger('change');
+	$("input#lender_us_state_id").trigger('change');
 
 
   /*Beginning of Alternative Address*/
 	
-	$("select#lenders_country_id_alternative").bind('change', function() {
+	$("select#lender_country_id_alternative").bind('change', function() {
 
-		var country_text = $("select#lenders_country_id_alternative option:selected").text();
+		var country_text = $("select#lender_country_id_alternative option:selected").text();
 		$("span#country_alternative_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-$("select#lenders_us_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
+$("select#lender_us_state_id_alternative option[value='99']" ).attr( "selected", "selected" );
 			$("span#state_alternative_selection").html('');
 			$("div#choose_us_state_alternative").css("display", "none");
 			$("div#provide_country_state_alternative").css("display", "inline");
@@ -939,46 +939,46 @@ $("select#lenders_us_state_id_alternative option[value='99']" ).attr( "selected"
 		}
 
 	});
-	$("select#lenders_country_id_alternative").trigger('change');
+	$("select#lender_country_id_alternative").trigger('change');
 	
 	
-	$("input#lenders_us_state_id_alternative").bind('change', function() {
+	$("input#lender_us_state_id_alternative").bind('change', function() {
 		$("span#us_state_id_alternative_selection").html($(this).val());
 	});
-	$("input#lenders_us_state_id_alternative").trigger('change');
+	$("input#lender_us_state_id_alternative").trigger('change');
 	
-	$("select#lenders_us_state_id_alternative").bind('change', function() {
-		var tmpID = $("select#lenders_us_state_id_alternative option:selected").text();
+	$("select#lender_us_state_id_alternative").bind('change', function() {
+		var tmpID = $("select#lender_us_state_id_alternative option:selected").text();
 		$("span#state_alternative_selection").html(tmpID);
 		});
-	$("select#lenders_us_state_id_alternative").trigger('change');
+	$("select#lender_us_state_id_alternative").trigger('change');
 
 
 
-	$("#lenders_address_line_1_alternative").bind('change', function() {
+	$("#lender_address_line_1_alternative").bind('change', function() {
 		$("span#address_1_alternative_selection").html($(this).val());
 	});
-	$("#lenders_address_line_1_alternative").trigger('change');
+	$("#lender_address_line_1_alternative").trigger('change');
 
-	$("#lenders_address_line_2_alternative").bind('change', function() {
+	$("#lender_address_line_2_alternative").bind('change', function() {
 		$("span#address_2_alternative_selection").html($(this).val());
 	});
-	$("#lenders_address_line_2_alternative").trigger('change');
+	$("#lender_address_line_2_alternative").trigger('change');
 
-	$("#lenders_province_alternative").bind('change', function() {
+	$("#lender_province_alternative").bind('change', function() {
 		$("span#province_alternative_selection").html($(this).val());
 	});
-	$("#lenders_province_alternative").trigger('change');
+	$("#lender_province_alternative").trigger('change');
 
-	$("#lenders_city_alternative").bind('change', function() {
+	$("#lender_city_alternative").bind('change', function() {
 		$("span#city_alternative_selection").html($(this).val());
 	});
-	$("#lenders_city_alternative").trigger('change');
+	$("#lender_city_alternative").trigger('change');
 	
-	$("#lenders_postal_code_alternative").bind('change', function() {
+	$("#lender_postal_code_alternative").bind('change', function() {
 		$("span#postal_code_alternative_selection").html($(this).val());
 	});
-	$("#lenders_postal_code_alternative").trigger('change');
+	$("#lender_postal_code_alternative").trigger('change');
 
 });
 
@@ -1001,10 +1001,10 @@ function validateUseWhichLenderContactAddress() {
     var use_which_ca = $("input[name='lender[useWhichContactAddress]']:checked").val();
 	if ((use_which_ca == 1) || (use_which_ca == 2)) {
 
-	if	( ($("#lenders_address_line_1_alternative").val() == "") || 
-		  ($("#lenders_postal_code_alternative").val() == "") || 
-		($("#lenders_city_alternative").val() == "") || 
-		($("#lenders_country_id_alternative option:selected").text() == "Please select"))  {
+	if	( ($("#lender_address_line_1_alternative").val() == "") || 
+		  ($("#lender_postal_code_alternative").val() == "") || 
+		($("#lender_city_alternative").val() == "") || 
+		($("#lender_country_id_alternative option:selected").text() == "Please select"))  {
 			return_value = false;
 		}	
 }	
@@ -1015,8 +1015,8 @@ function validateUseWhichLenderContactAddress() {
 function checkLLegal() {
 
     var notChecked = true;
-    var legal_18 = $("#lenders_age_18_or_more");
-    var legal_goodwill = $("#lenders_goodwill");
+    var legal_18 = $("#lender_age_18_or_more");
+    var legal_goodwill = $("#lender_goodwill");
 
     if (!(legal_18.is (':checked'))) {
         notChecked = false;
@@ -1113,7 +1113,7 @@ function saveAll() {
         return;
     } else {
         
-        $("#lenders_is_active").val('1');
+        $("#lender_is_active").val('1');
         $("form.lender_offering").submit();
     }
     return;
@@ -1156,9 +1156,9 @@ function showBorrowersContactPreferences() {
 
     var foundInvalid = validateContactPreferences();
     
-    var home_phone_contact = $("#lenders_home_phone");
-    var cell_phone_contact = $("#lenders_cell_phone");
-    var alternative_phone_contact = $("#lenders_alternative_phone");
+    var home_phone_contact = $("#lender_home_phone");
+    var cell_phone_contact = $("#lender_cell_phone");
+    var alternative_phone_contact = $("#lender_alternative_phone");
 
     if ((home_phone_contact.val() == '') && (cell_phone_contact.val() == '') && (alternative_phone_contact.val() == ''))  {
         $("div#byYourPhone").css("display", "none");
@@ -1211,7 +1211,7 @@ function validateContactPreferences() {
 	$("span.error").css("visibility", "hidden");
 	
 	y_n = $("input[name='lender[displayLenderOrganizationName]']:checked").val();
-	if ((y_n == 1) && ($("#lenders_organization_name").val() == "")) {
+	if ((y_n == 1) && ($("#lender_organization_name").val() == "")) {
 		$("span#organization_name_error").text("Please provide an organization name.");
 		$("span#organization_name_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -1220,10 +1220,10 @@ function validateContactPreferences() {
 	y_n = $("input[name='lender[displayLenderAddress]']:checked").val();
 	if (y_n == 1) {
 	if (
-		($("#lenders_address_line_1").val() == "") || 
-		($("#lenders_postal_code").val() == "") || 
-		($("#lenders_city").val() == "") || 
-		($("#lenders_country_id option:selected").text() == "Please select")
+		($("#lender_address_line_1").val() == "") || 
+		($("#lender_postal_code").val() == "") || 
+		($("#lender_city").val() == "") || 
+		($("#lender_country_id option:selected").text() == "Please select")
 	) {
 		
 		$("span#display_address_error").text("Please provide a complete address.");
@@ -1236,8 +1236,8 @@ function validateContactPreferences() {
 	y_n = $("input[name='lender[displayLenderName]']:checked").val();
 	if (y_n == 1) {
 	if (
-		($("#lenders_first_name").val() == "") || 
-		($("#lenders_last_name").val() == "") 
+		($("#lender_first_name").val() == "") || 
+		($("#lender_last_name").val() == "") 
 	) {
 		
 		$("span#public_display_name_error").text("Please provide a complete name.");
@@ -1248,13 +1248,13 @@ function validateContactPreferences() {
 		
 	
 	
-	if ($("#lenders_describe_yourself option:selected").text() == "Please select") {
+	if ($("#lender_describe_yourself option:selected").text() == "Please select") {
 		$("#describe_yourself_combo_error").text("Please choose an option to describe yourself.");
 		$("#describe_yourself_combo_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if (($("#lenders_describe_yourself option:selected").text() == "Other") && ($("#lenders_other_describe_yourself").val() == "")) {
+	if (($("#lender_describe_yourself option:selected").text() == "Other") && ($("#lender_other_describe_yourself").val() == "")) {
 
 		$("#other_describe_yourself_error").text("Other description is required.");
 		$("#other_describe_yourself_error").css("visibility", "visible");
@@ -1264,46 +1264,46 @@ function validateContactPreferences() {
 		$("#other_describe_yourself_error").css("visibility", "hidden");
 	}
 
-	if ($("#lenders_first_name").val() == "") {
+	if ($("#lender_first_name").val() == "") {
 		$("#first_name_error").text("First name is required.");
 		$("#first_name_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#lenders_last_name").val() == "") {
+	if ($("#lender_last_name").val() == "") {
 		$("#last_name_error").text("Last name is required.");
 		$("#last_name_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#lenders_city").val() == "") {
+	if ($("#lender_city").val() == "") {
 		$("#city_error").text("City name is required.");
 		$("#city_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#lenders_address_line_1").val() == "") {
+	if ($("#lender_address_line_1").val() == "") {
 		$("#address_line_1_error").text("Address Line 1 is required.");
 		$("#address_line_1_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#lenders_postal_code").val() != "") {
+	if ($("#lender_postal_code").val() != "") {
 		var re = /^[A-Za-z]+$/;
-		if (re.test(document.getElementById("lenders_postal_code").value)) {
+		if (re.test(document.getElementById("lender_postal_code").value)) {
 			$("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
 			$("#postal_code_error").css("visibility", "visible");
 			foundInvalid = false;
 		}
 	}
 
-	if ($("#lenders_postal_code").val() == "") {
+	if ($("#lender_postal_code").val() == "") {
 		$("#postal_code_error").text("Postal code is required.");
 		$("#postal_code_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#lenders_country_id option:selected").text() == "Please select") {
+	if ($("#lender_country_id option:selected").text() == "Please select") {
 		$("#country_error").text("Please select a Country.");
 		$("#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -1311,13 +1311,13 @@ function validateContactPreferences() {
 
 
 
-	if ( ($("#lenders_country_id option:selected").text() == "Please select")   &&  ($("input#lenders_us_state_id").val() == "")) {
+	if ( ($("#lender_country_id option:selected").text() == "Please select")   &&  ($("input#lender_us_state_id").val() == "")) {
 		$("#state_error").text("Please provide a Region.");
 		$("#state_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 	
-	if ((($("#lenders_us_state_id option:selected").text() == "Please select") || ($("#lenders_us_state_id option:selected").val() == '')) && ($("#lenders_country_id option:selected").text() == "United States")) {
+	if ((($("#lender_us_state_id option:selected").text() == "Please select") || ($("#lender_us_state_id option:selected").val() == '')) && ($("#lender_country_id option:selected").text() == "United States")) {
 
 		$("#state_error").text("Please select a State.");
 		$("#state_error").css("visibility", "visible");

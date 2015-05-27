@@ -6,8 +6,7 @@ class LenderController < ApplicationController
     if params[:lenders]
 		create
     else
-
- @lender = Lender.new
+   @lender = Lender.new
 	end
  
 end
@@ -22,12 +21,6 @@ end
           :first_name => 'NA',
           :last_name => 'NA',
           :displayLenderName => 0,
-          :address_line_1 => "NA",
-          :us_state_id=> @req[:us_state_id].to_s,
-          :region=> @req[:region],
-          :country_id=> @req[:country_id].to_s,
-          :city => @req[:city].to_s,
-          :postal_code => @req[:postal_code].to_s,
           :displayLenderAddress  => 0,
           :useWhichContactAddress => 0,
           :email_alternative=> @req[:email_alternative],
@@ -99,7 +92,7 @@ end
       session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-        @lender = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
+        @lender = Lender.find(:all, :readonly, :conditions => ["id = ?", params[:id]])
      
       end
       
@@ -116,7 +109,7 @@ end
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
 	      session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @lender = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
+        @lender = Lender.find(:all, :readonly, :conditions => ["id = ?", params[:id]])
       end
       
       if @lender.blank? || params[:id].blank?
@@ -184,7 +177,7 @@ end
     if params[:id].blank?
       @lender = Lender.new
     else
-      @lender = Lender.find(:all, :conditions => ["lender_id = ?", params[:id]])
+      @lender = Lender.find(:all, :conditions => ["id = ?", params[:id]])
       if @lender.blank?
         @lender = Lender.new
         
@@ -208,7 +201,7 @@ end
   def update_lender_offering
     session[:notice] = ''
     unless params[:lenders].blank?
-      if (params[:lenders][:lender_id].blank?)  ## then it is a new record
+      if (params[:lenders][:id].blank?)  ## then it is a new record
 
         @req = params[:lenders]
 
@@ -316,10 +309,10 @@ end
               :is_active => 1)
             @img.save
           end
-          puts "Save okay with picture"
+          
           redirect_to  :action => 'lender_history', :id => session[:user_id], :commit => ""
         else
-          puts "Returning false becuase save failed"
+          
           return false
         end
       
@@ -436,10 +429,10 @@ end
             @img.update_attributes(@myupdatehash[0])
             @img.save
           end
-          puts "fdgfgdgfgdfgfgf"
+          
           redirect_to  :action => 'lender_history', :id => session[:user_id], :commit => ""
         else
-          puts "Failed to save lender record"
+          
           return false
         end
       end
@@ -453,10 +446,10 @@ end
   def get_random_password
     length = 8
     characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
-    @password = SecureRandom.random_bytes(length).each_char.map do |char|
+    @id = SecureRandom.random_bytes(length).each_char.map do |char|
       characters[(char.ord % characters.length)]
     end.join
-    @password
+    @id
   end
 
 end

@@ -1,16 +1,25 @@
 class Lender < ActiveRecord::Base
   
-  attr_accessible :addresses_attributes, :item_image_attributes
-  has_one :item_image, dependent: :destroy
+  attr_accessible :addresses_attributes, :item_image_attributes, :primary_address_attributes, :alternative_address_attributes
+  has_one :primary_address, :class_name => 'Address'
+  has_one :alternative_address, :class_name => 'Address'
   has_many :addresses, dependent: :destroy
+  has_one :item_image, dependent: :destroy
+  has_one :item_condition
+  has_one :category
+  has_one :country
+  has_one :us_state
+  has_one :contact_describe
+  has_one :user
   accepts_nested_attributes_for :item_image
   accepts_nested_attributes_for :addresses
-  
-  before_create :get_lender_primary_key_value
+  accepts_nested_attributes_for :primary_address
+  accepts_nested_attributes_for :alternative_address
+  before_create :get_primary_key_value
 
   protected
   
-  def get_lender_primary_key_value
+  def get_primary_key_value
     if self.id.blank?
     self.id = get_random
     end

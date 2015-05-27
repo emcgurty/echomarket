@@ -13,9 +13,9 @@
 <% if not @lender.blank?  %>
 <div style="display:none;">
 	<% if session[:reuse] %>
-	<%= nf.hidden_field( :lender_id, :value=>'') %>
+	<%= nf.hidden_field( :id, :value=>'') %>
 	<% else %>
-	<%= nf.hidden_field( :lender_id) %>
+	<%= nf.hidden_field( :lender_id, :value => @lender.id) %>
 	<% end %>
 	<%= nf.hidden_field( :is_active) %>
 	<%= nf.hidden_field( :user_id) %>
@@ -85,7 +85,7 @@
 				<div style="display:inline-block;vertical-align:top;">
 					<label>Public Display Organization Name?:</label>
 					<%= render :partial => 'layouts/yes_no', :locals =>
-					{:object=> "lenders", :field=> "displayLenderOrganizationName", :radio_id => "public_display_organization_name", :radio_num => "publicdisplayorganizationname", :which_class=>"radio", :onchange_call => ""} %>
+					{:object=> "lender", :field=> "displayLenderOrganizationName", :radio_id => "public_display_organization_name", :radio_num => "publicdisplayorganizationname", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error" id="public_display_organization_name_error">&nbsp;</span>
 				</div></td>
 
@@ -121,7 +121,7 @@
 				<td style="width:25%;">
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Name?:</label>
-					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
+					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit => true, :field=> "displayLenderName", :radio_id => "public_display_name", :radio_num => "publicdisplayname", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error" id="public_display_name_error">&nbsp;</span>
 				</div></td>
 
@@ -189,7 +189,7 @@
 				<td style="width:25%;">
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Address?:</label>
-					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "lenders",:edit => true, :field=> "displayLenderAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
+					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "lender",:edit => true, :field=> "displayLenderAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error" id="display_address_error">&nbsp;</span>
 				</div></td>
 			</tr>
@@ -234,7 +234,7 @@
 		<% end %>
 		<div id="postalWithContactAddress" style="display: <%= display_div %>;">
 			<%= render :partial => 'layouts/with_contact_address', :locals =>
-			{:object => "lenders", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'lenders');"} %>
+			{:object => "lender", :field=>"useWhichContactAddress", :radio_id => "useWhichContactAddress", :radio_num => "useWhichContactAddress", :which_class=>"radio", :onchange_call => "noNotContactAddress(this, 'lenders');"} %>
 		</div>
 
 	</div>
@@ -318,7 +318,7 @@
 				<div >
 					<label>Which E-Mail Address?:</label>
 					<%= render :partial => 'layouts/contact_email', :locals =>
-					{:object => "lenders", :field=>"borrower_contact_by_email", :radio_id => "borrower_contact_email", :which_class=>"radio"} %>
+					{:object => "lender", :field=>"borrower_contact_by_email", :radio_id => "borrower_contact_email", :which_class=>"radio"} %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 			</tr>
@@ -423,7 +423,7 @@
 	</div>
 	<div style="float:left;width:92%;padding-left: 25px;padding-top: 5px;margin-left:25px;background-color:#C2B9BC;">
 		<label for="agreed_location_radio">Meet with borrower at an agreed location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true,:field=>"meetBorrowerAtAgreedL2B", :radio_id => "agreed_location_radio", :radio_num => "agreedlocationradio", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=>true,:field=>"meetBorrowerAtAgreedL2B", :radio_id => "agreed_location_radio", :radio_num => "agreedlocationradio", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 	<div   class="div_white" >
@@ -431,7 +431,7 @@
 	</div>
 	<div style="float:left;width:92%;padding-left: 25px;padding-top: 5px;margin-left:25px;background-color:#CFBDAE;">
 		<label for="borrower_preferred_location_radio">Will deliver to borrower preferred location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true,:field=>"willDeliverToBorrowerPreferredL2B", :radio_id => "borrower_preferred_location_radio", :radio_num => "borrowerpreferredlocationradio", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=>true,:field=>"willDeliverToBorrowerPreferredL2B", :radio_id => "borrower_preferred_location_radio", :radio_num => "borrowerpreferredlocationradio", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 	<div   class="div_white" >
@@ -440,7 +440,7 @@
 
 	<div style="float:left;width:92%;padding-left: 25px;padding-top: 5px;margin-left:25px;background-color:#C2B9BC;">
 		<label for="third_party_present_lender">Would you like a third-party present during transfer to borrower?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true, :field=>"thirdPartyPresenceL2B", :radio_id => "third_party_present_lender", :radio_num => "thirdpartypresentlender", :which_class=>"radio",
+		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=>true, :field=>"thirdPartyPresenceL2B", :radio_id => "third_party_present_lender", :radio_num => "thirdpartypresentlender", :which_class=>"radio",
 		:onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
@@ -453,11 +453,11 @@
 	<div style="float:left;width:92%;padding-left: 25px;padding-top:5px;margin-left:25px;background-color:#E1F5A9;display:<%= display_div  %>;" id="which_delivery_locationL2B_div">
 		<div class="column30">
 			<label  for="which_delivery_location_lender">Your choice?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true, :field=> "lenderThirdPartyChoiceL2B",:radio_id => "which_delivery_location_lender", :radio_num => "whichdeliverylocationlender", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=>true, :field=> "lenderThirdPartyChoiceL2B",:radio_id => "which_delivery_location_lender", :radio_num => "whichdeliverylocationlender", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 		<div class="column30">
 			<label  for="mutually_agreed_radio_lender">Mutually agreed?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=>true, :field=>"agreedThirdPartyChoiceL2B", :radio_id => "mutually_agreed_radio_lender", :radio_num => "mutuallyagreedradiolender", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=>true, :field=>"agreedThirdPartyChoiceL2B", :radio_id => "mutually_agreed_radio_lender", :radio_num => "mutuallyagreedradiolender", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 	</div>
 
@@ -477,25 +477,25 @@
 	<label class="personal" style="margin-left:55px;">How would like borrower(s) to return your item?</label>
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Borrower returns to your...:</label>
-		<%= render :partial => 'layouts/borrower_returns_to_address', :locals => {:object => "lenders",:radio_id => "delivery_address_checkbox_borrower", :which_class=>"radio" } %>
+		<%= render :partial => 'layouts/borrower_returns_to_address', :locals => {:object => "lender",:radio_id => "delivery_address_checkbox_borrower", :which_class=>"radio" } %>
 		<span class="error">&nbsp;</span>
 	</div>
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Will meet with borrower at an agreed location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true, :field=>"meetBorrowerAtAgreedB2L",:radio_id => "agreed_location_radio_borrower", :radio_num => "agreedlocationradioborrower", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=> true, :field=>"meetBorrowerAtAgreedB2L",:radio_id => "agreed_location_radio_borrower", :radio_num => "agreedlocationradioborrower", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Will pick up at borrower's location?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true,:field=>"willPickUpPreferredLocationB2L",:radio_id => "borrower_location_pick_up", :radio_num => "borrowerlocationpickup", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=> true,:field=>"willPickUpPreferredLocationB2L",:radio_id => "borrower_location_pick_up", :radio_num => "borrowerlocationpickup", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 		<label >Would you like a third-party present during transfer from borrower?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true,:field=>"thirdPartyPresenceB2L",:radio_id => "third_party_present_borrower", :radio_num => "thirdpartypresentborrower", :which_class=>"radio",
+		<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=> true,:field=>"thirdPartyPresenceB2L",:radio_id => "third_party_present_borrower", :radio_num => "thirdpartypresentborrower", :which_class=>"radio",
 		:onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
@@ -510,12 +510,12 @@
 		<div class="column30" >
 
 			<label >Your choice?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",:edit=> true,:field=>"lenderThirdPartyChoiceB2L",:radio_id => "your_choice_location_radio_borrower", :radio_num => "lenderThirdPartyChoiceB2L", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",:edit=> true,:field=>"lenderThirdPartyChoiceB2L",:radio_id => "your_choice_location_radio_borrower", :radio_num => "lenderThirdPartyChoiceB2L", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 
 		<div class="column30" >
 			<label >Mutually agreed?:</label>
-			<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"agreedThirdPartyChoiceB2L",:radio_id => "mutually agreed_radio_borrower", :radio_num => "agreedThirdPartyChoiceB2L", :which_class=>"radio", :onchange_call => ""} %>
+			<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"agreedThirdPartyChoiceB2L",:radio_id => "mutually agreed_radio_borrower", :radio_num => "agreedThirdPartyChoiceB2L", :which_class=>"radio", :onchange_call => ""} %>
 		</div>
 	</div>
 
@@ -542,9 +542,8 @@
 			<td style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;">
 				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> 
-					<%= nf.fields_for :category do |cat| %>
-					<%= cat.collection_select(:category_id, Category.all, :category_id, :category_type %>
-					<% end %>
+					<%= nf.collection_select(:category_id, Category.all, :id, :category_type %>
+					
 					</label>
 				     <span class="error" id="category_id_error">Choose a 'Category'.</span>
 
@@ -567,7 +566,7 @@
 			<td colspan='2'>
 			<div style="margin-left:25px;margin-top:5px;">
 				<label>Based on this category, would you like to notify borrowers seeking items in this category?:&nbsp;
-					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lenders",
+					<%= render :partial => 'layouts/yes_no', :locals => {:object=> "lender",
 					:field=>"notify_borrowers",:radio_id => "notify_borrowers", :radio_num => "notify_borrowers1", :which_class=>"radio", :onchange_call => ""} %></label>
 			</div></td>
 		</tr>
@@ -584,9 +583,8 @@
 				<label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
 
 				<% unless @lender.item_condition_id.blank? %>
-				<%= nf.fields_for :item_condition do |ic|  %>
-				<%  ic.collection_select(:item_condition_id, Itemcondition.all, :iten_condition_id, :condition) %>
-				<%= end %>
+				<%  nf.collection_select(:item_condition_id, Itemcondition.all, :id, :condition) %>
+				
 				<span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
 			</div></td>
 		</tr>
@@ -605,7 +603,7 @@
 			</div></td>
 		</tr>
 
-		<%= nf.fields_for :itemimage do |ii| %>
+		<%= fields_for :itemimage do |ii| %>
 		
 		<tr class="odd">
 			<td  style="width:50%;">
@@ -618,7 +616,7 @@
 			<div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
 				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
 				<label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
-				<%= nf.text_field( :item_image_caption) %>
+				<%= ii.text_field( :item_image_caption) %>
 			</div></td>
 		</tr>
 		
@@ -645,7 +643,7 @@
 				<span class="file_image_error">&nbsp;</span>
 				<img id="imagePreview" height="100" width="200" src="" alt="New uploaded image file" />
 				<label>If you'd like, provide an updated caption for your item image<span class="max_length">(50)</span></label>
-				<%= nf.text_field( :item_image_caption) %>
+				<%=ii.text_field( :item_image_caption) %>
 			</div></td>
 		</tr>
 		<% end %>
@@ -678,7 +676,7 @@
 			<td>
 			<div style="display:inline-table;margin-top:5px;margin-left:25px;">
 				<label for="for_free_radio" class="personal">For free?</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object=>"lenders" ,:edit=> true,:field=>"for_free",:radio_id => "for_free_radio", :radio_num => "forfreeradio", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object=>"lender" ,:edit=> true,:field=>"for_free",:radio_id => "for_free_radio", :radio_num => "forfreeradio", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td>
@@ -690,7 +688,7 @@
 			<td>
 			<div style="margin-top:5px;margin-left:25px;">
 				<label class="personal">Small borrowing fee?:</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"small_fee",:radio_id => "small_fee_radio", :radio_num => "smallfeeradio", :which_class=>"radio", :onchange_call => "" } %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"small_fee",:radio_id => "small_fee_radio", :radio_num => "smallfeeradio", :which_class=>"radio", :onchange_call => "" } %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td>
@@ -704,7 +702,7 @@
 			<td>
 			<div style="margin-top:5px;margin-left:25px;">
 				<label class="personal">Item may be available for small purchase amount?:</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"available_for_purchase",:radio_id => "small_purchase_amount_radio", :radio_num => "available_for_purchase", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"available_for_purchase",:radio_id => "small_purchase_amount_radio", :radio_num => "available_for_purchase", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td>
@@ -718,13 +716,13 @@
 			<td>
 			<div style="margin-top:5px;margin-left:25px;">
 				<label class="personal">Item may be available for donation?:</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"available_for_donation",:radio_id => "available_for_donation_radio", :radio_num => "availablefordonationradio", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"available_for_donation",:radio_id => "available_for_donation_radio", :radio_num => "availablefordonationradio", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td>
 			<div style="margin-top:5px;margin-left:25px;">
 				<label class="personal">If yes, would you like to anonymously donate?:</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"donate_anonymous",:radio_id => "anonymous_donation_radio", :radio_num => "anonymousdonationradio", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"donate_anonymous",:radio_id => "anonymous_donation_radio", :radio_num => "anonymousdonationradio", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 		</tr>
@@ -732,7 +730,7 @@
 			<td>
 			<div style="margin-top:5px;margin-left:25px;">
 				<label class="personal">Would you be interesting in trading?:</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"trade",:radio_id => "trading_radio", :radio_num => "tradingradio", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"trade",:radio_id => "trading_radio", :radio_num => "tradingradio", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td>
@@ -746,7 +744,7 @@
 			<td>
 			<div style="margin-top:5px;margin-left:25px;">
 				<label class="personal">Do you require a security deposit?:</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"security_deposit",:radio_id => "security_deposit_radio", :radio_num => "securitydepositradio", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"security_deposit",:radio_id => "security_deposit_radio", :radio_num => "securitydepositradio", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td>
@@ -769,17 +767,17 @@
 <div id="form_duration" class="contact_information" style="display:none;">
 	<div style="float:left;width:33%;margin-left:25px;">
 		<label class="personal">Agreed number of days?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"agreed_number_of_days",:radio_id => "agreed_number_of_days", :radio_num => "agreed_number_of_days", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"agreed_number_of_days",:radio_id => "agreed_number_of_days", :radio_num => "agreed_number_of_days", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 	<div style="float:left;">
 		<label class="personal">Agreed number of hours?:</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"agreed_number_of_hours",:radio_id => "agreed_number_of_hours", :radio_num => "agreed_number_of_hours", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"agreed_number_of_hours",:radio_id => "agreed_number_of_hours", :radio_num => "agreed_number_of_hours", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 	<div style="float:left;margin-left:40px;">
 		<label class="personal">Indefinite?</label>
-		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"indefinite_duration",:radio_id => "indefinite", :radio_num => "indefinite", :which_class=>"radio", :onchange_call => ""} %>
+		<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"indefinite_duration",:radio_id => "indefinite", :radio_num => "indefinite", :which_class=>"radio", :onchange_call => ""} %>
 		<span class="error">&nbsp;</span>
 	</div>
 	<div class="bottom">
@@ -810,12 +808,12 @@
 			<div style="display:<%= display_div %>;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
 				<div style="margin-left:25px;margin-top:5px;margin-right:10px;">
 					<label >During the entire lending period?:</label>
-					<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"entire_period",:radio_id => "present_entire", :radio_num => "present_entire", :which_class=>"radio", :onchange_call => ""} %>
+					<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"entire_period",:radio_id => "present_entire", :radio_num => "present_entire", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error">&nbsp;</span>
 				</div>
 				<div style="margin-left:25px;margin-top:5px;margin-right:10px;">
 					<label >During lending period partially?:</label>
-					<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"partial_period",:radio_id => "present_partial", :radio_num => "present_partial", :which_class=>"radio", :onchange_call => ""} %>
+					<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"partial_period",:radio_id => "present_partial", :radio_num => "present_partial", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error">&nbsp;</span>
 				</div>
 			</div></td>
@@ -824,7 +822,7 @@
 			<td style="vertical-align:top;">
 			<div style="margin-left:25px;margin-top:5px;">
 				<label >Would you like to provide item proper-use training?</label>
-				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lenders",:edit=> true,:field=>"provide_proper_use_training",:radio_id => "proper_use", :radio_num => "proper_use", :which_class=>"radio", :onchange_call => ""} %>
+				<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"provide_proper_use_training",:radio_id => "proper_use", :radio_num => "proper_use", :which_class=>"radio", :onchange_call => ""} %>
 				<span class="error">&nbsp;</span>
 			</div></td>
 			<td style="vertical-align:top;">
