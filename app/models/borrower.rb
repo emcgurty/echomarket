@@ -16,21 +16,8 @@ class Borrower < ActiveRecord::Base
   has_many :addresses, dependent: :destroy
   has_one :primary_address, :class_name => 'Address'
   has_one :alternative_address, :class_name => 'Address'
-    
   has_one :item_image, dependent: :destroy
-  has_one :item_condition
-  has_one :category
-  has_one :country
-  has_one :us_state
-  has_many :users
-  has_one :contact_describe
-  
   accepts_nested_attributes_for :item_image
-  accepts_nested_attributes_for :item_condition
-  accepts_nested_attributes_for :category
-  accepts_nested_attributes_for :country
-  accepts_nested_attributes_for :us_state
-  accepts_nested_attributes_for :users
   accepts_nested_attributes_for :addresses
   before_create :get_borrower_primary_key_value
 

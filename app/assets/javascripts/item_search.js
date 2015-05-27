@@ -130,13 +130,13 @@
 			var mystr = "";
 
 			if (data) {
-				///alert("Data found");
+				alert("Data found");
 				if (data.error_msg) {
 					//errorDiv.text(data.error_msg);
 					///alert("No error okay");
 				}
 				else {
-					///alert(data.zip_codes);
+					alert(data.zip_codes);
 					$.each(data.zip_codes, function(i, zip) {
 						mystr = mystr + "'" + zip.zip_code + "',";
 					});

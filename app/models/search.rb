@@ -21,16 +21,24 @@ attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :l
 private
 
 def find_borrowers
-
-  borrowers = Borrower.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') ).addresses.all
+puts postal_code
+puts postal_code.present?
+  if postal_code.present?
+    borrowers = Borrower.joins(:addresses).where([getUserType, conditions].join(' AND ') )
+  else
+    borrowers = Borrower.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') )
+  end    
   
 
 end
 
 def find_lenders
 
-  lenders = Lender.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') ).addresses.all
-
+  if postal_code.present?
+    lenders = Lender.joins(:addresses).where([getUserType, conditions].join(' AND ') )
+  else
+    lenders = Lender.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') )
+  end  
 end
 
 
