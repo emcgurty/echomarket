@@ -200,12 +200,13 @@
 		 </td>
 		<td>
 		<% if @search.lender_or_borrower == 2 %>	
-		<%= pc = Borrower.find(isq.id.to_s).addresses.select("postal_code") %>
-		<%= puts pc.to_yaml %>
-		<%= (pc.blank? ? "NA": pc.postal_code) %>
+			<%= @pc = Address.find(:first, :select=> "postal_code", :readonly=> true, :conditions => ["borrower_id = ?", isq.id]) %>
+			<%= (@pc.blank? ? "NA": @pc.postal_code) %>
+		
 		<% elsif @search.lender_or_borrower == 1 %>	
-		<%= pc = Lender.find(isq.id.to_s).addresses.select("postal_code") %>
-		<%= (pc.blank? ? "NA": pc[:postal_code]) %>
+			<%= @pc = Address.find(:first, :select=> "postal_code", :readonly=> true, :conditions => ["lender_id = ?", isq.id]) %>
+			<%= (pc.blank? ? "NA": @pc.postal_code) %>
+		
 		<% end %>
 		</td>
 		<td> 
