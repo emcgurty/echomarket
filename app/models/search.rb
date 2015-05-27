@@ -10,9 +10,9 @@ attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :l
   def get_items
     
     if lender_or_borrower == 2
-    @borrowers ||= find_borrowers
+    @borrower ||= find_borrowers
     elsif lender_or_borrower == 1
-    @lenders ||= find_lenders
+    @lender ||= find_lenders
     end  
   end
 
@@ -21,8 +21,7 @@ attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :l
 private
 
 def find_borrowers
-puts postal_code
-puts postal_code.present?
+
   if postal_code.present?
     borrowers = Borrower.joins(:addresses).where([getUserType, conditions].join(' AND ') )
   else

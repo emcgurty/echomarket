@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'lender_offering.js' %>
 <%  rowCount = 1 %>
-<%= form_for @lenders, :url=> {:controller=>"lender", :action => "lender_history"}, :html=> {:class=>"lender_history", :id=>"lenders_item_form"} do |nf| %>
+<%= form_for @lender, :url=> {:controller=>"lender", :action => "lender_history"}, :html=> {:class=>"lender_history", :id=>"lenders_item_form"} do |nf| %>
 
  <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
@@ -21,13 +21,13 @@
         </tr>
         
 
-        <% @lenders.each do |isq| %>
+        <% @lender.each do |isq| %>
 
           <% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
           <%  rowCount = rowCount + 1 %>
           <tr class="<%= rowClass %>" >
             <td>
-               <%= (isq.category_id.blank? ? "No Item Category provided" : @cats.category_type) %>
+               <%= (isq.category_type.blank? ? "No Item Category provided" : isq.category_type) %>
             </td>
             <td>
               <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
@@ -35,7 +35,7 @@
               <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
             <td>
             
-              <%= (isq.category_id.blank? ? "No Item Condition provided" : @cond.conditions) %>
+              <%= (isq.condition.blank? ? "No Item Condition provided" : isq.condition) %>
             </td>
             <td>
               <%= (isq.date_created.blank? ? "NA": isq.date_created.strftime("%m/%d/%Y %I:%M%p")) %> <br style="margin:0;"/>

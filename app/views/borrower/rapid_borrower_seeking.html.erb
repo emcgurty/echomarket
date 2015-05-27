@@ -2,14 +2,11 @@
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "rapid_borrower_seeking", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "rapid_borrower_seeking", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
 
-<% unless @borrowers[0].blank? %>
-<% @borrowers = @borrowers[0] %>
+<% unless @borrower[0].blank? %>
+<% @borrower = @borrower[0] %>
 <% end  %>
-
-<%= "LI B "  %>
-	<%= @borrowers.includes(:addresses).to_yaml %>
 
 
 <div style="display:none;">
@@ -45,7 +42,15 @@
 </div>
 
 
-<% nf.fields_for :addresses do |adr| %>
+<% fields_for :addresses do |adr| %>
+
+<div style="display:none;">
+	<%= adr.hidden_field( :lender_id, :value ="") %>
+	<%= adr.hidden_field( :borrower_id, :value = @borrower.id) %>
+	<%= adr.hidden_field( :address_line_1, :value = "NA") %>
+	<%= adr.hidden_field( :city, :value = "NA") %>
+	<%= adr.hidden_field( :address_type, :value = "primary") %>
+</div>
 
 <div style="float:left;;width:92%;">
 	<label>Your Postal Code: </label>
@@ -53,13 +58,10 @@
 	<%= adr.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
 </div>
 
-
 <div style="float:left;;width:92%;">
 	<div class="column50_rapid"> 
 	<label>Your Country:</label>
-	<%= adr.fields_for :country_id do |ct| %>
-	<%= ct.collection_select :country_id, Country.all, :country_id, :country_name %>
-	<% end  %>
+	 <%= adr.collection_select :country_id, Country.all, :id, :country_name %>
 	</div>
 
 	
@@ -67,32 +69,26 @@
     <div class="column50_rapid">
 	<label>Your State or Region: </label>
 	<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
-		<%= adr.fields_for :us_state_id do |st| %>
-		<%= st.collection_select :us_state_id, UsState.all, :us_state_id, :state_name %>
-		<% end  %>
+		<%= adr.collection_select :us_state_id, UsState.all, :id, :state_name %>
 	</div>
-	
 
-	
-	
-	<% unless @borrowers.us_state_id.blank? %>
+	<% unless Borrower.find(@Borrrowers.id).addresses.select('region').blank? %>
 	<% display_us_state_id = 'inline' %>
 	<% else %>
 	<% display_us_state_id = 'none' %>
 	<% end %>
 	<div id="provide_country_state" style="display:<%= display_us_state_id %>;" >
-		<%= adr.text_field(:us_state_id, :maxlength=>40, :size=>25) %>
+		<%= adr.text_field(:region, :maxlength=>40, :size=>25) %>
 	</div>
 	</div>
 </div>
 <% end %>
+
 <div style="float:left;width:92%;">
 
-
 <div class="column50_rapid"><label>Item Category:
-<%= nf.fields_for :category_id do |cat| %>
-<%= cat.collection_select :category_id, Category.all, :category_id, :category_type %></label>
-<% end  %> 
+<%= nf.collection_select :category_id, Category.all, :id, :category_type %></label>
+ 
 </div>
 
 <div class="column50_rapid"> 
@@ -122,9 +118,7 @@
 
 <div class="column50_rapid">
 <label>The Condition of Item:
-<%= nf.fields_for :item_condition_id do |ic| %>
-<%= ic.collection_select :item_condtion_id, Itemcondition.all, :item_condition_id, :condition %>
-<% end  %>
+<%= nf.collection_select :item_condition_id, ItemCondition.all, :id, :condition %>
 </div>
 
 <div class="column50_rapid">

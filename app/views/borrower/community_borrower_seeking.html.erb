@@ -2,13 +2,13 @@
 <%= javascript_include_tag 'bl_util.js', :type => "text/javascript" %>
 
 <%= render :partial => 'menus/borrowers_menu' %>
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "update_borrower_seeking"},
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "update_borrower_seeking"},
  :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
 
-  <%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrowers}  %>
-  <% unless @borrowers[0].blank? %>
-		<% @borrowers = @borrowers[0] %>
+  <%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrower}  %>
+  <% unless @borrower[0].blank? %>
+		<% @borrower = @borrower[0] %>
   <% end %>
  
     <% if session[:reuse] %>
@@ -28,7 +28,7 @@
 	<% end  %>
  
     <% if session[:edit_record]  %>
-      <% @getValue = @borrowers%>
+      <% @getValue = @borrower%>
     <% else %>
       <% @getValue = @cdetails %>
     <% end %>

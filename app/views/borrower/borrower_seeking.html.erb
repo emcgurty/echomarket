@@ -124,7 +124,7 @@
 				</div></td>
 
 			</tr>
-			<%= nf.fields_for :primary_address do |primary| %>
+			<%= fields_for :primary_address do |primary| %>
 			<tr class="odd">
 				<td style="width:25%;">
 				<div>
@@ -245,7 +245,7 @@
 	<div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
 		<label class="personal" >Provide your alternative contact address here:</label>
 		<br />
-		<%= nf.fields_for :alternative_address do |alternative| %>
+		<%= fields_for :alternative_address do |alternative| %>
 		<% state_id_test = (@borrower.id.blank? ? '' : Borrower.find(@borrower.id).addresses.select('us_state_id').where(:address_type => 'alternative')) %>
 		<div style="display:none">
 			<%= alternative.hidden_field(:address_type, :value => 'alternative') %>
@@ -422,9 +422,10 @@
 		<tr class="odd">
 			<td style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;">
-				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span> <%= nf.fields_for :category  do |cat| %>
-					<%= cat.collection_select :category_id, Category.all, :category_id, :category_type %>
-					<%  end %> </label>
+				<label>Category:<span class="required_fields">&nbsp;&nbsp;*</span>
+					<%= nf.collection_select :category_id, Category.all, :id, :category_type %>
+					 
+					</label>
 				<span class="error" id="category_id_error">Choose a 'Category'.</span>
 
 			</div></td>
@@ -482,7 +483,7 @@
 			</div></td>
 		</tr>
 
-		<%= nf.fields_for :item_image do |ii| %>
+		<%= fields_for :item_image do |ii| %>
 
 		<tr class="odd">
 			<td  style="width:50%;">

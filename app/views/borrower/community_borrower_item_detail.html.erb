@@ -23,8 +23,8 @@
 
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
-  <% @ldr = @borrowers %>
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
+  <% @ldr = @borrower %>
   <%  @bl = Contactdescribes.find(:all, :select=> "borrower_or_lender_text",
     :readonly => true, :conditions => ['borrower_or_lender = 2 and option_value = ?', @ldr.describe_yourself]) %>
 

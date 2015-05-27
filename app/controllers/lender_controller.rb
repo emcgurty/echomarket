@@ -7,7 +7,7 @@ class LenderController < ApplicationController
 		create
     else
 
- @lenders = Lender.new
+ @lender = Lender.new
 	end
  
 end
@@ -16,7 +16,7 @@ end
     session[:notice] = ''
     unless params[:lenders].blank?
         @req = params[:lenders]
-        @lenders = Lender.new(
+        @lender = Lender.new(
           :user_id => 'NA',
           :describe_yourself => -1,
           :first_name => 'NA',
@@ -45,13 +45,13 @@ end
           :date_created => Time.now,
           :approved => 1,
           :remote_ip => @req[:remote_ip])
-         if @lenders.save(:validate => false) 
-         @un = 'rapid_' + @lenders.item_description
-         @user = User.new(:username => @un, :email => @lenders.email_alternative, :created_at => Time.now, 
-                    :remote_ip => @lenders.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'lender', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
+         if @lender.save(:validate => false) 
+         @un = 'rapid_' + @lender.item_description
+         @user = User.new(:username => @un, :email => @lender.email_alternative, :created_at => Time.now, 
+                    :remote_ip => @lender.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'lender', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
          @user.save(:validate => false)
          @myupdatehash = [:user_id => @user.user_id]
-         if @lenders.update_attributes(@myupdatehash[0])
+         if @lender.update_attributes(@myupdatehash[0])
          Notifier.notify_rapid(@user).deliver 
          session[:notice] = "Your lender's record has been saved."
          redirect_to  :controller => "search", :action => 'item_search'
@@ -62,13 +62,31 @@ end
  end
  
   def l_list
-      session[:notice] = ''
+  session[:notice] = ''
       session[:background] = true
-       if session[:community_name].blank? 
-        @lender = Lender.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => ["is_active=1 and (is_community = 0 OR is_community = 3)"]) 
-      else
-        @lender = Lender.find(:all, :order =>"category_id ASC, date_created ASC", :conditions => 
-             ["is_active=1 and is_community = 1 and user_id = ?", session[:user_id]])  
+      if session[:community_name].blank? 
+        my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type, item_images.*  
+              FROM lenders
+              INNER JOIN categories ON categories.id = lenders.category_id
+              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
+              INNER JOIN item_images ON item_images.lender_id = lenders.id
+              WHERE (lenders.is_active=1 and (lenders.is_community = 0  OR lenders.is_community = 3))
+              ORDER BY lenders.category_id ASC, lenders.date_created ASC"
+              
+        @lender = Lender.find_by_sql my_sql_string       
+                
+      else 
+          
+          my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type, item_images.*  
+              FROM borrowers
+              INNER JOIN categories ON categories.id = lenders.category_id
+              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
+              INNER JOIN item_images ON item_images.lender_id = lenders.id
+              WHERE (lenders.is_active=1 AND  lenders.is_community = 1 AND lenders.user_id =  "
+          my_sql_string =  my_sql_string + session[:user_id]
+          my_sql_string =  my_sql_string + " ) ORDER BY lenders.category_id ASC, lenders.date_created ASC" 
+          @lender = Lender.find_by_sql my_sql_string
+      
       end 
         if @lender.blank?
           session[:notice] = "Sorry, no Lenders records yet."
@@ -81,11 +99,11 @@ end
       session[:background] = true
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
+        @lender = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
      
       end
       
-      if @lenders.blank? || params[:id].blank?
+      if @lender.blank? || params[:id].blank?
           session[:notice]  = "The lender item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end 
@@ -98,10 +116,10 @@ end
       unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
 	      session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        @lenders = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
+        @lender = Lender.find(:all, :readonly, :conditions => ["lender_id = ?", params[:id]])
       end
       
-      if @lenders.blank? || params[:id].blank?
+      if @lender.blank? || params[:id].blank?
           session[:notice]  = "The Community lender item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
       end 
@@ -126,13 +144,20 @@ end
           redirect_to :action => @which_view, :commit => "reuse", :id => params[:id]
         end  
     else  
-        lend = Lender.find(:all, :readonly, :conditions => ["user_id = ? and is_active = 1", params[:id]])
+         my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type  
+              FROM lenders
+              INNER JOIN categories ON categories.id = lenders.category_id
+              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
+              WHERE (lenders.is_active=1 and lenders.user_id = "
+        my_sql_string = my_sql_string +    params[:id]
+        my_sql_string = my_sql_string + " ) ORDER BY lenders.category_id ASC, lenders.date_created ASC "    
+          
+        @lender = Lender.find_by_sql my_sql_string
  
-        if lend.blank?
+        if @lender.blank?
           redirect_to  :controller => "lender", :action => @which_view 
         else
-          cat = lend.category.first
-          @lenders = cat.item_condition.first 
+           @lender 
        end
    end     
         
@@ -189,7 +214,7 @@ end
 
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
-        @lenders = Lender.new(
+        @lender = Lender.new(
           :user_id => session[:user_id],
           :describe_yourself =>  @req[:describe_yourself].to_i,
           :other_describe_yourself => @req[:other_describe_yourself],
@@ -280,10 +305,10 @@ end
           :date_created => Time.now,
           :approved => 0)
        
-        if @lenders.save(:validate => true) && @lenders.errors.empty?
+        if @lender.save(:validate => true) && @lender.errors.empty?
 
           unless @hold_picture_file.blank?
-            @img =  Itemimage.new(:lender_id => @lenders.lender_id,
+            @img =  Itemimage.new(:lender_id => @lender.lender_id,
               :borrower_id => '',
               :item_image_upload=> @hold_picture_file,
               :item_image_caption=> @req[:item_image_caption],

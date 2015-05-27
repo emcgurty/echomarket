@@ -1,31 +1,14 @@
 class Lender < ActiveRecord::Base
   
   attr_accessible :addresses_attributes, :item_image_attributes
-  attr_accessor :item_image_upload
-  attr_accessor :found_zip_codes
   has_one :item_image, dependent: :destroy
-  has_one :item_condition
-  has_one :category
-  has_one :country
-  has_one :us_state
-  has_one :contact_describe
-  has_one :user
   has_many :addresses, dependent: :destroy
   accepts_nested_attributes_for :item_image
-  accepts_nested_attributes_for :item_condition
-  accepts_nested_attributes_for :category
-  accepts_nested_attributes_for :country
-  accepts_nested_attributes_for :us_state
-  accepts_nested_attributes_for :user
   accepts_nested_attributes_for :addresses
   
-  before_create :get_lender_primary_key_value, :save_image
+  before_create :get_lender_primary_key_value
 
   protected
-
- def save_image
-   ItemImage.create(:item_image_upload => self.item_image_upload, :lender_id => self.id)
-  end 
   
   def get_lender_primary_key_value
     if self.id.blank?

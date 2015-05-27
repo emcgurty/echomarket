@@ -36,7 +36,7 @@
 
 	<% end %>
 	<%= nf.hidden_field :remote_ip, :value=> request.remote_ip %>
-     <%= nf.text_field :found_zip_codes, :value=> '' %>
+     <%= nf.hidden_field :found_zip_codes, :value=> '' %>
 	<% if session[:user_id].blank? %>
 
 	<ul >

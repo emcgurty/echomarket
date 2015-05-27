@@ -2,10 +2,10 @@
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<%= form_for @lenders, :url=> {:controller=>"lender", :action => "rapid_lender_offering", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
+<%= form_for @lender, :url=> {:controller=>"lender", :action => "rapid_lender_offering", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
 
-<% unless @lenders[0].blank? %>
-<% @lenders = @lenders[0] %>
+<% unless @lender[0].blank? %>
+<% @lender = @lender[0] %>
 <% end  %>
 
 
@@ -70,7 +70,7 @@
 	</div>
 	
 	
-	<% unless @lenders.us_state_id.blank? %>
+	<% unless @lender.us_state_id.blank? %>
 	<% display_us_state_id = 'inline' %>
 	<% else %>
 	<% display_us_state_id = 'none' %>

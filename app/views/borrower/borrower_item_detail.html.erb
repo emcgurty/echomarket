@@ -18,7 +18,7 @@
 
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 
-<%= form_for @borrowers, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
 
 <div class="top" >
 	<p>
@@ -42,94 +42,94 @@
 </div>
 <div class="div_p_detail_sub">
 	<p>
-		<%=  @borrowers.borrower_or_lender_text] %>
-		<% if @borrowers.borrower_or_lender_text] == 'Other'%>
-		&nbsp;<%= @borrowers.other_describe_yourself %>
+		<%=  @borrower.borrower_or_lender_text] %>
+		<% if @borrower.borrower_or_lender_text] == 'Other'%>
+		&nbsp;<%= @borrower.other_describe_yourself %>
 		<% end %>
 
-		<% unless @borrowers.organization_name.blank? %>
+		<% unless @borrower.organization_name.blank? %>
 		<br />
-		<% if @borrowers.displayBorrowerOrganizationName.abs == 1 %>
-		Borrower Organization Name: &nbsp;<%= @borrowers.organization_name %>
+		<% if @borrower.displayBorrowerOrganizationName.abs == 1 %>
+		Borrower Organization Name: &nbsp;<%= @borrower.organization_name %>
 		<br />
 		<% end %>
 		<% end %>
-		<% if @borrowers.displayBorrowerName.abs == 1%>
-		Borrower Name:&nbsp;<%= @borrowers.first_name %>&nbsp;<%= (@borrowers.mi.blank? ? "": @borrowers.mi) %>&nbsp;<%= @borrowers.last_name %>
+		<% if @borrower.displayBorrowerName.abs == 1%>
+		Borrower Name:&nbsp;<%= @borrower.first_name %>&nbsp;<%= (@borrower.mi.blank? ? "": @borrower.mi) %>&nbsp;<%= @borrower.last_name %>
 		<br />
 		<% end %>
 	</p>
-	<% if (@borrowers.displayBorrowerAddress == 1) %>
+	<% if (@borrower.displayBorrowerAddress == 1) %>
 	<p>
 		Borrower Address:
 		<br />
-		<%= @borrowers.address_line_1 %><%= (@borrowers.address_line_2.blank? ? " ": @borrowers.address_line_2) %>
+		<%= @borrower.address_line_1 %><%= (@borrower.address_line_2.blank? ? " ": @borrower.address_line_2) %>
 		<br />
-		<%= @borrowers.city + ","%><%= (@borrowers.province.blank? ? "": @borrowers.province) + " " %>
+		<%= @borrower.city + ","%><%= (@borrower.province.blank? ? "": @borrower.province) + " " %>
 
-		<% if @borrowers.us_state_id.blank? %>
+		<% if @borrower.us_state_id.blank? %>
 		<% >
 
-		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrowers.us_state_id ]) %>
+		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrower.us_state_id ]) %>
 		<%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
 		<% else %>
-		<%= @borrowers.us_state_id %>
+		<%= @borrower.us_state_id %>
 		<% end %>
 		<br />
-		<% unless @borrowers.country_id.blank? %>
-		<% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", @borrowers.country_id ]) %>
+		<% unless @borrower.country_id.blank? %>
+		<% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", @borrower.country_id ]) %>
 		<%= @s_c.country_name + " " %>
 		<% end %>
-		<%= @borrowers.postal_code %>
+		<%= @borrower.postal_code %>
 	</p>
 	<% end %>
 
 </div>
 
-<% if ((@borrowers.useWhichContactAddress == 2)  || (@borrowers.useWhichContactAddress == 1)) %>
+<% if ((@borrower.useWhichContactAddress == 2)  || (@borrower.useWhichContactAddress == 1)) %>
 <div class="div_p_detail" >
 	Borrower Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
 
 	<p>
-		<%= @borrowers.address_line_1_alternative %><%= (@borrowers.address_line_2_alternative.blank? ? " ": @borrowers.address_line_2_alternative) %>
+		<%= @borrower.address_line_1_alternative %><%= (@borrower.address_line_2_alternative.blank? ? " ": @borrower.address_line_2_alternative) %>
 		<br />
-		<%= @borrowers.city_alternative + ","%><%= (@borrowers.province_alternative.blank? ? "": @borrowers.province_alternative) + " " %>
+		<%= @borrower.city_alternative + ","%><%= (@borrower.province_alternative.blank? ? "": @borrower.province_alternative) + " " %>
 
-		<% if @borrowers.us_state_id_alternative.blank? %>
-		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrowers.us_state_id_alternative ]) %>
+		<% if @borrower.us_state_id_alternative.blank? %>
+		<% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", @borrower.us_state_id_alternative ]) %>
 		<%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
 		<% else %>
-		<%= @borrowers.us_state_id_alternative + " " %>
+		<%= @borrower.us_state_id_alternative + " " %>
 		<% end %>
 		<br />
-		<% unless @borrowers.country_id_alternative.blank? %>
-		<% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", @borrowers.country_id_alternative ]) %>
+		<% unless @borrower.country_id_alternative.blank? %>
+		<% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", @borrower.country_id_alternative ]) %>
 		<%= @s_c.country_name + " " %>
 		<% end %>
-		<%= @borrowers.postal_code_alternative %>
+		<%= @borrower.postal_code_alternative %>
 	</p>
 </div>
 <% else %>
 <% end %>
 
-<% if @borrowers.public_display_home_phone.abs == 1 || @borrowers.public_display_cell_phone.abs == 1  || @borrowers.public_display_alternative_phone.abs == 1%>
+<% if @borrower.public_display_home_phone.abs == 1 || @borrower.public_display_cell_phone.abs == 1  || @borrower.public_display_alternative_phone.abs == 1%>
 
 <div class="div_p_detail"  >
 	Borrower Contact - Phone:
 </div>
 <div class="div_p_detail_sub">
 	<p>
-		<% if @borrowers.public_display_home_phone.abs == 1 %>
-		<%= "Home: " + @borrowers.home_phone %>&nbsp;
+		<% if @borrower.public_display_home_phone.abs == 1 %>
+		<%= "Home: " + @borrower.home_phone %>&nbsp;
 		<% end %>
-		<% if @borrowers.public_display_cell_phone.abs == 1 %>
-		<%= "Cell: " + @borrowers.cell_phone %>&nbsp;
+		<% if @borrower.public_display_cell_phone.abs == 1 %>
+		<%= "Cell: " + @borrower.cell_phone %>&nbsp;
 		<% end %>
 
-		<% if @borrowers.public_display_alternative_phone.abs == 1 %>
-		<%= "Alternative: " + @borrowers.alternative_phone %>
+		<% if @borrower.public_display_alternative_phone.abs == 1 %>
+		<%= "Alternative: " + @borrower.alternative_phone %>
 		<% end %>
 	</p>
 
@@ -137,7 +137,7 @@
 
 <% end %>
 
-<% unless @borrowers.borrower_contact_by_email == '0'  %>
+<% unless @borrower.borrower_contact_by_email == '0'  %>
 
 <div class="div_p_detail" >
 	Borrower Contact - Email:
@@ -145,24 +145,24 @@
 
 <div class="div_p_detail_sub">
 	<p>
-		<% if @borrowers.borrower_contact_by_email == 3 %>
+		<% if @borrower.borrower_contact_by_email == 3 %>
 		<% if  session[:community_id] %>
 		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
 		<% else  %>
-		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @borrowers.user_id]) %>&nbsp;&nbsp;
+		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @borrower.user_id]) %>&nbsp;&nbsp;
 		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
 		<% end  %>
 		<% end %>
 
-		<% if @borrowers.borrower_contact_by_email == '2' %>
-		<%= mail_to @borrowers.email_alternative,"#{@borrowers.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+		<% if @borrower.borrower_contact_by_email == '2' %>
+		<%= mail_to @borrower.email_alternative,"#{@borrower.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
 		<% end %>
-		<% if @borrowers.borrower_contact_by_email.to_i.abs == 1 %>
-		<%= mail_to @borrowers.email_alternative, "#{@borrowers.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+		<% if @borrower.borrower_contact_by_email.to_i.abs == 1 %>
+		<%= mail_to @borrower.email_alternative, "#{@borrower.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
 		<% if  session[:community_id] %>
 		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
 		<% else  %>
-		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @borrowers.user_id]) %>&nbsp;&nbsp;
+		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @borrower.user_id]) %>&nbsp;&nbsp;
 		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
 		<% end  %>
 		<% end %>
@@ -172,34 +172,34 @@
 
 <% end %>
 
-<% unless @borrowers.borrower_contact_by_Facebook.blank? &&  @borrowers.borrower_contact_by_LinkedIn.blank? &&  @borrowers.borrower_contact_by_Other_Social_Media.blank?
-@borrowers.borrower_contact_by_Twitter.blank? &&  @borrowers.borrower_contact_by_Instagram.blank? &&  @borrowers.borrower_contact_by_Other_Social_Media_Access.blank? %>
+<% unless @borrower.borrower_contact_by_Facebook.blank? &&  @borrower.borrower_contact_by_LinkedIn.blank? &&  @borrower.borrower_contact_by_Other_Social_Media.blank?
+@borrower.borrower_contact_by_Twitter.blank? &&  @borrower.borrower_contact_by_Instagram.blank? &&  @borrower.borrower_contact_by_Other_Social_Media_Access.blank? %>
 <div class="div_p_detail" >
 	borrower Contact - Social Media:
 </div>
 <div class="div_p_detail_sub">
 
 	<p>
-		<% unless @borrowers.borrower_contact_by_Facebook.blank?  %>
-		Facebook Access: &nbsp;<%= @borrowers.borrower_contact_by_Facebook %>&nbsp;&nbsp;
+		<% unless @borrower.borrower_contact_by_Facebook.blank?  %>
+		Facebook Access: &nbsp;<%= @borrower.borrower_contact_by_Facebook %>&nbsp;&nbsp;
 		<% end %>
 
-		<% unless @borrowers.borrower_contact_by_LinkedIn.blank?  %>
-		LinkedIn Access: &nbsp;<%= @borrowers.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
+		<% unless @borrower.borrower_contact_by_LinkedIn.blank?  %>
+		LinkedIn Access: &nbsp;<%= @borrower.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
 		<% end %>
 
-		<% unless @borrowers.borrower_contact_by_Twitter.blank?  %>
-		Twitter Access:&nbsp;<%= @borrowers.borrower_contact_by_Twitter %>&nbsp;&nbsp;
+		<% unless @borrower.borrower_contact_by_Twitter.blank?  %>
+		Twitter Access:&nbsp;<%= @borrower.borrower_contact_by_Twitter %>&nbsp;&nbsp;
 
 		<% end %>
-		<% unless @borrowers.borrower_contact_by_Instagram.blank?  %>
-		Instagram Access:&nbsp;<%= @borrowers.borrower_contact_by_Instagram %>&nbsp;&nbsp;
+		<% unless @borrower.borrower_contact_by_Instagram.blank?  %>
+		Instagram Access:&nbsp;<%= @borrower.borrower_contact_by_Instagram %>&nbsp;&nbsp;
 		<% end %>
 
-		<% unless @borrowers.borrower_contact_by_Other_Social_Media.blank?  %>
+		<% unless @borrower.borrower_contact_by_Other_Social_Media.blank?  %>
 		<br />
-		Other Social Media Account Access:&nbsp;<%= @borrowers.borrower_contact_by_Other_Social_Media %>
-		Other Social Media Account Access:&nbsp;<%= @borrowers.borrower_contact_by_Other_Social_Media_Access %>
+		Other Social Media Account Access:&nbsp;<%= @borrower.borrower_contact_by_Other_Social_Media %>
+		Other Social Media Account Access:&nbsp;<%= @borrower.borrower_contact_by_Other_Social_Media_Access %>
 		<% end %>
 	</p>
 </div>
@@ -212,34 +212,34 @@
 <div class="div_p_detail_sub">
 
 	Category:
-	<% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @borrowers.category_id]) %>
+	<% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", @borrower.category_id]) %>
 	<%= @Category.category_type %>
 	<% if @Category.category_type == "Other" %>
 	&nbsp;Other category:
-	<%= @borrowers.other_item_category %>
+	<%= @borrower.other_item_category %>
 	<% end %>
 
 	<br />
 	Description:&nbsp;
-	<%= @borrowers.item_description %>
+	<%= @borrower.item_description %>
 	<br />
 
 	Condition:&nbsp;
-	<% @cont = Itemconditions.find(:first, :select => "conditions", :readonly=> true, :conditions => ["item_condition_id = ?", @borrowers.item_condition_id]) %>
+	<% @cont = Itemconditions.find(:first, :select => "conditions", :readonly=> true, :conditions => ["item_condition_id = ?", @borrower.item_condition_id]) %>
 	<%= @cont.conditions %>
 	<br />
 
-	<% unless @borrowers.item_model.blank?  %>
+	<% unless @borrower.item_model.blank?  %>
 	Model: &nbsp;
-	<%= @borrowers.item_model %>
+	<%= @borrower.item_model %>
 	<br />
 	<% end %>
 
 	Number of Items: &nbsp;
-	<%= @borrowers.item_count %>
+	<%= @borrower.item_count %>
 	<br />
 
-	<% @icaption = (@borrowers.item_image_caption.blank? ? "No caption provided"  :  @borrowers.item_image_caption)  %>
+	<% @icaption = (@borrower.item_image_caption.blank? ? "No caption provided"  :  @borrower.item_image_caption)  %>
 
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 
@@ -252,7 +252,7 @@
 			<tr>
 
 				<td style="width:50%;text-align:center;"><%= @icaption %></td>
-				<td style="width:50%;text-align:center;"><img src="<%= get_image_path(@borrowers.image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
+				<td style="width:50%;text-align:center;"><img src="<%= get_image_path(@borrower.image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
 			</tr>
 		</table>
 	</div>
