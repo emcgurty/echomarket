@@ -2,7 +2,7 @@
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<%= form_for @lender, :url=> {:controller=>"lender", :action => "rapid_lender_offering", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
+<%= form_for @lender, :url=> {:controller=>"lender", :action => "rapid_lender_offering"},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
 
 <% unless @lender[0].blank? %>
 <% @lender = @lender[0] %>

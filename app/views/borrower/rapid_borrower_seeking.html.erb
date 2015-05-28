@@ -2,7 +2,7 @@
 <%= stylesheet_link_tag 'rapid_echo_market.css' %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "rapid_borrower_seeking", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "rapid_borrower_seeking"},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
 
 <% unless  @borrower.errors.empty? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrower}  %>

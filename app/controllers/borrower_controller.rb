@@ -227,8 +227,8 @@ end
        
         @borrower = Borrower.new(@myupdatehash[0])
         if @borrower.save(:validate => true) && @borrower.errors.empty?
-          @borrower.addresseses_create(params[:primary_address])          
-          @borrower.addresses_create(params[:alternative_address])
+          @borrower.address_create(params[:primary_address])          
+          @borrower.address_create(params[:alternative_address])
           @borrower.item_image_create(params[:item_image])
         end      
         if @borrower.reload
@@ -286,8 +286,8 @@ end
 
 
         if @ltmp.update_attributes(@myupdatehash[0])
-          @borrower.update_attributes(:addresses_attributes => params[:primary_address])          
-          @borrower.update_attributes(:addresses_attributes => params[:alternative_address])
+          @borrower.update_attributes(:address_attributes => params[:primary_address])          
+          @borrower.update_attributes(:address_attributes => params[:alternative_address])
           @borrower.update_attributes(:item_image_attributes => params[:item_image])
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
@@ -338,15 +338,16 @@ end
           :comment => params[:borrower][:comment]          
  )
          if @borrower.save(:validate => true) && @borrower.errors.empty? 
+                     
           @borrower.addresses << Address.new(params["addresses"])
           @un = 'rapid_' + @borrower.item_description
           @myupdatehash = Hash.new
           @myupdatehash = [:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
                            :remote_ip => @borrower.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, 
                            :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password ]        
-          @borrower.user_create(@myupdatehash[0])
+          @borrower.user << User.new(@myupdatehash[0])
           @myupdatehash = [:borrower_id => @borrower.id, :date_created => Time.now, :image_file_name => '']
-          @borrower.item_image_create(@myupdatehash[0])
+          @borrower.item_image << ItemImage.new(@myupdatehash[0])
           puts "@borrower.user.to_yaml"
           puts @borrower.user.to_yaml
          if @borrower.reload

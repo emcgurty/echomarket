@@ -1,12 +1,12 @@
 class Borrower < ActiveRecord::Base
-
+  attr_accessible :describe_yourself, :first_name, :last_name, :displayBorrowerName, :displayBorrowerAddress, :useWhichContactAddress, :email_alternative, :borrower_contact_by_email, 
+                   :category_id, :item_description, :item_condition_id, :other_item_category, :item_model, :item_count, :goodwill, :age_18_or_more, :is_active, :is_community, :date_created,
+                   :approved, :remote_ip, :comment
   has_many :addresses, dependent: :destroy
   has_many :item_image, dependent: :destroy
   has_many :user
  
-  attr_accessible :describe_yourself, :first_name, :last_name, :displayBorrowerName, :displayBorrowerAddress, :useWhichContactAddress, :email_alternative, :borrower_contact_by_email, 
-                   :category_id, :item_description, :item_condition_id, :other_item_category, :item_model, :item_count, :goodwill, :age_18_or_more, :is_active, :is_community, :date_created,
-                   :approved, :remote_ip, :comment
+
   
   attr_accessible :addresses_attributes, :item_image_attributes, :user_attributes
   accepts_nested_attributes_for :item_image
