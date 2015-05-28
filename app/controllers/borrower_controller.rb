@@ -1,5 +1,6 @@
 class BorrowerController < ApplicationController
 
+
 def rapid_borrower_seeking
     session[:notice] = ''
     session[:background] = true 
@@ -14,50 +15,6 @@ def rapid_borrower_seeking
     end
 end
 
- def create
-   session[:notice] = ''
-    unless params[:borrower].blank?
-        @borrower = Borrower.new(
- 
-          :user_id => 'NA',
-          :describe_yourself => -1,
-          :first_name => 'NA',
-          :last_name => 'NA',
-          :displayBorrowerName => 0,
-          :displayBorrowerAddress  => 0,
-          :useWhichContactAddress => 0,
-          :email_alternative=> params[:borrower][:email_alternative],
-          :borrower_contact_by_email=> 2,
-          :category_id => params[:borrower][:category_id],
-          :item_description=> params[:borrower][:item_description],
-          :item_condition_id=> params[:borrower][:item_condition_id],
-          :other_item_category=> params[:borrower][:other_item_category],
-          :item_model=> params[:borrower][:item_model],
-          :item_count=> params[:borrower][:item_count].to_i,
-          :goodwill=> params[:borrower][:goodwill].to_i,
-          :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
-          :is_active => params[:borrower][:is_active].to_i,
-          :is_community => params[:borrower][:is_community].to_i,
-          :date_created => Time.now,
-          :approved => 1,
-          :remote_ip => params[:borrower][:remote_ip],
-		      :comment => params[:borrower][:comment]          
- )
-         if @borrower.save(:validate => false)
-          @borrower.update_attributes(:primary_address_attributes => params['addresses'])  
-          @un = 'rapid_' + @borrower.item_description
-          @user = User.new(:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
-                    :remote_ip => @borrower.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password)        
-         @user.save(:validate => false)
-         @myupdatehash = [:user_id => @user.user_id]
-         if @borrower.update_attributes(@myupdatehash[0])
-          Notifier.notify_rapid(@user).deliver
-          session[:notice] = "Your borrower's record has been saved."
-          redirect_to  :controller => "search", :action => 'item_search' 
-         end
-         end
-     end       
- end
 
 
 ###  Could not get multipe table associations to WORK! 
@@ -65,27 +22,23 @@ end
       session[:notice] = ''
       session[:background] = true
       if session[:community_name].blank? 
-        my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              INNER JOIN item_images ON item_images.borrower_id = borrowers.id
-              WHERE (borrowers.is_active=1 and (borrowers.is_community = 0  OR borrowers.is_community = 3))
-              ORDER BY categories.category_type ASC, borrowers.date_created ASC"
+         @borrower = Borrower
+                  .joins(:category, :item_condition, :item_image)
+                  .select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_image.*"])
+                  .where(" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )") 
+                  .order("categories.category_type ASC, borrowers.date_created ASC ")
+                  
               
-        @borrower = Borrower.find_by_sql my_sql_string       
                 
       else 
           
-          my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              INNER JOIN item_images ON item_images.borrower_id = borrowers.id
-              WHERE (borrowers.is_active=1 AND  borrowers.is_community = 1 AND borrowers.user_id =  "
-          my_sql_string =  my_sql_string + session[:user_id]
-          my_sql_string =  my_sql_string + " ) ORDER BY categories.category_type ASC, borrowers.date_created ASC" 
-          @borrower = Borrower.find_by_sql my_sql_string
+         where_clause = "WHERE (borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  #{session[:user_id]}" 
+         @borrower = Borrower
+                  .joins(:category, :item_condition, :item_image)
+                  .select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_image.*"])
+                  .where(where_clause) 
+                  .order("categories.category_type ASC, lenders.date_created ASC ")
+                 
       
       end 
       
@@ -108,21 +61,17 @@ end
     session[:background] = true
     unless params[:id].blank?
       
-            my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              INNER JOIN addresses ON addresses.borrower_id = borrowers.id
-              WHERE borrowers.id = "
-           my_sql_string = my_sql_string + params[:id]  
-           my_sql_string = my_sql_string + " ORDER BY categories.category_type ASC, borrowers.date_created ASC"
-      
-           @borrower = Borrower.find_by_sql my_sql_string
+               @borrower = Borrower
+                  .joins(:category, :item_condition)
+                  .select(["borrowers.*", "categories.category_type", "item_conditions.condition"])
+                  .where(" borrowers.id = ?", params[:id]) 
+                  .order("categories.category_type ASC, borrowers.date_created ASC ")
+                         
     end
-      if @borrower.blank? || params[:id].blank?
+    if @borrower.blank? || params[:id].blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
-      end 
+     end 
       
   end
  
@@ -131,17 +80,11 @@ end
      unless params[:id].blank?
         session[:reuse] = (params['commit'] == 'reuse' ? true : false)
         session[:edit_record] = (params['commit'] == 'edit' ? true : false)
-        my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              INNER JOIN addresses ON addresses.borrower_id = borrowers.id
-              WHERE borrowers.id = "
-           my_sql_string = my_sql_string + params[:id]  
-           my_sql_string = my_sql_string + " AND borrowers.user_id = " + params[:user_id]
-           my_sql_string = my_sql_string + " ORDER BY categories.category_type ASC, borrowers.date_created ASC"
-      
-           @borrower = Borrower.find_by_sql my_sql_string
+       @borrower = Borrower
+                  .joins(:category, :item_condition)
+                  .select(["borrowers.*", "categories.category_type", "item_conditions.condition"])
+                  .where(" borrowers.id = ? AND borrower.user_id = ?", params[:id], session[:user_id]) 
+                  .order("categories.category_type ASC, borrowers.date_created ASC ")
                
         
      end
@@ -173,20 +116,16 @@ end
         end  
     else  
         
-    my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              WHERE (borrowers.is_active=1 and borrowers.user_id = "
-              my_sql_string  = my_sql_string + params[:id]
-              my_sql_string  = my_sql_string + " ) ORDER BY categories.category_type ASC, borrowers.date_created ASC "    
-          
-        @borrower = Borrower.find_by_sql my_sql_string
+         @borrower = Borrower
+                  .joins(:category, :item_condition)
+                  .select(["borrowers.*", "categories.category_type", "item_conditions.condition"])
+                  .where(" borrowers.is_active = 1 AND borrowers.user_id = ?", params[:id]) 
+                  .order("categories.category_type ASC, borrowers.date_created ASC ")
+   
         if @borrower.blank?
            redirect_to  :controller => "borrower", :action => @which_view
         else
           @borrower 
-    
         end
    end     
          
@@ -234,6 +173,8 @@ end
     end
   end
    
+ protected  
+   
   def update_borrower_seeking
     session[:notice] = ''
     unless params[:borrower].blank?
@@ -242,7 +183,7 @@ end
         @useWhichContactAddress = (params[:borrower][:useWhichContactAddress].blank? ? 0: params[:borrower][:useWhichContactAddress].to_i)
         @myupdatehash = Hash.new
         @myupdatehash = [
-          :user_id => session[User_id], 
+          :user_id => session[:user_id], 
           :describe_yourself =>  params[:borrower][:describe_yourself].to_i,
           :other_describe_yourself => params[:borrower][:other_describe_yourself],
           :organization_name => params[:borrower][:organization_name],
@@ -277,8 +218,7 @@ end
           :other_item_category=> params[:borrower][:other_item_category],
           :item_model=> params[:borrower][:item_model],
           :item_count=> params[:borrower][:item_count].to_i,
-          :item_image => params[:borrower][:item_image],
-          :goodwill=> params[:borrower][:goodwill].to_i,
+           :goodwill=> params[:borrower][:goodwill].to_i,
           :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
           :is_active => params[:borrower][:is_active].to_i,
           :is_community => (session[:community_name].blank? ? 0 : 1),
@@ -286,11 +226,13 @@ end
           :approved => 0]
        
         @borrower = Borrower.new(@myupdatehash[0])
-               
         if @borrower.save(:validate => true) && @borrower.errors.empty?
-          @borrower.update_attributes(:addresses_attributes => params[:primary_address])          
-          @borrower.update_attributes(:addresses_attributes => params[:alternative_address])
-           redirect_to :action => 'borrower_history', :id=> session[:user_id]
+          @borrower.addresseses_create(params[:primary_address])          
+          @borrower.addresses_create(params[:alternative_address])
+          @borrower.item_image_create(params[:item_image])
+        end      
+        if @borrower.reload
+          redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
         end
@@ -335,7 +277,6 @@ end
           :other_item_category=> params[:borrower][:other_item_category],
           :item_model=> params[:borrower][:item_model],
           :item_count=> params[:borrower][:item_count].to_i,
-          :item_image => params[:borrower][:item_image],
           :goodwill=> params[:borrower][:goodwill].to_i,
           :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
           :is_active => params[:borrower][:is_active].to_i,
@@ -347,6 +288,7 @@ end
         if @ltmp.update_attributes(@myupdatehash[0])
           @borrower.update_attributes(:addresses_attributes => params[:primary_address])          
           @borrower.update_attributes(:addresses_attributes => params[:alternative_address])
+          @borrower.update_attributes(:item_image_attributes => params[:item_image])
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
@@ -367,5 +309,54 @@ end
     end.join
     @password
   end
+
+ def create
+   session[:notice] = ''
+    unless params[:borrower].blank?
+        @borrower = Borrower.new(
+          :describe_yourself => -1,
+          :first_name => 'NA',
+          :last_name => 'NA',
+          :displayBorrowerName => 0,
+          :displayBorrowerAddress  => 0,
+          :useWhichContactAddress => 0,
+          :email_alternative=> params[:borrower][:email_alternative],
+          :borrower_contact_by_email=> 2,
+          :category_id => params[:borrower][:category_id],
+          :item_description=> params[:borrower][:item_description],
+          :item_condition_id=> params[:borrower][:item_condition_id],
+          :other_item_category=> params[:borrower][:other_item_category],
+          :item_model=> params[:borrower][:item_model],
+          :item_count=> params[:borrower][:item_count].to_i,
+          :goodwill=> params[:borrower][:goodwill].to_i,
+          :age_18_or_more=>params[:borrower][:age_18_or_more].to_i,
+          :is_active => params[:borrower][:is_active].to_i,
+          :is_community => params[:borrower][:is_community].to_i,
+          :date_created => Time.now,
+          :approved => 1,
+          :remote_ip => params[:borrower][:remote_ip],
+          :comment => params[:borrower][:comment]          
+ )
+         if @borrower.save(:validate => false)
+          @borrower.primary_address_create(params['addresses'])
+          @un = 'rapid_' + @borrower.item_description
+          @myupdatehash = Hash.new
+          @myupdatehash = [:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
+                           :remote_ip => @borrower.remote_ip, :user_alias => @un, :approved => 1, :is_rapid => 1, 
+                           :user_type => 'borrower', :activated_at => Time.now, :activation_code => '', :password => get_random_password ]        
+          @borrower.user_create(@myupdatehash[0])
+          @myupdatehash = [:borrower_id => @borrower.id, :date_created => Time.now, :image_file_name => '']
+          @borrower.item_image_create(@myupdatehash[0])
+          puts "@borrower.user.to_yaml"
+          puts @borrower.user.to_yaml
+         if @borrower.reload
+          Notifier.notify_rapid(@borrower.user).deliver
+          session[:notice] = "Your borrower's record has been saved."
+          redirect_to  :controller => "search", :action => 'item_search' 
+         end
+         end
+     end       
+ end
+
 
 end

@@ -1,15 +1,17 @@
 class Lender < ActiveRecord::Base
   
   
-  has_many :primary_address, :class_name => 'Address'
-  has_many :alternative_address, :class_name => 'Address'
+  has_one :primary_address, ->() do where( :address_type => :primary ) end, :class_name => 'Address'
+  has_one :alternative_address, ->() do where( :address_type => :alternative ) end, :class_name => 'Address'
   has_many :addresses, dependent: :destroy
   has_many :item_image, dependent: :destroy
-  attr_accessible :addresses_attributes, :item_image_attributes, :primary_address_attributes, :alternative_address_attributes
-   accepts_nested_attributes_for :item_image
+  has_many :user
+  attr_accessible :addresses_attributes, :item_image_attributes, :primary_address_attributes, :alternative_address_attributes, :user_attributes
+  accepts_nested_attributes_for :item_image
   accepts_nested_attributes_for :addresses
   accepts_nested_attributes_for :primary_address
   accepts_nested_attributes_for :alternative_address
+  accepts_nested_attributes_for :user
   
   ###  Lender tables contains i_c_id, c_i, c_i
   belongs_to :item_condition
