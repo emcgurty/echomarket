@@ -338,7 +338,7 @@ end
           :comment => params[:borrower][:comment]          
  )
          if @borrower.save(:validate => true) && @borrower.errors.empty? 
-          @borrower.address << Address.new(params[:borrower][:address])
+          @borrower.addresses << Address.new(params["addresses"])
           @un = 'rapid_' + @borrower.item_description
           @myupdatehash = Hash.new
           @myupdatehash = [:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 
