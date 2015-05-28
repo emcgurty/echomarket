@@ -5,8 +5,6 @@
     	$("div#country_selected").css("display", "none");
 
 
-
-
 	$("select#borrower_country_id").bind('change', function() {
 
 		

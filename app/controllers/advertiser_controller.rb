@@ -40,10 +40,11 @@ class AdvertiserController < ApplicationController
     respond_to do |f|
 
       unless params[:advertiser].blank?
-     
+        @myhash = Hash.new
+        @myhash = 
         @advertiser = Advertiser.new(params["advertiser"])
          if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
-          @result = @advertiser.item_image.create(params["item_image"])
+          @advertiser.item_image << ItemImage.new(params["item_image"])
           Notifier.notify_advertiser(@advertiser).deliver
           session[:notice] = "Your Advertisement record has been saved, and validation email has been sent to you at #{@advertiser.advertiser_email}."
           f.html {redirect_to  home_items_listing_url}

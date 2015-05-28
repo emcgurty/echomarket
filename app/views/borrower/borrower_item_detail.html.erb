@@ -60,8 +60,7 @@
 		<% end %>
 	</p>
 	<% if (@borrower.displayBorrowerAddress == 1 ) %>
-	<%# borrower_primary_address = Borrower.find(@borrower.id).addresses.where("address_type = 'primary'") %>
-	## http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for
+
 	<% nf.fields_for :primary_address do |borrower_primary_address| %>
 	<p>
 		Borrower Address:
@@ -102,7 +101,7 @@
 	Borrower Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
-    <% nf.fields_for :alternative_address do |borrower_alternative_address| %>
+    <%= nf.fields_for :alternative_address do |borrower_alternative_address| %>
 	<p>
 		<%= borrower_alternative_address.address_line_1 %>
 		<%= (borrower_alternative_address.address_line_2.blank? ? " ": borrower_alternative_address.address_line_2) %>
@@ -277,3 +276,7 @@
 </div>
 <% end %>
 <% end %>
+
+
+	### borrower_primary_address = Borrower.find(@borrower.id).addresses.where("address_type = 'primary'")
+	## http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for

@@ -337,8 +337,8 @@ end
           :remote_ip => params[:borrower][:remote_ip],
           :comment => params[:borrower][:comment]          
  )
-         if @borrower.save(:validate => false)
-          @borrower.primary_address_create(params['addresses'])
+         if @borrower.save(:validate => true) && @borrower.errors.empty? 
+          @borrower.address << Address.new(params[:borrower][:address])
           @un = 'rapid_' + @borrower.item_description
           @myupdatehash = Hash.new
           @myupdatehash = [:username => @un, :email => @borrower.email_alternative, :created_at => Time.now, 

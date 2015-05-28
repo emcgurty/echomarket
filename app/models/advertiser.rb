@@ -1,7 +1,6 @@
 class Advertiser < ActiveRecord::Base
 
   require 'uri'
-  self.primary_key = "advertiser_id"
   
   attr_accessible :title, :description, :advertiser_email, :advertiser_url, :category_id, :category_other, :is_active, :is_activated, :date_created, :approved, :remote_ip
                   
@@ -9,7 +8,7 @@ class Advertiser < ActiveRecord::Base
   has_many :category
   accepts_nested_attributes_for :item_image
   attr_accessible :item_image_attributes
-  before_create :get_advertiser_primary_key_value
+  before_create :get_primary_key_value
   before_create :url_valid
 
 
@@ -30,8 +29,10 @@ class Advertiser < ActiveRecord::Base
 
   end
   
-  def get_advertiser_primary_key_value
-    self.id = get_random
+  def get_primary_key_value
+    if self.id.blank?
+      self.id = get_random
+    end  
   end
 
   def get_random

@@ -4,6 +4,12 @@
 
 <%= form_for @borrower, :url=> {:controller=>"borrower", :action => "rapid_borrower_seeking", :id=> session[:rapid_id]},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
 
+<% unless  @borrower.errors.empty? %>
+<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrower}  %>
+<% end %>
+
+
+
 <% unless @borrower[0].blank? %>
 <% @borrower = @borrower[0] %>
 <% end  %>
@@ -42,14 +48,13 @@
 </div>
 
 
-<% fields_for :primary_address do |adr| %>
+<%= nf.fields_for :address do |adr| %>
 
 <div style="display:none;">
-	<%= adr.hidden_field( :lender_id, :value ="") %>
-	<%= adr.hidden_field( :borrower_id, :value = @borrower.id) %>
-	<%= adr.hidden_field( :address_line_1, :value = "NA") %>
-	<%= adr.hidden_field( :city, :value = "NA") %>
-	<%= adr.hidden_field( :address_type, :value = "primary") %>
+	<%= adr.hidden_field( :lender_id, :value =>"") %>
+	<%= adr.hidden_field( :address_line_1, :value => "NA") %>
+	<%= adr.hidden_field( :city, :value => "NA") %>
+	<%= adr.hidden_field( :address_type, :value => "primary") %>
 </div>
 
 <div style="float:left;;width:92%;">
@@ -65,19 +70,14 @@
 	</div>
 
 	
-	<div id="country_selected" style="display:none;">
+	<div id="country_selected" style="display:block;">
     <div class="column50_rapid">
 	<label>Your State or Region: </label>
 	<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
 		<%= adr.collection_select :us_state_id, UsState.all, :id, :state_name %>
 	</div>
 
-	<% unless Borrower.find(@Borrrowers.id).addresses.select('region').blank? %>
-	<% display_us_state_id = 'inline' %>
-	<% else %>
-	<% display_us_state_id = 'none' %>
-	<% end %>
-	<div id="provide_country_state" style="display:<%= display_us_state_id %>;" >
+	<div id="provide_country_state" style="display:none;" >
 		<%= adr.text_field(:region, :maxlength=>40, :size=>25) %>
 	</div>
 	</div>
