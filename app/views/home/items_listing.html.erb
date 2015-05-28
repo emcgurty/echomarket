@@ -25,16 +25,22 @@
 		<h2 class="h2_listing" >What is offered to lend...</h2>
 
 		<% if session[:community_name].blank? %>
-		
-		<%  my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type, item_images.*  
+				<%  my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type, item_images.*  
               FROM lenders
               INNER JOIN categories ON categories.id = lenders.category_id
               INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
               INNER JOIN item_images ON item_images.lender_id = lenders.id
-              WHERE (lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3))
-              ORDER BY categories.category_type ASC, lenders.date_created ASC"  %>
-       
-		<% @lender = Lender.find_by_sql my_sql_string %>
+              WHERE lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 ) " %>
+           
+           <%  my_sql_string =  my_sql_string + "  ORDER BY categories.category_type ASC, lenders.date_created ASC "  %>
+              
+		
+		<% @lender = Lender.find_by_sql my_sql_string  %>
+			
+	    
+	    
+	    <!-- <% l = ItemCondition.first.lender %> 						
+		<% @lenders = l %>		 -->		
 						
 		<% else %>
 		
@@ -113,7 +119,7 @@
 						
 		<% else %>
 		
-			<%  my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type, item_images.*  
+			<%  my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
               FROM borrowers
               INNER JOIN categories ON categories.id = borrowers.category_id
               INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
@@ -150,7 +156,7 @@
           <% @ih2[kv.fetch("item_condition_id")]  = kv.fetch("conditions") %>
          <% end %>
 		<% @borrower.each do |ldr| %>
-		<% @cats = Category.find(:first, :readonly, :conditions => ['category_id = ?', ldr.category_id])  %>
+		<% @cats = Category.find(:first, :readonly, :conditions => ['id = ?', ldr.category_id])  %>
 		<% if @cats %>
 		<% if ((@cats.category_id == ldr.category_id) && (hold_cat != @cats.category_id))  %>
 		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
@@ -158,7 +164,7 @@
 		<% hold_cat  = @cats.category_id %>
 		<% end %>
 		<% end %>
-		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_id = ?', ldr.borrower_id])  %>
+		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_id = ?', ldr.id])  %>
 		<% if @imgs %>
 		<% @imgs.each do |oimg| %>
 
@@ -175,7 +181,7 @@
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
         		
-			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.borrower_id), {:class=>"item_details"} %>
+			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.id), {:class=>"item_details"} %>
 		
 		<hr style="color:indigo;" />
 

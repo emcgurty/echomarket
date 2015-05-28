@@ -5,6 +5,8 @@ class ItemImage < ActiveRecord::Base
   attr_accessible :lender_id, :borrower_id, :advertiser_id, :item_image_caption, :is_active, :date_created, :date_deleted, :item_image_upload
    
   belongs_to :advertiser
+  belongs_to :borrower
+  belongs_to :lender
   before_create :get_primary_key_value, :item_image_upload
   before_update :item_image_upload
 

@@ -1,7 +1,7 @@
 class Category < ActiveRecord::Base
   
-  belongs_to :advertiser
-  belongs_to :borrower
-  belongs_to :lender
+  has_one :advertiser
+  has_one :borrower
+  has_one :lender
 
 end
