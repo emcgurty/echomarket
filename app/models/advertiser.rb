@@ -1,11 +1,12 @@
 class Advertiser < ActiveRecord::Base
 
   require 'uri'
- 
+  self.primary_key = "advertiser_id"
+  
   attr_accessible :title, :description, :advertiser_email, :advertiser_url, :category_id, :category_other, :is_active, :is_activated, :date_created, :approved, :remote_ip
                   
-  has_one :item_image, dependent: :destroy
-  has_one :category
+  has_many :item_image, dependent: :destroy
+  has_many :category
   accepts_nested_attributes_for :item_image
   attr_accessible :item_image_attributes
   before_create :get_advertiser_primary_key_value

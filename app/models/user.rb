@@ -7,9 +7,9 @@ class User < ActiveRecord::Base
   alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
   alpha_numeric_regex_username = /\A[0-9 a-zA-Z\-\_]+\z/
   
-  has_one :lender
-  has_one :borrower
-  has_one :community
+  has_many :lender
+  has_many :borrower
+  has_many :community
   
   attr_accessor :password, :password_confirmation
   attr_accessor :community_name, :community_password, :community_first_name, :community_mi, :community_last_name, :community_alias

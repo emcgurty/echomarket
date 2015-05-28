@@ -1,10 +1,10 @@
 class Lender < ActiveRecord::Base
   
   
-  has_one :primary_address, :class_name => 'Address'
-  has_one :alternative_address, :class_name => 'Address'
+  has_many :primary_address, :class_name => 'Address'
+  has_many :alternative_address, :class_name => 'Address'
   has_many :addresses, dependent: :destroy
-  has_one :item_image, dependent: :destroy
+  has_many :item_image, dependent: :destroy
   attr_accessible :addresses_attributes, :item_image_attributes, :primary_address_attributes, :alternative_address_attributes
    accepts_nested_attributes_for :item_image
   accepts_nested_attributes_for :addresses
@@ -16,8 +16,8 @@ class Lender < ActiveRecord::Base
   belongs_to :category
   belongs_to :country
   belongs_to :us_state
-  has_one :contact_describe
-  has_one :user
+  has_many :contact_describe
+  has_many :user
  
   before_create :get_primary_key_value
 
@@ -43,7 +43,7 @@ end
 # Stewart Mckinney: 
 # has_many :addresses
 # 
-# has_one :primary_address, 
+# has_many :primary_address, 
 # ->() do
   # where( :type => :primary )
 # end,

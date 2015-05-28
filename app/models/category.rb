@@ -1,7 +1,9 @@
 class Category < ActiveRecord::Base
   
-  has_one :advertiser
-  has_one :borrower
-  has_one :lender
+  self.primary_key = "id"
+  
+  has_many :advertiser
+  has_many :borrower
+  has_many :lender
 
 end

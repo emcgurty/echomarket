@@ -24,39 +24,26 @@
 	<div class="column40">
 		<h2 class="h2_listing" >What is offered to lend...</h2>
 
-		<% if session[:community_name].blank? %>
-				<%  my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM lenders
-              INNER JOIN categories ON categories.id = lenders.category_id
-              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
-              INNER JOIN item_images ON item_images.lender_id = lenders.id
-              WHERE lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 ) " %>
-           
-           <%  my_sql_string =  my_sql_string + "  ORDER BY categories.category_type ASC, lenders.date_created ASC "  %>
-              
-		
-		<% @lender = Lender.find_by_sql my_sql_string  %>
-			
+	 	<% if session[:community_name].blank? %>
 	    
-	    
-	    <!-- <% l = ItemCondition.first.lender %> 						
-		<% @lenders = l %>		 -->		
+	    <% @lender = Lender
+	                .joins(:category, :item_condition, :item_image)
+	                .select(["lenders.*", "categories.category_type", "item_conditions.condition", "item_image.*"])
+	                .where(" lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 )") 
+	                .order("categories.category_type ASC, lenders.date_created ASC ")
+	                
+	                %>
 						
 		<% else %>
 		
-			<%  my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM lenders
-              INNER JOIN categories ON categories.id = lenders.category_id
-              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
-              INNER JOIN item_images ON item_images.lender_id = lenders.id
-              WHERE (lenders.is_active=1 AND lenders.is_community = 1  AND lenders.user_id  = " %>
-           <%  my_sql_string =  my_sql_string + session[:user_id] %>
-           <%  my_sql_string =  my_sql_string + " ) ORDER BY categories.category_type ASC, lenders.date_created ASC "  %>
-              
-		
-		<% @lender = Lender.find_by_sql my_sql_string  %>
-			
-		
+           <% where_clause = "WHERE (lenders.is_active= 1 AND lenders.is_community = 1  AND lenders.user_id  =  #{session[:user_id]}" %>
+	       <% @lender = Lender
+	                .joins(:category, :item_condition, :item_image)
+	                .select(["lenders.*", "categories.category_type", "item_conditions.condition", "item_image.*"])
+	                .where(where_clause) 
+	                .order("categories.category_type ASC, lenders.date_created ASC ")
+	               %>
+        
 		<% end %>
 
 		<% if @lender.blank? %>
@@ -92,8 +79,7 @@
 		
 			
 	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.id), {:class=>"item_details"}  %>
-			
-			
+				
 		
 		<hr style="color:indigo;" />
 
@@ -107,79 +93,48 @@
 
 		<% if session[:community_name].blank? %>
 		
-		<%  my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              INNER JOIN item_images ON item_images.borrower_id = borrowers.id
-              WHERE (borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3))
-              ORDER BY categories.category_type ASC, borrowers.date_created ASC"  %>
-       
-		<% @borrower = Borrower.find_by_sql my_sql_string %>
+    <% @borrower = Borrower
+	                .joins(:category, :item_condition, :item_image)
+	                .select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_image.*"])
+	                .where(" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )") 
+	                .order("categories.category_type ASC, borrowers.date_created ASC ")
+	                
+	                %>
 						
 		<% else %>
 		
-			<%  my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = borrowers.category_id
-              INNER JOIN item_conditions ON item_conditions.id = borrowers.item_condition_id
-              INNER JOIN item_images ON item_images.borrower_id = borrowers.id
-              WHERE (borrowers.is_active=1 AND borrowers.is_community = 1  AND borrowers.user_id  = " %>
-           <%  my_sql_string =  my_sql_string + session[:user_id] %>
-           <%  my_sql_string =  my_sql_string + " ) ORDER BY categories.category_type ASC, lenders.date_created ASC "  %>
-              
-		
-		<% @borrower = Borrower.find_by_sql my_sql_string  %>
-			
+           <% where_clause = "WHERE (borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  #{session[:user_id]}" %>
+	       <% @borrower = Borrower
+	                .joins(:category, :item_condition, :item_image)
+	                .select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_image.*"])
+	                .where(where_clause) 
+	                .order("categories.category_type ASC, borrowers.date_created ASC ")
+	               %>
 		
 		<% end %>
 
 		<% if @borrower.blank? %>
-		<p style="padding:5px;margin-left:-5px;">
-			Seems that no one is seeking to borrow anything...
-		</p>
+		<p style="padding:5px;margin-left:-5px;">Seems that no one is seeking to borrow anything...</p>
 		<% if session[:user_type] == 'borrower' || session[:user_type] == 'both' %>
-
 	      <%= link_to "Would you like to borrow something?", {:controller => "borrower", :action=> "borrower_history", :id=> session[:user_id]}, {:class=>"search1"}  %>
-
-
 		<% else %>
 		<%= link_to "Please login or register as a 'borrower' to seek an item.", user_login_url(:id => '', :type => 'borrower'),  {:class => "search1"}   %>
 		<% end %>
-		<% else %>
-		<% hold_cat  = "" %>
-	    <% @icond = Itemconditions.find(:all, :readonly) %>
-		<% @ih = Hash.new %>
-		<% @ih2 = Hash.new %>
-        <% @ih = @icond.to_a.map(&:serializable_hash) %>
-        <% for kv in @ih %>
-          <% @ih2[kv.fetch("item_condition_id")]  = kv.fetch("conditions") %>
-         <% end %>
-		<% @borrower.each do |ldr| %>
-		<% @cats = Category.find(:first, :readonly, :conditions => ['id = ?', ldr.category_id])  %>
-		<% if @cats %>
-		<% if ((@cats.category_id == ldr.category_id) && (hold_cat != @cats.category_id))  %>
-		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
-		<br />
-		<% hold_cat  = @cats.category_id %>
-		<% end %>
-		<% end %>
-		<% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['borrower_id = ?', ldr.id])  %>
-		<% if @imgs %>
-		<% @imgs.each do |oimg| %>
 
-		<% file_path_str = oimg.image_file_name %>
-		<% icaption = (oimg.item_image_caption.blank? ? '' : oimg.item_image_caption) %>
+		<% else %>
+		
+		<% @borrower.each do |ldr| %>
+		<label class="item_listing">Category:&nbsp;<%= ldr.category_type %></label>
+		<br />
+		<% file_path_str = ldr.image_file_name %>
+		<% icaption = (ldr.item_image_caption.blank? ? '' : ldr.item_image_caption) %>
 		<img src='<%= get_image_path(file_path_str.to_s) %>' alt="<%= icaption %>" style="margin:5px;" height="50" width="50" />
 		<% unless icaption.blank? %>
 		<label class="item_listing"><%= icaption %></label>
 		<% end %>
-
-		<% end %>
-		<% end %>
 		<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
-		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
+		<label class="item_listing">Condition:&nbsp;<%= ldr.condition %></label>
         		
 			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.id), {:class=>"item_details"} %>
 		
@@ -212,9 +167,7 @@
 			<a href="/borrower/borrower_seeking" >=> Seek an Item to Borrow</a>
 		<% end %>
 		
-		
-		
-		
+			
 		
 		<% end %>
 		<% if session[:user_type] == 'guest'  %>
