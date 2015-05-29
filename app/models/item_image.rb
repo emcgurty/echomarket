@@ -7,6 +7,7 @@ class ItemImage < ActiveRecord::Base
   belongs_to :advertiser
   belongs_to :borrower
   belongs_to :lender
+  
   before_create :get_primary_key_value, :item_image_upload
   before_update :item_image_upload
 

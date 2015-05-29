@@ -25,7 +25,7 @@ end
       session[:background] = true
       if session[:community_name].blank? 
          @borrower = Borrower
-                  .joins(:category, :item_condition, :item_image)
+                  .joins(:category, :item_condition, :item_images)
                   .select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"])
                   .where(" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )") 
                   .order("categories.category_type ASC, borrowers.date_created ASC ")
@@ -34,7 +34,7 @@ end
           
          where_clause = "WHERE (borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  #{session[:user_id]}" 
          @borrower = Borrower
-                  .joins(:category, :item_condition, :item_image)
+                  .joins(:category, :item_condition, :item_images)
                   .select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"])
                   .where(where_clause) 
                   .order("categories.category_type ASC, lenders.date_created ASC ")
@@ -61,19 +61,20 @@ end
  end
 
  def borrower_item_detail
+   where_clause = ""
     session[:background] = true
     unless params[:id].blank?
     
               if session[:community_name].blank?
                  where_clause = " borrowers.id =  #{params[:id]}"
-                 puts whereclause
+                 
               else
-                 where_clause = " borrowers.id = ? AND borrower.user_id = ?", params[:id], session[:user_id]
-                 puts whereclause
+                 where_clause = " borrowers.id = #{params[:id]} AND borrower.user_id = #{session[:user_id]}" 
+                 
               end 
                                       
                    @borrower = Borrower
-                  .joins(:category, :item_condition, :item_image, :contact_describe)
+                  .joins(:category, :item_condition, :item_images, :contact_describe)
                   .select(["contact_describes.borrower_or_lender_text", "borrowers.*", "borrowers.id AS b_id",   "categories.category_type", "item_conditions.condition", 
                     "item_images.item_image_caption", "item_images.image_file_name"])
                   .where(where_clause) 
@@ -228,7 +229,7 @@ end
         if @borrower.save(:validate => true) && @borrower.errors.empty?
             @borrower.addresses  <<  Address.new(params[:borrower][:primary_address])          
             @borrower.addresses  <<  Address.new(params[:borrower][:alternative_address])
-            @borrower.item_image <<  ItemImage.new(params[:borrower][:item_image])
+            @borrower.item_images <<  ItemImage.new(params[:borrower][:item_image])
         end      
         if @borrower.errors.empty?
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
@@ -287,7 +288,7 @@ end
         if @ltmp.update_attributes(@myupdatehash[0])
           @ltmp.update_attributes(:address_attributes => params[:primary_address])          
           @ltmp.update_attributes(:address_attributes => params[:alternative_address])
-          @ltmp.update_attributes(:item_image_attributes => params[:item_image])
+          @ltmp.update_attributes(:item_images_attributes => params[:item_image])
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
