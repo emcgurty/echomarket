@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 <%  rowCount = 1 %>
-<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_history"}, :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"} do |nf| %>
+<%= form_tag '/borrower/borrower_history', :html=>  {:class=>"borrower_history", :id=>"borrowers_item_form"}  %>
 
 
   <div class="top" >
@@ -26,15 +26,15 @@
           <%  rowCount = rowCount + 1 %>
           <tr class="<%= rowClass %>" >
             <td>
-              <%= nf.label (ba.category_type.blank? ? "No Item Category provided" : ba.category_type) %>
+              <%=  (ba.category_type.blank? ? "No Item Category provided" : ba.category_type) %>
               
             </td>
             <td>
-              <%= nf.label (ba.item_description.blank? ? "NA": ba.item_description) %></td>
+              <%=  (ba.item_description.blank? ? "NA": ba.item_description) %></td>
             <td>
-              <%= nf.label (ba.item_model.blank? ? "NA": ba.item_model) %></td>
+              <%=  (ba.item_model.blank? ? "NA": ba.item_model) %></td>
             <td>
-              <%= nf.label (ba.condition.blank? ? "No Item Condition provided" : ba.condition) %>
+              <%=  (ba.condition.blank? ? "No Item Condition provided" : ba.condition) %>
              
             </td>
             <td>
@@ -81,7 +81,7 @@
     <% end %>
 
   </div>
-<% end %>
+
 
 
 

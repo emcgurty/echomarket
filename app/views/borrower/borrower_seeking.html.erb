@@ -124,7 +124,7 @@
 				</div></td>
 
 			</tr>
-			<% is_us_state_blank = Address.where(borrower_id: @borrower.id).primary_address.select('us_state_id') %>
+			
 			<%= nf.fields_for :primary_address do |primary| %>
 			<div style="display:none;">
 					<%= primary.hidden_field(:address_type, :value => 'primary') %>
@@ -167,22 +167,14 @@
 				<span class="error" id="country_error">&nbsp;</span></td>
 
 				<td style="width:25%;"> 
-				<% if is_us_state_blank.blank? %>
-				<% display_us_state_id = 'inline' %>
-				<% else %>
-				<% display_us_state_id = 'none' %>
-				<% end %>
-				<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
+				
+				<div id="choose_us_state"  style="display:block;" >
 					<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
 					<%= primary.collection_select :us_state_id, UsState.all, :id, :state_name %>
 					
 				</div>
-				<% unless state_id_test.blank? %>
-				<% display_us_state_id = 'inline' %>
-				<% else %>
-				<% display_us_state_id = 'none' %>
-				<% end %>
-				<div id="provide_country_state" style="display:<%= display_us_state_id %>;" >
+				
+				<div id="provide_country_state" style="display:none;" >
 					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= primary.text_field(:region) %>
 				</div><span class="error" id="state_error">&nbsp;</span></td>
@@ -250,8 +242,7 @@
 	<div id="table_alternative_address_input" style="float:left;display:inline;width:92%;background-color:#E1F5A9; margin:5px 0px 0px 25px">
 		<label class="personal" >Provide your alternative contact address here:</label>
 		<br />
-		<% is_us_state_blank = Address.where(borrower_id: @borrower.id).alternative_address.select('us_state_id') %>
-		
+				
 		<%= nf.fields_for :alternative_address do |alternative| %>
 		
 		<div style="display:none;">
@@ -276,22 +267,13 @@
 				<span class="error" id="country_alternative_error">&nbsp;</span></td>
 
 				<td> 
-				<% if is_us_state_blank.us_state == '99'  %>
-				<% display_us_state_id = 'inline' %>
-				<% else %>
-				<% display_us_state_id = 'none' %>
-				<% end %>
-				<div id="choose_us_state_alternative"  style="display:<%= display_us_state_id %>;" >
+				<div id="choose_us_state_alternative"  style="display:block;" >
 					<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
 					<%= alternative.collection_select :us_state_id, UsState.all, :id, :state_name %>
 					
 				</div>
-				<% unless is_us_state_blank %>
-				<% display_us_state_id = 'inline' %>
-				<% else %>
-				<% display_us_state_id = 'none' %>
-				<% end %>
-				<div id="provide_country_state_alternative" style="display:<%= display_us_state_id %>;" >
+				
+				<div id="provide_country_state_alternative" style="display:block;" >
 					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
 					<%= alternative.text_field(:region) %>
 
@@ -491,9 +473,9 @@
 				<span class="error" id="item_count_error">Invalid item count.</span>
 			</div></td>
 		</tr>
-	    <% image_detail = ItemImages.where(borrower_id: @borrower.id) %>
+	    
 		<%= nf.fields_for :item_image do |ii| %>
-
+        <% image_detail = ItemImage.where(borrower_id: @borrower.id) %>
 		<tr class="odd">
 			<td  style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;float:left;">
@@ -514,14 +496,7 @@
 			<td style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;float:left;">
 				<label>Image Caption:
-				
-						<% unless image_detail.item_image_caption.blank? %>
-						<%= ii.label :item_image_caption %>
-						<% else %>
-							None provided.
-						<% end %>
-							
-					</label>
+				<%= ii.label :item_image_caption %></label>
 				<label>Image of Item:</label>
 				<img src="<%= get_image_path(image_detail.image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
 				<span class="file_image_error">&nbsp;</span>
@@ -538,7 +513,7 @@
 		</tr>
 		<% end %>
 		
-		<% end %>
+		
 
 	</table>
 	<div   class="div_white" >

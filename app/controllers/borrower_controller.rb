@@ -228,7 +228,7 @@ end
         if @borrower.save(:validate => true) && @borrower.errors.empty?
             @borrower.addresses  <<  Address.new(params[:borrower][:primary_address])          
             @borrower.addresses  <<  Address.new(params[:borrower][:alternative_address])
-            @borrower.item_image <<  ItemImage.new(params[:borrower]params[:item_image])
+            @borrower.item_image <<  ItemImage.new(params[:borrower][:item_image])
         end      
         if @borrower.errors.empty?
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
