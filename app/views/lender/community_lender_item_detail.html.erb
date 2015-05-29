@@ -26,7 +26,7 @@
 <%= form_for @lender, :url=> {:controller=>"lender", :action => "lender_item_detail"}, :html=> {:class=>"lender_item_detail", :id=>"lenders_item_form"} do |nf| %>
   <% @ldr = @lender %>
   <%  @bl = Contactdescribes.find(:all, :select=> "borrower_or_lender_text",
-    :readonly => true, :conditions => ['borrower_or_lender = 1 and option_value = ?', @ldr.describe_yourself]) %>
+    :readonly => true, :conditions => ['borrower_or_lender = 1 and option_value = ?', @ldr.contact_describe_id]) %>
 
   <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>

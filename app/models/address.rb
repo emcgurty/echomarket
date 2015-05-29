@@ -1,11 +1,12 @@
 class Address < ActiveRecord::Base
   
   attr_accessible :lender_id, :borrower_id, :address_line_1, :address_line_2, :postal_code, :city, :province, :us_state_id, :region, :country_id, :address_type
-  
+                                     
+                     
   belongs_to :borrower  # becuase add has borrower_id  
   belongs_to :lender
-  #scope :primary_address, where(:address_type  => 'primary') 
-  #scope :alternative_address, where(:address_type  => 'alternative')
+  scope :primary_address, where(:address_type  => 'primary') 
+  scope :alternative_address, where(:address_type  => 'alternative')
   before_create :get_primary_key_value
   
   protected

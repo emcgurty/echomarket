@@ -17,7 +17,7 @@ end
         @req = params[:lenders]
         @lender = Lender.new(
           :user_id => 'NA',
-          :describe_yourself => -1,
+          :contact_describe_id => -1,
           :first_name => 'NA',
           :last_name => 'NA',
           :displayLenderName => 0,
@@ -209,7 +209,7 @@ end
         @hold_picture_file = @req[:item_image_upload]
         @lender = Lender.new(
           :user_id => session[:user_id],
-          :describe_yourself =>  @req[:describe_yourself].to_i,
+          :contact_describe_id =>  @req[:contact_describe_id].to_i,
           :other_describe_yourself => @req[:other_describe_yourself],
           :organization_name => @req[:organization_name],
           :displayLenderOrganizationName => (@req[:displayLenderOrganizationName].blank? ? -1  : @req[:displayLenderOrganizationName].to_i),
@@ -323,7 +323,7 @@ end
         @useWhichContactAddress = (@req[:useWhichContactAddress].blank? ? 0: @req[:useWhichContactAddress].to_i)
         @hold_picture_file = @req[:item_image_upload]
         @myupdatehash = Hash.new
-        @myupdatehash = [:describe_yourself =>  @req[:describe_yourself].to_i,
+        @myupdatehash = [:contact_describe_id =>  @req[:contact_describe_id].to_i,
           :other_describe_yourself => @req[:other_describe_yourself],
           :organization_name => @req[:organization_name],
           :displayLenderOrganizationName => (@req[:displayLenderOrganizationName].blank? ? -1  : @req[:displayLenderOrganizationName].to_i),

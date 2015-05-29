@@ -1,29 +1,11 @@
   $(document).ready(function() {
    
-    $("span.error").css("visibility", "hidden");
+
+
+        $("span.error").css("visibility", "hidden");
     	$("div#rapid_borrower").css('display', 'block');
     	$("div#country_selected").css("display", "none");
 
-
-	$("select#borrower_country_id").bind('change', function() {
-
-		
-		var country_text = $("select#borrower_country_id option:selected").text();
-		$("div#country_selected").css("display", "block");
-		if ((country_text != 'United States') || (country_text == 'Please select')) {
-
-			$("div#choose_us_state").css("display", "none");
-			$("div#provide_country_state").css("display", "inline");
-
-
-		} else {
-
-			$("div#provide_country_state").css("display", "none");
-			$("div#choose_us_state").css("display", "inline");
-		}
-
-	});
-	$("select#borrower_country_id").trigger('change');
 	
 		$("#borrower_category_id").bind('change', function() {
 		var cat_cmb = $("select#borrower_category_id option:selected").text();
@@ -36,15 +18,14 @@
 			$("#other_category").css('display', 'none');
 		}
 
-	});
-
-	$("#borrower_category_id").trigger('change');
+    	});
+	    $("#borrower_category_id").trigger('change');
 	
 
-		$("select#lender_country_id").bind('change', function() {
+		$("select#addresses_country_id").bind('change', function() {
 
-		
-		var country_text = $("select#lender_country_id option:selected").text();
+
+		var country_text = $("select#addresses_country_id option:selected").text();
 		$("div#country_selected").css("display", "block");
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
 
@@ -59,7 +40,7 @@
 		}
 
 	});
-	$("select#lender_country_id").trigger('change');
+	$("select#addresses_country_id").trigger('change');
 	
 		$("#lender_category_id").bind('change', function() {
 		var cat_cmb = $("select#lender_category_id option:selected").text();
@@ -199,7 +180,7 @@ function validEmail(em) {
 function validLenderCountryState() {
 	
 	var foundIncomplete = false;
-	var cid = $("select#lender_country_id option:selected").val();
+	var cid = $("select#addresses_country_id option:selected").val();
 	var sid = $("select#lender_us_state_id option:selected").val(); 
 	var sis = $("input#lender_us_state_id").val();
 	
@@ -220,7 +201,7 @@ function validLenderCountryState() {
 function validBorrowerCountryState() {
 	
 	var foundIncomplete = false;
-	var cid = $("select#borrower_country_id option:selected").val();
+	var cid = $("select#addresses_country_id option:selected").val();
 	var sid = $("select#borrower_us_state_id option:selected").val(); 
 	var sis = $("input#borrower_us_state_id").val();
 	

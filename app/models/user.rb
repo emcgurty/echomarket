@@ -7,16 +7,12 @@ class User < ActiveRecord::Base
   alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
   alpha_numeric_regex_username = /\A[0-9 a-zA-Z\-\_]+\z/
   
-  has_many :lender
-  has_many :borrower
-  has_many :community
-  
   attr_accessor :password, :password_confirmation
   attr_accessor :community_name, :community_password, :community_first_name, :community_mi, :community_last_name, :community_alias
   attr_accessible :username, :email, :remote_ip, :user_alias, :community_name, :community_password
   attr_accessible :password, :password_confirmation, :user_type, :approved, :is_rapid
   attr_accessible :salt, :crypted_password,  :reset_code
-  before_save  :encrypt_password
+  before_save   :encrypt_password
   before_create :get_user_id,:make_activation_code
   validates  :user_alias, :username,:password, :password_confirmation, :email, :presence => true
   #
@@ -33,9 +29,8 @@ class User < ActiveRecord::Base
   # Activates the user in the database.
 
   def get_user_id
-     if self.id.blank?
-       self.id =  get_random
-     end  
+     self.id =  get_random
+       
     
   end
     

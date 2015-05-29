@@ -54,19 +54,19 @@
     <div style="display:block;float:left;width:94%;height:auto;margin:5px;">
       <div style="width: 50%;float:left;">
         <label id="personal" >As a borrower, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-        <% unless @Borrower.describe_yourself.blank? %>
-          <% @current_selected = @Borrower.describe_yourself %>
+        <% unless @Borrower.contact_describe_id.blank? %>
+          <% @current_selected = @Borrower.contact_describe_id %>
         <% else %>
           <% @current_selected = '99' %>
         <% end  %>
         <%  @getbl = Contactdescribes.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 2'], :order=>"option_value") %>
         <%  @bl = options_from_collection_for_select(@getbl, :option_value, :borrower_or_lender_text, @current_selected.to_i) %>
-        <%= nf.select( :describe_yourself, @bl,{ :onchange=>"borrower_describe_yourself();", :style=>"width:auto;" }) %>
+        <%= nf.select( :contact_describe_id, @bl,{ :onchange=>"borrower_describe_yourself();", :style=>"width:auto;" }) %>
         <span class="error" id="describe_yourself_combo_error">&nbsp;</span>
       </div>
       <% display_div = 'none' %>
-      <% unless @Borrower.describe_yourself.blank? %>
-        <% if @Borrower.describe_yourself == 100 %>
+      <% unless @Borrower.contact_describe_id.blank? %>
+        <% if @Borrower.contact_describe_id == 100 %>
           <% display_div =  'inline'%>
         <% end %>
       <% end %>

@@ -4,9 +4,11 @@
 
 <%= form_for @borrower, :url=> {:controller=>"borrower", :action => "rapid_borrower_seeking"},  :html=>   {:class=>"rapid_item", :method => 'post'} do |nf| %>
 
-<% unless  @borrower.errors.empty? %>
+<% if  @borrower.errors.any? %>
 <%= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrower}  %>
+
 <% end %>
+
 
 
 
@@ -31,6 +33,10 @@
 	<%= get_search_query_string.html_safe %>
 	<p>
 		<span >RAPID BORROWER ITEM REGISTRATION</span>
+	</p>
+	
+	<p>
+		<%= session[:notice] unless session[:notice].blank? %>
 	</p>
 	<a href="#" onclick="addLenderItem();">==> Save your Item Sought</a>
 	<%= link_to '==> Return to New Search', search_item_search_url %>
@@ -135,10 +141,10 @@
 	Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.
 </p>
 
-<label for="borrowers_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
+<label for="borrower_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
 	<%= nf.check_box( :goodwill) %></label>
 
-<label for="borrowers_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
+<label for="borrower_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
 	<%= nf.check_box( :age_18_or_more) %></label>
 <br/>
 </div>

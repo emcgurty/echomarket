@@ -18,7 +18,7 @@
 
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 
-<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_item_detail"},  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"} do |nf| %>
+<%= form_tag '/borrower/borrower_item_detail',  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"}  %>
 
 <div class="top" >
 	<p>
@@ -26,13 +26,7 @@
 	</p>
 	<p>
 
-		<% if  session[:community_id] %>
-		<%= session[:user_alias]   %>
-		<% else  %>
-		<%= nf.fields_for :user do |u| %>
-		<%= u.label :user_alias   %>
-		<% end  %>
-		: BORROWER ITEM DETAIL
+		<%= session[:user_alias]   %>: BORROWER ITEM DETAIL
 	</p>
 	<%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
 </div>
@@ -42,26 +36,29 @@
 </div>
 <div class="div_p_detail_sub">
 	<p>
-		<%=  @borrower.borrower_or_lender_text] %>
-		<% if @borrower.borrower_or_lender_text] == 'Other'%>
-		&nbsp;<%= @borrower.other_describe_yourself %>
+		
+		<% for bb in @borrower %>
+		
+		<%=  bb.borrower_or_lender_text %>
+		<% if bb.borrower_or_lender_text == 'Other'%>
+		&nbsp;<%= bb.other_describe_yourself %>
 		<% end %>
 
-		<% unless @borrower.organization_name.blank? %>
+		<% unless bb.organization_name.blank? %>
 		<br />
-		<% if @borrower.displayBorrowerOrganizationName.abs == 1 %>
-		Borrower Organization Name: &nbsp;<%= @borrower.organization_name %>
+		<% if bb.displayBorrowerOrganizationName.abs == 1 %>
+		Borrower Organization Name: &nbsp;<%= bb.organization_name %>
 		<br />
 		<% end %>
 		<% end %>
-		<% if @borrower.displayBorrowerName.abs == 1%>
-		Borrower Name:&nbsp;<%= @borrower.first_name %>&nbsp;<%= (@borrower.mi.blank? ? "": @borrower.mi) %>&nbsp;<%= @borrower.last_name %>
+		<% if bb.displayBorrowerName.abs == 1%>
+		Borrower Name:&nbsp;<%= bb.first_name %>&nbsp;<%= (bb.mi.blank? ? "": bb.mi) %>&nbsp;<%= bb.last_name %>
 		<br />
 		<% end %>
 	</p>
-	<% if (@borrower.displayBorrowerAddress == 1 ) %>
+	<% if (bb.displayBorrowerAddress == 1 ) %>
 
-	<% nf.fields_for :primary_address do |borrower_primary_address| %>
+<%	borrower_primary_address = Borrower.find(bb.b_id).addresses.where("address_type = 'primary'")  %>
 	<p>
 		Borrower Address:
 		<br />
@@ -72,12 +69,12 @@
 		<%= (borrower_primary_address.province.blank? ? "": borrower_primary_address.province) + " " %>
 
 		<% unless borrower_primary_address.us_state_id.blank? || borrower_primary_address.us_state_id == '99'  %>
-		<%= borrower_primary_address.state_name) %>
+		<%= borrower_primary_address.state_name %>
 		<% end %>
 		<br />
 		
 		<% unless borrower_primary_address.region.blank?  %>
-		<%= borrower_primary_address.region) %>
+		<%= borrower_primary_address.region %>
 		<% end %>
 		<br />
 		
@@ -95,13 +92,14 @@
 
 </div>
 
-<% if ((@borrower.useWhichContactAddress == 2)  || (@borrower.useWhichContactAddress == 1)) %>
+<% if ((bb.useWhichContactAddress == 2)  || (bb.useWhichContactAddress == 1)) %>
 
 <div class="div_p_detail" >
 	Borrower Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
-    <%= nf.fields_for :alternative_address do |borrower_alternative_address| %>
+   <%  borrower_alternative_address = Borrower.find(bb.b_id).addresses.where("address_type = 'alternative'") %>
+    
 	<p>
 		<%= borrower_alternative_address.address_line_1 %>
 		<%= (borrower_alternative_address.address_line_2.blank? ? " ": borrower_alternative_address.address_line_2) %>
@@ -110,12 +108,12 @@
 		<%= (borrower_alternative_address.province.blank? ? "": borrower_alternative_address.province) + " " %>
 
 		<% unless borrower_alternative_address.us_state_id.blank? || borrower_alternative_address.us_state_id == '99'  %>
-		<%= borrower_alternative_address.state_name) %>
+		<%= borrower_alternative_address.state_name %>
 		<% end %>
 		<br />
 		
 		<% unless borrower_alternative_address.region.blank?  %>
-		<%= borrower_alternative_address.region) %>
+		<%= borrower_alternative_address.region %>
 		<% end %>
 		<br />
 		
@@ -126,27 +124,27 @@
 		
 		<%= borrower_alternative_address.postal_code %>
 	</p>
-	<% end %>
+	
 </div>
-<% else %>
+<% end %>
 
 
-<% if @borrower.public_display_home_phone.abs == 1 || @borrower.public_display_cell_phone.abs == 1  || @borrower.public_display_alternative_phone.abs == 1%>
+<% if bb.public_display_home_phone.abs == 1 || bb.public_display_cell_phone.abs == 1  || bb.public_display_alternative_phone.abs == 1%>
 
 <div class="div_p_detail"  >
 	Borrower Contact - Phone:
 </div>
 <div class="div_p_detail_sub">
 	<p>
-		<% if @borrower.public_display_home_phone.abs == 1 %>
-		<%= "Home: " + @borrower.home_phone %>&nbsp;
+		<% if bb.public_display_home_phone.abs == 1 %>
+		<%= "Home: " + bb.home_phone %>&nbsp;
 		<% end %>
-		<% if @borrower.public_display_cell_phone.abs == 1 %>
-		<%= "Cell: " + @borrower.cell_phone %>&nbsp;
+		<% if bb.public_display_cell_phone.abs == 1 %>
+		<%= "Cell: " + bb.cell_phone %>&nbsp;
 		<% end %>
 
-		<% if @borrower.public_display_alternative_phone.abs == 1 %>
-		<%= "Alternative: " + @borrower.alternative_phone %>
+		<% if bb.public_display_alternative_phone.abs == 1 %>
+		<%= "Alternative: " + bb.alternative_phone %>
 		<% end %>
 	</p>
 
@@ -154,7 +152,7 @@
 
 <% end %>
 
-<% unless @borrower.borrower_contact_by_email == '0'  %>
+<% unless bb.borrower_contact_by_email == '0'  %>
 
 <div class="div_p_detail" >
 	Borrower Contact - Email:
@@ -162,61 +160,60 @@
 
 <div class="div_p_detail_sub">
 	<p>
-		<% if @borrower.borrower_contact_by_email == 3 %>
+		<% if bb.borrower_contact_by_email == 3 %>
 		<% if  session[:community_id] %>
 		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
 		<% else  %>
-		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @borrower.user_id]) %>&nbsp;&nbsp;
+		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>&nbsp;&nbsp;
 		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
 		<% end  %>
 		<% end %>
 
-		<% if @borrower.borrower_contact_by_email == '2' %>
-		<%= mail_to @borrower.email_alternative,"#{@borrower.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+		<% if bb.borrower_contact_by_email == '2' %>
+		<%= mail_to bb.email_alternative,"#{bb.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
 		<% end %>
-		<% if @borrower.borrower_contact_by_email.to_i.abs == 1 %>
-		<%= mail_to @borrower.email_alternative, "#{@borrower.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+		<% if bb.borrower_contact_by_email.to_i.abs == 1 %>
+		<%= mail_to bb.email_alternative, "#{bb.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
 		<% if  session[:community_id] %>
 		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
 		<% else  %>
-		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", @borrower.user_id]) %>&nbsp;&nbsp;
+		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>&nbsp;&nbsp;
 		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
 		<% end  %>
 		<% end %>
 	</p>
 
 </div>
+	<% end %>
 
-<% end %>
-
-<% unless @borrower.borrower_contact_by_Facebook.blank? &&  @borrower.borrower_contact_by_LinkedIn.blank? &&  @borrower.borrower_contact_by_Other_Social_Media.blank?
-@borrower.borrower_contact_by_Twitter.blank? &&  @borrower.borrower_contact_by_Instagram.blank? &&  @borrower.borrower_contact_by_Other_Social_Media_Access.blank? %>
+<% unless bb.borrower_contact_by_Facebook.blank? &&  bb.borrower_contact_by_LinkedIn.blank? &&  bb.borrower_contact_by_Other_Social_Media.blank?
+bb.borrower_contact_by_Twitter.blank? &&  bb.borrower_contact_by_Instagram.blank? &&  bb.borrower_contact_by_Other_Social_Media_Access.blank? %>
 <div class="div_p_detail" >
 	borrower Contact - Social Media:
 </div>
 <div class="div_p_detail_sub">
 
 	<p>
-		<% unless @borrower.borrower_contact_by_Facebook.blank?  %>
-		Facebook Access: &nbsp;<%= @borrower.borrower_contact_by_Facebook %>&nbsp;&nbsp;
+		<% unless bb.borrower_contact_by_Facebook.blank?  %>
+		Facebook Access: &nbsp;<%= bb.borrower_contact_by_Facebook %>&nbsp;&nbsp;
 		<% end %>
 
-		<% unless @borrower.borrower_contact_by_LinkedIn.blank?  %>
-		LinkedIn Access: &nbsp;<%= @borrower.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
+		<% unless bb.borrower_contact_by_LinkedIn.blank?  %>
+		LinkedIn Access: &nbsp;<%= bb.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
 		<% end %>
 
-		<% unless @borrower.borrower_contact_by_Twitter.blank?  %>
-		Twitter Access:&nbsp;<%= @borrower.borrower_contact_by_Twitter %>&nbsp;&nbsp;
-
-		<% end %>
-		<% unless @borrower.borrower_contact_by_Instagram.blank?  %>
-		Instagram Access:&nbsp;<%= @borrower.borrower_contact_by_Instagram %>&nbsp;&nbsp;
+		<% unless bb.borrower_contact_by_Twitter.blank?  %>
+		Twitter Access:&nbsp;<%= bb.borrower_contact_by_Twitter %>&nbsp;&nbsp;
 		<% end %>
 
-		<% unless @borrower.borrower_contact_by_Other_Social_Media.blank?  %>
+		<% unless bb.borrower_contact_by_Instagram.blank?  %>
+		Instagram Access:&nbsp;<%= bb.borrower_contact_by_Instagram %>&nbsp;&nbsp;
+		<% end %>
+
+		<% unless bb.borrower_contact_by_Other_Social_Media.blank?  %>
 		<br />
-		Other Social Media Account Access:&nbsp;<%= @borrower.borrower_contact_by_Other_Social_Media %>
-		Other Social Media Account Access:&nbsp;<%= @borrower.borrower_contact_by_Other_Social_Media_Access %>
+		Other Social Media Account Access:&nbsp;<%= bb.borrower_contact_by_Other_Social_Media %>
+		Other Social Media Account Access:&nbsp;<%= bb.borrower_contact_by_Other_Social_Media_Access %>
 		<% end %>
 	</p>
 </div>
@@ -230,33 +227,35 @@
 
 	Category:
 	
-	<%= @borrower.category_type %>
-	<% if @borrower.category_type == "Other" %>
+	<%= bb.category_type %>
+	<% if bb.category_type == "Other" %>
 	&nbsp;Other category:
-	<%= @borrower.other_item_category %>
+	<%= bb.other_item_category %>
 	<% end %>
 
 	<br />
 	Description:&nbsp;
-	<%= @borrower.item_description %>
+	<%= bb.item_description %>
 	<br />
 
 	Condition:&nbsp;
-	<%= @borrower.condition %>
+	<%= bb.condition %>
 	<br />
 
-	<% unless @borrower.item_model.blank?  %>
+	<% unless bb.item_model.blank?  %>
 	Model: &nbsp;
-	<%= @borrower.item_model %>
+	<%= bb.item_model %>
 	<br />
 	<% end %>
 
 	Number of Items: &nbsp;
-	<%= @borrower.item_count %>
+	<%= bb.item_count %>
 	<br />
 
-	<% @icaption = (@borrower.item_image_caption.blank? ? "No caption provided"  :  @borrower.item_image_caption)  %>
+	<% @icaption = (bb.item_image_caption.blank? ? "No caption provided"  :  bb.item_image_caption)  %>
 
+	
+	<% unless bb.image_file_name == "NA" ||  bb.image_file_name == ""  %>
 	<div style="margin-left:25px;margin-top:5px;float:left;">
 
 		<table style="width:100%">
@@ -268,15 +267,12 @@
 			<tr>
 
 				<td style="width:50%;text-align:center;"><%= @icaption %></td>
-				<td style="width:50%;text-align:center;"><img src="<%= get_image_path(@borrower.image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
+				<td style="width:50%;text-align:center;"><img src="<%= get_image_path(bb.image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
 			</tr>
 		</table>
 	</div>
+	<% end %>
 
 </div>
-<% end %>
-<% end %>
 
-
-	### borrower_primary_address = Borrower.find(@borrower.id).addresses.where("address_type = 'primary'")
-	## http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for
+<% end %>

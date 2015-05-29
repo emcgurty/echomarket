@@ -1,18 +1,17 @@
 class Borrower < ActiveRecord::Base
-  attr_accessible :describe_yourself, :first_name, :last_name, :displayBorrowerName, :displayBorrowerAddress, :useWhichContactAddress, :email_alternative, :borrower_contact_by_email, 
+  
+  
+  attr_accessible :contact_describe_id, :first_name, :last_name, :displayBorrowerName, :displayBorrowerAddress, :useWhichContactAddress, :email_alternative, :borrower_contact_by_email, 
                    :category_id, :item_description, :item_condition_id, :other_item_category, :item_model, :item_count, :goodwill, :age_18_or_more, :is_active, :is_community, :date_created,
                    :approved, :remote_ip, :comment
   has_many :addresses, dependent: :destroy
   has_many :item_image, dependent: :destroy
-  has_many :user
- 
-
   
-  attr_accessible :addresses_attributes, :item_image_attributes, :user_attributes
+  
+  attr_accessible :addresses_attributes, :item_image_attributes
   accepts_nested_attributes_for :item_image
   accepts_nested_attributes_for :addresses
-  accepts_nested_attributes_for :user
-  
+   
   
   ###  Borrower tables contains i_c_id, c_i, c_i
   belongs_to :item_condition
@@ -20,7 +19,6 @@ class Borrower < ActiveRecord::Base
   belongs_to :country
   belongs_to :us_state
   belongs_to :contact_describe 
-  
   before_create :get_primary_key_value
 
   protected

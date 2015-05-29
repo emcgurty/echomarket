@@ -7,12 +7,13 @@ class Notifier < ActionMailer::Base
   layout 'notifier'
 
   def notify_rapid(user)
-    @subject = "Welcome Rapid Echo Market participant"
-    @recipients = user.email + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
-    @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
-    @user_type = user.user_type
-    @user_alias = user.user_alias
-    @email = user.email
+      puts "rapid user email sent"  
+     @subject = "Welcome Rapid Echo Market participant"
+     @recipients = user.email + ", " + LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+     @from = LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:email]
+     @user_type = user.user_type
+     @user_alias = user.user_alias
+     @email = user.email
    end
    
     def notify_advertiser(ad)

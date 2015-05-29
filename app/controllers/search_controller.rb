@@ -1,7 +1,7 @@
 class SearchController < ApplicationController
   def item_search
 
-    # session[:notice] = ''
+    ##session[:notice] = ''
     session[:background] = true
     if params[:id]
       @search = Search.find(params[:id].to_i)

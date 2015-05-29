@@ -46,12 +46,12 @@
 	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
 		<div style="width: 50%;float:left;">
 			<label class="personal" >As a lender, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			<%= cd.collection_select :describe_yourself, ContactDescribe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 1'], :order=>"option_value"), :option_value, :borrower_or_lender_text  %>
+			<%= cd.collection_select :contact_describe_id, ContactDescribe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 1'], :order=>"option_value"), :option_value, :borrower_or_lender_text  %>
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
 		<% display_div = 'none' %>
-		<% unless @lender.describe_yourself.blank? %>
-			<% if @lender.describe_yourself == 100 %>
+		<% unless @lender.contact_describe_id.blank? %>
+			<% if @lender.contact_describe_id == 100 %>
 			<% display_div =  'inline'%>
 			<% else %>
 			<% display_div =  'none'%>
