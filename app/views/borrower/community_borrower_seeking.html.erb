@@ -6,34 +6,23 @@
  :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
 
-  <%#= render :partial => 'home/check_for_errors', :locals => {:data_source => @borrower}  %>
-  <% unless @borrower[0].blank? %>
-		<% @borrower = @borrower[0] %>
-  <% end %>
- 
-    <% if session[:reuse] %>
-      <%= nf.hidden_field( :borrower_id, :value=>'') %>
-    <% else %>
-      <%= nf.hidden_field( :borrower_id) %>
-    <% end %>
-    <%= nf.hidden_field( :is_active) %>
-    <%= nf.hidden_field( :user_id) %>
- 
+<% if session[:reuse] %>
+<div style="display:none;">
+	<%= nf.hidden_field( :id, :value=>'') %>
+</div>
+<% else %>
+<div style="display:none;">
+	<%= nf.hidden_field( :id, :value=> @borrower.id) %>
+</div>
+<% end %>
 
-  <% @st = UsStates.find(:all, :order => "state_name") %>
-  <% @ct = Countries.find(:all, :order => "country_name") %>
-  <% @community_name  = (session[:community_name].blank? ? false : true) %>
-	<% if @community_name  %>
-		<% @cdetails = Community.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
-	<% end  %>
- 
-    <% if session[:edit_record]  %>
-      <% @getValue = @borrower%>
-    <% else %>
-      <% @getValue = @cdetails %>
-    <% end %>
- 
- 
+<div style="display:none;">
+
+	<%= nf.hidden_field( :is_active, :value =>'1') %>
+	<%= nf.hidden_field( :user_id, :value => session[:user_id]) %>
+
+</div>
+
   <div class="top" >
 
     <p><span class="logo_white" >The Echo Market</span></p>
