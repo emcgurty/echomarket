@@ -27,7 +27,7 @@
 	 	<% if session[:community_name].blank? %>
 	    
 	    <% @lender = Lender
-	                .joins(:category, :item_condition, :item_image)
+	                .joins(:category, :item_condition, :item_images)
 	                .select(["lenders.*", "categories.category_type", "item_conditions.condition", "item_images.*"])
 	                .where(" lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 )") 
 	                .order("categories.category_type ASC, lenders.date_created ASC ")
@@ -38,7 +38,7 @@
 		
            <% where_clause = "WHERE (lenders.is_active= 1 AND lenders.is_community = 1  AND lenders.user_id  =  #{session[:user_id]}" %>
 	       <% @lender = Lender
-	                .joins(:category, :item_condition, :item_image)
+	                .joins(:category, :item_condition, :item_images)
 	                .select(["lenders.*", "categories.category_type", "item_conditions.condition", "item_images.*"])
 	                .where(where_clause) 
 	                .order("categories.category_type ASC, lenders.date_created ASC ")
@@ -94,7 +94,7 @@
 		<% if session[:community_name].blank? %>
 		
     <% @borrower = Borrower
-	                .joins(:category, :item_condition, :item_image)
+	                .joins(:category, :item_condition, :item_images)
 	                .select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_images.*"])
 	                .where(" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )") 
 	                .order("categories.category_type ASC, borrowers.date_created ASC ")
@@ -105,7 +105,7 @@
 		
            <% where_clause = "WHERE (borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  #{session[:user_id]}" %>
 	       <% @borrower = Borrower
-	                .joins(:category, :item_condition, :item_image)
+	                .joins(:category, :item_condition, :item_images)
 	                .select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_images.*"])
 	                .where(where_clause) 
 	                .order("categories.category_type ASC, borrowers.date_created ASC ")

@@ -474,7 +474,7 @@
 			</div></td>
 		</tr>
 	    
-		<%= nf.fields_for :item_image do |ii| %>
+		<%= nf.fields_for :item_images do |ii| %>
         <% image_detail = ItemImage.where(borrower_id: @borrower.id) %>
 		<tr class="odd">
 			<td  style="width:50%;">
