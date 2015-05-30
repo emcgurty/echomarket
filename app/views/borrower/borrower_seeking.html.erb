@@ -115,7 +115,7 @@
 
 			</tr>
 			
-			<%= nf.fields_for :primary_address do |primary| %>
+			<%= nf.fields_for :addresses, @borrower.addresses.primary_address do |primary| %>
 			<div style="display:none;">
 					<%= primary.hidden_field(:address_type, :value => 'primary') %>
 					<%= primary.hidden_field(:lender_id, :value => '') %>
@@ -125,7 +125,7 @@
 				<td style="width:25%;">
 				
 					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= primary.text_field( :address_line_1, :maxlength=>24, :size=>24) %>
+					<%= primary.text_field(:address_line_1, :maxlength=>24, :size=>24) %>
 					<span class="error" id="address_line_1_error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">
@@ -233,7 +233,7 @@
 		<label class="personal" >Provide your alternative contact address here:</label>
 		<br />
 				
-		<%= nf.fields_for :alternative_address do |alternative| %>
+		<%= nf.fields_for :addresses, @borrower.addresses.alternative_address do |alternative| %>
 		
 		<div style="display:none;">
 					<%= alternative.hidden_field(:address_type, :value => 'alternative') %>
@@ -464,13 +464,14 @@
 			</div></td>
 		</tr>
 	   </table>
-	
+	  here begin
+		
 		<% if session[:edit_record] %>
 						
 		
 		<table class="personal">
-		<%= nf.fields_for :item_images do |builder| %>
-        <% image_detail = Borrower.find(@borrower.id).item_images.select('image_file_name').first unless @borrower.id.blank? %>
+		<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
+        
      
 		<tr class="odd">
 			<td  style="width:50%;">
@@ -480,10 +481,12 @@
 				<span class="file_image_error">&nbsp;</span>
 			</div></td >
 			<td  style="width:50%;">
-			<div style="margin-left:5px;margin-top:5px;float:left;display:none;" id="image_details">
+			<div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
 				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
-				<label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
-				<%= builder.text_field( :item_image_caption) %>
+				<label>If you'd like, provide a caption for your itemssssssss image<span class="max_length">(50)</span></label>
+				<%= builder.label( :item_image_caption) %>
+				<%= "lkjlkjljklkjljljkl" %>
+				<%= :item_image_caption %>
 			</div></td>
 		</tr>
 		
@@ -494,7 +497,7 @@
 				<%= builder.label :item_image_caption %></label>
 				<label>Image of Item:</label>
 				
-				<img src="<%= get_image_path(image_detail.image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
+				<img src="<%= get_image_path(:image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
 				<span class="file_image_error">&nbsp;</span>
 			</div></td>
 			<td style="width:50%;">
@@ -513,7 +516,7 @@
 		<% else %>
 		
 		<table class="personal">
-		<%= fields_for :item_images do |builder| %>
+		<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
         <tr class="odd">
         	
 			<td  style="width:50%;">
@@ -537,6 +540,8 @@
 	</table>
 	
 	<% end %>	
+	
+	here end
 	<div   class="div_white" >
 		&nbsp;
 	</div>

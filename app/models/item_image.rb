@@ -23,8 +23,8 @@ class ItemImage < ActiveRecord::Base
 
   def item_image_upload=(picture_field)
     if picture_field.blank?
-      self.image_file_name = "NA" 
-      self.item_image_caption = "NA"
+      self.image_file_name = "No image file selected" 
+      self.item_image_caption = "No caption provided"
       return
     end
 

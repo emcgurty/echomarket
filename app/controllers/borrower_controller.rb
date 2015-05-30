@@ -164,6 +164,7 @@ end
       
     else
       if params[:id].blank?
+       session[:edit_record] = false 
        @borrower = Borrower.new
       else
         @borrower = Borrower.find(params[:id])

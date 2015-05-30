@@ -7,9 +7,9 @@ class Borrower < ActiveRecord::Base
                    :cell_phone, :public_display_cell_phone, :alternative_phone, :public_display_alternative_phone, :borrower_contact_by_home_phone, :borrower_contact_by_cell_phone, 
                    :borrower_contact_by_alternative_phone, :borrower_contact_by_Facebook, :borrower_contact_by_LinkedIn, :borrower_contact_by_Other_Social_Media, :borrower_contact_by_Twitter, 
                    :borrower_contact_by_Instagram, :borrower_contact_by_Other_Social_Media_Access, :notify_lenders, :date_updated
+             
   has_many :addresses, dependent: :destroy
   has_many :item_images, dependent: :destroy
-  
   
   attr_accessible :addresses_attributes, :item_images_attributes
   accepts_nested_attributes_for :item_images
