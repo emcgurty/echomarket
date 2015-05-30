@@ -154,8 +154,8 @@ end
       # <% @getValue = @cdetails %>
     # <% end %>
     
-    
-    
+    ## If the borrowers has no borrower data....
+ 
     session[:no_border] = true
     if params[:borrower]
       unless update_borrower_seeking
@@ -229,7 +229,7 @@ end
         if @borrower.save(:validate => true) && @borrower.errors.empty?
             @borrower.addresses  <<  Address.new(params[:borrower][:primary_address])          
             @borrower.addresses  <<  Address.new(params[:borrower][:alternative_address])
-            @borrower.item_images <<  ItemImage.new(params[:borrower][:item_image])
+            @borrower.item_images <<  ItemImage.new(params[:item_images])    ## If new then can't use nf.borrowes so separate params
         end      
         if @borrower.errors.empty?
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
@@ -288,7 +288,7 @@ end
         if @ltmp.update_attributes(@myupdatehash[0])
           @ltmp.update_attributes(:address_attributes => params[:primary_address])          
           @ltmp.update_attributes(:address_attributes => params[:alternative_address])
-          @ltmp.update_attributes(:item_images_attributes => params[:item_image])
+          @ltmp.update_attributes(:item_images_attributes => params[:item_images])
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
         else
           return false
@@ -351,7 +351,7 @@ end
                 
                   @borrower.addresses << Address.new(params["addresses"])
                   @myupdatehash = [:borrower_id => @borrower.id, :date_created => Time.now, :image_file_name => 'NA']
-                  @borrower.item_image << ItemImage.new(@myupdatehash[0])
+                  @borrower.item_images << ItemImage.new(@myupdatehash[0])
                   
                   if @borrower.errors.empty?
                     Notifier.notify_rapid(@user_new).deliver

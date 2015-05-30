@@ -6,16 +6,6 @@
 :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
 
-<% if session[:reuse] %>
-<div style="display:none;">
-	<%= nf.hidden_field( :id, :value=>'') %>
-</div>
-<% else %>
-<div style="display:none;">
-	<%= nf.hidden_field( :id, :value=> @borrower.id) %>
-</div>
-<% end %>
-
 <div style="display:none;">
 
 	<%= nf.hidden_field( :is_active, :value =>'1') %>
@@ -473,49 +463,80 @@
 				<span class="error" id="item_count_error">Invalid item count.</span>
 			</div></td>
 		</tr>
-	    
-		<%= nf.fields_for :item_images do |ii| %>
-        <% image_detail = ItemImage.where(borrower_id: @borrower.id) %>
+	   </table>
+	
+		<% if session[:edit_record] %>
+						
+		
+		<table class="personal">
+		<%= nf.fields_for :item_images do |builder| %>
+        <% image_detail = Borrower.find(@borrower.id).item_images.select('image_file_name').first unless @borrower.id.blank? %>
+     
 		<tr class="odd">
 			<td  style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;float:left;">
 				<label>Image of Item:</label>
-				<input type="file" id="l2bimage" class="" name="item_image_upload"  accept="image/*" />
+				<%= builder.file_field(:item_image_upload, {:id=>"l2bimage", :accept=>"image/*"}) %>
 				<span class="file_image_error">&nbsp;</span>
 			</div></td >
 			<td  style="width:50%;">
 			<div style="margin-left:5px;margin-top:5px;float:left;display:none;" id="image_details">
 				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
 				<label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
-				<%= ii.text_field( :item_image_caption) %>
+				<%= builder.text_field( :item_image_caption) %>
 			</div></td>
 		</tr>
-
 		
 		<tr class="odd">
 			<td style="width:50%;">
 			<div style="margin-left:25px;margin-top:5px;float:left;">
 				<label>Image Caption:
-				<%= ii.label :item_image_caption %></label>
+				<%= builder.label :item_image_caption %></label>
 				<label>Image of Item:</label>
+				
 				<img src="<%= get_image_path(image_detail.image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
 				<span class="file_image_error">&nbsp;</span>
 			</div></td>
 			<td style="width:50%;">
 			<div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-				<input type="file" id="l2bimage" class="" name="item_image_upload"  accept="image/*" />
+				<%= builder.file_field(:item_image_upload, {:id=>"l2bimage", :accept=>"image/*"}) %>
 				<span class="file_image_error">&nbsp;</span>
 				<img id="imagePreview" height="100" width="200" src="" alt="New uploaded image file" />
 				<label>If you'd like, provide an updated caption for your item image<span class="max_length">(50)</span></label>
-				<%= ii.text_field( :item_image_caption) %>
+				<%= builder.text_field( :item_image_caption) %>
 			</div>
 			</td>
 		</tr>
 		<% end %>
+		</table>
 		
+		<% else %>
 		
-
+		<table class="personal">
+		<%= fields_for :item_images do |builder| %>
+        <tr class="odd">
+        	
+			<td  style="width:50%;">
+			<div style="margin-left:25px;margin-top:5px;float:left;">
+				<label>Image of Item:</label>
+				<%= builder.file_field(:item_image_upload, {:id=>"l2bimage", :accept=>"image/*"}) %>
+				<span class="file_image_error">&nbsp;</span>
+			</div></td >
+			<td  style="width:50%;">
+			<div style="margin-left:5px;margin-top:5px;float:left;display:none;" id="image_details">
+				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
+				<label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
+				<%= builder.text_field( :item_image_caption) %>
+			</div>
+			</td>
+			
+		</tr>
+		<% end %>
+	
+		
 	</table>
+	
+	<% end %>	
 	<div   class="div_white" >
 		&nbsp;
 	</div>

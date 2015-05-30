@@ -12,28 +12,6 @@ class AdvertiserController < ApplicationController
 
   end
 
-  # def create
-    # session[:notice] = ''
-# 
-    # respond_to do |f|
-# 
-      # unless params[:advertiser].blank?
-#      
-        # @advertiser = Advertiser.new(params["advertiser"])
-         # if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
-          # @result = @advertiser.update_attributes(:item_image_attributes => params["item_image"])
-          # Notifier.notify_advertiser(@advertiser).deliver
-          # session[:notice] = "Your Advertisement record has been saved, and validation email has been sent to you at #{@advertiser.advertiser_email}."
-          # f.html {redirect_to  home_items_listing_url}
-        # else
-          # f.html { render :action => 'new'}
-        # end
-      # end
-#       
-    # end
-  # end
-
-
   def create
     session[:notice] = ''
 
@@ -44,7 +22,7 @@ class AdvertiserController < ApplicationController
         @myhash = 
         @advertiser = Advertiser.new(params["advertiser"])
          if  @advertiser.save(:validate => true) && @advertiser.errors.empty? 
-          @advertiser.item_images << ItemImage.new(params["item_image"])
+          @advertiser.item_image << ItemImage.new(params["item_image"])
           Notifier.notify_advertiser(@advertiser).deliver
           session[:notice] = "Your Advertisement record has been saved, and validation email has been sent to you at #{@advertiser.advertiser_email}."
           f.html {redirect_to  home_items_listing_url}
