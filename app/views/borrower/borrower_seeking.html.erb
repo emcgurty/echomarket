@@ -115,68 +115,17 @@
 
 			</tr>
 			
-			<%= nf.fields_for :addresses, @borrower.addresses.primary_address do |primary| %>
-			<div style="display:none;">
-					<%= primary.hidden_field(:address_type, :value => 'primary') %>
-					<%= primary.hidden_field(:lender_id, :value => '') %>
-					<%= primary.hidden_field(:borrower_id, :value => @borrower.id) %>
-				</div>	
-			<tr class="odd">
-				<td style="width:25%;">
-				
-					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					<%= primary.text_field(:address_line_1, :maxlength=>24, :size=>24) %>
-					<span class="error" id="address_line_1_error">&nbsp;</span>
-				</div></td>
-				<td style="width:25%;">
-				<div>
-					<label>Address Line 2:</label>
-					<%= primary.text_field( :address_line_2,  :maxlength=>24, :size=>24) %>
-					<span class="error">&nbsp;</span>
-				</div></td>
-				<td style="width:25%;">
-				<div>
-					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
-					<%= primary.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
-					<span class="error" id="postal_code_error">&nbsp;</span>
-				</div></td>
-				<td style="width:25%;">
-				<div>
-					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
-					<%= primary.text_field( :city, :maxlength=>20, :size=>20) %>
-					<span class="error" id="city_error">&nbsp;</span>
-				</div></td>
-
-			</tr>
-			<tr class="even">
-				
-				<td style="width:25%;"><label>County:&nbsp;<span class="max_length">(20)</span></label> 
-				<%= primary.text_field( :province,  :maxlength=>20, :size=>20) %> <span class="error">&nbsp;</span></td>
-				<td style="width:25%;"><label>Country:<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			   	<%= primary.collection_select :country_id, Country.all, :id, :country_name %>
-				<span class="error" id="country_error">&nbsp;</span></td>
-
-				<td style="width:25%;"> 
-				
-				<div id="choose_us_state"  style="display:block;" >
-					<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
-					<%= primary.collection_select :us_state_id, UsState.all, :id, :state_name %>
-					
-				</div>
-				
-				<div id="provide_country_state" style="display:none;" >
-					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= primary.text_field(:region) %>
-				</div><span class="error" id="state_error">&nbsp;</span></td>
-
-				<td style="width:25%;">
-				<div style="display:inline-block;vertical-align:top;">
-					<label >Public Display Address?:</label>
-					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "borrower",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
-					<span class="error" id="display_address_error">&nbsp;</span>
-				</div></td>
-			</tr>
-			<% end %>
+			<% if session[:edit_record] %>
+			
+			<%= render :partial => 'borrower/existing_primary_address' %>
+			
+			<% else %>
+			
+			<%= render :partial => 'borrower/new_primary_address' %>
+		
+			<% end %>	
+			
+						
 			
 		</table>
 		<table class="personal">
@@ -233,55 +182,16 @@
 		<label class="personal" >Provide your alternative contact address here:</label>
 		<br />
 				
-		<%= nf.fields_for :addresses, @borrower.addresses.alternative_address do |alternative| %>
+		<% if session[:edit_record] %>
+			
+			<%= render :partial => 'borrower/existing_alternative_address' %>
+			
+			<% else %>
+			
+			<%= render :partial => 'borrower/new_alternative_address' %>
 		
-		<div style="display:none;">
-					<%= alternative.hidden_field(:address_type, :value => 'alternative') %>
-					<%= alternative.hidden_field(:lender_id, :value => '') %>
-					<%= alternative.hidden_field(:borrower_id, :value => @borrower.id) %>
-				</div>	
-		<table class="alternative_address_table" id="table_address_input" >
-			<tr>
-				<td><label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
-					 <%= alternative.text_field( :address_line_1, :size=>20, :maxlength=>24) %> <span class="error" id="address_line_1_alternative_error">&nbsp;</span></td>
-				<td><label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label>
-					 <%= alternative.text_field( :address_line_2, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
-				<td><label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label> 
-					<%= alternative.text_field( :city, :size=>20, :maxlength=>20) %> <span class="error" id="city_alternative_error">&nbsp;</span></td>
-				<td><label>County:&nbsp;<span class="max_length">(24)</span></label> 
-					<%= alternative.text_field( :province,  :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
-			</tr>
-			<tr>
-				<td><label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> 
-				<%= alternative.collection_select :country_id, Country.all, :id, :country_name %>
-				<span class="error" id="country_alternative_error">&nbsp;</span></td>
-
-				<td> 
-				<div id="choose_us_state_alternative"  style="display:block;" >
-					<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
-					<%= alternative.collection_select :us_state_id, UsState.all, :id, :state_name %>
-					
-				</div>
-				
-				<div id="provide_country_state_alternative" style="display:block;" >
-					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
-					<%= alternative.text_field(:region) %>
-
-				</div><span class="error" id="state_alternative_error">&nbsp;</span></td>
-
-				<td><label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label> 
-				<%= alternative.text_field( :postal_code,  :maxlength=>15, :size=>15) %> <span class="error" id="postal_code_alternative_error">&nbsp;</span></td>
-				<td> &nbsp; </td>
-
-			</tr>
-
-			<tr>
-				<td colspan="4"><span class="error" id="whichContactAddressError">Incomplete alternative address information.  Please note required fields.</span></td>
-
-			</tr>
-		</table>
-		
-		<% end %>
+			<% end %>
+	
 
 	</div>
 	<div   class="div_white" >
@@ -464,84 +374,16 @@
 			</div></td>
 		</tr>
 	   </table>
-	  here begin
-		
-		<% if session[:edit_record] %>
-						
-		
-		<table class="personal">
-		<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
-        
-     
-		<tr class="odd">
-			<td  style="width:50%;">
-			<div style="margin-left:25px;margin-top:5px;float:left;">
-				<label>Image of Item:</label>
-				<%= builder.file_field(:item_image_upload, {:id=>"l2bimage", :accept=>"image/*"}) %>
-				<span class="file_image_error">&nbsp;</span>
-			</div></td >
-			<td  style="width:50%;">
-			<div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
-				<label>If you'd like, provide a caption for your itemssssssss image<span class="max_length">(50)</span></label>
-				<%= builder.label( :item_image_caption) %>
-				<%= "lkjlkjljklkjljljkl" %>
-				<%= :item_image_caption %>
-			</div></td>
-		</tr>
-		
-		<tr class="odd">
-			<td style="width:50%;">
-			<div style="margin-left:25px;margin-top:5px;float:left;">
-				<label>Image Caption:
-				<%= builder.label :item_image_caption %></label>
-				<label>Image of Item:</label>
-				
-				<img src="<%= get_image_path(:image_file_name.to_s) %>" alt="Uploaded image file" height="100" width="200" />
-				<span class="file_image_error">&nbsp;</span>
-			</div></td>
-			<td style="width:50%;">
-			<div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-				<%= builder.file_field(:item_image_upload, {:id=>"l2bimage", :accept=>"image/*"}) %>
-				<span class="file_image_error">&nbsp;</span>
-				<img id="imagePreview" height="100" width="200" src="" alt="New uploaded image file" />
-				<label>If you'd like, provide an updated caption for your item image<span class="max_length">(50)</span></label>
-				<%= builder.text_field( :item_image_caption) %>
-			</div>
-			</td>
-		</tr>
-		<% end %>
-		</table>
-		
-		<% else %>
-		
-		<table class="personal">
-		<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
-        <tr class="odd">
-        	
-			<td  style="width:50%;">
-			<div style="margin-left:25px;margin-top:5px;float:left;">
-				<label>Image of Item:</label>
-				<%= builder.file_field(:item_image_upload, {:id=>"l2bimage", :accept=>"image/*"}) %>
-				<span class="file_image_error">&nbsp;</span>
-			</div></td >
-			<td  style="width:50%;">
-			<div style="margin-left:5px;margin-top:5px;float:left;display:none;" id="image_details">
-				<img id="imagePreview" height="100" width="200" src="" alt="Uploaded image file" />
-				<label>If you'd like, provide a caption for your item image<span class="max_length">(50)</span></label>
-				<%= builder.text_field( :item_image_caption) %>
-			</div>
-			</td>
+	  <% if session[:edit_record] %>
 			
-		</tr>
-		<% end %>
-	
+			<%= render :partial => 'borrower/existing_image' %>
+			
+			<% else %>
+			
+			<%= render :partial => 'borrower/new_image' %>
 		
-	</table>
+			<% end %>
 	
-	<% end %>	
-	
-	here end
 	<div   class="div_white" >
 		&nbsp;
 	</div>

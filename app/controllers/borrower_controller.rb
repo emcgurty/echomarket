@@ -228,9 +228,10 @@ end
        
         @borrower = Borrower.new(@myupdatehash[0])
         if @borrower.save(:validate => true) && @borrower.errors.empty?
-            @borrower.addresses  <<  Address.new(params[:borrower][:primary_address])          
-            @borrower.addresses  <<  Address.new(params[:borrower][:alternative_address])
-            @borrower.item_images <<  ItemImage.new(params[:item_images])    ## If new then can't use nf.borrowes so separate params
+            ## obviously I could cycle throug address_attr
+            @borrower.addresses.primary_address      <<  Address.new(params[:borrower][:addresses_attributes[0]])          
+            @borrower.addresses.alternative_address  <<  Address.new(params[:borrower][:addresses_attributes[1]])
+            @borrower.item_images                    <<  ItemImage.new(params[:item_images])   
         end      
         if @borrower.errors.empty?
           redirect_to :action => 'borrower_history', :id=> session[:user_id]
@@ -295,7 +296,7 @@ end
           return false
         end
       end
-    else
+     
       session[:notice]  = "Echo Market error in updating borrower record"
       redirect_to home_items_listing_url
     end

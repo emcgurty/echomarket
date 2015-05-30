@@ -1,0 +1,51 @@
+			<%= nf.fields_for :addresses, @borrower.addresses.alternative_address do |alternative| %>
+			
+		
+		<div style="display:none;">
+					<%= alternative.hidden_field(:address_type, :value => 'alternative') %>
+					<%= alternative.hidden_field(:lender_id, :value => '') %>
+					<%= alternative.hidden_field(:borrower_id, :value => @borrower.id) %>
+				</div>	
+		<table class="alternative_address_table" id="table_address_input" >
+			<tr>
+				<td><label>Address Line 1:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					 <%= alternative.text_field( :address_line_1, :size=>20, :maxlength=>24) %> <span class="error" id="address_line_1_alternative_error">&nbsp;</span></td>
+				<td><label>Address Line 2:&nbsp;<span class="max_length">(24)</span></label>
+					 <%= alternative.text_field( :address_line_2, :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+				<td><label>City:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label> 
+					<%= alternative.text_field( :city, :size=>20, :maxlength=>20) %> <span class="error" id="city_alternative_error">&nbsp;</span></td>
+				<td><label>County:&nbsp;<span class="max_length">(24)</span></label> 
+					<%= alternative.text_field( :province,  :size=>20, :maxlength=>24) %> <span class="error">&nbsp;</span></td>
+			</tr>
+			<tr>
+				<td><label>Country:<span style="color:black;font-size:16px">&nbsp;&nbsp;*</span></label> 
+				<%= alternative.collection_select :country_id, Country.all, :id, :country_name %>
+				<span class="error" id="country_alternative_error">&nbsp;</span></td>
+
+				<td> 
+				<div id="choose_us_state_alternative"  style="display:block;" >
+					<label>State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<%= alternative.collection_select :us_state_id, UsState.all, :id, :state_name %>
+					
+				</div>
+				
+				<div id="provide_country_state_alternative" style="display:block;" >
+					<label>Provide State/Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<%= alternative.text_field(:region) %>
+
+				</div><span class="error" id="state_alternative_error">&nbsp;</span></td>
+
+				<td><label>Postal Code<span style="color:#ffa800;font-size:16px">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label> 
+				<%= alternative.text_field( :postal_code,  :maxlength=>15, :size=>15) %> <span class="error" id="postal_code_alternative_error">&nbsp;</span></td>
+				<td> &nbsp; </td>
+
+			</tr>
+
+			<tr>
+				<td colspan="4"><span class="error" id="whichContactAddressError">Incomplete alternative address information.  Please note required fields.</span></td>
+
+			</tr>
+		</table>
+		
+		<% end %>
+	

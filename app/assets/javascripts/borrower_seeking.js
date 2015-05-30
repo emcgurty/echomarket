@@ -712,6 +712,7 @@ function validateUseWhichBorrowerContactAddress() {
 function saveBAll() {
 	
 
+/*
 	var validContactInfo = validateContactPreferences();
 
 	var validItem = validateBItem();
@@ -747,9 +748,10 @@ function saveBAll() {
         return;
 	} else {
 
-		$("#borrower_is_active").val('1');
+		
 		$("form.borrower_seeking").submit();
-	}
+	}*/
+     $("form.borrower_seeking").submit();
 	return;
 }
 
@@ -854,57 +856,59 @@ function showItem() {
 }
 
 function showBorrowersContactPreferences() {
+alert("lkjlkjkj ");
 
-
-    var foundInvalid = validateContactPreferences();
+    // var foundInvalid = validateContactPreferences();
+//     
+    // var home_phone_contact = $("#borrower_home_phone");
+    // var cell_phone_contact = $("#borrower_cell_phone");
+    // var alternative_phone_contact = $("#borrower_alternative_phone");
+// 
+    // if ((home_phone_contact.val() == '') && (cell_phone_contact.val() == '') && (alternative_phone_contact.val() == ''))  {
+        // $("div#byYourPhone").css("display", "none");
+    // } else {
+        // $("div#byYourPhone").css("display", "block");
+    // }
+// 
+    // if (home_phone_contact.val() == '') {
+        // $("div#displayHomePhoneContact").css("display", "none");
+        // $("div#nodisplayHomePhoneContact").css("display", "block");
+    // } else {
+        // $("div#displayHomePhoneContact").css("display", "block");
+        // $("div#nodisplayHomePhoneContact").css("display", "none");
+    // }
+// 
+    // if (cell_phone_contact.val() == '') {
+        // $("div#displayCellPhoneContact").css("display", "none");
+        // $("div#nodisplayCellPhoneContact").css("display", "block");
+    // } else {
+        // $("div#displayCellPhoneContact").css("display", "block");
+        // $("div#nodisplayCellPhoneContact").css("display", "none");
+    // }
+// 
+    // if (alternative_phone_contact.val() == '') {
+        // $("div#displayAlternativePhoneContact").css("display", "none");
+        // $("div#nodisplayAlternativePhoneContact").css("display", "block");
+    // } else {
+        // $("div#displayAlternativePhoneContact").css("display", "block");
+        // $("div#nodisplayAlternativePhoneContact").css("display", "none");
+    // }
+// 
+   // if (foundInvalid) {
+        // $(".contact_information").css("display", "none");
+        // hideAllBFormHrefs();
+// 
+        // $("#form_contact_information").css("display", "inline-table");
+        // $("#menu_item_1").css("display", "inline");
+        // $("#form_borrower_preference").css("display", "inline-table");
+        // $("#menu_item_2").css("display", "inline");
+    // } else {
+// 
+        // location.href = "#menu_item_1";
+    // }
+    // return foundInvalid;
     
-    var home_phone_contact = $("#borrower_home_phone");
-    var cell_phone_contact = $("#borrower_cell_phone");
-    var alternative_phone_contact = $("#borrower_alternative_phone");
-
-    if ((home_phone_contact.val() == '') && (cell_phone_contact.val() == '') && (alternative_phone_contact.val() == ''))  {
-        $("div#byYourPhone").css("display", "none");
-    } else {
-        $("div#byYourPhone").css("display", "block");
-    }
-
-    if (home_phone_contact.val() == '') {
-        $("div#displayHomePhoneContact").css("display", "none");
-        $("div#nodisplayHomePhoneContact").css("display", "block");
-    } else {
-        $("div#displayHomePhoneContact").css("display", "block");
-        $("div#nodisplayHomePhoneContact").css("display", "none");
-    }
-
-    if (cell_phone_contact.val() == '') {
-        $("div#displayCellPhoneContact").css("display", "none");
-        $("div#nodisplayCellPhoneContact").css("display", "block");
-    } else {
-        $("div#displayCellPhoneContact").css("display", "block");
-        $("div#nodisplayCellPhoneContact").css("display", "none");
-    }
-
-    if (alternative_phone_contact.val() == '') {
-        $("div#displayAlternativePhoneContact").css("display", "none");
-        $("div#nodisplayAlternativePhoneContact").css("display", "block");
-    } else {
-        $("div#displayAlternativePhoneContact").css("display", "block");
-        $("div#nodisplayAlternativePhoneContact").css("display", "none");
-    }
-
-   if (foundInvalid) {
-        $(".contact_information").css("display", "none");
-        hideAllBFormHrefs();
-
-        $("#form_contact_information").css("display", "inline-table");
-        $("#menu_item_1").css("display", "inline");
-        $("#form_borrower_preference").css("display", "inline-table");
-        $("#menu_item_2").css("display", "inline");
-    } else {
-
-        location.href = "#menu_item_1";
-    }
-    return foundInvalid;
+     location.href = "#menu_item_1";
 }
 
 /* Returns foundInvalid */
