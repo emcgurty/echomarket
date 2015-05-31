@@ -53,10 +53,10 @@ $(document).ready(function() {
 	var	y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
 	if (y_n == 1) {
 	if (
-		($("#borrower_addresses_attributes_0_address_line_1").val() == "") || 
-		($("#borrower_addresses_attributes_0_postal_code").val() == "") || 
-		($("#borrower_addresses_attributes_0_city").val() == "") || 
-		($("#borrower_addresses_attributes_0_country_id option:selected").text() == "Please select")
+		($(".borrower.primary.address_line_1").val() == "") || 
+		($(".borrower.primary.postal_code").val() == "") || 
+		($(".borrower.primary.city").val() == "") || 
+		($(".borrower.primary.country_id option:selected").text() == "Please select")
 	) {
 		
 		$("span#display_address_error").text("Please provide a complete address.");
@@ -311,8 +311,8 @@ $("span#cell_phone_error").text("");
 	$("#borrower_cell_phone").trigger('change');
 
 	$("#borrower_alternative_phone").bind('change', function() {
-$("span#alternative_phone_error").text("");
-				$("span#alternative_phone_error").css("visibility", "hidden");
+	$("span#alternative_phone_error").text("");
+		$("span#alternative_phone_error").css("visibility", "hidden");
 		if ($("#borrower_alternative_phone").val() != '') {
 			if (($("#borrower_alternative_phone").val() == $("#borrower_home_phone").val()) || ($("#borrower_alternative_phone").val() == $("#borrower_cell_phone").val())) {
 
@@ -378,20 +378,23 @@ $("span#alternative_phone_error").text("");
 
 		
 	
-	$("#borrower_other_contact_describe_id").bind('change', function() {
+	$("#borrower_other_describe_yourself").bind('change', function() {
 		$("span#contact_describe_id").html($(this).val());
 	    			
 	});
-	$("#borrower_other_contact_describe_id").trigger('change');
+	$("#borrower_other_describe_yourself").trigger('change');
+	
+	
 
 	$("select#borrower_contact_describe_id").bind('change', function() {
+		alert('asdsad');
 		var contact_describe_id_str = $("select#borrower_contact_describe_id option:selected").text();
 		if (contact_describe_id_str == "Other") {
-			$("div#other_contact_describe_id").css("display", "inline");
+			$("div#other_describe_youself").css("display", "inline");
 			$("span#contact_describe_id").html(contact_describe_id_str);
 		} else {
-			$("div#other_contact_describe_id").css("display", "none");
-			$("#borrower_other_contact_describe_id").val("");
+			$("div#other_describe_yourself").css("display", "none");
+			$("#borrower_other_describe_yourself").val("");
 
 		}
 		if (contact_describe_id_str != "Please select") {
@@ -400,7 +403,7 @@ $("span#alternative_phone_error").text("");
 		
 		}
 	});
-	$("#borrower_contact_describe_id").trigger('change');
+	$("select#borrower_contact_describe_id").trigger('change');
 
 
 	$("input#borrower_first_name").bind('change', function() {
@@ -545,42 +548,42 @@ $("span#alternative_phone_error").text("");
 
    /*   $("name^='borrower[primary_address]'").trigger('change'); */
 
-	$("input#borrower_addresses_attributes_0_address_line_1").bind('change', function() {
+	$(".borrower.primary.line_1").bind('change', function() {
 		address1 = $(this).val();
 		$("span#address_1_selection").html($(this).val());
 	});
-	$("input#borrower_addresses_attributes_0_address_line_1").trigger('change');
+	$(".borrower.primary.address_line_1").trigger('change');
 
-	$("#borrower_addresses_attributes_0_address_line_2").bind('change', function() {
+	$(".borrower.primary.address_line_2").bind('change', function() {
 		address2 = $(this).val();
 		$("span#address_2_selection").html($(this).val());
 	});
-	$("#borrower_addresses_attributes_0_address_line_2").trigger('change');
+	$(".borrower.primary.address_line_2").trigger('change');
 
-	$("#borrower_addresses_attributes_0_province").bind('change', function() {
+	$(".borrower.primary.province").bind('change', function() {
 		province = $(this).val();
 		$("span#province_selection").html($(this).val());
 
 	});
-	$("#borrower_addresses_attributes_0_province").trigger('change');
+	$(".borrower.primary.province").trigger('change');
 
-	$("#borrower_addresses_attributes_0_city").bind('change', function() {
+	$(".borrower.primary.city").bind('change', function() {
 		city = $(this).val();
 		$("span#city_selection").html($(this).val());
 
 	});
-	$("#borrower_addresses_attributes_0_city").trigger('change');
+	$(".borrower.primary.city").trigger('change');
 
-	$("#borrower_addresses_attributes_0_postal_code").bind('change', function() {
+	$(".borrower.primary.postal_code").bind('change', function() {
 		postal_code = $(this).val();
 		$("span#postal_code_selection").html($(this).val());
 
 	});
-	$("#borrower_addresses_attributes_0_postal_code").trigger('change');
+	$(".borrower.primary.postal_code").trigger('change');
 
-	$("select#borrower_addresses_attributes_0_us_state_id").bind('change', function() {
+	$(".borrower.primary.us_state_id").bind('change', function() {
 
-		state_cmb = $("select#borrower_addresses_attributes_0_us_state_id option:selected").text();
+		state_cmb = $(".borrower.primary.state_id option:selected").text();
 		
 		if (state_cmb != 'Please select') {
 		$("span#us_state_selection").html(state_cmb);
@@ -588,15 +591,15 @@ $("span#alternative_phone_error").text("");
 		}
 
 	});
-	$("select#borrower_addresses_attributes_0_us_state_id").trigger('change');
+	$(".borrower.primary.us_state_id").trigger('change');
 
 
-	$("select#borrower_addresses_attributes_0_country_id").bind('change', function() {
+	$(".borrower.primary.country_id").bind('change', function() {
 
-		var country_text = $("select#borrower_addresses_attributes_0_country_id option:selected").text();
+		var country_text = $(".borrower.primary.country_id option:selected").text();
 		$("span#country_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-		$("select#borrower_addresses_attributes_0_us_state_id option[value='99']" ).attr( "selected", "selected" );
+		$(".borrower.primary.us_state_id option[value='99']" ).attr( "selected", "selected" );
 			$("span#us_state_selection").html('');
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
@@ -609,24 +612,24 @@ $("span#alternative_phone_error").text("");
 		}
 
 	});
-	$("select#borrower_addresses_attributes_0_country_id").trigger('change');
+	$(".borrower.primary.country_id").trigger('change');
 
-	$("input#borrower_addresses_attributes_0_region").bind('change', function() {
+	$(".borrower.primary.region").bind('change', function() {
 		$("span#region_selection").html($(this).val());
 	});
-	$("input#borrower_addresses_attributes_0_region").trigger('change');
+	$(".borrower.primary.region").trigger('change');
 	
 	
 	
 	
 	/*Beginning of Alternative Address*/
 	
-	$("select#borrower_addresses_attributes_1_country_id").bind('change', function() {
+	$("select.borrower.alternative.country_id").bind('change', function() {
 
-		var country_text = $("select#borrower_addresses_attributes_1_country_id option:selected").text();
+		var country_text = $("select.borrower.alternative.country_id option:selected").text();
 		$("span#country_alternative_selection").html(country_text);
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-		$("select#borrower_addresses_attributes_1_us_state_id option[value='99']" ).attr( "selected", "selected" );
+		$("select.borrower.alternative.us_state_id option[value='99']" ).attr( "selected", "selected" );
 			$("span#state_alternative_selection").html('');
 			$("div#choose_us_state_alternative").css("display", "none");
 			$("div#provide_country_state_alternative").css("display", "inline");
@@ -639,46 +642,46 @@ $("span#alternative_phone_error").text("");
 		}
 
 	});
-	$("select#borrower_addresses_attributes_1_country_id").trigger('change');
+	$("select.borrower.alternative.country_id").trigger('change');
 	
 	
-	$("input#borrower_addresses_attributes_1_region").bind('change', function() {
+	$("input.borrower.alternative.region").bind('change', function() {
 		$("span#us_state_id_alternativeselection").html($(this).val());
 	});
-	$("input#borrower_addresses_attributes_1_region").trigger('change');
+	$("input.borrower.alternative.region").trigger('change');
 	
-	$("select#borrower_addresses_attributes_1_us_state_id").bind('change', function() {
-		var tmpID = $("select#borrower_addresses_attributes_1_us_state_id option:selected").text();
+	$("select.borrower.alternative.us_state_id").bind('change', function() {
+		var tmpID = $("select.borrower.alternative.us_state_id option:selected").text();
 		$("span#state_alternative_selection").html(tmpID);
 		});
-	$("select#borrower_addresses_attributes_1_us_state_id").trigger('change');
+	$("select.borrower.alternative.us_state_id").trigger('change');
 
 
 
-	$("#borrower_addresses_attributes_1_address_line_1").bind('change', function() {
+	$(".borrower.alternative.address_line_1").bind('change', function() {
 		$("span#address_1_alternative_selection").html($(this).val());
 	});
-	$("#borrower_addresses_attributes_1_address_line_1").trigger('change');
+	$(".borrower.alternative.address_line_1").trigger('change');
 
-	$("#borrower_addresses_attributes_1_address_line_2").bind('change', function() {
+	$(".borrower.alternative.address_line_2").bind('change', function() {
 		$("span#address_2_alternative_selection").html($(this).val());
 	});
-	$("#borrower_addresses_attributes_1_address_line_2").trigger('change');
+	$(".borrower.alternative.address_line_2").trigger('change');
 
-	$("#borrower_addresses_attributes_1_province").bind('change', function() {
+	$(".borrower.alternative.province").bind('change', function() {
 		$("span#province_alternative_selection").html($(this).val());
 	});
-	$("#borrower_addresses_attributes_1_province").trigger('change');
+	$(".borrower.alternative.province").trigger('change');
 
-	$("#borrower_addresses_attributes_1_city").bind('change', function() {
+	$(".borrower.alternative.city").bind('change', function() {
 		$("span#city_alternative_selection").html($(this).val());
 	});
-	$("#borrower_addresses_attributes_1_city").trigger('change');
+	$(".borrower.alternative.city").trigger('change');
 	
-	$("#borrower_addresses_attributes_1_postal_code").bind('change', function() {
+	$(".borrower.alternative.postal_code").bind('change', function() {
 		$("span#postal_code_alternative_selection").html($(this).val());
 	});
-	$("#borrower_addresses_attributes_1_postal_code").trigger('change');
+	$(".borrower.alternative.postal_code").trigger('change');
 
 
 
@@ -698,10 +701,10 @@ function validateUseWhichBorrowerContactAddress() {
 	var use_which_ca = $("input[name='borrower[useWhichContactAddress]']:checked").val();
 	if ((use_which_ca == 1) || (use_which_ca == 2 )) {
 
-	if	( ($("#borrower_addresses_attributes_1_address_line_1").val() == "") || 
-		  ($("#borrower_addresses_attributes_1_postal_code").val() == "") || 
-		($("#borrower_addresses_attributes_1_city").val() == "") || 
-		($("#borrower_addresses_attributes_1_country_id option:selected").text() == "Please select"))  {
+	if	( ($(".borrower.alternative.address_line_1").val() == "") || 
+		  ($(".borrower.alternative.postal_code").val() == "") || 
+		  ($(".borrower.alternative.city").val() == "") || 
+		  ($(".borrower.alternative.country_id option:selected").text() == "Please select"))  {
 			return_value = false;
 		}	
 }	
@@ -712,7 +715,7 @@ function validateUseWhichBorrowerContactAddress() {
 function saveBAll() {
 	
 
-/*
+
 	var validContactInfo = validateContactPreferences();
 
 	var validItem = validateBItem();
@@ -747,11 +750,10 @@ function saveBAll() {
        
         return;
 	} else {
-
 		
 		$("form.borrower_seeking").submit();
-	}*/
-     $("form.borrower_seeking").submit();
+	}
+   
 	return;
 }
 
@@ -856,59 +858,59 @@ function showItem() {
 }
 
 function showBorrowersContactPreferences() {
-alert("lkjlkjkj ");
 
-    // var foundInvalid = validateContactPreferences();
-//     
-    // var home_phone_contact = $("#borrower_home_phone");
-    // var cell_phone_contact = $("#borrower_cell_phone");
-    // var alternative_phone_contact = $("#borrower_alternative_phone");
-// 
-    // if ((home_phone_contact.val() == '') && (cell_phone_contact.val() == '') && (alternative_phone_contact.val() == ''))  {
-        // $("div#byYourPhone").css("display", "none");
-    // } else {
-        // $("div#byYourPhone").css("display", "block");
-    // }
-// 
-    // if (home_phone_contact.val() == '') {
-        // $("div#displayHomePhoneContact").css("display", "none");
-        // $("div#nodisplayHomePhoneContact").css("display", "block");
-    // } else {
-        // $("div#displayHomePhoneContact").css("display", "block");
-        // $("div#nodisplayHomePhoneContact").css("display", "none");
-    // }
-// 
-    // if (cell_phone_contact.val() == '') {
-        // $("div#displayCellPhoneContact").css("display", "none");
-        // $("div#nodisplayCellPhoneContact").css("display", "block");
-    // } else {
-        // $("div#displayCellPhoneContact").css("display", "block");
-        // $("div#nodisplayCellPhoneContact").css("display", "none");
-    // }
-// 
-    // if (alternative_phone_contact.val() == '') {
-        // $("div#displayAlternativePhoneContact").css("display", "none");
-        // $("div#nodisplayAlternativePhoneContact").css("display", "block");
-    // } else {
-        // $("div#displayAlternativePhoneContact").css("display", "block");
-        // $("div#nodisplayAlternativePhoneContact").css("display", "none");
-    // }
-// 
-   // if (foundInvalid) {
-        // $(".contact_information").css("display", "none");
-        // hideAllBFormHrefs();
-// 
-        // $("#form_contact_information").css("display", "inline-table");
-        // $("#menu_item_1").css("display", "inline");
-        // $("#form_borrower_preference").css("display", "inline-table");
-        // $("#menu_item_2").css("display", "inline");
-    // } else {
-// 
-        // location.href = "#menu_item_1";
-    // }
-    // return foundInvalid;
+
+    var foundInvalid = validateContactPreferences(); 
+      
+      var home_phone_contact = $("#borrower_home_phone");
+      var cell_phone_contact = $("#borrower_cell_phone");
+      var alternative_phone_contact = $("#borrower_alternative_phone");
+  
+      if ((home_phone_contact.val() == '') && (cell_phone_contact.val() == '') && (alternative_phone_contact.val() == ''))  {
+          $("div#byYourPhone").css("display", "none");
+      } else {
+          $("div#byYourPhone").css("display", "block");
+      }
+  
+      if (home_phone_contact.val() == '') {
+          $("div#displayHomePhoneContact").css("display", "none");
+          $("div#nodisplayHomePhoneContact").css("display", "block");
+      } else {
+          $("div#displayHomePhoneContact").css("display", "block");
+          $("div#nodisplayHomePhoneContact").css("display", "none");
+      }
+  
+      if (cell_phone_contact.val() == '') {
+          $("div#displayCellPhoneContact").css("display", "none");
+          $("div#nodisplayCellPhoneContact").css("display", "block");
+      } else {
+          $("div#displayCellPhoneContact").css("display", "block");
+          $("div#nodisplayCellPhoneContact").css("display", "none");
+      }
+  
+      if (alternative_phone_contact.val() == '') {
+          $("div#displayAlternativePhoneContact").css("display", "none");
+          $("div#nodisplayAlternativePhoneContact").css("display", "block");
+      } else {
+          $("div#displayAlternativePhoneContact").css("display", "block");
+          $("div#nodisplayAlternativePhoneContact").css("display", "none");
+     
+   }
+     if (foundInvalid) {
+          $(".contact_information").css("display", "none");
+          hideAllBFormHrefs();
+  
+          $("#form_contact_information").css("display", "inline-table");
+          $("#menu_item_1").css("display", "inline");
+          $("#form_borrower_preference").css("display", "inline-table");
+          $("#menu_item_2").css("display", "inline");
+      } else {
     
-     location.href = "#menu_item_1";
+          location.href = "#menu_item_1";
+     } 
+      return false ;
+      
+     
 }
 
 /* Returns foundInvalid */
@@ -927,10 +929,10 @@ function validateContactPreferences() {
 	y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
 	if (y_n == 1) {
 	if (
-		($("#borrower_addresses_attributes_0_address_line_1").val() == "") || 
-		($("#borrower_addresses_attributes_0_postal_code").val() == "") || 
-		($("#borrower_addresses_attributes_0_city").val() == "") || 
-		($("#borrower_addresses_attributes_0_country_id option:selected").text() == "Please select")
+		($(".borrower.primary.address_line_1").val() == "") || 
+		($(".borrower.primary.postal_code").val() == "") || 
+		($(".borrower.primary.city").val() == "") || 
+		($(".borrower.primary.country_id option:selected").text() == "Please select")
 	) {
 		
 		$("span#display_address_error").text("Please provide a complete address.");
@@ -983,19 +985,19 @@ function validateContactPreferences() {
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_addresses_attributes_0_city").val() == "") {
+	if ($(".borrower.primary.city").val() == "") {
 		$("#city_error").text("City name is required.");
 		$("#city_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_addresses_attributes_0_address_line_1").val() == "") {
+	if ($(".borrower.primary.address_line_1").val() == "") {
 		$("#address_line_1_error").text("Address Line 1 is required.");
 		$("#address_line_1_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_addresses_attributes_0_postal_code").val() != "") {
+	if ($(".borrower.primary.postal_code").val() != "") {
 		var re = /^[A-Za-z]+$/;
 		if (re.test(document.getElementById("borrower_addresses_attributes_0_postal_code").value)) {
 			$("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
@@ -1004,13 +1006,13 @@ function validateContactPreferences() {
 		}
 	}
 
-	if ($("#borrower_addresses_attributes_0_postal_code").val() == "") {
+	if ($(".borrower.primary.postal_code").val() == "") {
 		$("#postal_code_error").text("Postal code is required.");
 		$("#postal_code_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if ($("#borrower_addresses_attributes_0_country_id option:selected").text() == "Please select") {
+	if ($(".borrower.primary.country_id option:selected").text() == "Please select") {
 		$("#country_error").text("Please select a Country.");
 		$("#country_error").css("visibility", "visible");
 		foundInvalid = false;
@@ -1018,19 +1020,19 @@ function validateContactPreferences() {
 
 
 
-	if ( ($("#borrower_addresses_attributes_0_country_id option:selected").text() == "Please select")   &&  ($("input#borrower_us_state_id").val() == "")) {
+	if ( ($(".borrower.primary.country_id option:selected").text() == "Please select")   &&  ($("input#borrower_us_state_id").val() == "")) {
 		$("#state_error").text("Please provide a Region.");
 		$("#state_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 	
-	if ((($("#borrower_addresses_attributes_0_us_state_id option:selected").text() == "Please select") || ($("#borrower_addresses_attributes_0_us_state_id option:selected").val() == '')) && ($("#borrower_addresses_attributes_0_country_id option:selected").text() == "United States")) {
+	if ((($(".borrower.primary.us_state_id option:selected").text() == "Please select") || ($(".borrower.primary.us_state_id option:selected").val() == '')) && ($(".borrower.primary.country_id option:selected").text() == "United States")) {
 
 		$("#state_error").text("Please select a State.");
 		$("#state_error").css("visibility", "visible");
 
 		foundInvalid = false;
-	}
+	} 
 	
 	return foundInvalid;
 	

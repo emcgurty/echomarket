@@ -229,9 +229,9 @@ end
         @borrower = Borrower.new(@myupdatehash[0])
         if @borrower.save(:validate => true) && @borrower.errors.empty?
             ## obviously I could cycle throug address_attr
-            @borrower.addresses.primary_address      <<  Address.new(params[:borrower][:addresses_attributes[0]])          
-            @borrower.addresses.alternative_address  <<  Address.new(params[:borrower][:addresses_attributes[1]])
-            @borrower.item_images                    <<  ItemImage.new(params[:item_images])   
+            @borrower.addresses.primary_address      <<  Address.new(params[:borrower][:primary_address])          
+            @borrower.addresses.alternative_address  <<  Address.new(params[:borrower][:alternative_address])
+            @borrower.item_images                    <<  ItemImage.new(params[:borrower][:item_image_new])   
         end      
         if @borrower.errors.empty?
           redirect_to :action => 'borrower_history', :id=> session[:user_id]

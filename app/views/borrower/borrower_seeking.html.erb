@@ -116,13 +116,15 @@
 			</tr>
 			
 			<% if session[:edit_record] %>
-			
-			<%= render :partial => 'borrower/existing_primary_address' %>
-			
+			     <%= "edit record primary" %>
+			    <%= nf.fields_for :addresses, @borrower.addresses.primary_address do |primary| %>
+				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @borrower, :builder => primary, :class_content => "borrower primary" } %>
+				<% end %>
 			<% else %>
-			
-			<%= render :partial => 'borrower/new_primary_address' %>
-		
+			<%= "new record primary" %>
+				<%= nf.fields_for :primary_address do |primary| %>
+				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @borrower, :builder => primary, :class_content => "borrower primary" } %>
+				<% end %>
 			<% end %>	
 			
 						
@@ -182,15 +184,17 @@
 		<label class="personal" >Provide your alternative contact address here:</label>
 		<br />
 				
-		<% if session[:edit_record] %>
 			
-			<%= render :partial => 'borrower/existing_alternative_address' %>
-			
+			<% if session[:edit_record] %>
+			    <%= nf.fields_for :addresses, @borrower.addresses.alternative_address do |alternative| %>
+				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @borrower, :builder => alternative , :class_content => "borrower alternative" } %>
+				<% end %>
 			<% else %>
+				<%= nf.fields_for :alternative_address do |alternative| %>
+				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @borrower, :builder => alternative, :class_content => "borrower alternative" } %>
+				<% end %>
+			<% end %>	
 			
-			<%= render :partial => 'borrower/new_alternative_address' %>
-		
-			<% end %>
 	
 
 	</div>
@@ -374,14 +378,16 @@
 			</div></td>
 		</tr>
 	   </table>
-	  <% if session[:edit_record] %>
-			
-			<%= render :partial => 'borrower/existing_image' %>
-			
+	    	<% if session[:edit_record] %>
+	    		<%= "nf.fields_for :item_images, @borrower.item_images do |builder|  edit record" %>
+				<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
+				<%= render :partial => 'layouts/existing_image',  :locals => {:object=> @borrower, :builder=> builder } %>
+				<% end %>	
 			<% else %>
-			
-			<%= render :partial => 'borrower/new_image' %>
-		
+			<%= "New image record" %>
+				<%= nf.fields_for :item_image_new do |builder| %>
+				<%= render :partial => 'layouts/new_image',  :locals => {:object=> @borrower, :builder => builder } %>
+				<% end %>
 			<% end %>
 	
 	<div   class="div_white" >
