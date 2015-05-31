@@ -116,12 +116,12 @@
 			</tr>
 			
 			<% if session[:edit_record] %>
-			     <%= "edit record primary" %>
-			    <%= nf.fields_for :addresses, @borrower.addresses.primary_address do |primary| %>
+			     
+			    <%= nf.fields_for  :primary_address,  @borrower.addresses.primary_address.first do |primary| %>
 				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @borrower, :builder => primary, :class_content => "borrower primary" } %>
 				<% end %>
 			<% else %>
-			<%= "new record primary" %>
+			
 				<%= nf.fields_for :primary_address do |primary| %>
 				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @borrower, :builder => primary, :class_content => "borrower primary" } %>
 				<% end %>
@@ -186,7 +186,7 @@
 				
 			
 			<% if session[:edit_record] %>
-			    <%= nf.fields_for :addresses, @borrower.addresses.alternative_address do |alternative| %>
+			    <%= nf.fields_for :alternative_address, @borrower.addresses.alternative_address.first do |alternative| %>
 				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @borrower, :builder => alternative , :class_content => "borrower alternative" } %>
 				<% end %>
 			<% else %>
@@ -379,14 +379,14 @@
 		</tr>
 	   </table>
 	    	<% if session[:edit_record] %>
-	    		<%= "nf.fields_for :item_images, @borrower.item_images do |builder|  edit record" %>
+	    		
 				<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
-				<%= render :partial => 'layouts/existing_image',  :locals => {:object=> @borrower, :builder=> builder } %>
+				<%= render :partial => 'layouts/existing_image',  :locals => {:object=> @borrower, :builder=> builder, :class_content => "borrower primary" } %>
 				<% end %>	
 			<% else %>
-			<%= "New image record" %>
+			
 				<%= nf.fields_for :item_image_new do |builder| %>
-				<%= render :partial => 'layouts/new_image',  :locals => {:object=> @borrower, :builder => builder } %>
+				<%= render :partial => 'layouts/new_image',  :locals => {:object=> @borrower, :builder => builder, :class_content => "borrower primary"  } %>
 				<% end %>
 			<% end %>
 	

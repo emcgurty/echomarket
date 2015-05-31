@@ -6,7 +6,7 @@ def rapid_borrower_seeking
     session[:background] = true 
     if params[:borrower]
       if create
-          redirect_to  :controller => "search", :action => 'item_search' 
+         redirect_to home_items_listing_url
       end
     else
       @borrower = Borrower.new
@@ -158,8 +158,10 @@ end
  
     session[:no_border] = true
     if params[:borrower]
-      unless update_borrower_seeking
-        @borrower
+      if update_borrower_seeking
+        redirect_to :action => 'borrower_history', :id=> session[:user_id]
+      else
+         @borrower
       end
       
     else
@@ -228,14 +230,16 @@ end
        
         @borrower = Borrower.new(@myupdatehash[0])
         if @borrower.save(:validate => true) && @borrower.errors.empty?
-            ## obviously I could cycle throug address_attr
-            @borrower.addresses.primary_address      <<  Address.new(params[:borrower][:primary_address])          
-            @borrower.addresses.alternative_address  <<  Address.new(params[:borrower][:alternative_address])
-            @borrower.item_images                    <<  ItemImage.new(params[:borrower][:item_image_new])   
+            
+            @borrower.addresses      <<  Address.new(params[:borrower][:primary_address])   
+            @borrower.addresses      <<  Address.new(params[:borrower][:alternative_address])
+            @borrower.item_images    <<  ItemImage.new(params[:borrower][:item_image_new])   
         end      
         if @borrower.errors.empty?
-          redirect_to :action => 'borrower_history', :id=> session[:user_id]
+          session[:notice]  = "Echo Market successful in creating your new borrower record."
+          return true
         else
+          session[:notice]  = "Echo Market was not successful in creating your new borrower record. Please try again, and if problem persists contact us."
           return false
         end
 
@@ -288,17 +292,18 @@ end
 
 
         if @ltmp.update_attributes(@myupdatehash[0])
-          @ltmp.update_attributes(:address_attributes => params[:primary_address])          
-          @ltmp.update_attributes(:address_attributes => params[:alternative_address])
-          @ltmp.update_attributes(:item_images_attributes => params[:item_images])
-          redirect_to :action => 'borrower_history', :id=> session[:user_id]
+          @ltmp.update_attributes(:address_attributes => params[:borrower][:primary_address])          
+          @ltmp.update_attributes(:address_attributes => params[:borrower][:alternative_address])
+          @ltmp.update_attributes(:item_images_attributes => params[:borrower][:item_images])
+          session[:notice]  = "Echo Market was successful in updating your borrower record."
+          return true
         else
+          session[:notice]  = "Echo Market was successful in updating your borrower record."
           return false
         end
       end
      
-      session[:notice]  = "Echo Market error in updating borrower record"
-      redirect_to home_items_listing_url
+     
     end
   end
   

@@ -1,9 +1,9 @@
 			
 			
 			   <div style="display:none;">
-					<%= builder.hidden_field(:address_type, :value => 'builder') %>
+					<%= builder.hidden_field(:address_type, :value => 'primary') %>
 					<%= builder.hidden_field(:lender_id, :value => '') %>
-					<%= builder.hidden_field(:borrower_id, :value => object.id) %>
+					
 				</div>	
 			<tr class="odd">
 				<td style="width:25%;">
@@ -15,7 +15,7 @@
 				<td style="width:25%;">
 				<div>
 					<label>Address Line 2:</label>
-					<%= builder.text_field( :address_line_2,  :maxlength=>24, :size=>24, , :class=> class_content + " address_line_2") %>
+					<%= builder.text_field( :address_line_2,  :maxlength=>24, :size=>24,  :class=> class_content + " address_line_2") %>
 					<span class="error">&nbsp;</span>
 				</div></td>
 				<td style="width:25%;">

@@ -387,10 +387,10 @@ $("span#cell_phone_error").text("");
 	
 
 	$("select#borrower_contact_describe_id").bind('change', function() {
-		alert('asdsad');
+	
 		var contact_describe_id_str = $("select#borrower_contact_describe_id option:selected").text();
 		if (contact_describe_id_str == "Other") {
-			$("div#other_describe_youself").css("display", "inline");
+			$("div#other_describe_yourself").css("display", "inline");
 			$("span#contact_describe_id").html(contact_describe_id_str);
 		} else {
 			$("div#other_describe_yourself").css("display", "none");
@@ -534,10 +534,10 @@ $("span#cell_phone_error").text("");
 	});
 	$("#borrower_item_condition_id").trigger('change');
 
-	$("#borrower_item_images_attributes_0_item_image_caption").bind('change', function() {
+	$(".borrower.primary.item_image_caption").bind('change', function() {
 		$("span#image_caption_selection").html($(this).val());
 	});
-	$("#borrower_item_images_attributes_0_item_image_caption").trigger('change');
+	$(".borrower.primary.item_image_caption").trigger('change');
 
 	$("#borrower_item_count").bind('change', function() {
 		$("span#item_count_selection").html($(this).val());
@@ -548,7 +548,7 @@ $("span#cell_phone_error").text("");
 
    /*   $("name^='borrower[primary_address]'").trigger('change'); */
 
-	$(".borrower.primary.line_1").bind('change', function() {
+	$(".borrower.primary.address_line_1").bind('change', function() {
 		address1 = $(this).val();
 		$("span#address_1_selection").html($(this).val());
 	});
@@ -587,7 +587,7 @@ $("span#cell_phone_error").text("");
 		
 		if (state_cmb != 'Please select') {
 		$("span#us_state_selection").html(state_cmb);
-		$("span#us_state_id_selection").html("Region Placeholder");
+		$("span#us_state_selection").html("Region Placeholder");
 		}
 
 	});
@@ -646,7 +646,7 @@ $("span#cell_phone_error").text("");
 	
 	
 	$("input.borrower.alternative.region").bind('change', function() {
-		$("span#us_state_id_alternativeselection").html($(this).val());
+		$("span#region_alternative_selection").html($(this).val());
 	});
 	$("input.borrower.alternative.region").trigger('change');
 	
@@ -957,20 +957,20 @@ function validateContactPreferences() {
 		
 	
 	
-	if ($("#borrower_contact_describe_id option:selected").text() == "Please select") {
-		$("#contact_describe_id_combo_error").text("Please choose an option to describe yourself.");
-		$("#contact_describe_id_combo_error").css("visibility", "visible");
+	if ($("select#borrower_contact_describe_id option:selected").text() == "Please select") {
+		$("#describe_yourself_combo_error").text("Please choose an option to describe yourself.");
+		$("#describe_yourself_combo_error").css("visibility", "visible");
 		foundInvalid = false;
 	}
 
-	if (($("#borrower_contact_describe_id option:selected").text() == "Other") && ($("#borrower_other_contact_describe_id").val() == "")) {
+	if (($("select#borrower_contact_describe_id option:selected").text() == "Other") && ($("#borrower_other_describe_yourself").val() == "")) {
 
-		$("#other_contact_describe_id_error").text("Other description is required.");
-		$("#other_contact_describe_id_error").css("visibility", "visible");
+		$("#other_describe_yourself_error").text("Other description is required.");
+		$("#other_describe_yourself_error").css("visibility", "visible");
 		foundInvalid = false;
 	} else {
-		$("#other_contact_describe_id_error").text("");
-		$("#other_contact_describe_id_error").css("visibility", "hidden");
+		$("#other_describe_yourself_error").text("");
+		$("#other_describe_yourself_error").css("visibility", "hidden");
 	}
 
 	if ($("#borrower_first_name").val() == "") {
@@ -999,7 +999,8 @@ function validateContactPreferences() {
 
 	if ($(".borrower.primary.postal_code").val() != "") {
 		var re = /^[A-Za-z]+$/;
-		if (re.test(document.getElementById("borrower_addresses_attributes_0_postal_code").value)) {
+		var hold_postal_value = $(".borrower.primary.postal_code").val();
+		if (re.test(hold_postal_value)) {
 			$("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
 			$("#postal_code_error").css("visibility", "visible");
 			foundInvalid = false;
