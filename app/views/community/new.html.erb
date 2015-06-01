@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'community.js', :type => "text/javascript" %>
 
-<%= form_for @community,  :url=>  {:controller=>"community", :action => "create", :commit=>"create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+<%= form_for @community,  :url=>  {:controller=>"community", :action => "new"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 
 <div class="top" >
 

@@ -1,59 +1,87 @@
 class CommunityController < ApplicationController
   
-    
   def new
-    @community = Community.new
+    if params[:community]
+      if create_new_community
+        session[:notice] = "Your Echo Market Community record, #{params[:community][:community_name]}, has been successfully created!  Please check your email, #{params[:community][:email]}, to activate your account."
+      else
+        @community
+      end
+    else  
+     @community = Community.new
+    end 
      respond_to do |format|
-      format.html # new.html.erb
+     format.html # new.html.erb
 
     end
   end
 
-  # GET /communities/1/edit
+
   def edit
-    if params[:community]
+    if params[:id]
       update
     else
       @community = Community.find(session[:community_id])
     end   
   end
 
-  # POST /communities
-  # POST /communities.json
+ def list
+      session[:background] = true
+      @community = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+      @community_member = @community.community_member.all
+  end
+  
+  def advise
+     session[:background] = true
+     if params[:community]
+       if create
+       end  
+     else
+         @community = Community.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+     end    
+     
+  end
+   
+ 
+  protected
+  
+   def logout
+
+    @current_user = nil
+    reset_session
+    session[:notice] = "Thank you for exploring www.echomarket.org.  Please return soon."
+    redirect_to home_items_listing_path
+
+  end
+  
   def create
     session[:notice] = ''
-    @community = Community.new(params[:community])
     respond_to do |format|
       
-      if @community.save(:validate =>true) && @community.errors.empty?
-        myhashformembers = Hash.new
-        myhashformembers = [:first_name => @community.first_name, 
-                           :mi => @community.mi,
-                           :last_name => @community.last_name, 
-                           :remote_ip => @community.remote_ip, 
-                           :date_created => Time.now, 
-                           :is_active => 1, 
-                           :is_creator => 1,
-                           :user_type => 'both',
-                           :user_id => '']
-                           
-        @result = @community.update_attributes(:community_members_attributes => myhashformembers)
-          session[:notice] = "Your Echo Market Community record, #{params[:community][:community_name]}, has been successfully created!  Please check your email, #{params[:community][:email]}, to activate your account."
-          format.html { redirect_to :controller => "home", :action => "items_listing" }
-        else
-          session[:notice]= "Error in creating Community record"
-          format.html { render :action => "new" }  
-              
-      end  #ends if saved 
-    end # ends do
+    if params[:commit] == "Update Creator"
+       @community = Community.find(params[:community][:community_id])
+       @community.update_attributes(params[:community])
+       if @community.errors.empty?
+         session[:notice] = "Successful update of Echo Market Community creator record."
+         return true
+       else
+         session[:notice] = "Echo Market Community was not successful in updating your Community Creator record."
+         return false  
+       end
+    elsif params[:commit] == "Add Member"
+       @community.community_members   <<  CommunityMembers.new(params[:community][:community_members]) 
+        if @community.errors.empty?
+         session[:notice] = "Successful addition of Echo Market Community member."
+         return true
+       else
+         session[:notice] = "Echo Market Community was not successful in adding Community member record."
+         return false  
+       end
+    end     
+    
+     end
   end  # ends def
  
- 
- 
-  # PUT /communities/1
-  # PUT /communities/1.json
-# PUT /communities/1
-  # PUT /communities/1.json
   def update
     session[:notice] = ''
     if params[:id]
@@ -96,36 +124,18 @@ class CommunityController < ApplicationController
     end
   end
   
-
-  # DELETE /communities/1
-  # DELETE /communities/1.json
-  def destroy
-    reset_session
-        
-    begin
-    Community.delete(params[:id])
-    @cm = CommunityMember.find(:all, :conditions => ["community_id = ?", params[:id]])
-      @cm.each do |val|
-       CommunityMember.delete(val.community_member_id)
-      end 
-       session[:notice] = "Your Community Record with associated members, if any beyond Community creator member, has been deleted from the Echo Market database."
-       redirect_to home_items_listing_url
-    rescue 
-        session[:notice] = "Echo Market has experienced an error in deleting your Community Market record. Please refresh your browser, and try again. Otherwise if this matter persists, please contact Echo Market."
-        redirect_to home_items_listing_url  
-    end
-    
-  end
   
-    def logout
-
-    @current_user = nil
-    reset_session
-    session[:notice] = "Thank you for exploring www.echomarket.org.  Please return soon."
-    redirect_to home_items_listing_path
-
-  end
-  
+  def create_new_community
+     @community = Community.new(params[:community])
+      if @community.save(:validate =>true) && @community.errors.empty?
+        session[:notice] = "Echo Market successful in creating your Community!  Welocome aboard." 
+        return true
+      else
+        session[:notice] = "Echo Market error in creating new community"  
+        return false
+     end
+     
+end
   
    def activate
     reset_session
@@ -142,8 +152,9 @@ class CommunityController < ApplicationController
           session[:community_name] = @current_user.community_name
           session[:user_alias] = (@cm_l.first_name.blank? ? @cm_l.alias : @cm_l.first_name + " " + (@cm_l.mi.blank? ? "": @cm_l.mi) + " " + @cm_l.last_name) 
           session[:notice] = @current_user.community_name + ", your registration activation is complete, and you are now logged in."
+          redirect_to :controller=> "community", :action=>"advise", :id => @cm.community_id
         else
-          session[:notice] = "Failure in saving record."
+          session[:notice] = "Echo Market failure in saving record."
         end
       else
         @current_user = @cm
@@ -156,16 +167,14 @@ class CommunityController < ApplicationController
         session[:notice] = @current_user.community_name + ", you have already activated your registration, and you are now logged in."
       end
         session[:advise] = false
-        redirect_to :controller=> "community_member", :action=>"m_list", :id => @cm.community_id
+        redirect_to :controller=> "community_member", :action=>"list", :id => @cm.community_id
     else
       session[:notice] = "Seems that you may have not properly copied the Activation url provided in your email.  Please try again."
       redirect_to :controller=> "home", :action=>"items_listing"
     end
   end
   
-  # POST /communities
-  # POST /communities.json
-  def forgot_community_name
+   def forgot_community_name
     session[:background] = true
     if request.post?
       forgot('community_name')
@@ -211,9 +220,9 @@ class CommunityController < ApplicationController
 
     end  #end def
     
-  # respond_to do |format|
-  # format.html
-  #end
+   respond_to do |format|
+   format.html
+  end
   end
       
 
@@ -254,120 +263,5 @@ class CommunityController < ApplicationController
     @community = Community.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
   
-  ####  COMMUNITY MEMBERS DEFS
   
-    def list
-      session[:background] = true
-      @community = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
-      @community_member = @community.community_member.all
-  end
-
-  # # POST /community_members
-  # # POST /community_members.json
-  # def create
-# 
-    # @community_members = CommunityMember.new(params[:community_members])
-#     
-    # respond_to do |format|
-#       
-      # if @community_members.save && @community_members.errors.empty? 
-        # if params[:commit] == 'Add'
-          # format.html { redirect_to :action=>'m_list' }
-#        
-        # end
-#       
-      # else
-        # format.html { render :action => "new" }
-# 
-      # end
-    # end
-  # end
-
- # POST /community_members
-  # POST /community_members.json
-  def add
-  #Parameters: {"utf8"=>"?", "authenticity_token"=>"8b3H95PyT131qgJxSIR9+19VxS9A4MyV579W9KywLvU=", "community_members"=>{"first_name_h"=>"Liz", "mi_h"=>"m", "last_name_h"=>"mcgurty", "alias_h"=>"", "first_name"=>"d", "mi"=
-  #>"m", "last_name"=>"l", "alias"=>"", "is_creator"=>"0"}, "commit"=>"Add", "view"=>"m_list"}
-    myaddhash = Hash.new
-    myaddhash = [:community_id => session[:community_id], :first_name => params[:community_members][:first_name], 
-    :mi=>params[:community_members][:mi], :last_name => params[:community_members][:last_name], 
-    :alias=> params[:community_members][:alias], :is_creator => 0, :remote_ip => params[:community_members][:remote_ip]]
-
-    @community_members = CommunityMember.new(myaddhash[0])
-
-    respond_to do |format|
-      if @community_members.save
-        format.html { redirect_to :action=>'m_list'}
-
-      else
-        session[:notice]  = "Echo Market error in adding new community member."
-        format.html { redirect_to :action=>'m_list'}
-      end
-    end
-  end
-  
-  # # POST /community_members
-  # # POST /community_members.json
-  # def remove
-#     
-    # begin
-      # CommunityMember.delete(params[:id])
-      # redirect_to :action=>'m_list'
-    # rescue 
-        # session[:notice] = 'Echo Market application error in removing your selected member.'
-        # redirect_to :action=>'m_list'
-    # end
-#     
-  # end
-
-  
-  # PUT /community_members/1
-  # PUT /community_members/1.json :  :       /*  /*    match 'community_member/update_row/(:fi)/(:m)/(:la)/(:al)/(:ci)/(:com_id)/(:is_c)'=> "community_member#update_row", :as=> :community_member_update_row */ */
-  def update_row
-    @community_member = CommunityMember.find(params[:ci])
-    
-    unless @community_member.blank?
-      myupdatehash = Hash.new
-       if (params[:is_c] == '1')
-            my_alias_str = params[:fi] + (params[:m].blank? ? "" : params[:m]) + params[:la]
-           myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => my_alias_str, :date_updated=> Time.now]
-       else
-           myupdatehash = [:first_name => params[:fi], :mi => params[:m],:last_name => params[:la], :alias => params[:al], :date_updated=> Time.now]
-       end      
-    end
-
-    
-      if @community_member.update_attributes(myupdatehash[0])
-        if (params[:is_c] == '1')
-          @c = Community.find(params[:com_id])
-          @c.first_name = params[:fi]
-          @c.mi = params[:m]
-          @c.last_name = params[:la]
-          @c.date_updated = Time.now
-          @c.save(:validate => false)
-                 
-        end
-        redirect_to :action=>'m_list' , :id => params[:ci]
-      else
-        session[:notice] = "The Echo Market Application encountered an error in updating your selected Community Member row."        
-        redirect_to :action=>'m_list' , :id => params[:ci]
-      end
-    
- 
- 
-  end
-
-
-  # # DELETE /community_members/1
-  # # DELETE /community_members/1.json
-  # def destroy
-    # @community_member = CommunityMember.find(params[:id])
-    # @community_member.destroy
-# 
-    # respond_to do |format|
-      # format.html { redirect_to community_members_url }
-# 
-    # end
-  # end
-
 end

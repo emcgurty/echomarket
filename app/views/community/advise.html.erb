@@ -34,7 +34,7 @@
 </style>
 
 
-<%= form_for @community , :url=>  {:controller=>"community", :action => "create"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
+<%= form_for @community , :url=>  {:controller=>"community", :action => "advise"}, :html=> {:class=>"register_community", :id=>"register_community"} do |nf| %>
 <div class="top" >
 
 	<p>		<span class="logo_white" >The Echo Market</span>
@@ -49,6 +49,11 @@
 	<% end %>
 
 </div>
+<div style="display:none;">
+	<%= nf.hidden_field(:community_id) %>
+</div>	
+	
+	
 <div class="top_notice_5" id="commmunity_info">
 	
 	<p>Would you like to add members to your Community?
