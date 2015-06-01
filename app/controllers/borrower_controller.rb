@@ -143,18 +143,27 @@ end
 
   def borrower_seeking
     
-      # <% @community_name  = (session[:community_name].blank? ? false : true) %>
-  # <% if @community_name  %>
-    # <% @cdetails = Community.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
-  # <% end  %>
-#  
-    # <% if session[:edit_record]  %>
-      # <% @getValue = @borrower%>
-    # <% else %>
-      # <% @getValue = @cdetails %>
-    # <% end %>
+    session[:no_border] = true
+    if params[:borrower]
+      if update_borrower_seeking
+        redirect_to :action => 'borrower_history', :id=> session[:user_id]
+      else
+         @borrower
+      end
+      
+    else
+      if params[:id].blank?
+       session[:edit_record] = false 
+       @borrower = Borrower.new
+      else
+        @borrower = Borrower.find(params[:id])
+      end
+    end
     
-    ## If the borrowers has no borrower data....
+  end
+  
+    def community_borrower_seeking
+    
  
     session[:no_border] = true
     if params[:borrower]
@@ -292,13 +301,13 @@ end
 
 
         if @ltmp.update_attributes(@myupdatehash[0])
-          @ltmp.update_attributes(:address_attributes => params[:borrower][:primary_address])          
-          @ltmp.update_attributes(:address_attributes => params[:borrower][:alternative_address])
+          @ltmp.update_attributes(:addresses_attributes => params[:borrower][:primary_address])          
+          @ltmp.update_attributes(:addresses_attributes => params[:borrower][:alternative_address])
           @ltmp.update_attributes(:item_images_attributes => params[:borrower][:item_images])
           session[:notice]  = "Echo Market was successful in updating your borrower record."
           return true
         else
-          session[:notice]  = "Echo Market was successful in updating your borrower record."
+          session[:notice]  = "Echo Market was not successful in updating your borrower record. "
           return false
         end
       end

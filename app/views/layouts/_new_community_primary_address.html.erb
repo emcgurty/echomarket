@@ -1,0 +1,65 @@
+			
+			
+			   <div style="display:none;">
+					<%= builder.hidden_field(:address_type, :value => 'primary') %>
+					<%= builder.hidden_field(:lender_id, :value => '') %>
+					
+				</div>	
+			<tr class="odd">
+				<td style="width:25%;">
+				
+					<label>Address Line 1:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
+					<%= builder.text_field(:address_line_1, :maxlength=>24, :size=>24, :class=> class_content + " address_line_1", :value => getValue.address_line_1) %>
+					<span class="error" id="address_line_1_error">&nbsp;</span>
+				</div></td>
+				<td style="width:25%;">
+				<div>
+					<label>Address Line 2:</label>
+					<%= builder.text_field( :address_line_2,  :maxlength=>24, :size=>24,  :class=> class_content + " address_line_2",  :value => getValue.address_line_2) %>
+					<span class="error">&nbsp;</span>
+				</div></td>
+				<td style="width:25%;">
+				<div>
+					<label>Postal Code:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(15)</span></label>
+					<%= builder.text_field( :postal_code,  :maxlength=>15, :size=>15, :class=> class_content + " postal_code",  :value => getValue.postal_code) %>
+					<span class="error" id="postal_code_error">&nbsp;</span>
+				</div></td>
+				<td style="width:25%;">
+				<div>
+					<label>City:<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(20)</span></label>
+					<%= builder.text_field( :city, :maxlength=>20, :size=>20, :class=> class_content + " city",  :value => getValue.city) %>
+					<span class="error" id="city_error">&nbsp;</span>
+				</div></td>
+
+			</tr>
+			<tr class="even">
+				
+				<td style="width:25%;"><label>County:&nbsp;<span class="max_length">(20)</span></label> 
+				<%= builder.text_field( :province,  :maxlength=>20, :size=>20, :class=> class_content + " province",  :value => getValue.province) %>
+				<span class="error">&nbsp;</span></td>
+				<td style="width:25%;"><label>Country:<span class="required_fields">&nbsp;&nbsp;*</span></label>
+			   	<%= builder.collection_select(:country_id, Country.all, :id, :country_name, {}, {:class=> class_content + " country_id", :selected => getValue.country_id}) %>
+				<span class="error" id="country_error">&nbsp;</span></td>
+
+				<td style="width:25%;"> 
+				
+				<div id="choose_us_state"  style="display:block;" >
+					<label>US State: <span class="required_fields">&nbsp;&nbsp;*</span> </label>
+					<%= builder.collection_select(:us_state_id, UsState.all, :id, :state_name, {}, {:class=> class_content + " us_state_id", :selected => getValue.us_state_id}) %>
+					
+				</div>
+				
+				<div id="provide_country_state" style="display:none;" >
+					<label>Region: <span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(40)</span> </label>
+					<%= builder.text_field(:region , :class=> class_content + " region",  :value => getValue.region )%>
+				</div><span class="error" id="state_error">&nbsp;</span></td>
+
+				<td style="width:25%;">
+				<div style="display:inline-block;vertical-align:top;">
+					<label >Public Display Address?:</label>
+					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "borrower",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
+					<span class="error" id="display_address_error">&nbsp;</span>
+				</div></td>
+			</tr>
+
+			

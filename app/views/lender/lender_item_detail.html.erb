@@ -8,116 +8,138 @@
     font-weight:normal;
     width:94%;
   }
-
   label {
     margin-left:15px;
     font-size:14px;
     font-weight:normal;
-
   }
-
-
 </style>
 
 
+<%= javascript_include_tag 'lender_offering.js', :type => "text/javascript" %>
 
-<%= javascript_include_tag 'lender_offering.js' %>
+<%= form_tag '/lender/lender_item_detail', :html=> {:class=>"lender_item_detail", :id=>"lenders_item_form"} do |nf| %>
 
-<%= form_for @lender, :url=> {:controller=>"lender", :action => "lender_item_detail"}, :html=> {:class=>"lender_item_detail", :id=>"lenders_item_form"} do |nf| %>
-<% for ldr in @lender %>  
-  <%  @bl = Contactdescribes.find(:all, :select=> "borrower_or_lender_text",
-    :readonly => true, :conditions => ['borrower_or_lender = 1 and option_value = ?', ldr.contact_describe_id]) %>
-
-  <div class="top" >
-    <p><span class="logo_white" >The Echo Market</span></p>
-    <p>
-      <% if  session[:community_id] %>
-      <%= session[:user_alias]   %>
-      <% else  %>
-      <% @u = User.find(:first, :readonly, :select => "user_alias", :conditions => ["user_id = ?", ldr.user_id ] )  %>
-      <%= @u.user_alias   %>
-      <% end  %>
-      
-      LENDER ITEM DETAIL</p>
-    <%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
-  </div>
+<div class="top" >
+	<p>
+		<span class="logo_white" >The Echo Market</span>
+	</p>
+	<p>
+        <% unless sesion[:community_name].blank?  %>
+        <%= (session[:user_alias].blank? ? "" : session[:user_alias] + " of " +  session[:community_name]  %>
+        <% else %>
+		<%= session[:user_alias]   %>
+		<% end %>
+		: LENDER ITEM DETAIL
+	</p>
+	<%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
+</div>
 
   <div class="div_p_detail" >Lender Description</div>
   <div class="div_p_detail_sub">
-    <p><%=  @bl[0][:borrower_or_lender_text] %>
-      <% if @bl[0][:borrower_or_lender_text] == 'Other'%>
-        &nbsp;<%= ldr.other_describe_yourself %>
-      <% end %>
-
-      <% unless ldr.organization_name.blank? %>
+    <p>
+    
+  		<% for bb in @lender %>  
+      
+   	<%=  bb.borrower_or_lender_text %>
+		<% if bb.borrower_or_lender_text == 'Other'%>
+		&nbsp;<%= bb.other_describe_yourself %>
+		<% end %>
+      <% unless bb.organization_name.blank? %>
         <br />
-        <% if ldr.displayLenderOrganizationName.abs == 1 %>
-          Lender Organization Name: &nbsp;<%= ldr.organization_name %><br />
+        <% if bb.displayLenderOrganizationName.abs == 1 %>
+          Lender Organization Name: &nbsp;<%= bb.organization_name %><br />
         <% end %>
       <% end %>
-      <% if ldr.displayLenderName.abs == 1%>
-        Lender Name:&nbsp;<%= ldr.first_name %>&nbsp;<%= (ldr.mi.blank? ? "": ldr.mi) %>&nbsp;<%= ldr.last_name %><br />
+      <% if bb.displayLenderName.abs == 1%>
+        Lender Name:&nbsp;<%= bb.first_name %>&nbsp;<%= (bb.mi.blank? ? "": bb.mi) %>&nbsp;<%= bb.last_name %><br />
       <% end %></p>
-      <% if (ldr.displayLenderAddress == 1) %>
-     <p>Lender Address:<br />
-           <%= ldr.address_line_1 %><%= (ldr.address_line_2.blank? ? " ": ldr.address_line_2) %><br />
-        <%= ldr.city + ","%><%= (ldr.province.blank? ? "": ldr.province) + " " %>
+      <% if (bb.displayLenderAddress == 1) %>
+ 		 <%	lender_primary_address = Lender.find(bb.l_id).addresses.where("address_type = 'primary'")  %>
+		<p>
+		Lender Address:
+		<br />
+		<%= lender_primary_address.address_line_1 %>
+		<%= (lender_primary_address.address_line_2.blank? ? " ": lender_primary_address.address_line_2) %>
+		<br />
+		<%= lender_primary_address.city + ","%>
+		<%= (lender_primary_address.province.blank? ? "": lender_primary_address.province) + " " %>
 
-        <% if ldr.us_state_id.blank? %>
-          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", ldr.us_state_id ]) %>
-          <%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name) %>
-        <% else %>
-         <%= ldr.us_state_id %>
-        <% end %>
-        <br />
-        <% unless ldr.country_id.blank? %>
-          <% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", ldr.country_id ]) %>
-          <%= @s_c.country_name + " " %>
-        <% end %>
-        <%= ldr.postal_code %></p>
-        <% end %>
+		<% unless lender_primary_address.us_state_id.blank? || lender_primary_address.us_state_id == '99'  %>
+		<%= lender_primary_address.state_name %>
+		<% end %>
+		<br />
+		
+		<% unless lender_primary_address.region.blank?  %>
+		<%= lender_primary_address.region %>
+		<% end %>
+		<br />
+		
+		
+		<% unless lender_primary_address.country_name.blank? %>
+		<%= lender_primary_address.country_name + " " %>
+		<% end %>
+		
+		<%= lender_primary_address.postal_code %>
+	</p>
+	<% end %>
+	
       
   </div>
 
 
-  <% if ((ldr.useWhichContactAddress == 2)  || (ldr.useWhichContactAddress == 1)) %>
-    <div class="div_p_detail" >Lender Contact - Alternative Address:</div>
-    <div class="div_p_detail_sub">
+ % if ((bb.useWhichContactAddress == 2)  || (bb.useWhichContactAddress == 1)) %>
 
-      <p><%= ldr.address_line_1_alternative %><%= (ldr.address_line_2_alternative.blank? ? " ": ldr.address_line_2_alternative) %><br />
-        <%= ldr.city_alternative + ","%><%= (ldr.province_alternative.blank? ? "": ldr.province_alternative) + " " %>
+<div class="div_p_detail" >
+	Lender Contact - Alternative Address:
+</div>
+<div class="div_p_detail_sub">
+   <%  lender_alternative_address = Lender.find(bb.b_id).addresses.where("address_type = 'alternative'") %>
+    
+	<p>
+		<%= lender_alternative_address.address_line_1 %>
+		<%= (lender_alternative_address.address_line_2.blank? ? " ": lender_alternative_address.address_line_2) %>
+		<br />
+		<%= lender_alternative_address.city + ","%>
+		<%= (lender_alternative_address.province.blank? ? "": lender_alternative_address.province) + " " %>
 
-        <% if ldr.us_state_id_alternative.blank? %>
-          <% @s_c = UsStates.find(:first, :readonly => true,  :conditions => ["us_state_id = ?", ldr.us_state_id_alternative ]) %>
-          <%= (@s_c.us_state_id == '99' ? "" : @s_c.state_name + " ") %>
-        <% else %>  
-        <%= ldr.us_state_id_alternative + " " %>
-        <% end %>
-        <br />
-        <% unless ldr.country_id_alternative.blank? %>
-          <% @s_c = Countries.find(:first, :select => "country_name", :readonly => true,  :conditions => ["country_id = ?", ldr.country_id_alternative ]) %>
-          <%= @s_c.country_name + " " %>
-        <% end %>
-        <%= ldr.postal_code_alternative %></p>
-    </div>
-  <% else %>  
-  <% end %>
+		<% unless lender_alternative_address.us_state_id.blank? || lender_alternative_address.us_state_id == '99'  %>
+		<%= lender_alternative_address.state_name %>
+		<% end %>
+		<br />
+		
+		<% unless lender_alternative_address.region.blank?  %>
+		<%= lender_alternative_address.region %>
+		<% end %>
+		<br />
+		
+		
+		<% unless lender_alternative_address.country_name.blank? %>
+		<%= lender_alternative_address.country_name + " " %>
+		<% end %>
+		
+		<%= lender_alternative_address.postal_code %>
+	</p>
+	
+</div>
+<% end %>
+
   
 
-  <% if ldr.public_display_home_phone.abs == 1 || ldr.public_display_cell_phone.abs == 1  || ldr.public_display_alternative_phone.abs == 1%>
+  <% if bb.public_display_home_phone.abs == 1 || bb.public_display_cell_phone.abs == 1  || bb.public_display_alternative_phone.abs == 1%>
 
     <div class="div_p_detail"  >Lender Contact - Phone:</div>
     <div class="div_p_detail_sub">
       <p>
-        <% if ldr.public_display_home_phone.abs == 1 %>
-          <%= "Home: " + ldr.home_phone %>&nbsp;
+        <% if bb.public_display_home_phone.abs == 1 %>
+          <%= "Home: " + bb.home_phone %>&nbsp;
         <% end %>
-        <% if ldr.public_display_cell_phone.abs == 1 %>
-          <%= "Cell: " + ldr.cell_phone %>&nbsp;
+        <% if bb.public_display_cell_phone.abs == 1 %>
+          <%= "Cell: " + bb.cell_phone %>&nbsp;
         <% end %>
 
-        <% if ldr.public_display_alternative_phone.abs == 1 %>
-          <%= "Alternative: " + ldr.alternative_phone %>
+        <% if bb.public_display_alternative_phone.abs == 1 %>
+          <%= "Alternative: " + bb.alternative_phone %>
         <% end %></p>
 
     </div>
@@ -125,35 +147,34 @@
   <% end %>
 
 
-  <% unless ldr.borrower_contact_by_email == 0  %>
-
+  <% unless bb.borrower_contact_by_email == 0  %>
+  <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>
     <div class="div_p_detail" >Lender Contact - Email:</div>
 
     <div class="div_p_detail_sub">
       <p>
-        <% if ldr.borrower_contact_by_email == 3 %>
+        <% if bb.borrower_contact_by_email == 3 %>
         <% if  session[:community_id] %>
      		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
       	<% else  %>
-          <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
+          
+          &nbsp;&nbsp;
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
       	<% end  %>
         <% end %>
         
-        <% if ldr.borrower_contact_by_email == 2 %>
-          <%= mail_to ldr.email_alternative,"#{ldr.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+        <% if bb.borrower_contact_by_email == 2 %>
+          <%= mail_to bb.email_alternative,"#{bb.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
         <% end %>
-        <% if ldr.borrower_contact_by_email.to_i.abs == 1 %>
-          <%= mail_to ldr.email_alternative, "#{ldr.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+        <% if bb.borrower_contact_by_email.to_i.abs == 1 %>
+          <%= mail_to bb.email_alternative, "#{bb.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
          
  <% if  session[:community_id] %>
      		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
       	<% else  %>
-          <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", ldr.user_id]) %>&nbsp;&nbsp;
+         
           <%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
       	<% end  %>
-
-
 
         <% end %>
       </p>
@@ -162,32 +183,32 @@
 
   <% end %>
 
-  <% unless ldr.borrower_contact_by_Facebook.blank? &&  ldr.borrower_contact_by_LinkedIn.blank? &&  ldr.borrower_contact_by_Other_Social_Media.blank?
-    ldr.borrower_contact_by_Twitter.blank? &&  ldr.borrower_contact_by_Instagram.blank? &&  ldr.borrower_contact_by_Other_Social_Media_Access.blank? %>
+  <% unless bb.borrower_contact_by_Facebook.blank? &&  bb.borrower_contact_by_LinkedIn.blank? &&  bb.borrower_contact_by_Other_Social_Media.blank?
+    bb.borrower_contact_by_Twitter.blank? &&  bb.borrower_contact_by_Instagram.blank? &&  bb.borrower_contact_by_Other_Social_Media_Access.blank? %>
     <div class="div_p_detail" >Lender Contact - Social Media:</div>
     <div class="div_p_detail_sub">
 
       <p>
-        <% unless ldr.borrower_contact_by_Facebook.blank?  %>
-          Facebook Access: &nbsp;<%= ldr.borrower_contact_by_Facebook %>&nbsp;&nbsp;
+        <% unless bb.borrower_contact_by_Facebook.blank?  %>
+          Facebook Access: &nbsp;<%= bb.borrower_contact_by_Facebook %>&nbsp;&nbsp;
         <% end %>
 
-        <% unless ldr.borrower_contact_by_LinkedIn.blank?  %>
-          LinkedIn Access: &nbsp;<%= ldr.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
+        <% unless bb.borrower_contact_by_LinkedIn.blank?  %>
+          LinkedIn Access: &nbsp;<%= bb.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
         <% end %>
 
-        <% unless ldr.borrower_contact_by_Twitter.blank?  %>
-          Twitter Access:&nbsp;<%= ldr.borrower_contact_by_Twitter %>&nbsp;&nbsp;
+        <% unless bb.borrower_contact_by_Twitter.blank?  %>
+          Twitter Access:&nbsp;<%= bb.borrower_contact_by_Twitter %>&nbsp;&nbsp;
 
         <% end %>
-        <% unless ldr.borrower_contact_by_Instagram.blank?  %>
-          Instagram Access:&nbsp;<%= ldr.borrower_contact_by_Instagram %>&nbsp;&nbsp;
+        <% unless bb.borrower_contact_by_Instagram.blank?  %>
+          Instagram Access:&nbsp;<%= bb.borrower_contact_by_Instagram %>&nbsp;&nbsp;
         <% end %>
 
-        <% unless ldr.borrower_contact_by_Other_Social_Media.blank?  %>
+        <% unless bb.borrower_contact_by_Other_Social_Media.blank?  %>
           <br />
-          Other Social Media Account Access:&nbsp;<%= ldr.borrower_contact_by_Other_Social_Media %>
-          Other Social Media Account Access:&nbsp;<%= ldr.borrower_contact_by_Other_Social_Media_Access %>
+          Other Social Media Account Access:&nbsp;<%= bb.borrower_contact_by_Other_Social_Media %>
+          Other Social Media Account Access:&nbsp;<%= bb.borrower_contact_by_Other_Social_Media_Access %>
         <% end %>
       </p>
     </div>
@@ -196,7 +217,7 @@
 
   <div class="div_p_detail" >Item Transfer: Lender to Borrower</div>
   <div class="div_p_detail_sub">
-    <% @user_response = ldr.b_comes_to_which_address.to_s %>
+    <% @user_response = bb.b_comes_to_which_address.to_s %>
     Borrower item pick up ...:
     <% if  @user_response == "3" %>
       <p>.. At lender address</p>
@@ -211,33 +232,33 @@
     <% end %>
 
 
-    <%  unless ldr.meetBorrowerAtAgreedL2B.to_i == 0 %>
+    <%  unless bb.meetBorrowerAtAgreedL2B.to_i == 0 %>
       Wants to meet with borrower at an agreed location?: &nbsp;
-      <%= (ldr.meetBorrowerAtAgreedL2B.to_i == 1 ? "Yes": "Lender indifferent") %>
+      <%= (bb.meetBorrowerAtAgreedL2B.to_i == 1 ? "Yes": "Lender indifferent") %>
       <br />
     <% end %>
 
-    <%  unless ldr.willDeliverToBorrowerPreferredL2B == 0 %>
+    <%  unless bb.willDeliverToBorrowerPreferredL2B == 0 %>
       Will deliver to borrower preferred location?: &nbsp;
-      <%= (ldr.willDeliverToBorrowerPreferredL2B.to_i == 1 ? "Yes": "Lender indifferent")  %>
+      <%= (bb.willDeliverToBorrowerPreferredL2B.to_i == 1 ? "Yes": "Lender indifferent")  %>
       <br />
     <% end %>
 
 
-    <% unless ldr.thirdPartyPresenceL2B == 0 %>
+    <% unless bb.thirdPartyPresenceL2B == 0 %>
       <div class="div_p_detail_sub" style="background-color:#E2D7CE;">
         Lender would like a third-party present during transfer to borrower?: &nbsp;
-        <%= (ldr.thirdPartyPresenceL2B == 1 ? "Yes": "Lender indifferent")  %>
+        <%= (bb.thirdPartyPresenceL2B == 1 ? "Yes": "Lender indifferent")  %>
         <br />
 
 
         <div class="column30">
           Lender's choice?: &nbsp;
-          <%= (ldr.lenderThirdPartyChoiceL2B == 0 ? "Not interested" : (ldr.lenderThirdPartyChoiceL2B == 1 ? "Yes": "Indifferent") ) %>
+          <%= (bb.lenderThirdPartyChoiceL2B == 0 ? "Not interested" : (bb.lenderThirdPartyChoiceL2B == 1 ? "Yes": "Indifferent") ) %>
         </div>
         <div class="column30">
           Mutually agreed?: &nbsp;
-          <%= (ldr.agreedThirdPartyChoiceL2B == 0 ? "Not interested" : (ldr.agreedThirdPartyChoiceL2B == 1 ? "Yes": "Indifferent") ) %>
+          <%= (bb.agreedThirdPartyChoiceL2B == 0 ? "Not interested" : (bb.agreedThirdPartyChoiceL2B == 1 ? "Yes": "Indifferent") ) %>
         </div>
       </div>
     <% end %>
@@ -246,7 +267,7 @@
 
   <div   class="div_p_detail" >Item Transfer: Borrower to Lender</div>
   <div class="div_p_detail_sub">
-    <% @user_response = ldr.b_returns_to_which_address.to_s %>
+    <% @user_response = bb.b_returns_to_which_address.to_s %>
     Borrower item return ...:
     <% if  @user_response == "3" %>
       <p>Can return to lender contact address</p>
@@ -260,33 +281,33 @@
       <p>This is a Rapid Item Registered Participant. No addresses required.</p>
     <% end %>
 
-    <% unless  ldr.meetBorrowerAtAgreedB2L == 0  %>
+    <% unless  bb.meetBorrowerAtAgreedB2L == 0  %>
       Wants to meet with borrower at an agreed location?:
-      <%= (ldr.meetBorrowerAtAgreedB2L.to_i == 1 ? "Yes": "Indifferent") %>
+      <%= (bb.meetBorrowerAtAgreedB2L.to_i == 1 ? "Yes": "Indifferent") %>
       <br />
     <% end  %>
 
 
-    <% unless ldr.willPickUpPreferredLocationB2L == 0 %>
+    <% unless bb.willPickUpPreferredLocationB2L == 0 %>
       Wants to pick up at borrower's location?: &nbsp;
-      <%= (ldr.willPickUpPreferredLocationB2L.to_i == 1 ? "Yes": "Indifferent")  %>
+      <%= (bb.willPickUpPreferredLocationB2L.to_i == 1 ? "Yes": "Indifferent")  %>
       <br />
     <% end %>
 
 
-    <% unless ldr.thirdPartyPresenceB2L == 0 %>
+    <% unless bb.thirdPartyPresenceB2L == 0 %>
       <div class="div_p_detail_sub" style="background-color:#E2D7CE;">
         Lender would like a third-party present during transfer from borrower?: &nbsp;
-        <%= (ldr.thirdPartyPresenceB2L.to_i == 1 ? "Yes": "Indifferent")  %>
+        <%= (bb.thirdPartyPresenceB2L.to_i == 1 ? "Yes": "Indifferent")  %>
         <br />
 
         <div class="column30">
           Lender's choice?: &nbsp;
-          <%= (ldr.lenderThirdPartyChoiceB2L == 0 ? "Not interested" : (ldr.lenderThirdPartyChoiceB2L == 1 ? "Yes": "Indifferent") ) %>
+          <%= (bb.lenderThirdPartyChoiceB2L == 0 ? "Not interested" : (bb.lenderThirdPartyChoiceB2L == 1 ? "Yes": "Indifferent") ) %>
         </div>
         <div class="column30">
           Mutually agreed?: &nbsp;
-          <%= (ldr.agreedThirdPartyChoiceL2B == 0 ? "Not interested" : (ldr.agreedThirdPartyChoiceB2L == 1 ? "Yes": "Indifferent") ) %>
+          <%= (bb.agreedThirdPartyChoiceL2B == 0 ? "Not interested" : (bb.agreedThirdPartyChoiceB2L == 1 ? "Yes": "Indifferent") ) %>
         </div>
       </div>
     <% end %>
@@ -296,38 +317,34 @@
   <div class="div_p_detail_sub">
 
     Category:
-    <% @categories = Category.find(:first, :select => "category_type", :readonly=> true, :conditions => ["category_id = ?", ldr.category_id]) %>
-    <%= @Category.category_type %>
-    <% if @Category.category_type == "Other" %>
+   
+   
+    <% if bb.category_type == "Other" %>
       &nbsp;Other category:
-      <%= ldr.other_item_category %>
+      <%= bb.other_item_category %>
     <% end %>
 
 
     <br />
     Description:&nbsp;
-    <%= ldr.item_description %>
+    <%= bb.item_description %>
     <br />
 
     Condition:&nbsp;
-    <% @cont = Itemconditions.find(:first, :select => "conditions", :readonly=> true, :conditions => ["item_condition_id = ?", ldr.item_condition_id]) %>
-    <%= @cont.conditions %>
+    <%= bb.condition %>
     <br />
 
-    <% unless ldr.item_model.blank?  %>
+    <% unless bb.item_model.blank?  %>
       Model: &nbsp;
-      <%= ldr.item_model %>
+      <%= bb.item_model %>
       <br />
     <% end %>
 
     Number of Items: &nbsp;
-    <%= ldr.item_count %><br />
+    <%= bb.item_count %><br />
 
 
-
-    <% @imgs = Itemimages.find(:all,:readonly => true, :conditions => ['lender_id = ?', ldr.lender_id])  %>
-    <% unless @imgs.blank? %>
-      <% @icaption = (@imgs[0].item_image_caption.blank? ? "No caption provided"  :  @imgs[0].item_image_caption)  %>
+      <% @icaption = (bb.item_image_caption.blank? ? "No caption provided"  :  bb.item_image_caption)  %>
 
       <div style="margin-left:25px;margin-top:5px;float:left;">
 
@@ -338,11 +355,11 @@
           </tr>
           <tr>
             <td style="width:50%;text-align:center;"><%= @icaption %></td>
-            <td style="width:50%;text-align:center;"> <img src="<%= get_image_path(@imgs[0].image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
+            <td style="width:50%;text-align:center;"> <img src="<%= get_image_path(bb.image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
           </tr>
         </table>
       </div>
-    <% end %>
+
 
 
 
@@ -351,79 +368,79 @@
   <div   class="div_p_detail" >Terms of Lending: Monetary</div>
   <div class="div_p_detail_sub">
 
-    <% unless  ldr.for_free == 0 %>
+    <% unless  bb.for_free == 0 %>
       Lender offering item for free: &nbsp;
-      <%= (ldr.for_free == 1 ? "Yes": "Lender indifferent") %>
+      <%= (bb.for_free == 1 ? "Yes": "Lender indifferent") %>
       <br />
     <% end %>
-    <% unless  ldr.small_fee == 0 %>
+    <% unless  bb.small_fee == 0 %>
       Lender offering item for a small borrowing fee:
-      <%= (ldr.small_fee == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
-      <% unless  ldr.small_fee_amount.blank?  %>
+      <%= (bb.small_fee == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
+      <% unless  bb.small_fee_amount.blank?  %>
         Small borrowing fee amount:
-        <%= number_to_currency(ldr.small_fee_amount) %>
+        <%= number_to_currency(bb.small_fee_amount) %>
       <% end %>
       <br />
     <% end %>
 
 
-    <% unless  ldr.available_for_purchase == 0 %>
+    <% unless  bb.available_for_purchase == 0 %>
       Lender offering for small purchase amount: &nbsp;
-      <%= (ldr.available_for_purchase == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
-      <% unless  ldr.available_for_purchase_amount.blank? %>
+      <%= (bb.available_for_purchase == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
+      <% unless  bb.available_for_purchase_amount.blank? %>
         Small purchase amount:
-        <%= number_to_currency(ldr.available_for_purchase_amount) %><br />
+        <%= number_to_currency(bb.available_for_purchase_amount) %><br />
       <% end %>
       <br />
     <% end %>
 
-    <% unless  ldr.available_for_donation == 0 %>
+    <% unless  bb.available_for_donation == 0 %>
       Lender offering for for donation: &nbsp;
-      <%= (ldr.available_for_donation.to_i == 1 ? "Yes": "Indifferent") %>
+      <%= (bb.available_for_donation.to_i == 1 ? "Yes": "Indifferent") %>
       <br />
     <% end %>
 
-    <% unless  ldr.security_deposit == 0 %>
+    <% unless  bb.security_deposit == 0 %>
       Lender is requesting a security deposit: &nbsp;
-      <%= (ldr.security_deposit == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
-      <% unless  ldr.security_deposit_amount.blank? %>
+      <%= (bb.security_deposit == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
+      <% unless  bb.security_deposit_amount.blank? %>
         Security deposit amount:
-        <%= number_to_currency(ldr.security_deposit_amount) %><br />
+        <%= number_to_currency(bb.security_deposit_amount) %><br />
       <% end %>
       <br />
     <% end %>
     
     
-    <% unless  ldr.trade == 0 %>
+    <% unless  bb.trade == 0 %>
       Lender interested in trading:&nbsp;
-      <%= (ldr.trade.to_i == 1 ? "Yes": "Indifferent") %>&nbsp;&nbsp;
-      <% unless ldr.trade_item.blank? %>
+      <%= (bb.trade.to_i == 1 ? "Yes": "Indifferent") %>&nbsp;&nbsp;
+      <% unless bb.trade_item.blank? %>
         Lender would like to trade:&nbsp;
-        <%= ldr.trade_item %>
+        <%= bb.trade_item %>
       <% end %>
     <% end %>
     <br />
   </div>
 
-  <% unless ldr.agreed_number_of_days == 0 && ldr.agreed_number_of_hours == 0  && ldr.present_during_borrowing_period == 0 %>
+  <% unless bb.agreed_number_of_days == 0 && bb.agreed_number_of_hours == 0  && bb.present_during_borrowing_period == 0 %>
     <div   class="div_p_detail" >Terms of Lending: Duration</div>
     <div class="div_p_detail_sub">
 
-      <% unless  ldr.agreed_number_of_days == 0 %>
+      <% unless  bb.agreed_number_of_days == 0 %>
         Lender seeking agreed number of days:
-        <%= (ldr.agreed_number_of_days == 1 ? "Yes": "Indifferent")  %>
+        <%= (bb.agreed_number_of_days == 1 ? "Yes": "Indifferent")  %>
         <br />
       <% end %>
 
-      <% unless  ldr.agreed_number_of_hours == 0 %>
+      <% unless  bb.agreed_number_of_hours == 0 %>
         Lender seeking agreed number of hours:
-        <%= (ldr.agreed_number_of_hours == 1 ? "Yes": "Indifferent") %>
+        <%= (bb.agreed_number_of_hours == 1 ? "Yes": "Indifferent") %>
         <br />
       <% end %>
 
-      <% unless  ldr.present_during_borrowing_period == 0 %>
+      <% unless  bb.present_during_borrowing_period == 0 %>
         Lender offering indefinite borrowing period?
-        <%= (ldr.present_during_borrowing_period == 1 ? "Yes": "Indifferent") %>
+        <%= (bb.present_during_borrowing_period == 1 ? "Yes": "Indifferent") %>
         <br />
       <% end %>
 
@@ -433,22 +450,22 @@
 
   <div   class="div_p_detail" >Terms of Lending: Conditions</div>
   <div class="div_p_detail_sub">
-    <% if ldr.present_during_borrowing_period.abs == 1 %>
+    <% if bb.present_during_borrowing_period.abs == 1 %>
       Lender requests presence during the entire lending period:
-      <%= (ldr.entire_period == 0 ? "No" : (ldr.entire_period == 1 ? "Yes": "Indifferent"))  %><br />
+      <%= (bb.entire_period == 0 ? "No" : (bb.entire_period == 1 ? "Yes": "Indifferent"))  %><br />
       Lender requests presence during lending period partially:
-      <%= (ldr.partial_period == 0 ? "No" : (ldr.partial_period == 1 ? "Yes": "Indifferent")) %>&nbsp;&nbsp;
+      <%= (bb.partial_period == 0 ? "No" : (bb.partial_period == 1 ? "Yes": "Indifferent")) %>&nbsp;&nbsp;
       <br />
     <% end %>
 
-    <% unless ldr.provide_proper_use_training == 0 %>
+    <% unless bb.provide_proper_use_training == 0 %>
       Item proper-use training requested:
-      <%= (ldr.provide_proper_use_training == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
+      <%= (bb.provide_proper_use_training == 1 ? "Yes": "Lender indifferent") %>&nbsp;&nbsp;
       <br />
     <% end %>
-    <% unless ldr.specific_conditions.blank? %>
+    <% unless bb.specific_conditions.blank? %>
       Specific lending conditions:&nbsp;
-      <%= ldr.specific_conditions %>
+      <%= bb.specific_conditions %>
       <br />
     <% end %>
   </div>

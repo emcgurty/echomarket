@@ -35,9 +35,7 @@
 	<%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
 </div>
 
-<div class="div_p_detail" >
-	Borrower Description
-</div>
+<div class="div_p_detail" >Borrower Description</div>
 <div class="div_p_detail_sub">
 	<p>
 		
@@ -47,7 +45,6 @@
 		<% if bb.borrower_or_lender_text == 'Other'%>
 		&nbsp;<%= bb.other_describe_yourself %>
 		<% end %>
-
 		<% unless bb.organization_name.blank? %>
 		<br />
 		<% if bb.displayBorrowerOrganizationName.abs == 1 %>
@@ -157,7 +154,7 @@
 <% end %>
 
 <% unless bb.borrower_contact_by_email == '0'  %>
-
+<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>
 <div class="div_p_detail" >
 	Borrower Contact - Email:
 </div>
@@ -168,7 +165,7 @@
 		<% if  session[:community_id] %>
 		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
 		<% else  %>
-		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>&nbsp;&nbsp;
+		&nbsp;&nbsp;
 		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
 		<% end  %>
 		<% end %>
@@ -181,14 +178,14 @@
 		<% if  session[:community_id] %>
 		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
 		<% else  %>
-		<% @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>&nbsp;&nbsp;
+		&nbsp;&nbsp;
 		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
 		<% end  %>
 		<% end %>
 	</p>
 
 </div>
-	<% end %>
+<% end %>
 
 <% unless bb.borrower_contact_by_Facebook.blank? &&  bb.borrower_contact_by_LinkedIn.blank? &&  bb.borrower_contact_by_Other_Social_Media.blank?
 bb.borrower_contact_by_Twitter.blank? &&  bb.borrower_contact_by_Instagram.blank? &&  bb.borrower_contact_by_Other_Social_Media_Access.blank? %>

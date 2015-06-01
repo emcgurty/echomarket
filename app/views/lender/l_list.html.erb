@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'echo_market.js' , :type => "text/javascript" %>
 
-<%= form_for @lender, :url=>{:controller=>"lender", :action => "l_list"},  :html=>  {:class=>"l_list",  :id=>"l_list"} do |nf| %>
+<%= form_tag '/lender/l_list",  :html=>  {:class=>"l_list",  :id=>"l_list"} do |nf| %>
 
 
   <div class="top" >
@@ -67,4 +67,3 @@
 
 
 
-<% end %>

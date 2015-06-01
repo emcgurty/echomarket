@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'lender_offering.js' %>
 <%  rowCount = 1 %>
-<%= form_for @lender, :url=> {:controller=>"lender", :action => "lender_history"}, :html=> {:class=>"lender_history", :id=>"lenders_item_form"} do |nf| %>
+<%= form_tag 'lender/lender_history' , :html=> {:class=>"lender_history", :id=>"lenders_item_form"} do |nf| %>
 
  <div class="top" >
     <p><span class="logo_white" >The Echo Market</span></p>
@@ -78,5 +78,3 @@
      <% end %>
 
   </div>
-  
-<% end %>

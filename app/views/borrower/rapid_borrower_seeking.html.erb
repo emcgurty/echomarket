@@ -9,22 +9,12 @@
 
 <% end %>
 
-
-
-
-<% unless @borrower[0].blank? %>
-<% @borrower = @borrower[0] %>
-<% end  %>
-
-
 <div style="display:none;">
 <%= nf.hidden_field( :is_active, :value => 1) %>
 <%= nf.hidden_field( :is_community, :value=> 0) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 </div>
-
-<% display_us_state_id = 'none' %>
 
 <div class="top" >
 	<p>
@@ -38,6 +28,11 @@
 	<p>
 		<%= session[:notice] unless session[:notice].blank? %>
 	</p>
+	
+	<p>Except for Comments, all fields are required.</p>
+	
+	</p>
+	
 	<a href="#" onclick="addLenderItem();">==> Save your Item Sought</a>
 	<%= link_to '==> Return to New Search', search_item_search_url %>
 	<br />
@@ -50,11 +45,11 @@
 <div style="float:left;;width:92%;">
 	<label>Please provide an email address for lender contact:</label>
 	<br />
-	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40 ) %>
+	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40, :class=> "rapid email" ) %>
 </div>
 
 
-<%= fields_for :addresses do |builder| %>
+<%= nf.fields_for :addresses do |builder| %>
 
 <div style="display:none;">
 	<%= builder.hidden_field( :lender_id, :value =>"") %>
@@ -66,25 +61,25 @@
 <div style="float:left;;width:92%;">
 	<label>Your Postal Code: </label>
 	<br />
-	<%= builder.text_field( :postal_code,  :maxlength=>15, :size=>15) %>
+	<%= builder.text_field( :postal_code,  :maxlength=>15, :size=>15, :class=> "rapid postal_code") %>
 </div>
 
 <div style="float:left;;width:92%;">
 	<div class="column50_rapid"> 
 	<label>Your Country:</label>
-	 <%= builder.collection_select :country_id, Country.all, :id, :country_name %>
+	 <%= builder.collection_select(:country_id, Country.all, :id, :country_name, {}, {:class => "rapid country_id"}) %>
 	</div>
 
 	
 	<div id="country_selected" style="display:block;">
     <div class="column50_rapid">
 	<label>Your State or Region: </label>
-	<div id="choose_us_state"  style="display:<%= display_us_state_id %>;" >
-		<%= builder.collection_select :us_state_id, UsState.all, :id, :state_name %>
+	<div id="choose_us_state"  style="display:block;" >
+		<%= builder.collection_select(:us_state_id, UsState.all, :id, :state_name, {}, {:class => "rapid us_state_id"}) %>
 	</div>
 
-	<div id="provide_country_state" style="display:block;" >
-		<%= builder.text_field(:region, :maxlength=>40, :size=>25) %>
+	<div id="provide_country_state" style="display:none;" >
+		<%= builder.text_field(:region, :maxlength=>40, :size=>25, :class => "rapid region"}) %>
 	</div>
 	</div>
 </div>
@@ -93,14 +88,15 @@
 <div style="float:left;width:92%;">
 
 <div class="column50_rapid"><label>Item Category:
-<%= nf.collection_select :category_id, Category.all, :id, :category_type %></label>
+<%= nf.collection_select(:category_id, Category.all, :id, :category_type, {}, {:class => "rapid country_id"}) %>
+</label>
  
 </div>
 
 <div class="column50_rapid"> 
 <div style="display:none;" id="other_category">
 	<label>Add another category:
-	<%= nf.text_field( :other_item_category,:maxlength=>24, :size=>25) %>
+	<%= nf.text_field(:other_item_category,:maxlength=>24, :size=>25, :class => "rapid other_item_category") %>
 	</label>
 </div>
 </div>
@@ -110,13 +106,13 @@
 <div class="column50_rapid">	
 <label for="item_description">Item Description:</label>
 <br />
-<%= nf.text_field( :item_description, :maxlength=>50, :size=>25) %>
+<%= nf.text_field(:item_description, :maxlength=>50, :size=>25, :class => "rapid item_description")  %>
 </div>
 
 <div class="column50_rapid">	
 <label for="item_model">Item Model:</label>
 <br />
-<%= nf.text_field( :item_model, :maxlength=>50, :size=>25) %>
+<%= nf.text_field(:item_model, :maxlength=>50, :size=>25, :class => "rapid item_model")  %>
 </div>
 </div>
 
@@ -124,7 +120,7 @@
 
 <div class="column50_rapid">
 <label>The Condition of Item:
-<%= nf.collection_select :item_condition_id, ItemCondition.all, :id, :condition %>
+<%= nf.collection_select :item_condition_id, ItemCondition.all, :id, :condition, {}, {:class => "rapid item_condition_id"}) %>
 </div>
 
 <div class="column50_rapid">
@@ -134,6 +130,7 @@
 
 </div>
 
+
 <div style="float:left;width:92%;">
 
 <p >
@@ -142,10 +139,11 @@
 </p>
 
 <label for="borrower_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
-	<%= nf.check_box( :goodwill) %></label>
+	<%= nf.check_box(:goodwill, :class => "rapid goodwill") %>
+	</label>
 
 <label for="borrower_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
-	<%= nf.check_box( :age_18_or_more) %></label>
+	<%= nf.check_box( :age_18_or_more, :class => "rapid goodwill") %></label>
 <br/>
 </div>
 <div class="top">

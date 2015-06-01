@@ -1,15 +1,20 @@
 class Lender < ActiveRecord::Base
   
   
-   attr_accessible :contact_describe_id, :first_name, :last_name, :displayBorrowerName, :displayBorrowerAddress, :useWhichContactAddress, :email_alternative, :borrower_contact_by_email, 
-                   :category_id, :item_description, :item_condition_id, :other_item_category, :item_model, :item_count, :goodwill, :age_18_or_more, :is_active, :is_community, :date_created,
-                   :approved, :remote_ip, :comment, :user_id, :other_describe_yourself, :organization_name, :displayBorrowerOrganizationName, :mi, :home_phone, :public_display_home_phone, 
-                   :cell_phone, :public_display_cell_phone, :alternative_phone, :public_display_alternative_phone, :borrower_contact_by_home_phone, :borrower_contact_by_cell_phone, 
-                   :borrower_contact_by_alternative_phone, :borrower_contact_by_Facebook, :borrower_contact_by_LinkedIn, :borrower_contact_by_Other_Social_Media, :borrower_contact_by_Twitter, 
-                   :borrower_contact_by_Instagram, :borrower_contact_by_Other_Social_Media_Access, :notify_lenders, :date_updated
-  has_many :addresses, dependent: :destroy
-  has_many :item_images, dependent: :destroy
+attr_accessible :contact_describe_id, :other_describe_yourself,:first_name,:mi, :last_name,:displayLenderName, :displayLenderAddress,:home_phone, :cell_phone, :alternative_phone,
+                :public_display_home_phone,:public_display_cell_phone,:public_display_alternative_phone,:useWhichContactAddress,:email_alternative,:borrower_contact_by_email,
+                :borrower_contact_by_home_phone, :borrower_contact_by_cell_phone,:borrower_contact_by_alternative_phone, :borrower_contact_by_Facebook,:borrower_contact_by_Twitter, 
+                :borrower_contact_by_Instagram, :borrower_contact_by_LinkedIn,:borrower_contact_by_Other_Social_Media, :borrower_contact_by_Other_Social_Media_Access,
+                :b_comes_to_which_address,:meetBorrowerAtAgreedL2B,:willDeliverToBorrowerPreferredL2B,:thirdPartyPresenceL2B,:lenderThirdPartyChoiceL2B,:agreedThirdPartyChoiceL2B,:b_returns_to_which_address,:meetBorrowerAtAgreedB2L,
+                :willPickUpPreferredLocationB2L,:thirdPartyPresenceB2L,:lenderThirdPartyChoiceB2L,:agreedThirdPartyChoiceB2L,
+                :borrowerChoice,:category_id,:other_item_category,:item_model,:item_description,:item_count,:for_free,:available_for_purchase,:available_for_purchase_amount,
+                :small_fee,:small_fee_amount,:available_for_donation,:donate_anonymous,:trade,:trade_item,:agreed_number_of_days,:agreed_number_of_hours,
+                :indefinite_duration,:present_during_borrowing_period,:entire_period,:partial_period,:provide_proper_use_training,:specific_conditions,:goodwill,:age_18_or_more,
+                :is_active,:date_created,:date_updated,:date_deleted,:organization_name,:displayLenderOrganizationName,:approved,:notify_borrowers,:receive_borrower_notifications,
+                :item_condition_id,:security_deposit_amount,:security_deposit,:is_community,:user_id,:remote_ip,:comment,:advertiser_id
   
+   has_many :addresses, dependent: :destroy
+  has_many :item_images, dependent: :destroy
   
   attr_accessible :addresses_attributes, :item_images_attributes
   accepts_nested_attributes_for :item_images
@@ -23,7 +28,6 @@ class Lender < ActiveRecord::Base
   belongs_to :us_state
   belongs_to :contact_describe 
   before_create :get_primary_key_value
-
 
   protected
   
@@ -42,6 +46,7 @@ class Lender < ActiveRecord::Base
     @id
   end
 end
+
 
 
 # Stewart Mckinney: 

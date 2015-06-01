@@ -29,8 +29,7 @@
             
     <% for bb in @borrower %>
         <label class="item_listing" ><%= bb.category_type %></label><br />
-		
-		<%  unless bb.image_file_name == "NA" || bb.image_file_name == ""  %> 
+				<%  unless bb.image_file_name == "NA" || bb.image_file_name == ""  %> 
 		<%  icaption = (bb.item_image_caption.blank? ? 'None provided' : bb.item_image_caption)  %>
         <img src='<%= get_image_path(bb.image_file_name) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
             <% unless icaption.blank? %>

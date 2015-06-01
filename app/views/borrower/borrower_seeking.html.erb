@@ -40,7 +40,6 @@
 	<div style="display:block;float:left;width:94%;height:auto;margin:5px;">
 		<div style="width: 50%;float:left;">
 			<label class="personal" >As a borrower, how would you describe yourself?<span class="required_fields">&nbsp;&nbsp;*</span></label>
-			
 			<%= nf.collection_select :contact_describe_id, ContactDescribe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 2'], :order=>"option_value"), :id, :borrower_or_lender_text %>
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
