@@ -2,13 +2,13 @@ class CommunityObserver < ActiveRecord::Observer
   
   observe :community
 
-  def before_create(communities)
-    communities.id = get_random
+  def before_create(community)
+    community.id = get_random
   end
 
-  def after_create(communities)
+  def after_create(community)
     begin
-      Notifier.signup_notification_community(communities).deliver
+      Notifier.signup_notification_community(community).deliver
      rescue  Exception => e
     puts e.message
     puts "signup_notification_community"        
@@ -16,14 +16,15 @@ class CommunityObserver < ActiveRecord::Observer
     end  
   end
 
-  def after_save(communities)
+  def after_save(community)
 
    begin
-    Notifier.community_activation(communities).deliver if communities.recently_activated?
-    Notifier.reset_community_password_notification(communities).deliver if communities.recently_reset? && communities.recently_password_reset?
-    Notifier.get_community_notification(communities).deliver if communities.recently_reset? && communities.recently_community_name_get?
+    Notifier.community_activation(community).deliver if community.recently_activated?
+    Notifier.reset_community_password_notification(community).deliver if community.recently_reset? && community.recently_password_reset?
+    Notifier.get_community_notification(community).deliver if community.recently_reset? && community.recently_community_name_get?
    rescue  Exception => e
     puts e.message
+    puts "after community save"   
        
   end
 end
@@ -31,10 +32,10 @@ end
   def get_random
     length = 40
     characters = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
-    @password = SecureRandom.random_bytes(length).each_char.map do |char|
+    @id = SecureRandom.random_bytes(length).each_char.map do |char|
       characters[(char.ord % characters.length)]
     end.join
-    @password
+    @id
   end
 
 

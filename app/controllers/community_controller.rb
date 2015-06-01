@@ -2,50 +2,76 @@ class CommunityController < ApplicationController
   
   def new
     if params[:community]
-      if create_new_community
-        session[:notice] = "Your Echo Market Community record, #{params[:community][:community_name]}, has been successfully created!  Please check your email, #{params[:community][:email]}, to activate your account."
-      else
-        @community
-      end
-    else  
+        if create_new_community
+          redirect_to  home_items_listing_url
+       end
+   else  
      @community = Community.new
     end 
-     respond_to do |format|
-     format.html # new.html.erb
-
-    end
+     
   end
 
-
-  def edit
+ def edit
     if params[:id]
       update
     else
       @community = Community.find(session[:community_id])
     end   
-  end
-
- def list
+  end 
+  
+   def list
       session[:background] = true
       @community = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
       @community_member = @community.community_member.all
-  end
-  
+   end
+
+
   def advise
      session[:background] = true
      if params[:community]
        if create
        end  
      else
-         @community = Community.find(:all, :conditions => ["community_id = ?", session[:community_id]])
+         @community = Community.find(:all, :conditions => ["id = ?", session[:community_id]])
      end    
      
   end
-   
- 
-  protected
   
-   def logout
+
+  
+    def create_new_community
+    session[:notice] = ''
+    @community = Community.new(params[:community])
+    
+      
+      if @community.save(:validate =>true) && @community.errors.empty?
+        myhashformembers = Hash.new
+        myhashformembers = [:first_name => @community.first_name, 
+                           :mi => @community.mi,
+                           :last_name => @community.last_name, 
+                           :remote_ip => @community.remote_ip, 
+                           :date_created => Time.now, 
+                           :is_active => 1, 
+                           :is_creator => 1,
+                           :user_type => 'both']
+                           
+        @community.community_members << CommunityMember.new(myhashformembers[0])
+        
+          if @community.save(:validate => false)
+            session[:notice] = "Your Echo Market Community record, #{params[:community][:community_name]}, has been successfully created!  
+            Please check your email, #{params[:community][:email]}, to activate your account."
+            return true    
+          else
+            session[:notice]= "Error in creating Community record"
+            return false
+            
+          end    
+              
+      end  #ends if saved 
+    
+  end  # ends def
+  
+    def logout
 
     @current_user = nil
     reset_session
@@ -53,13 +79,13 @@ class CommunityController < ApplicationController
     redirect_to home_items_listing_path
 
   end
-  
-  def create
+
+ def create
     session[:notice] = ''
     respond_to do |format|
       
     if params[:commit] == "Update Creator"
-       @community = Community.find(params[:community][:community_id])
+       @community = Community.find(session[:community_id])
        @community.update_attributes(params[:community])
        if @community.errors.empty?
          session[:notice] = "Successful update of Echo Market Community creator record."
@@ -77,102 +103,57 @@ class CommunityController < ApplicationController
          session[:notice] = "Echo Market Community was not successful in adding Community member record."
          return false  
        end
-    end     
+    end  # end if params   
     
-     end
+     end  # end do format
   end  # ends def
- 
-  def update
-    session[:notice] = ''
-    if params[:id]
-      myupdatehash = Hash.new
-      if params[:community]
-        @c = params[:community]
-        myupdatehash = [:remote_ip=> @c[:remote_ip],
-                        :approved=> 1,
-                        :is_active=>1,
-                        :community_name=> @c[:community_name], 
-                        :email=> @c[:email],
-                        :password=> @c[:password], 
-                        :password_confirmation=> @c[:password_confirmation],
-                        :first_name=> @c[:first_name], 
-                        :mi=> @c[:mi], 
-                        :last_name=> @c[:last_name], 
-                        :address_line_1=> @c[:address_line_1], 
-                        :address_line_2=>@c[:address_line_2], 
-                        :postal_code=>@c[:postal_code], 
-                        :city=>@c[:city],  
-                        :province=>@c[:province], 
-                        :country_id=>@c[:country_id].to_s, 
-                        :us_state_id=>@c[:us_state_id].to_s,  
-                        :region=>@c[:region], 
-                        :home_phone=>@c[:home_phone], 
-                        :cell_phone => @c[:cell_phone] ]
-
-     
-     @community = Community.find(params[:id])
-     if @community.update_attributes(myupdatehash[0]) && @community.errors.empty? 
-        @cm = CommunityMember.find(:first, :conditions => ["community_id = ? and is_creator = 1",params[:id] ])
-        @cm.first_name = params[:community][:first_name]
-        @cm.mi = params[:community][:mi]
-        @cm.last_name = params[:community][:last_name]
-        @cm.save(:validate => false)
-        session[:notice] = "Your Community Market updates were successful. Thanks for your partication.."
-        redirect_to home_items_listing_url 
-     end
-     end
-    end
-  end
-  
-  
-  def create_new_community
-     @community = Community.new(params[:community])
-      if @community.save(:validate =>true) && @community.errors.empty?
-        session[:notice] = "Echo Market successful in creating your Community!  Welocome aboard." 
-        return true
-      else
-        session[:notice] = "Echo Market error in creating new community"  
-        return false
-     end
-     
-end
-  
-   def activate
-    reset_session
     
+  def activate
+    
+    reset_session
     @cm = params[:activation_code].blank? ? false : Community.find_by_activation_code(params[:activation_code])
     unless @cm.blank?
-      unless @cm.activation_code.blank?
-        if @cm.activate
-          @current_user = @cm
-          @cm_l = CommunityMember.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
-          session[:user_id] = @cm_l.user_id 
-          session[:community_id] = @current_user.community_id
-          session[:user_type] = session[:register_type] = @current_user.user_type
-          session[:community_name] = @current_user.community_name
-          session[:user_alias] = (@cm_l.first_name.blank? ? @cm_l.alias : @cm_l.first_name + " " + (@cm_l.mi.blank? ? "": @cm_l.mi) + " " + @cm_l.last_name) 
-          session[:notice] = @current_user.community_name + ", your registration activation is complete, and you are now logged in."
-          redirect_to :controller=> "community", :action=>"advise", :id => @cm.community_id
-        else
-          session[:notice] = "Echo Market failure in saving record."
-        end
-      else
-        @current_user = @cm
-         @cm_l = CommunityMember.find(:first, :readonly, :conditions => ["community_id = ?", @current_user.community_id])
-         session[:user_id] = @cm_l.user_id
-        session[:community_id] = @current_user.community_id
-        session[:user_type] = session[:register_type] = @current_user.user_type
-        session[:community_name] = @current_user.community_name
-        session[:user_alias] = (@cm_l.first_name.blank? ? @cm_l.alias : @cm_l.first_name + " " + (@cm_l.mi.blank? ? "": @cm_l.mi) + " " + @cm_l.last_name)
-        session[:notice] = @current_user.community_name + ", you have already activated your registration, and you are now logged in."
-      end
-        session[:advise] = false
-        redirect_to :controller=> "community_member", :action=>"list", :id => @cm.community_id
+        unless @cm.activation_code.blank?
+             if @cm.activate
+                  
+                  @current_user = CommunityMember.find(:first, :readonly, :conditions => ["community_id = ? AND is_creator = 1", @cm.id])
+                                unless @current_user.blank? 
+                                  session[:user_id] = @current_user.id 
+                                  session[:community_id] = @current_user.community_id
+                                  session[:user_type] = session[:register_type] = @cm.user_type
+                                  session[:community_name] = @cm.community_name
+                                  session[:user_alias] = (@current_user.first_name.blank? ? @current_user.alias : @current_user.first_name + " " + (@current_user.mi.blank? ? "": @current_user.mi) + " " + @current_user.last_name) 
+                                  session[:notice] = @cm.community_name + ", your registration activation is complete, and you are now logged in."
+                                  session[:advise] = true
+                                  redirect_to :controller=> "community", :action=>"advise", :id => @cm.id
+                               else
+                                  session[:notice] = "Echo Market failed to locate Community creator record."
+                                  session[:advise] = false
+                                  redirect_to home_items_listing_url
+                               
+                               end   
+              else  ## activate failed to save
+                 session[:notice] = "Echo Market failed to activate your Community record."
+                 session[:advise] = false
+                 redirect_to home_items_listing_url
+              end  ## if active saved
+                  
+                    
+         else   ## activate code not found
+             session[:advise] = false
+             session[:notice] = "Seems that you may have not properly copied the Activation url provided in your email.  Please try again."
+             redirect_to :controller=> "home", :action=>"items_listing"
+         end  
     else
-      session[:notice] = "Seems that you may have not properly copied the Activation url provided in your email.  Please try again."
-      redirect_to :controller=> "home", :action=>"items_listing"
-    end
-  end
+       session[:advise] = false
+       session[:notice] = "Your Community record has already been activated.  Please just login."
+       redirect_to :controller=> "home", :action=>"items_listing"
+   
+      
+    end  ## unless community with activation code not found
+  end  ## ends def
+  
+  
   
    def forgot_community_name
     session[:background] = true
@@ -262,6 +243,5 @@ end
     session[:background] = true
     @community = Community.find(:first, :conditions => ["reset_code =?", params[:id]])
   end
-  
-  
+    
 end

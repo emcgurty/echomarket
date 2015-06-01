@@ -42,7 +42,8 @@ class Notifier < ActionMailer::Base
     @subject    += ' Please activate your new account'
     
     @url  = "http://"
-    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{communities.activation_code}/#{community.id}"
+    @url  = @url + "#{LookupValues::LookupMethods.lookupvalue[:echo_market_owner][:url]}/community/activate/#{community.activation_code}/#{community.id}"
+    puts @url 
     @community_name = community.community_name
     @password =  community.password
 

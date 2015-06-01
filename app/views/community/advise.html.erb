@@ -49,10 +49,11 @@
 	<% end %>
 
 </div>
-<div style="display:none;">
-	<%= nf.hidden_field(:community_id) %>
-</div>	
-	
+
+<% unless  @community.errors.empty? %>
+<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @community}  %>
+<% end %>
+
 	
 <div class="top_notice_5" id="commmunity_info">
 	
@@ -89,7 +90,7 @@
 
 				<td width= "20%"> <%= nf.text_field(:first_name, :size=>24, :class=> "creator first_name") %></td>
 				<td width='5%'><%= nf.text_field(:mi, :size=>1, :class => "mi") %></td>
-				<td width='20%'><%= nf.text_field(:last_name), :size=>24, :class => "creator last_name") %></td>
+				<td width='20%'><%= nf.text_field(:last_name, :size=>24, :class => "creator last_name") %></td>
 				<td width="5%">OR</td>
 				<td width='20%'><%= "Alias on Community creator not permit" %></td>
 				<td width='20%'><%= nf.submit "Update Creator" %></td>
@@ -101,11 +102,10 @@
 				<td width='5%'><%= builder.text_field(:mi, :size=>1) %></td>
 				<td width= '20%'><%= builder.text_field(:last_name, :size=>24, :class => "notcreator last_name") %></td>
 				<td width='5%'>OR</td>
-				<td width='20%'><%= builder.text_field :alias,:size=>24, :class => "notcreator alias") %></td>
-				<td width='20%'>&nbsp;&nbsp;<%= nf.submit 'Add Member'%><br />
-					<%= builder.check_box :_destroy %>
-					<%= builder.label "Remove Member" %>
+				<td width='20%'><%= builder.text_field( :alias,:size=>24, :class => "notcreator alias") %></td>
+				<td width='20%'>&nbsp;&nbsp;<%= builder.label :_destroy, "Remove Member" %><%= builder.check_box :_destroy %><br />
 				</td>
+				<%= nf.submit "Add Member" %>
 			</tr>
 			<% end %>
 				

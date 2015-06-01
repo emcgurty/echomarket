@@ -247,6 +247,19 @@ function submitCommunityRegistration(){
 		$("#city_error").text("");
 		$("#city_error").css("visibility", "hidden");
 	}
+	
+	if ($("#community_home_phone").val() != ""  &&  $("#community_cell_phone").val() != "")  {
+		if ( $("#community_home_phone").val() == $("#community_cell_phone").val()) {
+				$("#phone_error").text("Home and cell phone numbers should be different.");
+				$("#phone_error").css("visibility", "visible");
+				foundInvalid = false;
+		} else {
+				$("#phone_error").text("");
+				$("#phone_error").css("visibility", "hidden");
+	}
+	}
+	
+	
 	if ($("#community_postal_code").val() == "") {
 		$("#postal_code_error").text("Postal Code is required.");
 		$("#postal_code_error").css("visibility", "visible");
