@@ -78,54 +78,34 @@
 				<th>Alias</th>
 				<th>Function</th>
 			</tr>
-			<% for com_row in @community %>
+	
 			
-			
-			<% rowCount = 0 %>
-			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
-			<%= com_row.fields_for :community_member do |builder| %
-			
-			<tr class="<%= rowClass %>" >
+			<tr class="even" >
 
-				<td width= "20%"> <%= builder.text_field :first_name, {:size=>24}  %></td>
-				<td width='5%'><%= builder.text_field :mi,  {:size=>1} %></td>
-				<td width='20%'><%= builder.text_field (:last_name), {:size=>24} %></td>
+				<td width= "20%"> <%= nf.text_field(:first_name, :size=>24, :class=> "creator first_name") %></td>
+				<td width='5%'><%= nf.text_field(:mi, :size=>1, :class => "mi") %></td>
+				<td width='20%'><%= nf.text_field(:last_name), :size=>24, :class => "creator last_name") %></td>
 				<td width="5%">OR</td>
-				<td width='20%'><%= builder.text_field :alias, {:size=>24} %></td>
-				<td width='20%'>
-			    
-				
-				<% if  @community.is_creator == 1 %>
-					<%= nf.submit "Update Member" %>
-				    <%= builder.hidden_field :is_creator, :value => 1 %>
-				<% else %>
+				<td width='20%'><%= "Alias on Community creator not permit" %></td>
+				<td width='20%'><%= nf.submit "Update Creator" %></td>
+			</tr>
+			
+			<%= nf.fields_for :community_members do |builder| %>
+				<tr class="odd" >
+				<td width= '20%'> <%= builder.text_field(:first_name,:size=>24, :class => "notcreator first_name") %></td>
+				<td width='5%'><%= builder.text_field(:mi, :size=>1) %></td>
+				<td width= '20%'><%= builder.text_field(:last_name, :size=>24, :class => "notcreator last_name") %></td>
+				<td width='5%'>OR</td>
+				<td width='20%'><%= builder.text_field :alias,:size=>24, :class => "notcreator alias") %></td>
+				<td width='20%'>&nbsp;&nbsp;<%= nf.submit 'Add Member'%><br />
 					<%= builder.check_box :_destroy %>
 					<%= builder.label "Remove Member" %>
-					<br />
-					<%= builder.hidden_field :is_creator, :value => 0 %>
-					<%= nf.submit "Update Member" %> 
-				<% end%>
-				
-				 </td>
+				</td>
 			</tr>
-			<% rowCount = rowCount + 1 %>
-			<% end %>
-						
-			<% if rowCount == numRows %>
-			<%= com_row.fields_for :community_member_new do |builder| %
-				<tr>
-				<td width= '20%'> <%= builder.text_field :first_name, {:value=> '', :size=>24} %></td>
-				<td width='5%'><%= builder.text_field :mi, {:value=> '', :size=>1} %></td>
-				<td width= '20%'><%= builder.text_field :last_name, {:value=> '', :size=>24} %></td>
-				<td width='5%'>OR</td>
-				<td width='20%'><%= builder.text_field :alias, {:value=> '',:size=>24} %></td>
-				<td width='20%'>&nbsp;&nbsp;<%= nf.submit 'Add', {:id=> "form_submit1"} %></td>
-			</tr>
-			<% end%>
 			<% end %>
 				
 		</table>
-		<% end %>
+		
 		
 	</div>
 

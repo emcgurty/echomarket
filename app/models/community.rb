@@ -21,7 +21,7 @@ class Community < ActiveRecord::Base
   attr_accessible :first_name, :mi , :last_name, :address_line_1, :address_line_2,:postal_code  ,:city, :province, :us_state_id, :country_id, :region
   attr_accessible :home_phone,:cell_phone, :email, :is_active ,:date_deleted, :date_updated  
   before_save :encrypt_password 
-  before_create :get_user_id, :make_activation_code
+  before_create :get_id, :make_activation_code
   validates  :community_name, :password, :password_confirmation, :email, :presence => true
   
   validates_uniqueness_of :community_name,:if => :community_name, :case_sensitive => true, :message =>  " already exists."
@@ -30,7 +30,7 @@ class Community < ActiveRecord::Base
   validates_confirmation_of :password ,:if => :password, :message => "and re-entered password must match."
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
    
-    def get_user_id
+    def get_id
      if self.id.blank?
        self.id =  get_random
      end  
