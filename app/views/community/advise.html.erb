@@ -50,10 +50,6 @@
 
 </div>
 
-<% unless  @community.errors.empty? %>
-<%= render :partial => 'home/check_for_errors', :locals => {:data_source => @community}  %>
-<% end %>
-
 	
 <div class="top_notice_5" id="commmunity_info">
 	
@@ -88,7 +84,9 @@
 			
 			<tr class="even" >
 
-				<td width= "20%"> <%= nf.text_field(:first_name, :size=>24, :class=> "creator first_name") %></td>
+				<td width= "20%"> <%= nf.text_field(:first_name, :size=>24, :class=> "creator first_name") %>
+					<%= nf.hidden_field(:is_creator, :value => 1) %>
+				</td>
 				<td width='5%'><%= nf.text_field(:mi, :size=>1, :class => "mi") %></td>
 				<td width='20%'><%= nf.text_field(:last_name, :size=>24, :class => "creator last_name") %></td>
 				<td width="5%">OR</td>
@@ -96,21 +94,37 @@
 				<td width='20%'><%= nf.submit "Update Creator" %></td>
 			</tr>
 			
-			<%= nf.fields_for :community_members do |builder| %>
+			<%= nf.fields_for :noncreator_community_members, @community.community_members.noncreator_community_members do |builder| %>
+								
 				<tr class="odd" >
-				<td width= '20%'> <%= builder.text_field(:first_name,:size=>24, :class => "notcreator first_name") %></td>
+				<td width= '20%'> <%= builder.text_field(:first_name,:size=>24, :class => "notcreator first_name") %>
+					<%= builder.hidden_field(:is_creator, :value => 0) %>
+				</td>
 				<td width='5%'><%= builder.text_field(:mi, :size=>1) %></td>
 				<td width= '20%'><%= builder.text_field(:last_name, :size=>24, :class => "notcreator last_name") %></td>
 				<td width='5%'>OR</td>
 				<td width='20%'><%= builder.text_field( :alias,:size=>24, :class => "notcreator alias") %></td>
-				<td width='20%'>&nbsp;&nbsp;<%= builder.label :_destroy, "Remove Member" %><%= builder.check_box :_destroy %><br />
+				<td width='20%'>&nbsp;&nbsp;<%= builder.label :_destroy, "Remove Member" %><br /><%= builder.check_box :_destroy %>
 				</td>
-				<%= nf.submit "Add Member" %>
-			</tr>
+				</tr>
+			<% end %>
+			
+				<%= fields_for :noncreator_cm do |builder| %>
+								
+				<tr class="even" >
+				<td width= '20%'> <%= builder.text_field(:first_name,:size=>24, :class => "notcreator first_name") %>
+					<%= builder.hidden_field(:is_creator, :value => 0) %>
+				</td>
+				<td width='5%'><%= builder.text_field(:mi, :size=>1) %></td>
+				<td width= '20%'><%= builder.text_field(:last_name, :size=>24, :class => "notcreator last_name") %></td>
+				<td width='5%'>OR</td>
+				<td width='20%'><%= builder.text_field( :alias,:size=>24, :class => "notcreator alias") %></td>
+				<td width='20%'>&nbsp;&nbsp;<%= nf.submit "Add New Member" %></td>
+				</tr>
 			<% end %>
 				
 		</table>
-		
+	
 		
 	</div>
 

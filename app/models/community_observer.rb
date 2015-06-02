@@ -3,7 +3,8 @@ class CommunityObserver < ActiveRecord::Observer
   observe :community
 
   def before_create(community)
-    community.id = get_random
+    puts "before_create called on update"
+    community.id = get_random if community.id.blank?
   end
 
   def after_create(community)

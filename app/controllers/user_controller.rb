@@ -7,8 +7,8 @@ class UserController < ApplicationController
         @myupdatehash = [:user_type => params[:user][:user_type].to_s,
         :user_alias => params[:user][:user_alias].to_s,
         :email => params[:user][:email].to_s]
-        @save_result = @User.update_attributes(@myupdatehash[0])
-        @User.save(:validate => false)
+        @save_result = @user.update_attributes(@myupdatehash[0])
+        @user.save(:validate => false)
         @current_user = @user
       rescue ActiveRecord::ActiveRecordError => msg
         session[:notice] = "Error in updating your user record with system generated message: " + msg
@@ -79,8 +79,7 @@ class UserController < ApplicationController
   end
 
   def login
-    puts 'session[:user_id]'
-    puts session[:user_id]
+
     if session[:notice]
       @hold_s = session[:notice]
     end
@@ -105,18 +104,18 @@ class UserController < ApplicationController
       end
     ### else we're are about to edit user
     else
-      puts "asd else"
+      
       unless params[:id].blank?
         session[:edit_user] = true
         @user = User.find(params[:id])
       else
-        puts "user count"
+        
         @ucount = User.count
         if   @ucount == 0
           @user = User.new
           redirect_to :action => "register"
         else
-          puts "else User.new"
+        
           @user = User.new
         end
       end
@@ -210,9 +209,9 @@ class UserController < ApplicationController
                     
                     elsif  @current_user  && (@does_member_exist  == true) 
                           puts '5'
-                          @cm_creator = CommunityMember.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.community_id])
+                          @cm_creator = CommunityMember.find(:first, :readonly, :conditions => ["is_creator = 1 and community_id = ?", @current_user.id])
                            
-                                session[:user_id] = @cm_creator.user_id if session[:user_id].blank?
+                                session[:user_id] = @cm_creator.id if session[:user_id].blank?
                                 if session[:user_alias].blank?
                                   unless @cm_creator.alias.blank?
                                     session[:user_alias] = @cm_creator.alias
@@ -301,7 +300,7 @@ class UserController < ApplicationController
     end
 
     begin
-      @user = User.find(:first, :conditions=>['id = ?', params[:user][:user_id]])
+      @user = User.find(:first, :conditions=>['id = ?', params[:user][:id]])
       @user.update_attributes(myupdatehash)
 
       @user.delete_reset_code
@@ -413,9 +412,9 @@ class UserController < ApplicationController
     if @user
       @myupdatehash = Hash.new
       @myupdatehash = [:password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation]]
-      @User.update_attributes(@myupdatehash[0])
-      @User.delete_reset_code
-      session[:notice] = "Password reset successfully for #{@User.email}. Please login"
+      @user.update_attributes(@myupdatehash[0])
+      @user.delete_reset_code
+      session[:notice] = "Password reset successfully for #{@user.email}. Please login"
       redirect_to home_items_listing_url
     else
       session[:notice] = "There was an error in updating your password, please contact the Echo Market. Perhaps you are trying to update your password from an old email notification."
@@ -441,16 +440,13 @@ class UserController < ApplicationController
   
     
   def get_member_login_info(c, pm)
-   puts "get member_login"
-   
-   puts "pm[:community_alias]"
-   puts pm[:community_alias]
+ 
    return_result = true
    
    @b_find_member_name = find_member_name(c, pm) unless pm[:community_first_name].blank? && pm[:community_mi].blank? && pm[:community_first_name].blank?
       
    if  @b_find_member_name.blank?
-       puts "sb false"
+ 
        @b_find_member_alias = find_member_alias(c, pm) unless pm[:community_alias].blank?
        
         
@@ -480,12 +476,12 @@ end
         end
         unless @cm_nom.blank? && @cm_m.blank?
             unless @cm_nom.blank?
-              session[:user_id] = @cm_nom.community_member_id
+              session[:user_id] = @cm_nom.id
               session[:user_alias] = pm[:community_first_name] + " " + pm[:community_last_name]
               @r_success = @cm_nom
             end
             unless @cm_m.blank?
-              session[:user_id] = @cm_m.community_member_id
+              session[:user_id] = @cm_m.id
               session[:user_alias] = pm[:community_first_name] + " " + pm[:community_mi] + " " + pm[:community_last_name]
              @r_success = @cm_m
        end
@@ -505,7 +501,7 @@ end
             end
 
             unless @cm_a.blank?
-              session[:user_id] = @cm_a.community_member_id
+              session[:user_id] = @cm_a.id
               session[:user_alias] = pm[:community_alias]
               @r_success = @cm_a   
             end

@@ -59,18 +59,18 @@
 
 				</tr>
 				<tr>
-					<td ><%= nf.text_field(:community_first_name, {:maxlength=>16,  :value=>""}) %>
+					<td ><%= nf.text_field(:community_first_name, {:maxlength=>16, :class => "community first_name" }) %>
 					
 						
 					</td>
-					<td ><%= nf.text_field(:community_mi, {:maxlength=>1, :value=>""}) %>
+					<td ><%= nf.text_field(:community_mi, {:maxlength=>1,:class => "community mi" }) %>
 					
 					</td>
-					<td ><%= nf.text_field(:community_last_name, {:maxlength=>16,  :value=>""}) %>
+					<td ><%= nf.text_field(:community_last_name, {:maxlength=>16,:class => "community last_name" }) %>
 					
 					</td>
 					<td>OR</td>
-					<td ><%= nf.text_field(:community_alias, {:maxlength=>16,  :value=>""}) %>
+					<td ><%= nf.text_field(:community_alias, {:maxlength=>16, :class => "community alias" }) %>
 					
 					</td>
 				</tr>

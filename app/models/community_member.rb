@@ -1,7 +1,8 @@
 class CommunityMember < ActiveRecord::Base
    
   belongs_to :community
-  attr_accessible :user_id, :remote_ip, :first_name, :mi,  :last_name, :alias, :is_active, :date_created, :date_updated, :date_deleted ,:is_creator
+  scope :noncreator_community_members , where(:is_creator => 0) 
+  attr_accessible :user_id, :remote_ip, :first_name, :mi,  :last_name, :alias, :is_active, :date_created, :date_updated, :date_deleted ,:is_creator, :community_id
   before_create :get_user_id
   
   protected

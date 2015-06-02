@@ -1,13 +1,19 @@
 class LenderController < ApplicationController
 
  def rapid_lender_offering
-    session[:notice] = ''
     session[:background] = true 
-    if params[:lenders]
-		create
+    if params[:borrower]
+      if create
+         redirect_to home_items_listing_url
+      end
     else
-   @lender = Lender.new
-	end
+      @lender = Lender.new
+      
+     respond_to do |f|
+      f.html
+    end
+    end
+    
  
 end
 
@@ -55,52 +61,66 @@ end
  end
  
   def l_list
-  session[:notice] = ''
+      session[:notice] = ''
       session[:background] = true
       if session[:community_name].blank? 
-        my_sql_string = "select lenders.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM lenders
-              INNER JOIN categories ON categories.id = lenders.category_id
-              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
-              INNER JOIN item_images ON item_images.lender_id = lenders.id
-              WHERE (lenders.is_active=1 and (lenders.is_community = 0  OR lenders.is_community = 3))
-              ORDER BY categories.category_type ASC, lenders.date_created ASC"
-              
-        @lender = Lender.find_by_sql my_sql_string       
-                
+         @lender = Lender.joins(:category, :item_condition, :item_images).select(["lenders.*", "lenders.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"])
+                  .where([" lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 )"]).order(["categories.category_type ASC, lenders.date_created ASC "])
+      
       else 
           
-          my_sql_string = "select borrowers.*, item_conditions.condition, categories.category_type, item_images.*  
-              FROM borrowers
-              INNER JOIN categories ON categories.id = lenders.category_id
-              INNER JOIN item_conditions ON item_conditions.id = lenders.item_condition_id
-              INNER JOIN item_images ON item_images.lender_id = lenders.id
-              WHERE (lenders.is_active=1 AND  lenders.is_community = 1 AND lenders.user_id =  "
-          my_sql_string =  my_sql_string + session[:user_id]
-          my_sql_string =  my_sql_string + " ) ORDER BY categories.category_type ASC, lenders.date_created ASC" 
-          @lender = Lender.find_by_sql my_sql_string
-      
+         where_clause = "WHERE (lenders.is_active= 1 AND lenders.is_community = 1  AND lenders.user_id  =  #{session[:user_id]}" 
+         @lender = Lender.joins(:category, :item_condition, :item_images)
+                  .select(["lenders.*", "lenders.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]) 
+                  .where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
+               
+               
       end 
-        if @lender.blank?
-          session[:notice] = "Sorry, no Lenders records yet."
-          redirect_to  :controller => "search", :action => 'item_search'
+      
+     
+    
+     if @lender.blank?
+          
+          if session[:user_id].blank?
+            session[:notice] = "Sorry, no lenders records have been created."
+            redirect_to  home_items_listing_url
+          else
+            session[:notice] = "Sorry, no lenders records have been created. Perhaps you would like to create one now."
+            redirect_to  lender_offering_url
+          end    
+    
       end
+
+     @lender 
       
   end
 
   def lender_item_detail
-      session[:background] = true
-      unless params[:id].blank?
-        session[:reuse] = (params['commit'] == 'reuse' ? true : false)
-        @lender = Lender.find(:all, :readonly, :conditions => ["id = ?", params[:id]])
+     where_clause = ""
+    session[:background] = true
+    unless params[:id].blank?
+    
+              if session[:community_name].blank?
+                 where_clause = " lenders.id =  #{params[:id]}"
+                 
+              else
+                 where_clause = " lenders.id = #{params[:id]} AND lenders.user_id = #{session[:user_id]}" 
+                 
+              end 
+                                      
+                   @lender = Lender.joins(:category, :item_condition, :item_images, :contact_describe)
+                  .select(["contact_describes.borrower_or_lender_text", "lenders.*", "lenders.id AS b_id",   "categories.category_type", "item_conditions.condition", 
+                    "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
+                  
      
-      end
-      
-      if @lender.blank? || params[:id].blank?
+    end
+    if @lender.blank?
           session[:notice]  = "The lender item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
-      end 
-      
+     end 
+  
+     
+       @lender
       
   end
    

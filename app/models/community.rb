@@ -9,16 +9,23 @@ class Community < ActiveRecord::Base
   alpha_numeric_regex_msg = "must be alphanumeric characters with typical writing punctuation."
   alpha_numeric_regex_community_name = /\A[0-9 a-zA-Z\-\_]+\z/
   
-  has_many :community_members, dependent: :destroy
-  attr_accessible :community_members_attributes, allow_destroy: true
+  has_many :community_members, :dependent => :destroy
+  attr_accessible :community_members_attributes, :allow_destroy => true
+  ###        :reject_if => lambda (|a|  a[:first_name].blank? && a[:last].blank?)
   accepts_nested_attributes_for :community_members
   
+  has_many :noncreator_community_members, :dependent => :destroy
+  attr_accessible :noncreator_community_members_attributes, :allow_destroy => true
+  ###        :reject_if => lambda (|a|  a[:first_name].blank? && a[:last].blank?)
+  accepts_nested_attributes_for :noncreator_community_members
   
   
   attr_accessor :password, :password_confirmation
+  
   attr_accessible :password, :password_confirmation
   attr_accessible :community_name, :approved, :first_name, :mi, :last_name, :address_line_1, :address_line_2, :postal_code, :city, :province, :us_state_id, :country_id, :home_phone, :cell_phone, :email, 
                   :is_active, :is_saved, :date_created, :date_updated,:date_deleted,:user_type,:region,:remote_ip
+                  
   before_save :encrypt_password 
   before_create :get_id, :make_activation_code
   validates  :community_name, :password, :password_confirmation, :email, :presence => true

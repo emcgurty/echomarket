@@ -13,12 +13,21 @@ attr_accessible :contact_describe_id, :other_describe_yourself,:first_name,:mi, 
                 :is_active,:date_created,:date_updated,:date_deleted,:organization_name,:displayLenderOrganizationName,:approved,:notify_borrowers,:receive_borrower_notifications,
                 :item_condition_id,:security_deposit_amount,:security_deposit,:is_community,:user_id,:remote_ip,:comment,:advertiser_id
   
-   has_many :addresses, dependent: :destroy
-  has_many :item_images, dependent: :destroy
+  has_many :addresses, :dependent => :destroy
+  has_many :item_images, :dependent => :destroy
   
   attr_accessible :addresses_attributes, :item_images_attributes
   accepts_nested_attributes_for :item_images
   accepts_nested_attributes_for :addresses
+  
+  has_many :primary_addresses, :dependent => :destroy
+  attr_accessible :primary_addresses
+  accepts_nested_attributes_for :primary_addresses
+  
+  has_many :alternative_addresses, :dependent => :destroy
+  attr_accessible :alternative_addresses
+  accepts_nested_attributes_for :alternative_addresses
+  
    
   
   ###  Lender tables contains i_c_id, c_i, c_i

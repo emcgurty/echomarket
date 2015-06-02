@@ -24,22 +24,13 @@ end
       session[:notice] = ''
       session[:background] = true
       if session[:community_name].blank? 
-         @borrower = Borrower
-                  .joins(:category, :item_condition, :item_images)
-                  .select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"])
-                  .where(" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )") 
-                  .order("categories.category_type ASC, borrowers.date_created ASC ")
+         @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )"]).order(["categories.category_type ASC, borrowers.date_created ASC "])
       
       else 
           
          where_clause = "WHERE (borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  #{session[:user_id]}" 
-         @borrower = Borrower
-                  .joins(:category, :item_condition, :item_images)
-                  .select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"])
-                  .where(where_clause) 
-                  .order("categories.category_type ASC, lenders.date_created ASC ")
-                  
-               
+         @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
+                                 
       end 
       
      
@@ -69,16 +60,12 @@ end
                  where_clause = " borrowers.id =  #{params[:id]}"
                  
               else
-                 where_clause = " borrowers.id = #{params[:id]} AND borrower.user_id = #{session[:user_id]}" 
+                 where_clause = " borrowers.id = #{params[:id]} AND borrowers.user_id = #{session[:user_id]}" 
                  
               end 
                                       
-                   @borrower = Borrower
-                  .joins(:category, :item_condition, :item_images, :contact_describe)
-                  .select(["contact_describes.borrower_or_lender_text", "borrowers.*", "borrowers.id AS b_id",   "categories.category_type", "item_conditions.condition", 
-                    "item_images.item_image_caption", "item_images.image_file_name"])
-                  .where(where_clause) 
-                  .order("categories.category_type ASC, borrowers.date_created ASC ")
+                   @borrower = Borrower.joins(:category, :item_condition, :item_images, :contact_describe).select(["contact_describes.borrower_or_lender_text", "borrowers.*", "borrowers.id AS b_id",   "categories.category_type", "item_conditions.condition", 
+                    "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order(["categories.category_type ASC, borrowers.date_created ASC "])
                   
      
     end
@@ -111,11 +98,7 @@ end
         end  
     else  
         
-         @borrower = Borrower
-                  .joins(:category, :item_condition)
-                  .select(["borrowers.*", "categories.category_type", "item_conditions.condition"])
-                  .where(" borrowers.is_active = 1 AND borrowers.user_id = ?", params[:id]) 
-                  .order("categories.category_type ASC, borrowers.date_created ASC ")
+         @borrower = Borrower.joins(:category, :item_condition).select(["borrowers.*", "categories.category_type", "item_conditions.condition"]).where([" borrowers.is_active = 1 AND borrowers.user_id = ?", params[:id]]).order(["categories.category_type ASC, borrowers.date_created ASC "])
    
         if @borrower.blank?
            redirect_to  :controller => "borrower", :action => @which_view

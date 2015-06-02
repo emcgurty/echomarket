@@ -22,17 +22,23 @@ class CommunityController < ApplicationController
    def list
       session[:background] = true
       @community = CommunityMember.find(:all, :conditions => ["community_id = ?", session[:community_id]])
-      @community_member = @community.community_member.all
+      
    end
 
 
   def advise
      session[:background] = true
      if params[:community]
+       @community = ''
        if create
+          @community = Community.find(session[:community_id])
        end  
      else
-         @community = Community.find(:all, :conditions => ["id = ?", session[:community_id]])
+
+       @community = Community.find(session[:community_id])
+       unless @community.community_members.noncreator_community_members
+         3.times { @community.community_members.noncreator_community_members.build }
+       end
      end    
      
   end
@@ -85,25 +91,48 @@ class CommunityController < ApplicationController
     respond_to do |format|
       
     if params[:commit] == "Update Creator"
-       @community = Community.find(session[:community_id])
-       @community.update_attributes(params[:community])
-       if @community.errors.empty?
+       myupdatehash = Hash.new
+       myupdatehash = [:first_name => params[:community][:first_name], :mi => params[:community][:mi], :last_name => params[:community][:last_name]]
+       @community = Community.find(:first, :conditions => ["id = ?", params[:id].to_s])
+      
+          unless @community.blank?
+              @community.first_name = params[:community][:first_name]
+              @community.mi = params[:community][:mi]
+              @community.last_name = params[:community][:last_name]
+              @community.save(:validate => false)
+              @cm = CommunityMember.find(:first, :conditions => ["is_creator = 1 AND community_id = ?", params[:id].to_s])
+                puts @cm
+                unless @cm.blank?
+                    begin
+                      @cm.update_attributes(myupdatehash[0])
+                    rescue
+                      puts "Couldn't update community"
+                      puts e.msg
+                    end  
+                      
+                        
+                else
+                  session[:notice] = "Couldn't update Community creator member name."
+                  return false
+                end       
+          else
+             session[:notice] = "Couldn't update Community creator name."
+             return false
+          end       
+                
+                
+       if @community.errors.empty? &&  @cm.errors.empty?
          session[:notice] = "Successful update of Echo Market Community creator record."
          return true
        else
          session[:notice] = "Echo Market Community was not successful in updating your Community Creator record."
          return false  
        end
-    elsif params[:commit] == "Add Member"
-       @community.community_members   <<  CommunityMembers.new(params[:community][:community_members]) 
-        if @community.errors.empty?
-         session[:notice] = "Successful addition of Echo Market Community member."
+       elsif params[:commit] == "Add New Member"
+         @community = Community.find(params[:id])
+         @community.community_members << CommunityMember.new(params[:noncreator_cm])
          return true
-       else
-         session[:notice] = "Echo Market Community was not successful in adding Community member record."
-         return false  
-       end
-    end  # end if params   
+     end  # end if params   
     
      end  # end do format
   end  # ends def

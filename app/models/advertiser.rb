@@ -4,7 +4,7 @@ class Advertiser < ActiveRecord::Base
   
   attr_accessible :title, :description, :advertiser_email, :advertiser_url, :category_id, :category_other, :is_active, :is_activated, :date_created, :approved, :remote_ip
                   
-  has_many :item_image, dependent: :destroy
+  has_many :item_image, :dependent => :destroy
   has_many :category
   accepts_nested_attributes_for :item_image
   attr_accessible :item_image_attributes

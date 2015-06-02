@@ -8,12 +8,24 @@ class Borrower < ActiveRecord::Base
                    :borrower_contact_by_alternative_phone, :borrower_contact_by_Facebook, :borrower_contact_by_LinkedIn, :borrower_contact_by_Other_Social_Media, :borrower_contact_by_Twitter, 
                    :borrower_contact_by_Instagram, :borrower_contact_by_Other_Social_Media_Access, :notify_lenders, :date_updated
              
-  has_many :addresses, dependent: :destroy
-  has_many :item_images, dependent: :destroy
+  has_many :addresses, :dependent => :destroy
+  has_many :item_images, :dependent => :destroy
   
-  attr_accessible :addresses_attributes, :item_images_attributes
-  accepts_nested_attributes_for :item_images
+  
+  has_many :primary_addresses, :dependent => :destroy
+  attr_accessible :primary_addresses
+  accepts_nested_attributes_for :primary_addresses
+  
+  has_many :alternative_addresses, :dependent => :destroy
+  attr_accessible :alternative_addresses
+  accepts_nested_attributes_for :alternative_addresses
+  
+  attr_accessible :addresses_attributes
   accepts_nested_attributes_for :addresses
+  
+  attr_accessible :item_images_attributes
+  accepts_nested_attributes_for :item_images
+  
    
   
   ###  Borrower tables contains i_c_id, c_i, c_i
