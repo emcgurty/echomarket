@@ -59,7 +59,7 @@
 	</p>
 	<% if (bb.displayBorrowerAddress == 1 ) %>
 
-<%	borrower_primary_address = Borrower.find(bb.b_id).addresses.where("address_type = 'primary'")  %>
+<%	borrower_primary_address = Borrower.find(bb.b_id).addresses.where(["address_type = 'primary'"])  %>
 	<p>
 		Borrower Address:
 		<br />
@@ -99,7 +99,7 @@
 	Borrower Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
-   <%  borrower_alternative_address = Borrower.find(bb.b_id).addresses.where("address_type = 'alternative'") %>
+   <%  borrower_alternative_address = Borrower.find(bb.b_id).addresses.where(["address_type = 'alternative'"]) %>
     
 	<p>
 		<%= borrower_alternative_address.address_line_1 %>

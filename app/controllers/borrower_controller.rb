@@ -220,6 +220,23 @@ end
           :date_updated => Time.now,
           :approved => 0]
        
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
         @borrower = Borrower.new(@myupdatehash[0])
         if @borrower.save(:validate => true) && @borrower.errors.empty?
             
@@ -241,7 +258,9 @@ end
         @useWhichContactAddress = (params[:borrower][:useWhichContactAddress].blank? ? 0: params[:borrower][:useWhichContactAddress].to_i)
                
         @myupdatehash = Hash.new
-        @myupdatehash = [:contact_describe_id =>  params[:borrower][:contact_describe_id].to_i,
+        @myupdatehash = [
+        
+          :contact_describe_id =>  params[:borrower][:contact_describe_id].to_i,
           :other_describe_yourself => params[:borrower][:other_describe_yourself],
           :organization_name => params[:borrower][:organization_name],
           :displayBorrowerOrganizationName => (params[:borrower][:displayBorrowerOrganizationName].blank? ? -1  : params[:borrower][:displayBorrowerOrganizationName].to_i),

@@ -23,14 +23,14 @@
 
 	<label>Items to borrower or items to lend?:</label>
 	<% if session[:community_id] %>
-	<% @l_c =  Lender.where("user_id = ?", session[:user_id]) %>
-	<% @b_c =  Borrower.where("user_id = ?", session[:user_id]) %>
+	<% @l_c =  Lender.where(["user_id = ?", session[:user_id]]) %>
+	<% @b_c =  Borrower.where(["user_id = ?", session[:user_id]]) %>
 	<%= nf.hidden_field :is_community, :value=> 1 %>
 	<%= nf.hidden_field :user_id, :value=> session[:user_id] %>
 
 	<% else %>
-	<% @l_c =  Lender.where("is_community = 0 and is_active = 1") %>
-	<% @b_c =  Borrower.where("is_community = 0 and is_active = 1") %>
+	<% @l_c =  Lender.where(["is_community = 0 and is_active = 1"]) %>
+	<% @b_c =  Borrower.where(["is_community = 0 and is_active = 1"]) %>
 	<%= nf.hidden_field :is_community, :value=> 0 %>
 	<%= nf.hidden_field :user_id, :value=> '' %>
 
