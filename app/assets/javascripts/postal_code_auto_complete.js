@@ -3,13 +3,13 @@
 	$(function() {
 		// IMPORTANT: Fill in your client key
 		var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";
-		alert("hit1");
+
 		var cache = {};
 		var container = $("table.personal");
-		alert(container);
+
 		var errorDiv = container.find("span#postal_code_error");
 		errorDiv.css("visibility", "visible");
-		alert(errorDiv);
+
 		
 		/** Handle successful response */
 		function handleResp(data)

@@ -79,7 +79,7 @@
 	</div>
 
 	<div id="provide_country_state" style="display:none;" >
-		<%= builder.text_field(:region, :maxlength=>40, :size=>25, :class => "rapid region"}) %>
+		<%= builder.text_field(:region, {:maxlength=>40, :size=>25, :class => "rapid region"}) %>
 	</div>
 	</div>
 </div>
@@ -120,7 +120,7 @@
 
 <div class="column50_rapid">
 <label>The Condition of Item:
-<%= nf.collection_select :item_condition_id, ItemCondition.all, :id, :condition, {}, {:class => "rapid item_condition_id"}) %>
+<%= nf.collection_select(:item_condition_id, ItemCondition.all, :id, :condition, {}, {:class => "rapid item_condition_id"}) %>
 </div>
 
 <div class="column50_rapid">

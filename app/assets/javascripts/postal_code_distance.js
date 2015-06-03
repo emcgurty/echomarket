@@ -18,7 +18,7 @@
 
 			// Check for error
 			if (data.error_msg)  { 
-			    alert(data.error_msg); 
+			    //alert(data.error_msg); 
 				errorDiv.text(data.error_msg); }
 			else {
 			var mystr = "";

@@ -73,7 +73,7 @@
 			///alert("postal code change");
 			var distance = $("input[name='search[zip_code_radius]']:checked").val();
 
-			///alert(distance);
+			
 
 			if (distance) {
 				// Get zip code
@@ -130,17 +130,17 @@
 			var mystr = "";
 
 			if (data) {
-				alert("Data found");
+				
 				if (data.error_msg) {
 					//errorDiv.text(data.error_msg);
 					///alert("No error okay");
 				}
 				else {
-					alert(data.zip_codes);
+					
 					$.each(data.zip_codes, function(i, zip) {
 						mystr = mystr + "'" + zip.zip_code + "',";
 					});
-					/// alert(mystr);
+					
 					var set_hidden_field = $("input#search_found_zip_codes");
 					if (set_hidden_field) {
 						set_hidden_field.val() = mystr.chomp(",");
@@ -158,7 +158,7 @@
 	function submitSearch() {
 
 		var choose_l_or_b = $("input[name='search[lender_or_borrower]']:checked");
-        alert(choose_l_or_b);
+        
 		$("span#echo_market_search_error").css("visibility", "hidden");
 		if (!(choose_l_or_b.val())) {
 			$("span#echo_market_search_error").text("From the above option 'Items to Borrow or items to Lend?', you need to choose to either search for what is being offered or what is needed.");
