@@ -2,8 +2,7 @@
 <%= javascript_include_tag 'bl_util.js', :type => "text/javascript" %>
 
 <%= render :partial => 'menus/borrowers_menu' %>
-<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_seeking"},
-:html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_seeking"}, :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
 
 <div style="display:none;">
@@ -20,7 +19,6 @@
 	</p>
 	<p>
 		<%= session[:user_alias].to_s unless session[:user_alias].blank? %> BORROWER ITEM REGISTRATION
-
 		<a href="#" class="registration_header" style="display:none;" onclick="saveBAll();">Save Borrower Item Registration</a>
 	</p>
 	<% unless session[:notice].blank? %>
@@ -43,13 +41,8 @@
 			<%= nf.collection_select :contact_describe_id, ContactDescribe.find(:all, :readonly => true, :conditions => ['borrower_or_lender = 2'], :order=>"option_value"), :id, :borrower_or_lender_text %>
 			<span class="error" id="describe_yourself_combo_error">&nbsp;</span>
 		</div>
-		<% display_div = 'none' %>
-		<% unless @borrower.contact_describe_id.blank? %>
-		<% if @borrower.contact_describe_id == 100 %>
-		<% display_div =  'inline'%>
-		<% end %>
-		<% end %>
-		<div id="other_describe_yourself" style="float:left;width:48%;margin-left:15px;display:<%= display_div %>;">
+				
+		<div id="other_describe_yourself" style="float:left;width:48%;margin-left:15px;display:none;">
 			<label>How then would you describe yourself?:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span>&nbsp;<span class="max_length">(24)</span></label>
 			<%= nf.text_field(:other_describe_yourself, :size=>24, :maxlength=>24, :class=>"hidden_input") %>
 			<span class="error" id="other_describe_yourself_error">&nbsp;</span>

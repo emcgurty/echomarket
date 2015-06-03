@@ -186,26 +186,19 @@
 	<% @s_get_items.each do |isq| %>
 
 	<tr>
-		<td> <% @cats = Category.find(:first, :select=> "category_type", :readonly=>true, :conditions => ["id = ?", isq.category_id]) %>
-		<%= (isq.category_id.blank? ? "No Item Category provided" : @cats.category_type) %> </td>
-		<td> <%= (isq.item_description.blank? ? "NA": isq.item_description) %></td>
-		<td> <%= (isq.item_model.blank? ? "NA": isq.item_model) %></td>
-		<td>
-		 <% unless isq.item_condition_id.blank? %>		
-		   <% @cond = ItemCondition.find(:first, :select=> "condition", :readonly=>true, :conditions => ["id = ?", isq.item_condition_id]) %>
-		   <%= (isq.item_condition_id.blank? ? "No Item Condition provided" : @cond.condition) %>
-		 <% else %>
-		    <%= "No Item Condition provided" %>
-		 <% end %> 
+		<td> <%= (isq.category_type.blank? ? "No Item Category provided" : isq.category_type) %> </td>
+		<td> <%= (isq.item_description.blank? ? "No Item descrition provided": isq.item_description) %></td>
+		<td> <%= (isq.item_model.blank? ? "No Item model provided": isq.item_model) %></td>
+		<td> <%= (isq.condition == "Please select" ? "No Item Condition provided" : isq.condition) %>
+ 
 		 </td>
 		<td>
 		<% if @search.lender_or_borrower == 2 %>	
-			<%= @pc = Address.find(:first, :select=> "postal_code", :readonly=> true, :conditions => ["borrower_id = ?", isq.id]) %>
-			<%= (@pc.blank? ? "NA": @pc.postal_code) %>
+			<%= (isq.postal_code.blank? ? "Postal code not provided": isq.postal_code) %>
 		
 		<% elsif @search.lender_or_borrower == 1 %>	
-			<%= @pc = Address.find(:first, :select=> "postal_code", :readonly=> true, :conditions => ["lender_id = ?", isq.id]) %>
-			<%= (pc.blank? ? "NA": @pc.postal_code) %>
+			
+			<%= (isq.postal_code.blank? ? "Postal code not provided": isq.postal_code) %>
 		
 		<% end %>
 		</td>

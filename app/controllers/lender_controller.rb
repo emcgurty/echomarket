@@ -28,7 +28,7 @@ end
       
       else 
           
-         where_clause = "WHERE (lenders.is_active= 1 AND lenders.is_community = 1  AND lenders.user_id  =  #{session[:user_id]}" 
+         where_clause = " lenders.is_active= 1 AND lenders.is_community = 1  AND lenders.user_id  =  '#{session[:user_id]}'" 
          @lender = Lender.joins(:category, :item_condition, :item_images).select(["lenders.*", "lenders.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
                                  
       end 
@@ -60,7 +60,7 @@ end
                  where_clause = " lenders.id =  #{params[:id]}"
                  
               else
-                 where_clause = " lenders.id = #{params[:id]} AND lenders.user_id = #{session[:user_id]}" 
+                 where_clause = " lenders.id = '#{params[:id]}' AND lenders.user_id = '#{session[:user_id]}'" 
                  
               end 
                                       

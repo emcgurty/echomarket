@@ -20,64 +20,90 @@ attr_accessible :start_date, :end_date, :keyword, :postal_code, :category_id, :l
 
 private
 
-def find_borrowers
 
-  if postal_code.present?
-    borrowers = Borrower.joins(:addresses).where([getUserType, conditions].join(' AND ') )
-  else
-    borrowers = Borrower.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') )
-  end    
+def find_borrowers
   
+    borrowers = Borrower.joins(:addresses,:category,:item_condition).select(["borrowers.id AS id", "borrowers.item_description AS item_description", "borrowers.item_model AS item_model", "item_conditions.condition AS 'condition'",  "categories.category_type AS category_type", "addresses.postal_code AS postal_code"]).where([getUserType, conditions].join(' AND ') )
 
 end
 
 def find_lenders
 
-  if postal_code.present?
-    lenders = Lender.joins(:addresses).where([getUserType, conditions].join(' AND ') )
-  else
-    lenders = Lender.find(:all, :readonly, :conditions =>  [getUserType, conditions].join(' AND ') )
-  end  
+   lenders = Lender.joins(:addresses,:category,:item_condition).select(["lenders.id AS id", "lenders.item_description AS item_description", "lenders.item_model as item_model", "item_conditions.condition AS 'condition'", "categories.category_type AS category_type", "addresses.postal_code AS postal_code"]).where([getUserType, conditions].join(' AND ') )
+  
 end
 
 
 def getUserType
   
-  if is_community == 1  
-       ["user_id = '#{user_id}' "]
-  else
-       ["is_active = 1 AND is_community = 0 "]
-  end
+      if lender_or_borrower == 2
+  
+          if is_community == 1  
+               [" borrowers.user_id = '#{user_id}' "]
+          else
+               [" borrowers.is_active = 1 AND borrowers.is_community = 0 "]
+          end
+  
+     else
+    
+          if is_community == 1  
+             [" lenders.user_id = '#{user_id}' "]
+          else
+             [" lenders.is_active = 1 AND lenders.is_community = 0 "]
+          end
+    
+    end
 
 end
 
 def description_conditions
-   [" item_description like '%#{keyword}%'"] if keyword.present?
+   
+    if lender_or_borrower == 2
+   [" borrowers.item_description like '%#{keyword}%'"] if keyword.present?
+   else
+     [" lenders.item_description like '%#{keyword}%'"] if keyword.present?
+   end  
 end
 
 def model_conditions
-   [" item_model like '%#{keyword}%'"] if keyword.present?
+   if lender_or_borrower == 2
+   [" borrowers.item_model like '%#{keyword}%'"] if keyword.present?
+   else
+     [" lenders.item_model like '%#{keyword}%'"] if keyword.present?
+   end  
 end
 
 
 def category_conditions
-  ["category_id = #{category_id.to_i}"] if category_id.present?
+   if lender_or_borrower == 2
+  [" borrowers.category_id = #{category_id.to_i}"] if category_id.present?
+  else
+    [" lenders.category_id = #{category_id.to_i}"] if category_id.present?
+  end  
 end
 
 def date_conditions
   if end_date.present?
   @date_plus_one = end_date + 1.days
   end
-   
-  ["( date_created > '#{start_date}' AND date_created < '#{@date_plus_one.to_s}' )"] if start_date.present? and end_date.present?
+     if lender_or_borrower == 2
+  ["( borrowers.date_created > '#{start_date}' AND borrowers.date_created < '#{@date_plus_one.to_s}' )"] if start_date.present? and end_date.present?
+  else
+    ["( lenders.date_created > '#{start_date}' AND lenders.date_created < '#{@date_plus_one.to_s}' )"] if start_date.present? and end_date.present?
+  end
  
 end
 
 def postalcode_conditions
 if found_zip_codes.present?
-  ["postal_code IN '(#{found_zip_codes})' "]  
+     
+      [" addresses.postal_code IN '(#{found_zip_codes})' "]
+     
+      
 elsif postal_code.present? 
-  ["postal_code like '#{postal_code}%' "]  
+    
+      [" addresses.postal_code like '#{postal_code}%' "]
+      
 end
 
 end

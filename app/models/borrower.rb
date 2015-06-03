@@ -10,15 +10,13 @@ class Borrower < ActiveRecord::Base
              
   has_many :addresses, :dependent => :destroy
   has_many :item_images, :dependent => :destroy
+  has_one :alternative_address, :dependent => :destroy
+  has_one :primary_address, :dependent => :destroy
   
-  
-  has_many :primary_addresses, :dependent => :destroy
-  attr_accessible :primary_addresses
-  accepts_nested_attributes_for :primary_addresses
-  
-  has_many :alternative_addresses, :dependent => :destroy
-  attr_accessible :alternative_addresses
-  accepts_nested_attributes_for :alternative_addresses
+  attr_accessible :primary_address
+  attr_accessible :alternative_address
+  accepts_nested_attributes_for :primary_address
+  accepts_nested_attributes_for :alternative_address
   
   attr_accessible :addresses_attributes
   accepts_nested_attributes_for :addresses

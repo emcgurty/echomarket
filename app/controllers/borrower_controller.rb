@@ -28,7 +28,7 @@ end
       
       else 
           
-         where_clause = "WHERE (borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  #{session[:user_id]}" 
+         where_clause = " borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  '#{session[:user_id]}'" 
          @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
                                  
       end 
@@ -56,16 +56,19 @@ end
     session[:background] = true
     unless params[:id].blank?
     
-              if session[:community_name].blank?
-                 where_clause = " borrowers.id =  #{params[:id]}"
+              #if session[:community_name].blank?
+              #   where_clause = " borrowers.id =  '#{params[:id]}'"
                  
-              else
-                 where_clause = " borrowers.id = #{params[:id]} AND borrowers.user_id = #{session[:user_id]}" 
+              #else
+              #   where_clause = " borrowers.id = '#{params[:id]}' AND borrowers.user_id = '#{session[:user_id]}'" 
                  
-              end 
+              #end 
                                       
-                   @borrower = Borrower.joins(:category, :item_condition, :item_images, :contact_describe).select(["contact_describes.borrower_or_lender_text", "borrowers.*", "borrowers.id AS b_id",   "categories.category_type", "item_conditions.condition", 
-                    "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order(["categories.category_type ASC, borrowers.date_created ASC "])
+                   @borrower = Borrower.find(params[:id])
+                   
+                   #@borrower = Borrower.joins(:category, :item_condition, :item_images, :contact_describe).select(["contact_describes.borrower_or_lender_text", "borrowers.*", "borrowers.id AS b_id",   "categories.category_type", "item_conditions.condition", 
+                   # "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order(["categories.category_type ASC, borrowers.date_created ASC "])
+                  
                   
      
     end
@@ -73,9 +76,8 @@ end
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
      end 
-  
-     
-       @borrower
+   
+      @borrower
   end
  
   

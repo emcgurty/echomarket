@@ -25,8 +25,8 @@
 		<span class="logo_white" >The Echo Market</span>
 	</p>
 	<p>
-        <% unless sesion[:community_name].blank?  %>
-        <%= (session[:user_alias].blank? ? "" : session[:user_alias] + " of " +  session[:community_name]  %>
+        <% unless session[:community_name].blank?  %>
+        <%= (session[:user_alias].blank? ? "" : session[:user_alias] + " of " +  session[:community_name] ) %>
         <% else %>
 		<%= session[:user_alias]   %>
 		<% end %>

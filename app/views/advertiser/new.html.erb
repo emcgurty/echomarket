@@ -85,7 +85,7 @@
 <div >
 	<label>Advertisement Icon/Logo:</label>
 	<%= fields_for :item_image do |builder| %>
-	<%  builder.label :item_image_caption , "Item Caption" %>
+	<%=  builder.label :item_image_caption , "Item Caption" %>
 	<%= builder.text_field :item_image_caption %>
 	<%= builder.file_field :item_image_upload, {:id=>"l2bimage", :accept=>"image/*"} %>
     <%= builder.hidden_field :lender_id, :value => '' %>
