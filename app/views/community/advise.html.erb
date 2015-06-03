@@ -93,35 +93,34 @@
 				<td width='20%'><%= "Alias on Community creator not permit" %></td>
 				<td width='20%'><%= nf.submit "Update Creator" %></td>
 			</tr>
-			
-			<%= nf.fields_for :noncreator_community_members, @community.community_members.noncreator_community_members do |builder| %>
-								
-				<tr class="odd" >
-				<td width= '20%'> <%= builder.text_field(:first_name,:size=>24, :class => "notcreator first_name") %>
-					<%= builder.hidden_field(:is_creator, :value => 0) %>
-				</td>
-				<td width='5%'><%= builder.text_field(:mi, :size=>1) %></td>
-				<td width= '20%'><%= builder.text_field(:last_name, :size=>24, :class => "notcreator last_name") %></td>
-				<td width='5%'>OR</td>
-				<td width='20%'><%= builder.text_field( :alias,:size=>24, :class => "notcreator alias") %></td>
-				<td width='20%'>&nbsp;&nbsp;<%= builder.label :_destroy, "Remove Member" %><br /><%= builder.check_box :_destroy %>
-				</td>
-				</tr>
+		
+		  	<%= nf.fields_for :noncreator_community_members, @community.community_members.noncreator_community_members do |builder| %>
+			<% rowClass = ((rowCount%2) == 1 ? "odd" : "even" )  %>
+			<tr class="<%= rowClass %>" >
+               
+				<td width= "20%"><%= builder.text_field(:first_name, {:maxlength=>24, :size=>20, :class=> "member first_name"})  %></td>
+				<td width='5%'><%= builder.text_field(:mi,  {:maxlength=>1, :size=>2, :class => "member mi"}) %></td>
+				<td width='20%'><%= builder.text_field(:last_name,  {:maxlength=>24, :size=>20, :class => "member last_name"}) %></td>
+				<td width="5%">OR</td>
+				<td width='20%'><%= builder.text_field(:alias, {:maxlength=>50, :size=>20, :class => "member alias"}) %></td>
+				<td width='30%'><%= builder.label :_destroy, "Remove Member" %><%= builder.check_box :_destroy %></td>
+				
+			</tr>
+			<% rowCount = rowCount + 1 %>
 			<% end %>
-			
-				<%= fields_for :noncreator_cm do |builder| %>
-								
-				<tr class="even" >
-				<td width= '20%'> <%= builder.text_field(:first_name,:size=>24, :class => "notcreator first_name") %>
-					<%= builder.hidden_field(:is_creator, :value => 0) %>
-				</td>
-				<td width='5%'><%= builder.text_field(:mi, :size=>1) %></td>
-				<td width= '20%'><%= builder.text_field(:last_name, :size=>24, :class => "notcreator last_name") %></td>
-				<td width='5%'>OR</td>
-				<td width='20%'><%= builder.text_field( :alias,:size=>24, :class => "notcreator alias") %></td>
-				<td width='20%'>&nbsp;&nbsp;<%= nf.submit "Add New Member" %></td>
-				</tr>
-			<% end %>
+	           
+
+					<tr>
+						<td colspan=6 style="text-align:center;font-size:14px;color:red;">
+						<span class="error" id="incomplete_information_error" >incomplete</span>
+						</td>
+					</tr>
+					<tr >
+						<td colspan=6 ><span style="color:red;font-size:12px;">Presented to you are all the existing member(s). Click here to add a new one:</span><%= nf.submit "Add Member" %></td>
+					</tr>
+					<tr>
+						<td colspan=6 ><span style="color:red;font-size:12px;">Here your selection of either a fullname or alias, and checked 'Remove Member' to delete from Echo Market will be processed:</span><%= nf.submit "Update Members" %></td>
+					</tr>
 				
 		</table>
 	
