@@ -2,7 +2,7 @@
    
         $("span.error").css("visibility", "hidden");
     	$("div#rapid_borrower").css('display', 'block');
-    	$("div#country_selected").css("display", "none");
+    	
 
 	
 		$(".rapid.category_id").bind('change', function() {

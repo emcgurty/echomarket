@@ -369,7 +369,7 @@ end
               if @user_new.save(:validate => false)  
                 
                   @borrower.addresses << Address.new(params["primary_address"])
-                  @borrower.addresses << Address.new([:address_type => "alternative"])  
+                  @borrower.addresses << Address.new(:address_type => "alternative")  
                   @myupdatehash = [:borrower_id => @borrower.id, :date_created => Time.now, :image_file_name => 'NA']
                   @borrower.item_images << ItemImage.new(@myupdatehash[0])
                   

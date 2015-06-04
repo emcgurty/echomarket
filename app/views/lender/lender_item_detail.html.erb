@@ -240,7 +240,11 @@
     <% elsif  @user_response == "0" %>
       <p>No pick up at lender address</p>
     <% else %>
-      <p>...This is a Rapid Item Registered Participant...No addresses required.</p>
+      <% if  bb.is_community.to_i == 3 %>
+      <p>This is a Rapid Item Registered Participant. No addresses required.</p>
+      <% else %>
+      <p>No address preference.</p>
+      <% end %>
     <% end %>
 
 
@@ -290,7 +294,11 @@
     <% elsif  @user_response == "0" %>
       <p>No return to lender address</p>
     <% else %>
+       <% if  bb.is_community.to_i == 3 %>
       <p>This is a Rapid Item Registered Participant. No addresses required.</p>
+      <% else %>
+      <p>No address preference.</p>
+      <% end %>
     <% end %>
 
     <% unless  bb.meetBorrowerAtAgreedB2L == 0  %>
