@@ -25,8 +25,7 @@ $(document).ready(function() {
 	});
 	$("input#borrower_organization_name").trigger('change');
 
-	
-	
+
 	$("input[name='borrower[displayBorrowerOrganizationName]']").bind('change', function() {
 		var y_n = $("input[name='borrower[displayBorrowerOrganizationName]']:checked").val();
 		
@@ -1021,10 +1020,12 @@ function validateContactPreferences() {
 
 
 
-	if ( ($(".borrower.primary.country_id option:selected").text() == "Please select")   &&  ($("input#borrower_us_state_id").val() == "")) {
-		$("#state_error").text("Please provide a Region.");
-		$("#state_error").css("visibility", "visible");
-		foundInvalid = false;
+if ( ($(".borrower.primary.country_id option:selected").text() != "Please select")  || ($(".borrower.primary.country_id option:selected").text() != "United States") ) {  
+		if  ($("input#borrower.primary.region").val() == "") {
+			$("#state_error").text("Please provide a Region.");
+			$("#state_error").css("visibility", "visible");
+			foundInvalid = false;
+	}
 	}
 	
 	if ((($(".borrower.primary.us_state_id option:selected").text() == "Please select") || ($(".borrower.primary.us_state_id option:selected").val() == '')) && ($(".borrower.primary.country_id option:selected").text() == "United States")) {

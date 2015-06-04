@@ -44,7 +44,7 @@
 </div>
 
 
-<% nf.fields_for :addresses do |builder| %>
+<% nf.fields_for :primary_address do |builder| %>
 
 <div style="display:none;">
 	<%= builder.hidden_field( :borrower_id, :value =>"") %>
@@ -63,7 +63,7 @@
 <div style="float:left;;width:92%;">
 	<div class="column50_rapid"> 
 	<label>Your Country:</label>
-		 <%= builder.collection_select(:country_id, Country.all, :id, :country_name, {}, {:class => "rapid country_id"}) %>
+		 <%= builder.collection_select(:country_id, Country.all, :id, :country_name, {}, {:class => "rapid category_id"}) %>
 	</div>
 
 	

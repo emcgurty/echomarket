@@ -49,7 +49,7 @@
 </div>
 
 
-<%= nf.fields_for :addresses do |builder| %>
+<%= fields_for :primary_address do |builder| %>
 
 <div style="display:none;">
 	<%= builder.hidden_field( :lender_id, :value =>"") %>
@@ -78,7 +78,7 @@
 		<%= builder.collection_select(:us_state_id, UsState.all, :id, :state_name, {}, {:class => "rapid us_state_id"}) %>
 	</div>
 
-	<div id="provide_country_state" style="display:none;" >
+	<div id="provide_country_state" style="display:block;" >
 		<%= builder.text_field(:region, {:maxlength=>40, :size=>25, :class => "rapid region"}) %>
 	</div>
 	</div>
@@ -88,7 +88,7 @@
 <div style="float:left;width:92%;">
 
 <div class="column50_rapid"><label>Item Category:
-<%= nf.collection_select(:category_id, Category.all, :id, :category_type, {}, {:class => "rapid country_id"}) %>
+<%= nf.collection_select(:category_id, Category.all, :id, :category_type, {}, {:class => "rapid category_id"}) %>
 </label>
  
 </div>

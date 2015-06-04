@@ -8,6 +8,8 @@ class Address < ActiveRecord::Base
   scope :primary_address, where(:address_type  => 'primary') 
   scope :alternative_address, where(:address_type  => 'alternative')
   before_create :get_primary_key_value
+  has_many :country
+  has_many :us_state
   
   protected
 

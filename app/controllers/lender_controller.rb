@@ -52,30 +52,33 @@ end
  end
 
  def lender_item_detail
-   where_clause = ""
+    where_clause = ""
     session[:background] = true
+
     unless params[:id].blank?
     
-              if session[:community_name].blank?
-                 where_clause = " lenders.id =  #{params[:id]}"
-                 
-              else
-                 where_clause = " lenders.id = '#{params[:id]}' AND lenders.user_id = '#{session[:user_id]}'" 
-                 
-              end 
-                                      
-                   @lender = Lender.joins(:category, :item_condition, :item_images, :contact_describe).select(["contact_describes.borrower_or_lender_text", "lenders.*", "lenders.id AS b_id",   "categories.category_type", "item_conditions.condition", 
-                    "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
-                  
-     
+    if session[:community_name].blank?
+       where_clause = " lenders.id =  '#{params[:id]}'"
+       select_clause =  ["lenders.*", "lenders.id AS 'b_id'", "categories.category_type", "item_conditions.condition as 'condition'",  "item_images.image_file_name", "item_images.item_image_caption", " contact_describes.borrower_or_lender_text" ]
+      
+       
+    else
+       where_clause = " lenders.id = '#{params[:id]}' AND lenders.user_id = '#{session[:user_id]}'" 
+       select_clause =  [" lenders.*", "lenders.id AS 'b_id'", "categories.category_type", "item_conditions.condition as 'condition'",  "item_images.image_file_name", "item_images.item_image_caption", " contact_describes.borrower_or_lender_text" ]
+    end 
+                             
+                             
+     @lender = Lender.joins(:category, :item_condition, :item_images, :contact_describe).select(select_clause).where([where_clause]).order("categories.category_type ASC, lenders.date_created ASC ")
+      puts "@lender.to_sql lkkhkhkljh kkljhlsjhkhkjhskjhlksjjhkjkjhg" 
+     puts @lender.to_sql      
     end
     if @lender.blank?
-          session[:notice]  = "The lender item you offered does not exist in the Echo Market database."  
+          session[:notice]  = "The lender item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
      end 
-  
-     
-       @lender
+   
+     @lender   
+ 
   end
  
   
@@ -412,9 +415,10 @@ end
                            :user_type => 'lender', :password =>fake_password, :password_confirmation => fake_password  ]        
           @user_new = User.new(myupdatehash[0])
         
-              if @user_new.save(:validate => true)   &&  @user_new.errors.empty?
+              if @user_new.save(:validate => false) 
                 
-                  @lender.addresses << Address.new(params["addresses"])
+                  @lender.addresses << Address.new(params["primary_address"])
+                  @lender.addresses << Address.new([:address_type => "alternative"])  
                   @myupdatehash = [:lender_id => @lender.id, :date_created => Time.now, :image_file_name => 'NA']
                   @lender.item_images << ItemImage.new(@myupdatehash[0])
                   

@@ -1,5 +1,4 @@
 <style type="text/css">
-
   p{
     padding:1px 1px 1px 15px;
     margin-left:5px;
@@ -8,6 +7,7 @@
     font-weight:normal;
     width:94%;
   }
+
   label {
     margin-left:15px;
     font-size:14px;
@@ -18,7 +18,7 @@
 
 <%= javascript_include_tag 'lender_offering.js', :type => "text/javascript" %>
 
-<%= form_tag '/lender/lender_item_detail', :html=> {:class=>"lender_item_detail", :id=>"lenders_item_form"} do |nf| %>
+<%= form_tag '/lender/lender_item_detail', :html=> {:class=>"lender_item_detail"}  %>
 
 <div class="top" >
 	<p>
@@ -26,11 +26,11 @@
 	</p>
 	<p>
         <% unless session[:community_name].blank?  %>
-        <%= (session[:user_alias].blank? ? "" : session[:user_alias] + " of " +  session[:community_name] ) %>
+        <%= (session[:user_alias].blank? ? "" : session[:user_alias].to_s + " of " +  session[:community_name].to_s  + ":")  unless session[:user_alias].blank? %>
         <% else %>
-		<%= session[:user_alias]   %>
+		<%= session[:user_alias].to_s + ":" unless session[:user_alias].blank? %>
 		<% end %>
-		: LENDER ITEM DETAIL
+		 LENDER ITEM DETAIL
 	</p>
 	<%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
 </div>
@@ -55,72 +55,84 @@
         Lender Name:&nbsp;<%= bb.first_name %>&nbsp;<%= (bb.mi.blank? ? "": bb.mi) %>&nbsp;<%= bb.last_name %><br />
       <% end %></p>
       <% if (bb.displayLenderAddress == 1) %>
- 		 <%	lender_primary_address = Lender.find(bb.l_id).addresses.where("address_type = 'primary'")  %>
-		<p>
+
+<%	borrower_primary_address = Lender.find(bb.b_id).addresses.primary_address  %>
+<% for bpa in borrower_primary_address %>
+ 
+
+	<p>
 		Lender Address:
 		<br />
-		<%= lender_primary_address.address_line_1 %>
-		<%= (lender_primary_address.address_line_2.blank? ? " ": lender_primary_address.address_line_2) %>
+		<%= bpa.address_line_1 %>
+		<%= (bpa.address_line_2.blank? ? " ": bpa.address_line_2) %>
 		<br />
-		<%= lender_primary_address.city + ","%>
-		<%= (lender_primary_address.province.blank? ? "": lender_primary_address.province) + " " %>
+		<%= bpa.city + ","%>
+		<%= (bpa.province.blank? ? "": bpa.province) + " " %>
 
-		<% unless lender_primary_address.us_state_id.blank? || lender_primary_address.us_state_id == '99'  %>
-		<%= lender_primary_address.state_name %>
+		<% unless bpa.us_state_id.blank? || bpa.us_state_id == '99'  %>
+		<% add_sdetail = UsState.find(bpa.us_state_id) %>
+		<%= add_sdetail.state_name %>
 		<% end %>
 		<br />
 		
-		<% unless lender_primary_address.region.blank?  %>
-		<%= lender_primary_address.region %>
+		<% unless bpa.region.blank?  %>
+		<%= bpa.region %>
 		<% end %>
 		<br />
 		
 		
-		<% unless lender_primary_address.country_name.blank? %>
-		<%= lender_primary_address.country_name + " " %>
+		<% unless bpa.country_id.blank? %>
+		<% add_cdetail = Country.find(bpa.country_id) %>
+		<%= add_cdetail.country_name %>
 		<% end %>
 		
-		<%= lender_primary_address.postal_code %>
+		<%= bpa.postal_code %>
 	</p>
+	<% end %>
 	<% end %>
 	
       
   </div>
 
 
- % if ((bb.useWhichContactAddress == 2)  || (bb.useWhichContactAddress == 1)) %>
+<% if ((bb.useWhichContactAddress == 2)  || (bb.useWhichContactAddress == 1)) %>
 
 <div class="div_p_detail" >
 	Lender Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
-   <%  lender_alternative_address = Lender.find(bb.b_id).addresses.where("address_type = 'alternative'") %>
+   <%  borrower_alternative_address = Lender.find(bb.b_id).addresses.alternative_address %>
+   <% for baa in borrower_alternative_address %> 
+    
     
 	<p>
-		<%= lender_alternative_address.address_line_1 %>
-		<%= (lender_alternative_address.address_line_2.blank? ? " ": lender_alternative_address.address_line_2) %>
-		<br />
-		<%= lender_alternative_address.city + ","%>
-		<%= (lender_alternative_address.province.blank? ? "": lender_alternative_address.province) + " " %>
+		<%= baa.address_line_1 %>
 
-		<% unless lender_alternative_address.us_state_id.blank? || lender_alternative_address.us_state_id == '99'  %>
-		<%= lender_alternative_address.state_name %>
+		<%= (baa.address_line_2.blank? ? " ": baa.address_line_2) %>
+		<br />
+		<%= baa.city + ","%>
+		<%= (baa.province.blank? ? "": baa.province) + " " %>
+
+		<% unless baa.us_state_id.blank? || baa.us_state_id == '99'  %>
+		<% add_sdetail = UsState.find(baa.us_state_id) %>
+		<%= add_sdetail.state_name %>
 		<% end %>
 		<br />
 		
-		<% unless lender_alternative_address.region.blank?  %>
-		<%= lender_alternative_address.region %>
+		<% unless baa.region.blank?  %>
+		<%= baa.region %>
 		<% end %>
 		<br />
 		
 		
-		<% unless lender_alternative_address.country_name.blank? %>
-		<%= lender_alternative_address.country_name + " " %>
+		<% unless baa.country_id.blank? %>
+		<% add_cdetail = Country.find(baa.country_id) %>
+		<%= add_cdetail.country_name  + " " %>
 		<% end %>
 		
-		<%= lender_alternative_address.postal_code %>
+		<%= baa.postal_code %>
 	</p>
-	
+	<% end %>
 </div>
 <% end %>
 
@@ -148,7 +160,7 @@
 
 
   <% unless bb.borrower_contact_by_email == 0  %>
-  <%  @uemail = User.find(:first, :readonly => true, :conditions => ["user_id = ?", bb.user_id]) %>
+  <%  @uemail = User.find(:first, :readonly => true, :conditions => ["id = ?", bb.user_id]) %>
     <div class="div_p_detail" >Lender Contact - Email:</div>
 
     <div class="div_p_detail_sub">
@@ -469,5 +481,4 @@
       <br />
     <% end %>
   </div>
-<% end %>
 <% end %>

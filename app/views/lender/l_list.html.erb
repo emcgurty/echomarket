@@ -1,6 +1,6 @@
 <%= javascript_include_tag 'echo_market.js' , :type => "text/javascript" %>
 
-<%= form_tag '/lender/l_list",  :html=>  {:class=>"l_list",  :id=>"l_list"} do |nf| %>
+<%= form_tag '/lender/l_list',  :html=>  {:class=>"l_list",  :id=>"l_list"}  %>
 
 
   <div class="top" >
@@ -38,7 +38,7 @@
         <label class="item_listing">Model: &nbsp;<%= bb.item_model %></label>
         <label class="item_listing">Condition:&nbsp;<%= bb.condition %></label>
 		  
-        <%= link_to "Details..." , lender_item_detail_url(:id=> bb.id ), {:style=>"color:#ff4500;"} %>
+        <%= link_to "Details..." , lender_item_detail_url(:id=> bb.b_id ), {:style=>"color:#ff4500;"} %>
 	
         <hr style="color:indigo;" />
 

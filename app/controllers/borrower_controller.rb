@@ -24,12 +24,12 @@ end
       session[:notice] = ''
       session[:background] = true
       if session[:community_name].blank? 
-         @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )"]).order(["categories.category_type ASC, borrowers.date_created ASC "])
+         @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition AS 'condition'", "item_images.*"]).where([" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )"]).order(["categories.category_type ASC, borrowers.date_created ASC "])
       
       else 
           
          where_clause = " borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  '#{session[:user_id]}'" 
-         @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
+         @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS b_id", "categories.category_type", "item_conditions.condition AS 'condition'", "item_images.*"]).where([where_clause]).order(["categories.category_type ASC, lenders.date_created ASC "])
                                  
       end 
       
@@ -56,28 +56,27 @@ end
     session[:background] = true
     unless params[:id].blank?
     
-              #if session[:community_name].blank?
-              #   where_clause = " borrowers.id =  '#{params[:id]}'"
-                 
-              #else
-              #   where_clause = " borrowers.id = '#{params[:id]}' AND borrowers.user_id = '#{session[:user_id]}'" 
-                 
-              #end 
-                                      
-                   @borrower = Borrower.find(params[:id])
-                   
-                   #@borrower = Borrower.joins(:category, :item_condition, :item_images, :contact_describe).select(["contact_describes.borrower_or_lender_text", "borrowers.*", "borrowers.id AS b_id",   "categories.category_type", "item_conditions.condition", 
-                   # "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order(["categories.category_type ASC, borrowers.date_created ASC "])
-                  
-                  
-     
+    if session[:community_name].blank?
+       where_clause = " borrowers.id =  '#{params[:id]}'"
+       select_clause =  ["borrowers.*", "borrowers.id AS 'b_id'", "categories.category_type", "item_conditions.condition as 'condition'",  "item_images.image_file_name", "item_images.item_image_caption", " contact_describes.borrower_or_lender_text" ]
+      
+       
+    else
+       where_clause = " borrowers.id = '#{params[:id]}' AND borrowers.user_id = '#{session[:user_id]}'" 
+       select_clause =  ["borrowers.*", "borrowers.id AS 'b_id'", "categories.category_type", "item_conditions.condition as 'condition'",  "item_images.image_file_name", "item_images.item_image_caption", " contact_describes.borrower_or_lender_text" ]
+    end 
+                             
+                             
+     @borrower = Borrower.joins(:category, :item_condition, :item_images, :contact_describe).select(select_clause).where([where_clause]).order("categories.category_type ASC, borrowers.date_created ASC ")
+    
     end
     if @borrower.blank?
           session[:notice]  = "The borrower item you were seeking does not exist in the Echo Market database."  
           redirect_to home_items_listing_url
      end 
    
-      @borrower
+     @borrower   
+ 
   end
  
   
@@ -100,7 +99,7 @@ end
         end  
     else  
         
-         @borrower = Borrower.joins(:category, :item_condition).select(["borrowers.*", "categories.category_type", "item_conditions.condition"]).where([" borrowers.is_active = 1 AND borrowers.user_id = ?", params[:id]]).order(["categories.category_type ASC, borrowers.date_created ASC "])
+         @borrower = Borrower.joins(:category, :item_condition).select(["borrowers.*", "categories.category_type", "item_conditions.condition AS 'condition'"]).where([" borrowers.is_active = 1 AND borrowers.user_id = ?", params[:id]]).order(["categories.category_type ASC, borrowers.date_created ASC "])
    
         if @borrower.blank?
            redirect_to  :controller => "borrower", :action => @which_view
@@ -367,9 +366,10 @@ end
                            :user_type => 'borrower', :password =>fake_password, :password_confirmation => fake_password  ]        
           @user_new = User.new(myupdatehash[0])
         
-              if @user_new.save(:validate => true)   &&  @user_new.errors.empty?
+              if @user_new.save(:validate => false)  
                 
-                  @borrower.addresses << Address.new(params["addresses"])
+                  @borrower.addresses << Address.new(params["primary_address"])
+                  @borrower.addresses << Address.new([:address_type => "alternative"])  
                   @myupdatehash = [:borrower_id => @borrower.id, :date_created => Time.now, :image_file_name => 'NA']
                   @borrower.item_images << ItemImage.new(@myupdatehash[0])
                   

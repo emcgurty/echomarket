@@ -26,14 +26,14 @@
 
 	 	<% if session[:community_name].blank? %>
 	    
-	    <% @lender = Lender.joins(:category, :item_condition, :item_images).select(["lenders.*", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([" lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 )"]).order("categories.category_type ASC, lenders.date_created ASC ")
+	    <% @lender = Lender.joins(:category, :item_condition, :item_images).select(["lenders.*", "lenders.id AS pid", "categories.category_type", "item_conditions.condition", "item_images.item_image_caption", "item_images.image_file_name"]).where([" lenders.is_active=1 AND (lenders.is_community = 0  OR lenders.is_community = 3 )"]).order("categories.category_type ASC, lenders.date_created ASC ")
 	                
 	                %>
 						
 		<% else %>
 		
            <% where_clause = "lenders.is_active= 1 AND lenders.is_community = 1  AND lenders.user_id  =  '#{session[:user_id]}'" %>
-	       <% @lender = Lender.joins(:category, :item_condition, :item_images).select(["lenders.*", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([where_clause]).order("categories.category_type ASC, lenders.date_created ASC ")                %>
+	       <% @lender = Lender.joins(:category, :item_condition, :item_images).select(["lenders.*", "lenders.id AS pid", "categories.category_type", "item_conditions.condition", "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order("categories.category_type ASC, lenders.date_created ASC ")                %>
         
 		<% end %>
 
@@ -66,10 +66,10 @@
 		<% end %>
 		<label class="item_listing" >Item Description: &nbsp;<%= ldr.item_description %></label>
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
-		<label class="item_listing">Condition:&nbsp;<%= @ih2[ldr.item_condition_id.to_s] %></label>
+		<label class="item_listing">Condition:&nbsp;<%= ldr.condition %></label>
 		
 			
-	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.id), {:class=>"item_details"}  %>
+	<%= link_to "Details..." , lender_item_detail_url(:id => ldr.pid), {:id => ldr.pid, :class=>"item_details"}  %>
 				
 		
 		<hr style="color:indigo;" />
@@ -84,14 +84,14 @@
 
 		<% if session[:community_name].blank? %>
 		
-    <% @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )"]).order("categories.category_type ASC, borrowers.date_created ASC ")
+                  <% @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS pid", "categories.category_type", "item_conditions.condition", "item_images.item_image_caption", "item_images.image_file_name"]).where([" borrowers.is_active=1 AND (borrowers.is_community = 0  OR borrowers.is_community = 3 )"]).order("categories.category_type ASC, borrowers.date_created ASC ")
 	                
 	                %>
 						
 		<% else %>
 		
-           <% where_clause = "borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  '#{session[:user_id]}'" %>
-	       <% @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "categories.category_type", "item_conditions.condition", "item_images.*"]).where([where_clause]).order("categories.category_type ASC, borrowers.date_created ASC ")
+           <% where_clause = " borrowers.is_active= 1 AND borrowers.is_community = 1  AND borrowers.user_id  =  '#{session[:user_id]}'" %>
+	       <% @borrower = Borrower.joins(:category, :item_condition, :item_images).select(["borrowers.*", "borrowers.id AS pid", "categories.category_type", "item_conditions.condition", "item_images.item_image_caption", "item_images.image_file_name"]).where([where_clause]).order("categories.category_type ASC, borrowers.date_created ASC ")
 	               %>
 		
 		<% end %>
@@ -119,7 +119,7 @@
 		<label class="item_listing">Model: &nbsp;<%= ldr.item_model %></label>
 		<label class="item_listing">Condition:&nbsp;<%= ldr.condition %></label>
         		
-			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.id), {:class=>"item_details"} %>
+			<%= link_to "Details..." , borrower_item_detail_url(:id => ldr.pid), {:id => ldr.pid, :class=>"item_details"} %>
 		
 		<hr style="color:indigo;" />
 

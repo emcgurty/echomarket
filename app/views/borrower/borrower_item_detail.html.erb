@@ -18,19 +18,19 @@
 
 <%= javascript_include_tag 'borrower_seeking.js', :type => "text/javascript" %>
 
-<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_seeking"}, :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"}  do |nf| %>
-<%= puts @borrower.to_yaml %>
+<%= form_tag '/borrower/borrower_item_detail',  :html=>{:class=>"borrower_item_detail", :id=>"borrowers_item_form"}  %>
+
 <div class="top" >
 	<p>
 		<span class="logo_white" >The Echo Market</span>
 	</p>
 	<p>
         <% unless session[:community_name].blank?  %>
-        <%= (session[:user_alias].blank? ? "" : session[:user_alias] + " of " +  session[:community_name] ) %>
+        <%= (session[:user_alias].blank? ? "" : session[:user_alias].to_s + " of " +  session[:community_name].to_s  + ":")  unless session[:user_alias].blank? %>
         <% else %>
-		<%= session[:user_alias]   %>
+		<%= session[:user_alias].to_s + ":" unless session[:user_alias].blank? %>
 		<% end %>
-		: BORROWER ITEM DETAIL
+		BORROWER ITEM DETAIL
 	</p>
 	<%= link_to 'Back to Items Listing', home_items_listing_url, {:style=>"color:white; text-align:right;float:right;margin-right:15px;"}  %>
 </div>
@@ -39,34 +39,58 @@
 <div class="div_p_detail_sub">
 	<p>
 		
+		<% for bb in @borrower %>
 		
-		
-		<%=  @borrower[:borrower_or_lender_text] %>
-		<% if @borrower[:borrower_or_lender_text] == 'Other'%>
-		&nbsp;<%= @borrower[:other_describe_yourself] %>
+		<%=  bb.borrower_or_lender_text %>
+		<% if bb.borrower_or_lender_text == 'Other'%>
+		&nbsp;<%= bb.other_describe_yourself %>
 		<% end %>
-		<% unless @borrower[:organization_name].blank? %>
+		<% unless bb.organization_name.blank? %>
 		<br />
-		<% if @borrower[:displayBorrowerOrganizationName].to_i.abs == 1 %>
-		Borrower Organization Name: &nbsp;<%= @borrower[:organization_name] %>
+		<% if bb.displayBorrowerOrganizationName.abs == 1 %>
+		Borrower Organization Name: &nbsp;<%= bb.organization_name %>
 		<br />
 		<% end %>
 		<% end %>
-		<% if @borrower[:displayBorrowerName].to_i.abs == 1%>
-		Borrower Name:&nbsp;<%= @borrower[:first_name] %>&nbsp;<%= (@borrower[:mi].blank? ? "": @borrower[:mi]) %>&nbsp;<%= @borrower[:last_name] %>
+		<% if bb.displayBorrowerName.abs == 1%>
+		Borrower Name:&nbsp;<%= bb.first_name %>&nbsp;<%= (bb.mi.blank? ? "": bb.mi) %>&nbsp;<%= bb.last_name %>
 		<br />
 		<% end %>
 	</p>
-	<% if (@borrower[:displayBorrowerAddress] == 1 ) %>
+	<% if (bb.displayBorrowerAddress == 1 ) %>
 
-   <%= fields_for :primary, Borrower.find(@borrower.id).addresses.primary_addresses do |builder|  %>
+<%	borrower_primary_address = Borrower.find(bb.b_id).addresses.primary_address  %>
+<% for bpa in borrower_primary_address %>
+ 
+
 	<p>
 		Borrower Address:
 		<br />
-		<%= builder.label :address_line_1, "AS" %>
+		<%= bpa.address_line_1 %>
+		<%= (bpa.address_line_2.blank? ? " ": bpa.address_line_2) %>
+		<br />
+		<%= bpa.city + ","%>
+		<%= (bpa.province.blank? ? "": bpa.province) + " " %>
+
+		<% unless bpa.us_state_id.blank? || bpa.us_state_id == '99'  %>
+		<% add_sdetail = UsState.find(bpa.us_state_id) %>
+		<%= add_sdetail.state_name %>
+		<% end %>
+		<br />
 		
+		<% unless bpa.region.blank?  %>
+		<%= bpa.region %>
+		<% end %>
+		<br />
+		
+		
+		<% unless bpa.country_id.blank? %>
+		<% add_cdetail = Country.find(bpa.country_id) %>
+		<%= add_cdetail.country_name %>
+		<% end %>
+		
+		<%= bpa.postal_code %>
 	</p>
-	
 	<% end %>
 	<% end %>
 	
@@ -74,45 +98,192 @@
 
 </div>
 
-<% if ((@borrower[:useWhichContactAddress] == 2)  || (@borrower[:useWhichContactAddress] == 1)) %>
+<% if ((bb.useWhichContactAddress == 2)  || (bb.useWhichContactAddress == 1)) %>
 
 <div class="div_p_detail" >
 	Borrower Contact - Alternative Address:
 </div>
 <div class="div_p_detail_sub">
-   <%= fields_for :alternative, @borrower.alternative_addresses do |borrower_alternative_address|  %>
+   <%  borrower_alternative_address = Borrower.find(bb.b_id).addresses.alternative_address %>
+   <% for baa in borrower_alternative_address %> 
+    
     
 	<p>
-		<%= borrower_alternative_address.address_line_1 %>
-		<%= (borrower_alternative_address.address_line_2.blank? ? " ": borrower_alternative_address.address_line_2) %>
-		<br />
-		<%= borrower_alternative_address.city + ","%>
-		<%= (borrower_alternative_address.province.blank? ? "": borrower_alternative_address.province) + " " %>
+		<%= baa.address_line_1 %>
 
-		<% unless borrower_alternative_address.us_state_id.blank? || borrower_alternative_address.us_state_id == '99'  %>
-		<%= borrower_alternative_address.state_name %>
+		<%= (baa.address_line_2.blank? ? " ": baa.address_line_2) %>
+		<br />
+		<%= baa.city + ","%>
+		<%= (baa.province.blank? ? "": baa.province) + " " %>
+
+		<% unless baa.us_state_id.blank? || baa.us_state_id == '99'  %>
+		<% add_sdetail = UsState.find(baa.us_state_id) %>
+		<%= add_sdetail.state_name %>
 		<% end %>
 		<br />
 		
-		<% unless borrower_alternative_address.region.blank?  %>
-		<%= borrower_alternative_address.region %>
+		<% unless baa.region.blank?  %>
+		<%= baa.region %>
 		<% end %>
 		<br />
 		
 		
-		<% unless borrower_alternative_address.country_name.blank? %>
-		<%= borrower_alternative_address.country_name + " " %>
+		<% unless baa.country_id.blank? %>
+		<% add_cdetail = Country.find(baa.country_id) %>
+		<%= add_cdetail.country_name  + " " %>
 		<% end %>
 		
-		<%= borrower_alternative_address.postal_code %>
+		<%= baa.postal_code %>
 	</p>
 	<% end %>
-	
 </div>
 <% end %>
 
 
+<% if bb.public_display_home_phone.abs == 1 || bb.public_display_cell_phone.abs == 1  || bb.public_display_alternative_phone.abs == 1%>
+
+<div class="div_p_detail"  >
+	Borrower Contact - Phone:
+</div>
+<div class="div_p_detail_sub">
+	<p>
+		<% if bb.public_display_home_phone.abs == 1 %>
+		<%= "Home: " + bb.home_phone %>&nbsp;
+		<% end %>
+		<% if bb.public_display_cell_phone.abs == 1 %>
+		<%= "Cell: " + bb.cell_phone %>&nbsp;
+		<% end %>
+
+		<% if bb.public_display_alternative_phone.abs == 1 %>
+		<%= "Alternative: " + bb.alternative_phone %>
+		<% end %>
+	</p>
+
+</div>
+
+<% end %>
+
+<% unless bb.borrower_contact_by_email == '0'  %>
+<% @uemail = User.find(:first, :readonly => true, :conditions => ["id = ?", bb.user_id]) %>
+<div class="div_p_detail" >
+	Borrower Contact - Email:
+</div>
+
+<div class="div_p_detail_sub">
+	<p>
+		<% if bb.borrower_contact_by_email == 3 %>
+		<% if  session[:community_id] %>
+		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
+		<% else  %>
+		&nbsp;&nbsp;
+		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
+		<% end  %>
+		<% end %>
+
+		<% if bb.borrower_contact_by_email == '2' %>
+		<%= mail_to bb.email_alternative,"#{bb.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+		<% end %>
+		<% if bb.borrower_contact_by_email.to_i.abs == 1 %>
+		<%= mail_to bb.email_alternative, "#{bb.email_alternative}", {:style=>"color:indigo"} %>&nbsp;&nbsp;
+		<% if  session[:community_id] %>
+		<%= mail_to session[:email],"#{session[:email]}", {:style=>"color:indigo"}%>
+		<% else  %>
+		&nbsp;&nbsp;
+		<%= mail_to @uemail.email,"#{@uemail.email}", {:style=>"color:indigo"}%>
+		<% end  %>
+		<% end %>
+	</p>
+
+</div>
+<% end %>
+
+<% unless bb.borrower_contact_by_Facebook.blank? &&  bb.borrower_contact_by_LinkedIn.blank? &&  bb.borrower_contact_by_Other_Social_Media.blank?
+bb.borrower_contact_by_Twitter.blank? &&  bb.borrower_contact_by_Instagram.blank? &&  bb.borrower_contact_by_Other_Social_Media_Access.blank? %>
+<div class="div_p_detail" >
+	borrower Contact - Social Media:
+</div>
+<div class="div_p_detail_sub">
+
+	<p>
+		<% unless bb.borrower_contact_by_Facebook.blank?  %>
+		Facebook Access: &nbsp;<%= bb.borrower_contact_by_Facebook %>&nbsp;&nbsp;
+		<% end %>
+
+		<% unless bb.borrower_contact_by_LinkedIn.blank?  %>
+		LinkedIn Access: &nbsp;<%= bb.borrower_contact_by_LinkedIn %>&nbsp;&nbsp;
+		<% end %>
+
+		<% unless bb.borrower_contact_by_Twitter.blank?  %>
+		Twitter Access:&nbsp;<%= bb.borrower_contact_by_Twitter %>&nbsp;&nbsp;
+		<% end %>
+
+		<% unless bb.borrower_contact_by_Instagram.blank?  %>
+		Instagram Access:&nbsp;<%= bb.borrower_contact_by_Instagram %>&nbsp;&nbsp;
+		<% end %>
+
+		<% unless bb.borrower_contact_by_Other_Social_Media.blank?  %>
+		<br />
+		Other Social Media Account Access:&nbsp;<%= bb.borrower_contact_by_Other_Social_Media %>
+		Other Social Media Account Access:&nbsp;<%= bb.borrower_contact_by_Other_Social_Media_Access %>
+		<% end %>
+	</p>
+</div>
+
+<% end %>
+
+<div   class="div_p_detail" >
+	Item Sought to Borrow
+</div>
+<div class="div_p_detail_sub">
+
+	Category:
+	
+	<%= bb.category_type %>
+	<% if bb.category_type == "Other" %>
+	&nbsp;Other category:
+	<%= bb.other_item_category %>
+	<% end %>
+
+	<br />
+	Description:&nbsp;
+	<%= bb.item_description %>
+	<br />
+
+	Condition:&nbsp;
+	<%= bb.condition %>
+	<br />
+
+	<% unless bb.item_model.blank?  %>
+	Model: &nbsp;
+	<%= bb.item_model %>
+	<br />
+	<% end %>
+
+	Number of Items: &nbsp;
+	<%= bb.item_count %>
+	<br />
+
+	<% @icaption = (bb.item_image_caption.blank? ? "No caption provided"  :  bb.item_image_caption)  %>
 
 	
-  
+	<% unless bb.image_file_name == "NA" ||  bb.image_file_name == ""  %>
+	<div style="margin-left:25px;margin-top:5px;float:left;">
+
+		<table style="width:100%">
+			<tr>
+				<th>Image caption</th>
+				<th>Image of Item</th>
+
+			</tr>
+			<tr>
+
+				<td style="width:50%;text-align:center;"><%= @icaption %></td>
+				<td style="width:50%;text-align:center;"><img src="<%= get_image_path(bb.image_file_name) %>"  height="42"  width="42" alt="<%= @icaption  %>" style="margin:5px;" /></td>
+			</tr>
+		</table>
+	</div>
+	<% end %>
+
+</div>
+
 <% end %>

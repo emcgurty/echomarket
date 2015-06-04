@@ -21,18 +21,19 @@
 	
 
 		$(".rapid.country_id").bind('change', function() {
+		
 		var country_text = $(".rapid.country_id option:selected").text();
-		$("div#country_selected").css("display", "block");
+		
 		if ((country_text != 'United States') || (country_text == 'Please select')) {
-
+		$(".rapid.us_state_id option[value='99']" ).attr( "selected", "selected" );
 			$("div#choose_us_state").css("display", "none");
 			$("div#provide_country_state").css("display", "inline");
 
 
 		} else {
 
-			$("div#provide_country_state").css("display", "block");
-			$("div#choose_us_state").css("display", "block");
+			$("div#provide_country_state").css("display", "none");
+			$("div#choose_us_state").css("display", "inline");
 		}
 
 	});
