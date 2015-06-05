@@ -57,7 +57,7 @@
 				<td style="width:25%;">
 				<div style="display:inline-block;vertical-align:top;">
 					<label >Public Display Address?:</label>
-					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> "borrower",:edit => true, :field=> "displayBorrowerAddress",:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
+					<%= render :partial => 'layouts/yes_no_checked_no', :locals => {:object=> object,:edit => true, :field=> field,:radio_id => "public_display_address_radio", :radio_num => "publicdisplayaddress", :which_class=>"radio", :onchange_call => ""} %>
 					<span class="error" id="display_address_error">&nbsp;</span>
 				</div></td>
 			</tr>

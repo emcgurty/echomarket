@@ -11,23 +11,28 @@
 
 <div style="display:none;">
 <%= nf.hidden_field( :is_active, :value => 1) %>
-<%= nf.hidden_field( :is_community, :value=> 0) %>
+<%= nf.hidden_field( :is_community, :value=> 3) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 </div>
 
 <div class="top" >
 	<p>
-		<span >Your search for what borrowers need did not locate any records</span>
+		<span >Your search for what lenders have offered did not locate any records</span>
 	</p>
 	<%= get_search_query_string.html_safe %>
 	<p>
 		<span >RAPID LENDER ITEM REGISTRATION</span>
 	</p>
-	<p>Except for Comments, all fields are required.</p>
+	
 	<p>
 		<%= session[:notice] unless session[:notice].blank? %>
 	</p>
+	
+	<p>Except for Comments, all fields are required.</p>
+	
+	</p>
+	
 	<a href="#" onclick="addRapidItem();">==> Save your Item Offered</a>
 	<%= link_to '==> Return to New Search', search_item_search_url %>
 	<br />
@@ -37,33 +42,32 @@
 	<span class="error" id="incomplete_rapid_information" style="font-size:14px;"></span>
 </div>
 
-<div style="float:left;;width:92%;">
-	<label>Please provide an email address for lender contact:</label>
+<div style="float:left;width:92%;">
+	<label>Please provide an email address for borrower contact:</label>
 	<br />
-	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40, :class=>"rapid email") %>
+	<%= nf.email_field( :email_alternative, :maxlength=>50, :size=>40, :class=> "rapid email" ) %>
 </div>
 
 
-<% nf.fields_for :primary_address do |builder| %>
+<%= fields_for :primary_address do |builder| %>
 
 <div style="display:none;">
 	<%= builder.hidden_field( :borrower_id, :value =>"") %>
-	<%= builder.hidden_field( :address_line_1, :value => "NA") %>
-	<%= builder.hidden_field( :city, :value => "NA") %>
+	<%= builder.hidden_field( :address_line_1, :value => "Rapid Lender Address") %>
+	<%= builder.hidden_field( :city, :value => "Not required") %>
 	<%= builder.hidden_field( :address_type, :value => "primary") %>
 </div>
 
-<div style="float:left;;width:92%;">
+<div style="float:left;width:92%;">
 	<label>Your Postal Code: </label>
 	<br />
-	<%= builder.text_field( :postal_code,  :maxlength=>15, :size=>15, :class => "rapid postal code") %>
+	<%= builder.text_field( :postal_code,  :maxlength=>15, :size=>15, :class=> "rapid postal_code") %>
 </div>
 
-
-<div style="float:left;;width:92%;">
+<div style="float:left;width:92%;">
 	<div class="column50_rapid"> 
 	<label>Your Country:</label>
-		 <%= builder.collection_select(:country_id, Country.all, :id, :country_name, {}, {:class => "rapid category_id"}) %>
+	 <%= builder.collection_select(:country_id, Country.all, :id, :country_name, {}, {:class => "rapid country_id"}) %>
 	</div>
 
 	
@@ -71,22 +75,22 @@
     <div class="column50_rapid">
 	<label>Your State or Region: </label>
 	<div id="choose_us_state"  style="display:block;" >
-     <%= builder.collection_select(:us_state_id, UsState.all, :id, :state_name, {}, {:class => "rapid us_state_id"}) %>
+		<%= builder.collection_select(:us_state_id, UsState.all, :id, :state_name, {}, {:class => "rapid us_state_id"}) %>
 	</div>
-	
-	<div id="provide_country_state" style="display:none;" >
-		<%= builder.text_field(:region, :maxlength=>40, :size=>25, :class=>"rapid region") %>
+
+	<div id="provide_country_state" style="display:block;" >
+		<%= builder.text_field(:region, {:maxlength=>40, :size=>25, :class => "rapid region"}) %>
 	</div>
 	</div>
 </div>
 <% end %>
-<div style="float:left;width:92%;">
 
+<div style="float:left;width:92%;">
 
 <div class="column50_rapid"><label>Item Category:
 <%= nf.collection_select(:category_id, Category.all, :id, :category_type, {}, {:class => "rapid category_id"}) %>
 </label>
-
+ 
 </div>
 
 <div class="column50_rapid"> 
@@ -102,13 +106,13 @@
 <div class="column50_rapid">	
 <label for="item_description">Item Description:</label>
 <br />
-<%= nf.text_field( :item_description, :maxlength=>50, :size=>25, :class => "rapid item_description") %>
+<%= nf.text_field(:item_description, :maxlength=>50, :size=>25, :class => "rapid item_description")  %>
 </div>
 
 <div class="column50_rapid">	
 <label for="item_model">Item Model:</label>
 <br />
-<%= nf.text_field( :item_model, :maxlength=>50, :size=>25, :class => "rapid item_model") %>
+<%= nf.text_field(:item_model, :maxlength=>50, :size=>25, :class => "rapid item_model")  %>
 </div>
 </div>
 
@@ -126,6 +130,7 @@
 
 </div>
 
+
 <div style="float:left;width:92%;">
 
 <p >
@@ -134,10 +139,11 @@
 </p>
 
 <label for="lender_goodwill" style="color:#0B0B3B">&nbsp;I am acting and participating in a spirit of goodwill.&nbsp;
-	<%= nf.check_box(:goodwill, :class => "rapid goodwill") %></label>
+	<%= nf.check_box(:goodwill, :class => "rapid goodwill") %>
+	</label>
 
 <label for="lender_age_18_or_more" style="color:#0B0B3B">&nbsp;I have achieved the age of 18 years or more.&nbsp;
-	<%= nf.check_box(:age_18_or_more, :class=> "rapid age_18_or_more") %></label>
+	<%= nf.check_box( :age_18_or_more, :class => "rapid age_18_or_more") %></label>
 <br/>
 </div>
 <div class="top">

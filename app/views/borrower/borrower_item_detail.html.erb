@@ -263,6 +263,7 @@ bb.borrower_contact_by_Twitter.blank? &&  bb.borrower_contact_by_Instagram.blank
 	<%= bb.item_count %>
 	<br />
 
+  <% if bb.is_community.to_i < 3 %>
 	<% @icaption = (bb.item_image_caption.blank? ? "No caption provided"  :  bb.item_image_caption)  %>
 
 	
@@ -283,7 +284,7 @@ bb.borrower_contact_by_Twitter.blank? &&  bb.borrower_contact_by_Instagram.blank
 		</table>
 	</div>
 	<% end %>
-
+<% end %>
 </div>
 
 <% end %>

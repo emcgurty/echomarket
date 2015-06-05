@@ -110,12 +110,12 @@
 			<% if session[:edit_record] %>
 			     
 			    <%= nf.fields_for  :primary_address,  @borrower.addresses.primary_address.first do |primary| %>
-				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @borrower, :builder => primary, :class_content => "borrower primary" } %>
+				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> "borrower", :builder => primary, :class_content => "borrower primary" ,:field=> "displayBorrowersAddress"} %>
 				<% end %>
 			<% else %>
 			
 				<%= nf.fields_for :primary_address do |primary| %>
-				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @borrower, :builder => primary, :class_content => "borrower primary" } %>
+				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> "borrower", :builder => primary, :class_content => "borrower primary",:field=> "displayBorrowersAddress" } %>
 				<% end %>
 			<% end %>	
 			
@@ -179,11 +179,11 @@
 			
 			<% if session[:edit_record] %>
 			    <%= nf.fields_for :alternative_address, @borrower.addresses.alternative_address.first do |alternative| %>
-				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @borrower, :builder => alternative , :class_content => "borrower alternative" } %>
+				<%= render :partial => 'layouts/existing_alternative_address', :locals => { :builder => alternative , :class_content => "borrower alternative" } %>
 				<% end %>
 			<% else %>
 				<%= nf.fields_for :alternative_address do |alternative| %>
-				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @borrower, :builder => alternative, :class_content => "borrower alternative" } %>
+				<%= render :partial => 'layouts/existing_alternative_address', :locals => { :builder => alternative, :class_content => "borrower alternative" } %>
 				<% end %>
 			<% end %>	
 			

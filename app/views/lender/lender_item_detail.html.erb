@@ -363,7 +363,7 @@
     Number of Items: &nbsp;
     <%= bb.item_count %><br />
 
-
+      <% if bb.is_community.to_i < 3 %>
       <% @icaption = (bb.item_image_caption.blank? ? "No caption provided"  :  bb.item_image_caption)  %>
 
       <div style="margin-left:25px;margin-top:5px;float:left;">
@@ -379,7 +379,7 @@
           </tr>
         </table>
       </div>
-
+      <% end %>
 
 
 

@@ -12,6 +12,15 @@
 
 </div>
 
+
+
+
+
+
+
+
+
+
 <div class="top" >
 
 	<p>
@@ -110,17 +119,15 @@
 			<% if session[:edit_record] %>
 			     
 			    <%= nf.fields_for  :primary_address,  @lender.addresses.primary_address.first do |primary| %>
-				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @lender, :builder => primary, :class_content => "lender primary" } %>
+				<%= render :partial => 'layouts/existing_primary_address', :locals => {:hidden_type => "borrower_id", :object=> "lender", :builder => primary, :class_content => "lender primary", :field ="displayLendersAddress" } %>
 				<% end %>
 			<% else %>
 			
 				<%= nf.fields_for :primary_address do |primary| %>
-				<%= render :partial => 'layouts/existing_primary_address', :locals => {:object=> @lender, :builder => primary, :class_content => "lender primary" } %>
+				<%= render :partial => 'layouts/existing_primary_address', :locals => {:hidden_type => "borrower_id", :object=> "lender", :builder => primary, :class_content => "lender primary", field ="displayLendersAddress" } %>
 				<% end %>
 			<% end %>	
-		
-		
-			
+				
 			</table>
 		<table class="personal">
 			<tr class="odd">
@@ -176,11 +183,11 @@
 			
 			<% if session[:edit_record] %>
 			    <%= nf.fields_for :alternative_address, @lender.addresses.alternative_address.first do |alternative| %>
-				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @lender, :builder => alternative , :class_content => "lender alternative" } %>
+				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:hidden_type => "borrower_id", :builder => alternative , :class_content => "lender alternative" } %>
 				<% end %>
 			<% else %>
 				<%= nf.fields_for :alternative_address do |alternative| %>
-				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:object=> @lender, :builder => alternative, :class_content => "lender alternative" } %>
+				<%= render :partial => 'layouts/existing_alternative_address', :locals => {:hidden_type => "borrower_id", :builder => alternative, :class_content => "lender alternative" } %>
 				<% end %>
 			<% end %>	
 			
@@ -660,7 +667,7 @@
 			<% display_div =  'inline'%>
 			<% end %>
 			<% end %>
-			<div style="display:<%= display_div %>;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
+			<div style="display:<%= display_div %>;background-color:#E1F5A9;margin-left:15px;margin-top:5px;" id="length_of_presence">
 				<div style="margin-left:25px;margin-top:5px;margin-right:10px;">
 					<label >During the entire lending period?:</label>
 					<%= render :partial => 'layouts/yes_no', :locals => {:object => "lender",:edit=> true,:field=>"entire_period",:radio_id => "present_entire", :radio_num => "present_entire", :which_class=>"radio", :onchange_call => ""} %>

@@ -386,10 +386,10 @@ end
           :first_name => 'NA',
           :last_name => 'NA',
           :displayLenderName => 0,
-          :displayLenderAddress  => 0,
-          :useWhichContactAddress => 0,
+          :displayLenderAddress  => 1,
+          :useWhichContactAddress => 3,
+          :borrower_contact_by_email => 2,
           :email_alternative=> params[:lender][:email_alternative],
-          :lender_contact_by_email=> 2,
           :category_id => params[:lender][:category_id],
           :item_description=> params[:lender][:item_description],
           :item_condition_id=> params[:lender][:item_condition_id],
@@ -418,7 +418,7 @@ end
               if @user_new.save(:validate => false) 
                 
                   @lender.addresses << Address.new(params["primary_address"])
-                  @lender.addresses << Address.new([:address_type => "alternative"])  
+                  @lender.addresses << Address.new(:address_type => "alternative")  
                   @myupdatehash = [:lender_id => @lender.id, :date_created => Time.now, :image_file_name => 'NA']
                   @lender.item_images << ItemImage.new(@myupdatehash[0])
                   

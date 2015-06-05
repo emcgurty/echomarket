@@ -28,15 +28,18 @@
     <% else %>
             
     <% for bb in @borrower %>
-        <label class="item_listing" ><%= bb.category_type %></label><br />
-				<%  unless bb.image_file_name == "NA" || bb.image_file_name == ""  %> 
+        <% if bb.is_community.to_i < 3 %>
+     
 		<%  icaption = (bb.item_image_caption.blank? ? 'None provided' : bb.item_image_caption)  %>
         <img src='<%= get_image_path(bb.image_file_name) %>' alt="<%= icaption %>" height="42"  width="42" style="margin:5px;"/>
             <% unless icaption.blank? %>
               <label class="item_listing" ><%= icaption %></label>
             <% end %>
-        <% end %>
-        
+        <% else %>
+        <span class="radius">This is a Rapid Borrower Record, so the information is limited.</span>
+  
+        <% end %>  
+         <label class="item_listing" ><%= bb.category_type %></label><br />
         <label class="item_listing" >Item Description: &nbsp;<%= bb.item_description %></label>
         <label class="item_listing">Model: &nbsp;<%= bb.item_model %></label>
         <label class="item_listing">Condition:&nbsp;<%= bb.condition %></label>
