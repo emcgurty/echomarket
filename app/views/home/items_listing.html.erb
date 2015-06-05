@@ -56,7 +56,7 @@
 	 
        
 		<% @lender.each do |ldr| %>
-		<label>Category: &nbsp;<%= ldr.category_type %></label>
+		<label class="item_listing">Category:&nbsp;<%= ldr.category_type %></label>
 		<br />
 		<% file_path_str = ldr.image_file_name %>
 		<% icaption = (ldr.item_image_caption.blank? ? '' : ldr.item_image_caption)  %>

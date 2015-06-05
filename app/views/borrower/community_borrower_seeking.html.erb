@@ -2,7 +2,7 @@
 <%= javascript_include_tag 'bl_util.js', :type => "text/javascript" %>
 
 <%= render :partial => 'menus/borrowers_menu' %>
-<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "update_borrower_seeking"},
+<%= form_for @borrower, :url=> {:controller=>"borrower", :action => "borrower_seeking"},
  :html=>   {:class=>"borrower_seeking", :multipart=>true, :id=>"borrower_item_registration"} do |nf| %>
 
 
@@ -24,7 +24,7 @@
 </div>
 
      <% unless session[:edit_record]  %>
-  		<% @getValue = Community.find(:first, :readonly, :conditions => ["community_id = ?", session[:community_id]])  %>
+  		<% @getValue = Community.find(:first, :readonly, :conditions => ["id = ?", session[:community_id]])  %>
      <% else %>
         <% @getValue = @borrower %>
      <% end %>
@@ -137,12 +137,12 @@
 			     
 			    <%= nf.fields_for  :primary_address,  @borrower.addresses.primary_address.first do |primary| %>
 			    
-				<%= render :partial => 'layouts/existing_community_primary_address', :locals => {:hidden_type => "lender_id", :object=> "borrower", :builder => primary, :class_content => "borrower primary" , :field=> "displayBorrowersAddress" } %>
+				<%= render :partial => 'layouts/existing_community_primary_address', :locals => {:hidden_type => "lender_id", :object=> "borrower", :builder => primary, :class_content => "borrower primary" , :field=> "displayBorrowerAddress" } %>
 				<% end %>
 			<% else %>
 			
 				<%= nf.fields_for :primary_address do |primary| %>
-				<%= render :partial => 'layouts/new_community_primary_address', :locals => {:hidden_type => "lender_id", :object=> 'borrower', :getvalue => @getValue, :builder => primary, :class_content => "borrower primary",:field=> "displayBorrowersAddress" } %>
+				<%= render :partial => 'layouts/new_community_primary_address', :locals => {:hidden_type => "lender_id", :object=> 'borrower', :getValue => @getValue, :builder => primary, :class_content => "borrower primary",:field=> "displayBorrowerAddress" } %>
 				<% end %>
 			<% end %>	
 			
@@ -359,14 +359,7 @@
 
           <div style="margin-left:25px;margin-top:5px;">
             <label>Category:<span class="required_fields">&nbsp;&nbsp;*</span>
-              <% unless @borrower.category_id.blank? %>
-                <% @current_selected = @borrower.category_id %>
-              <% else %>
-                <% @current_selected = '99' %>
-              <% end  %>
-              <% @categories = Category.find(:all, :readonly => true, :order=> "category_type") %>
-              <%  @cats = options_from_collection_for_select(@categories, :category_id, :category_type, @current_selected.to_i) %>
-              <%= nf.select( :category_id, @cats,{ :onchange=>"borrowers_category_id();", :style=>"width:auto;" }) %></label>
+              <%= nf.collection_select(:category_id, Category.all, :id, :category_type, {}, {:class => "borrower category_id"}) %>
             <span class="error" id="category_id_error">Choose a 'Category'.</span>
 
           </div>
@@ -413,16 +406,8 @@
         <td style="width:50%">
           <div style="margin-left:25px;margin-top:5px;">
             <label>Condition:&nbsp;<span class="required_fields">&nbsp;&nbsp;*</span></label>
-
-            <% unless @borrower.item_condition_id.blank? %>
-              <% @current_selected = @borrower.item_condition_id %>
-            <% else %>
-              <% @current_selected = '99' %>
-            <% end  %>
-            <% @item_conditions = Itemconditions.find(:all, :order=> "item_condition_id") %>
-            <%  @bl = options_from_collection_for_select(@item_conditions, :item_condition_id, :conditions, @current_selected) %>
-            <%= nf.select( :item_condition_id, @bl) %>
-            <span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
+	         <%= nf.collection_select :item_condition_id, ItemCondition.all, :id, :condition %>
+	        <span class="error" id="item_condition_id_error">Choose a 'Condition'.</span>
           </div>
 
         </td>
@@ -450,7 +435,7 @@
       <% if session[:edit_record] %>
 	    		
 				<%= nf.fields_for :item_images, @borrower.item_images do |builder| %>
-				<%= render :partial => 'layouts/existing_image',  :locals => {:object=> @borrower, :builder=> builder, :class_content => "borrower primary" } %>
+				<%= render :partial => 'layouts/existing_image',  :locals => {:model => Borrower, :object=> @borrower, :builder=> builder, :class_content => "borrower primary" } %>
 				<% end %>	
 			<% else %>
 			

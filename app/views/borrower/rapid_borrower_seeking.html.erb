@@ -10,7 +10,7 @@
 
 <div style="display:none;">
 <%= nf.hidden_field( :is_active, :value => 1) %>
-<%= nf.hidden_field( :is_community, :value=> 3 %>
+<%= nf.hidden_field( :is_community, :value=> 3 ) %>
 <%= nf.hidden_field( :item_count, :value=> 1) %>
 <%= nf.hidden_field( :remote_ip, :value=> request.remote_ip) %>
 </div>
@@ -51,16 +51,16 @@
 <%= fields_for :primary_address do |builder| %>
 
 <div style="display:none;">
-	<%= builder.hidden_field( :lender_id, :value =>"") %>
-	<%= builder.hidden_field( :address_line_1, :value => "Rapid Borrower Address") %>
-	<%= builder.hidden_field( :city, :value => "Not required") %>
-	<%= builder.hidden_field( :address_type, :value => "primary") %>
+	<%= builder.hidden_field(:lender_id, :value =>"") %>
+	<%= builder.hidden_field(:address_line_1, :value => "Rapid Borrower Address") %>
+	<%= builder.hidden_field(:city, :value => "Not required") %>
+	<%= builder.hidden_field(:address_type, :value => "primary") %>
 </div>
 
 <div style="float:left;width:92%;">
 	<label>Your Postal Code: </label>
 	<br />
-	<%= builder.text_field( :postal_code,  :maxlength=>15, :size=>15, :class=> "rapid postal_code") %>
+	<%= builder.text_field(:postal_code,  :maxlength=>15, :size=>15, :class=> "rapid postal_code") %>
 </div>
 
 <div style="float:left;width:92%;">

@@ -1,5 +1,5 @@
 	
-		<% get_image_detail = Borrower.find(object.id).item_images.select(['image_file_name', 'item_image_caption']).first %>
+		<% get_image_detail = model.find(object.id).item_images.select(['image_file_name', 'item_image_caption']).first %>
         <div class="column50_withborder">
      
     	<p>Your existing item image and caption.</p>
