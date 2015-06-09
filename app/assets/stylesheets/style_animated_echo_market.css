@@ -1,13 +1,5 @@
-/**{
-    margin:0;
-    padding:0;
-}*/
 
-*{
-    /*    margin:0;
-        padding:0;*/
-    font-family:'Gotham Rounded A', 'Gotham Rounded B', sans-serif;
-}
+
 
 br {
     margin:0;
@@ -89,11 +81,9 @@ span.radius{
     height:inherit;
     margin:15px;
     display:block;
-    /*
-    border:0;
-        border:1px solid indigo;*/
-    
     overflow:auto;
+    font-family: Verdana, sans-serif, 'Gotham Rounded A', 'Gotham Rounded B';
+	
 
 }
 .form_wrapper div {
@@ -421,7 +411,13 @@ h2 span{
 
 .form_wrapper a{
     text-decoration:none;
-    color:black;
+    color:white;
+    font-size:16px;
+}
+
+.form_wrapper a:hover{
+    text-decoration:none;
+    color:#ff4500;
     font-size:16px;
 }
 
@@ -446,7 +442,7 @@ h2 span{
 }
 .form_wrapper a.search{
     text-decoration:none;
-    color:white;
+    color:black;
     font-size:14px;
 }
 .form_wrapper a.item_details{

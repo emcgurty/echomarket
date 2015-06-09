@@ -232,9 +232,13 @@ class CommunityController < ApplicationController
   
   
    def forgot_community_name
-    session[:background] = true
+     session[:background] = true
     if request.post?
-      forgot('community_name')
+      if forgot('community_name')
+         redirect_to home_items_listing_url
+      else 
+        @community = Community.new  
+      end
     else
       @community = Community.new
     end
@@ -243,7 +247,11 @@ class CommunityController < ApplicationController
   def forgot_community_password
     session[:background] = true
     if request.post?
-      forgot('password')
+      if forgot('password')
+         redirect_to home_items_listing_url
+      else 
+        @community = Community.new  
+      end
     else
       @community = Community.new
     end
@@ -251,6 +259,7 @@ class CommunityController < ApplicationController
 
   def forgot(which)
    
+    return_value = true   
     session[:notice] = ''
     if request.post?
       @community = Community.find(:first, :conditions => ['email = ?', params[:community][:email]])
@@ -258,29 +267,41 @@ class CommunityController < ApplicationController
       unless @community.blank?
         @community.create_reset_code(which)
         if which == 'community_name'
-          # respond_to do |format|
-          Notifier.get_community_notification(@community).deliver if @community.recently_reset? && @community.recently_community_name_get?
-          #format.html
-          session[:notice] = "Path to retrieve Community name sent to #{@community.email}"
-        #end
-        else
-          Notifier.reset_community_password_notification(@community).deliver if @community.recently_reset? && @community.recently_password_reset?
-          session[:notice] = "Path to reset password code sent to #{@community.email}"
+   
+          return_value = Notifier.get_community_notification(@community).deliver if @community.recently_reset? && @community.recently_community_name_get?
+          if return_value.blank? 
+            session[:notice] = "Echo Market was unable to deliver mail to your provided email address, #{@community.email}."
+            return_value = false
+          else
+            session[:notice] = "Path to retrieve Community name sent to #{@community.email}"
+            return_value = true
+          end  
+   
+        elsif which == 'password'
+           return_value = Notifier.reset_community_password_notification(@community).deliver if @community.recently_reset? && @community.recently_password_reset?
+           if return_value.blank?
+              session[:notice] = "Echo Market was unable to send your password reset code to #{@community.email}. "
+              return_value = false
+           else
+             session[:notice] = "Echo Market has sent your password reset code to #{@community.email}. "
+              return_value = true
+           end  
+              
         end
-        redirect_to home_items_listing_url
+        
 
       else
         session[:notice] = "Email: '#{params[:community][:email]}' does not exist in the Echo Market database."
-        redirect_to home_items_listing_url
+        return_value = false
 
-      end
+      end #end unless community
 
-    end  #end def
+   
     
-   respond_to do |format|
-   format.html
-  end
-  end
+   
+  end  ## end if req
+    return return_value
+  end  ## end def
       
 
 

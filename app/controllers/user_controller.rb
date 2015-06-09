@@ -91,9 +91,9 @@ class UserController < ApplicationController
 
     ### Create, update or validate login in
     if request.post?
-      puts "request post"
+      
       unless session[:user_id].blank?
-        puts "UI blank?"
+       
         user_record
       else
         if params[:user][:community_name].blank?  && params[:user][:community_password].blank?
@@ -109,16 +109,8 @@ class UserController < ApplicationController
         session[:edit_user] = true
         @user = User.find(params[:id])
       else
-        
-        @ucount = User.count
-        if   @ucount == 0
-          @user = User.new
-          redirect_to :action => "register"
-        else
-        
-          @user = User.new
+         @user = User.new
         end
-      end
     end
   end
 

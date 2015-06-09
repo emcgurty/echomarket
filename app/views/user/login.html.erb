@@ -29,9 +29,9 @@
 	</p>
 </div>
 <% end %>
-	<div   class="div_white" >
-		&nbsp;
-	</div>
+	<div   class="div_white" >&nbsp;</div>
+<% com_count = Community.where(["activation_code IS NULL"]) %>
+<% unless com_count.blank? %> 	
 <div class='column50_withborder' >
 	<p>	Echo Market Community Login
 	</p>
@@ -96,7 +96,7 @@
 				</tr>
 			</table>
 </div>
-	
+
 
 	<div class="bottom_login">
 		<a style="color:white;" href="#" onclick="submitCommunityLogin();">Submit Community Login</a>
@@ -104,7 +104,7 @@
 
 	<div   class="div_white" >&nbsp;</div>
 </div>
-
+<% end %>	
 <div class='column50_withborder' >
 	<p>
 		Echo Market Lender, Borrower, and Guest Login

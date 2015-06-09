@@ -1,17 +1,3 @@
-/**{
-    margin:0;
-    padding:0;
-}*/
-
-*{
-    /*    margin:0;
-        padding:0;*/
-    font-family:'Gotham Rounded A', 'Gotham Rounded B', sans-serif;
-}
-
-br {
-    margin:0;
-}
 p{
     padding:2px 20px 2px 15px;
     margin-left:5px;

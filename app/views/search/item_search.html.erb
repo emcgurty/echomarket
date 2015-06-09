@@ -36,7 +36,7 @@
 
 	<% end %>
 	<%= nf.hidden_field :remote_ip, :value=> request.remote_ip %>
-     <%= nf.hidden_field :found_zip_codes, :value=> '' %>
+     <%= nf.text_field :found_zip_codes, :value=> '' %>
 	<% if session[:user_id].blank? %>
 
 	<ul >
@@ -184,7 +184,7 @@
 	</tr>
 
 	<% @s_get_items.each do |isq| %>
-
+	<% if isq.address_type != 'alternative' %>
 	<tr>
 		<td> <%= (isq.category_type.blank? ? "No Item Category provided" : isq.category_type) %> </td>
 		<td> <%= (isq.item_description.blank? ? "No Item descrition provided": isq.item_description) %></td>
@@ -212,6 +212,7 @@
 		<% end %> </td>
 
 	</tr>
+		<% end %>
 	<% end %>
 </table>
 <% end %>

@@ -25,6 +25,8 @@ replaced indigo with indigo  */
     height: 22px;
     padding: 10px 0 10px 5px;
     position: relative;
+     font-family: Verdana, sans-serif, 'Gotham Rounded A', 'Gotham Rounded B';
+	
 }
 #nav > li {
     float: left;

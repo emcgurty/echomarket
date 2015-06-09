@@ -23,13 +23,13 @@ private
 
 def find_borrowers
   
-    borrowers = Borrower.joins(:addresses,:category,:item_condition).select(["borrowers.id AS id", "borrowers.item_description AS item_description", "borrowers.item_model AS item_model", "item_conditions.condition AS 'condition'",  "categories.category_type AS category_type", "addresses.postal_code AS postal_code"]).where([getUserType, conditions].join(' AND ') )
+    borrowers = Borrower.joins(:addresses,:category,:item_condition).select(["borrowers.id AS id", "borrowers.item_description AS item_description", "borrowers.item_model AS item_model", "item_conditions.condition AS 'condition'",  "categories.category_type AS category_type", "addresses.postal_code AS postal_code", "addresses.address_type AS address_type"]).where([getUserType, conditions].join(' AND ') )
 
 end
 
 def find_lenders
 
-   lenders = Lender.joins(:addresses,:category,:item_condition).select(["lenders.id AS id", "lenders.item_description AS item_description", "lenders.item_model as item_model", "item_conditions.condition AS 'condition'", "categories.category_type AS category_type", "addresses.postal_code AS postal_code"]).where([getUserType, conditions].join(' AND ') )
+   lenders = Lender.joins(:addresses,:category,:item_condition).select(["lenders.id AS id", "lenders.item_description AS item_description", "lenders.item_model as item_model", "item_conditions.condition AS 'condition'", "categories.category_type AS category_type", "addresses.postal_code AS postal_code", "addresses.address_type AS address_type"]).where([getUserType, conditions].join(' AND ') )
   
 end
 

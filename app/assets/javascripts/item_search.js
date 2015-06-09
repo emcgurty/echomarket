@@ -5,7 +5,7 @@
 		var cache = {};
 		var cache_placeholder = '';
 		var container = $("div.location");
-		var errorDiv = container.find("span#postal_code_error");
+		var errorDiv = container.find("span#echo_market_search_error");
 
 		$("input#search_start_date").datepicker({
 			dateFormat : "yy-mm-dd"
@@ -15,8 +15,6 @@
 			dateFormat : "yy-mm-dd"
 		});
 		
-	
-
 		$("input[name='search[zip_code_radius]']").bind('change', function() {
 			var test_is_checked = $("input[name='search[zip_code_radius]']:checked").val();
 			if (test_is_checked) {
@@ -70,39 +68,44 @@
 		});
 
 		$("input[name='search[postal_code]']").bind('change', function() {
-			///alert("postal code change");
+			alert("postal code change");
 			var distance = $("input[name='search[zip_code_radius]']:checked").val();
-
 			
 
 			if (distance) {
-				// Get zip code
+				 ///Get zip code
 				var zipcode = $("input[name='search[postal_code]']").val().substring(0, 5);
-				///		alert(zipcode);
+
 				if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
 
 					cache_placeholder = zipcode + distance;
-					///alert(cache_placeholder);
+					alert(cache_placeholder);
 					// Clear error
 
 					// Check cache
+					alert(cache);
 					if ( cache_placeholder in cache) {
+						
 						handleResp(cache[zipcode]);
+						
 					} else {
 						// Build url
+						
 						var url = "https://www.zipcodeapi.com/rest/" + clientKey + "/radius.json/" + zipcode + "/" + distance + "/mile";
 
 						$.ajax({
 							"url" : url,
 							"dataType" : "json"
 						}).done(function(data) {
-							///alert("okay");
+							
+							alert("okay next you should see data");
+							alert(data);
 							handleResp(data);
 
 							// Store in cache
 							cache[cache_placeholder] = data;
 						}).fail(function(data) {
-							////alert("FAIL");
+							alert("FAIL");
 							if (data.responseText && ( json = $.parseJSON(data.responseText))) {
 								// Store in cache
 								cache[cache_placeholder] = json;
@@ -126,23 +129,28 @@
 		$("input[name='search[zip_code_radius]']").trigger('change');
 
 		function handleResp(data) {
-			///		alert("function within function?");
+			alert("function within function?");
 			var mystr = "";
 
 			if (data) {
-				
+				alert(data);
 				if (data.error_msg) {
-					//errorDiv.text(data.error_msg);
-					///alert("No error okay");
+					errorDiv.text(data.error_msg);
+					alert(data.error_msg);
+					
 				}
 				else {
 					
 					$.each(data.zip_codes, function(i, zip) {
 						mystr = mystr + "'" + zip.zip_code + "',";
+					alert(mystr);	
 					});
 					
 					var set_hidden_field = $("input#search_found_zip_codes");
+					alert(set_hidden_field);
 					if (set_hidden_field) {
+						alert("Setting hidden");
+						alert(mystr);
 						set_hidden_field.val() = mystr.chomp(",");
 					} else {
 
